@@ -1,11 +1,5 @@
 import { useCallback, useReducer, type Dispatch } from 'react'
-import {
-  applyRegionToDocument,
-  boundsFromPixels,
-  copyRegion,
-  pushPaintCommand,
-  type PaintCmd,
-} from './commands/paintCmd'
+import { pushSnapshot, type DocumentSnapshot } from './history'
 import { createInitialDocument, duplicateFrameDeep } from './documentFactory'
 import { dedupePixels, paintPixelsOnDocument, type Rgba } from './paintDocument'
 import type { Document, Layer, PixelPoint } from './types'
@@ -16,13 +10,14 @@ export interface RsepriteRootState {
   activeFrameIndex: number
   /** 当前编辑目标：与 frame.cels[activeLayerIndex]、layers[activeLayerIndex] 对齐 */
   activeLayerIndex: number
-  undoStack: PaintCmd[]
-  redoStack: PaintCmd[]
+  undoStack: DocumentSnapshot[]
+  redoStack: DocumentSnapshot[]
 }
 
 /** 第 1 步 RESET；第 3 步 PAINT_PIXELS；第 5 步 UNDO/REDO；第 6 步图层；第 7 步多帧 */
 export type RsepriteAction =
   | { type: 'RESET'; width: number; height: number }
+  | { type: 'RESTORE_DOCUMENT'; document: Document }
   | {
       type: 'PAINT_PIXELS'
       frameIndex: number
@@ -47,6 +42,7 @@ function updateLayerInDoc(
   patch: Partial<Layer>,
 ): Document {
   if (index < 0 || index >= doc.layers.length) return doc
+  if (Object.entries(patch).every(([key, value]) => doc.layers[index]?.[key as keyof Layer] === value)) return doc
   const layers = doc.layers.map((l, i) =>
     i === index ? { ...l, ...patch } : l,
   )
@@ -63,7 +59,7 @@ function clampFrameIndex(doc: Document, index: number): number {
   return Math.max(0, Math.min(index, doc.frames.length - 1))
 }
 
-function createInitialState(width: number, height: number): RsepriteRootState {
+export function createInitialState(width: number, height: number): RsepriteRootState {
   const document = createInitialDocument(width, height)
   return {
     document,
@@ -74,177 +70,70 @@ function createInitialState(width: number, height: number): RsepriteRootState {
   }
 }
 
-function rsepriteReducer(
-  state: RsepriteRootState,
-  action: RsepriteAction,
-): RsepriteRootState {
+export function rsepriteReducer(state: RsepriteRootState, action: RsepriteAction): RsepriteRootState {
+  const snapshot = (value: RsepriteRootState): DocumentSnapshot => ({ document: value.document,
+    activeFrameIndex: value.activeFrameIndex, activeLayerIndex: value.activeLayerIndex })
+  if (action.type === 'UNDO' || action.type === 'REDO') {
+    const undo = action.type === 'UNDO'
+    const stack = undo ? state.undoStack : state.redoStack
+    const target = stack.at(-1)
+    if (!target) return state
+    return { ...state, ...target,
+      undoStack: undo ? stack.slice(0, -1) : pushSnapshot(state.undoStack, snapshot(state), target),
+      redoStack: undo ? pushSnapshot(state.redoStack, snapshot(state), target) : stack.slice(0, -1) }
+  }
+  if (action.type === 'SET_ACTIVE_LAYER') return { ...state, activeLayerIndex: clampLayerIndex(state.document, action.index) }
+  if (action.type === 'SET_ACTIVE_FRAME') return { ...state, activeFrameIndex: clampFrameIndex(state.document, action.index) }
+  if (action.type === 'RESTORE_DOCUMENT') return { ...state, document: action.document, activeFrameIndex: 0,
+    activeLayerIndex: 0, undoStack: [], redoStack: [] }
+  let document = state.document
+  let activeFrameIndex = state.activeFrameIndex
+  let activeLayerIndex = state.activeLayerIndex
   switch (action.type) {
     case 'RESET': {
-      const next = createInitialState(action.width, action.height)
-      return next
-    }
-    case 'SET_ACTIVE_LAYER': {
-      const idx = clampLayerIndex(state.document, action.index)
-      if (idx === state.activeLayerIndex) return state
-      return { ...state, activeLayerIndex: idx }
-    }
-    case 'SET_ACTIVE_FRAME': {
-      const idx = clampFrameIndex(state.document, action.index)
-      if (idx === state.activeFrameIndex) return state
-      return { ...state, activeFrameIndex: idx }
+      if (!Number.isInteger(action.width) || !Number.isInteger(action.height) || action.width < 1 || action.height < 1 || action.width > 2048 || action.height > 2048) return state
+      document = createInitialDocument(action.width, action.height)
+      activeFrameIndex = 0; activeLayerIndex = 0
+      break
     }
     case 'ADD_FRAME': {
-      const doc = state.document
-      const copyIdx = clampFrameIndex(doc, state.activeFrameIndex)
-      const newFrame = duplicateFrameDeep(doc, copyIdx)
-      if (!newFrame) return state
-      const frames = [
-        ...doc.frames.slice(0, copyIdx + 1),
-        newFrame,
-        ...doc.frames.slice(copyIdx + 1),
-      ]
-      return {
-        ...state,
-        document: { ...doc, frames },
-        activeFrameIndex: copyIdx + 1,
-        undoStack: [],
-        redoStack: [],
-      }
+      if (document.frames.length >= 1000) return state
+      if ((document.frames.length + 1) * document.layers.length * document.width * document.height * 4 > 256 * 1024 ** 2) return state
+      const index = clampFrameIndex(document, state.activeFrameIndex)
+      const copied = duplicateFrameDeep(document, index)
+      if (!copied) return state
+      document = { ...document, frames: [...document.frames.slice(0, index + 1), copied, ...document.frames.slice(index + 1)] }
+      activeFrameIndex = index + 1
+      break
     }
     case 'DELETE_FRAME': {
-      const { frameIndex } = action
-      if (state.document.frames.length <= 1) return state
-      if (frameIndex < 0 || frameIndex >= state.document.frames.length) return state
-      const frames = state.document.frames.filter((_, i) => i !== frameIndex)
-      let activeFrameIndex = state.activeFrameIndex
-      if (frameIndex < activeFrameIndex) activeFrameIndex -= 1
-      else if (frameIndex === activeFrameIndex)
-        activeFrameIndex = Math.min(activeFrameIndex, frames.length - 1)
-      return {
-        ...state,
-        document: { ...state.document, frames },
-        activeFrameIndex: Math.max(0, activeFrameIndex),
-        undoStack: [],
-        redoStack: [],
-      }
+      const index = action.frameIndex
+      if (document.frames.length <= 1 || index < 0 || index >= document.frames.length) return state
+      document = { ...document, frames: document.frames.filter((_, frame) => frame !== index) }
+      activeFrameIndex = Math.max(0, Math.min(activeFrameIndex - (index < activeFrameIndex ? 1 : 0), document.frames.length - 1))
+      break
     }
-    case 'SET_LAYER_VISIBLE': {
-      const doc = updateLayerInDoc(state.document, action.layerIndex, {
-        visible: action.visible,
-      })
-      if (doc === state.document) return state
-      return { ...state, document: doc }
-    }
-    case 'SET_LAYER_LOCKED': {
-      const doc = updateLayerInDoc(state.document, action.layerIndex, {
-        locked: action.locked,
-      })
-      if (doc === state.document) return state
-      return { ...state, document: doc }
-    }
+    case 'SET_LAYER_VISIBLE': document = updateLayerInDoc(document, action.layerIndex, { visible: action.visible }); break
+    case 'SET_LAYER_LOCKED': document = updateLayerInDoc(document, action.layerIndex, { locked: action.locked }); break
     case 'SET_FRAME_DURATION': {
-      const { frameIndex, durationMs } = action
-      const doc = state.document
-      if (frameIndex < 0 || frameIndex >= doc.frames.length) return state
-      const ms = Math.max(1, Math.min(60_000, Math.round(durationMs)))
-      const frames = doc.frames.map((f, i) =>
-        i === frameIndex ? { ...f, durationMs: ms } : f,
-      )
-      return { ...state, document: { ...doc, frames } }
+      if (action.frameIndex < 0 || action.frameIndex >= document.frames.length || !Number.isFinite(action.durationMs)) return state
+      document = { ...document, frames: document.frames.map((frame, index) => index === action.frameIndex
+        ? { ...frame, durationMs: Math.max(1, Math.min(60000, Math.round(action.durationMs))) } : frame) }
+      break
     }
     case 'PAINT_PIXELS': {
-      const doc = state.document
-      const { frameIndex, celIndex, pixels, rgba } = action
-
-      const layer = doc.layers[celIndex]
-      if (!layer || layer.locked) return state
-
-      const unique = dedupePixels(pixels)
-      if (unique.length === 0) return state
-
-      const b = boundsFromPixels(unique, doc.width, doc.height)
-      if (!b) return state
-
-      const frame = doc.frames[frameIndex]
-      const cel = frame?.cels[celIndex]
-      if (!cel) return state
-
-      const before = copyRegion(cel.imageData, b.x, b.y, b.width, b.height)
-      const nextDoc = paintPixelsOnDocument(
-        doc,
-        frameIndex,
-        celIndex,
-        unique,
-        rgba,
-      )
-      const nextCel = nextDoc.frames[frameIndex]?.cels[celIndex]
-      if (!nextCel) return state
-      const after = copyRegion(nextCel.imageData, b.x, b.y, b.width, b.height)
-
-      const cmd: PaintCmd = {
-        frameIndex,
-        celIndex,
-        x: b.x,
-        y: b.y,
-        width: b.width,
-        height: b.height,
-        before,
-        after,
-      }
-
-      return {
-        ...state,
-        document: nextDoc,
-        undoStack: pushPaintCommand(state.undoStack, cmd),
-        redoStack: [],
-      }
+      const layer = document.layers[action.celIndex]
+      if (!layer || layer.locked || !document.frames[action.frameIndex]?.cels[action.celIndex]) return state
+      const pixels = dedupePixels(action.pixels)
+      if (!pixels.length) return state
+      document = paintPixelsOnDocument(document, action.frameIndex, action.celIndex, pixels, action.rgba)
+      break
     }
-    case 'UNDO': {
-      if (state.undoStack.length === 0) return state
-      const cmd = state.undoStack[state.undoStack.length - 1]!
-      const undoStack = state.undoStack.slice(0, -1)
-      const document = applyRegionToDocument(
-        state.document,
-        cmd.frameIndex,
-        cmd.celIndex,
-        cmd.x,
-        cmd.y,
-        cmd.width,
-        cmd.height,
-        cmd.before,
-      )
-      return {
-        ...state,
-        document,
-        undoStack,
-        redoStack: [...state.redoStack, cmd],
-      }
-    }
-    case 'REDO': {
-      if (state.redoStack.length === 0) return state
-      const cmd = state.redoStack[state.redoStack.length - 1]!
-      const redoStack = state.redoStack.slice(0, -1)
-      const document = applyRegionToDocument(
-        state.document,
-        cmd.frameIndex,
-        cmd.celIndex,
-        cmd.x,
-        cmd.y,
-        cmd.width,
-        cmd.height,
-        cmd.after,
-      )
-      return {
-        ...state,
-        document,
-        undoStack: [...state.undoStack, cmd],
-        redoStack,
-      }
-    }
-    case 'NOOP':
-    default:
-      return state
+    default: return state
   }
+  if (document === state.document) return state
+  const next = { ...state, document, activeFrameIndex, activeLayerIndex, redoStack: [] }
+  return { ...next, undoStack: pushSnapshot(state.undoStack, snapshot(state), snapshot(next)) }
 }
 
 export interface UseRsepriteStateResult {

@@ -365,9 +365,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProFlowZipFailed: '打包失败',
     roninProRseprite: 'Rseprite',
     roninProRsepriteCardDesc:
-      '类 Aseprite 的像素动画编辑：多帧、图层、调色板与导出；持续开发中，不影响其他 RoninPro 功能。',
+      '像素绘画、图层和多帧编辑，支持洋葱皮与项目保存。',
     roninProRsepriteLead:
-      '在浏览器中完成像素绘画与时间轴编辑，工作流参考 Aseprite；后续可与 Sprite Sheet、序列帧模块联动。',
+      '绘制像素动画，调整图层与帧时长；更改会自动保存到当前项目。',
     roninProRsepritePlaceholder: '画布区域（开发中）',
     roninProRsepriteRoadmapTitle: '开发里程碑',
     roninProRsepriteRoadmapM1: 'M0：文档模型与 useRsepriteState（第 1 步已落地，见上方验证卡片）',
@@ -375,9 +375,9 @@ export const locales: Record<Lang, Record<string, string>> = {
       'M1：视口 + 笔刷 + 调色板/橡皮 + 历史 + 图层 + 多帧 + 复制帧/帧延时 + 洋葱皮（第 2～9 步，见下方）',
     roninProRsepriteRoadmapM3: 'M2：时间轴播放、PNG 序列（洋葱皮已接入）；M3：选区与导入联动',
     roninProRsepriteDocLine: '详细设计见仓库 docs/DEV_RSEPRITE_MODULE.md',
-    roninProRsepriteStep1Title: '第 1 步 · 文档状态（可验收）',
+    roninProRsepriteStep1Title: '文档',
     roninProRsepriteStep1Intro:
-      '内存中默认 1 帧（帧条可增删）、2 图层 × 各 1 透明 Cel。帧条与图层面板在下方画布卡片；RESET 恢复默认。',
+      '新建透明画布。重置操作也可以撤销。',
     roninProRsepriteStep1DocSize: '画布尺寸',
     roninProRsepriteStep1Frames: '帧数',
     roninProRsepriteStep1Layers: '图层数',
@@ -387,9 +387,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteStep1Bytes: '字节',
     roninProRsepriteStep1Expect: '期望',
     roninProRsepriteStep1Console: '打开开发者工具 → Console，可看到 [Rseprite Step1] document 日志。',
-    roninProRsepriteStep1Reset32: '重置为 32×32（测 RESET）',
-    roninProRsepriteStep1Reset64: '重置为 64×64',
-    roninProRsepriteStep2Title: '第 2～9 步 · 画布（视口、笔刷、帧、图层、历史）',
+    roninProRsepriteStep1Reset32: '新建 32×32',
+    roninProRsepriteStep1Reset64: '新建 64×64',
+    roninProRsepriteStep2Title: '画布、帧与图层',
     roninProRsepriteStep2Hint:
       '滚轮缩放；中键拖动或 Alt + 左键拖动可平移。像素绘制为邻近插值关闭，放大后边缘清晰。',
     roninProRsepriteStep3Hint:
@@ -409,7 +409,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteStep6Hint:
       '第 6 步 · 图层：列表自上而下为「上层→下层」；画布显示自下而上合成。隐藏层不参与预览；锁定层无法绘制（铅笔/橡皮禁用）。',
     roninProRsepriteStep7Hint:
-      '第 7 步 · 帧：点击缩略图切换当前帧；删除至少保留 1 帧。增删帧会清空撤销/重做栈。',
+      '点击缩略图切换帧；删除至少保留一帧。增删、复制和时长调整均可撤销。',
     roninProRsepriteStep8Hint:
       '第 8 步 · 「复制当前帧」深拷贝所有图层 Cel 并插在当前帧之后；新帧继承延时。每帧缩略图下显示延时（ms），可编辑当前帧延时（播放/导出尚未接入）。',
     roninProRsepriteStep9Hint:
@@ -421,7 +421,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteTimelineAdd: '添加帧',
     roninProRsepriteTimelineDelete: '删除当前帧',
     roninProRsepriteFrameDurationLabel: '当前帧延时',
-    roninProRsepriteFrameDurationHint: '占位字段，默认 100 ms；后续用于时间轴播放与导出。',
+    roninProRsepriteFrameDurationHint: '每帧时长随文档保存。',
     roninProRsepriteLayerPanelTitle: '图层',
     roninProRsepriteLayerVisibility: '切换可见',
     roninProRsepriteLayerLock: '切换锁定',
@@ -1525,9 +1525,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProFlowZipFailed: 'ZIP failed',
     roninProRseprite: 'Rseprite',
     roninProRsepriteCardDesc:
-      'Aseprite-style pixel animation: frames, layers, palette & export — in progress; other RoninPro tools unchanged.',
+      'Pixel drawing, layers and frames with onion skin and project saving.',
     roninProRsepriteLead:
-      'Paint and animate in the browser with an Aseprite-like workflow; later hook up to Sprite Sheet and frame-sequence tools.',
+      'Draw pixel animations and edit layers and frame durations. Changes are saved to the current project.',
     roninProRsepritePlaceholder: 'Canvas (work in progress)',
     roninProRsepriteRoadmapTitle: 'Roadmap',
     roninProRsepriteRoadmapM1: 'M0: Document model & useRsepriteState (Step 1 done — see card above)',
@@ -1535,9 +1535,9 @@ export const locales: Record<Lang, Record<string, string>> = {
       'M1: Viewport + brush + palette/eraser + history + layers + frames + duplicate/duration + onion skin (steps 2–9 — below)',
     roninProRsepriteRoadmapM3: 'M2: Timeline playback, PNG sequence (onion skin done); M3: selection & import hooks',
     roninProRsepriteDocLine: 'See docs/DEV_RSEPRITE_MODULE.md in the repo for full design notes.',
-    roninProRsepriteStep1Title: 'Step 1 · Document state (verify)',
+    roninProRsepriteStep1Title: 'Document',
     roninProRsepriteStep1Intro:
-      'Default: 1 frame (timeline can add/remove), 2 layers × 1 transparent cel each. Timeline & layers in the canvas card; RESET restores defaults.',
+      'Create a transparent canvas. Resetting can also be undone.',
     roninProRsepriteStep1DocSize: 'Canvas size',
     roninProRsepriteStep1Frames: 'Frames',
     roninProRsepriteStep1Layers: 'Layers',
@@ -1547,9 +1547,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteStep1Bytes: 'bytes',
     roninProRsepriteStep1Expect: 'expected',
     roninProRsepriteStep1Console: 'Open DevTools → Console for [Rseprite Step1] document logs.',
-    roninProRsepriteStep1Reset32: 'Reset to 32×32 (RESET test)',
-    roninProRsepriteStep1Reset64: 'Reset to 64×64',
-    roninProRsepriteStep2Title: 'Steps 2–9 · Canvas (viewport, brush, frames, layers, history)',
+    roninProRsepriteStep1Reset32: 'New 32×32',
+    roninProRsepriteStep1Reset64: 'New 64×64',
+    roninProRsepriteStep2Title: 'Canvas, frames and layers',
     roninProRsepriteStep2Hint:
       'Scroll wheel to zoom; middle-click drag or Alt + left-drag to pan. Nearest-neighbor scaling keeps pixels crisp.',
     roninProRsepriteStep3Hint:
@@ -1569,7 +1569,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteStep6Hint:
       'Step 6 · Layers: list top = front layer; canvas composites bottom → top. Hidden layers are skipped; locked layers cannot be painted.',
     roninProRsepriteStep7Hint:
-      'Step 7 · Frames: click a thumb to switch. Delete keeps ≥1 frame. Add/delete clears undo/redo.',
+      'Click a thumbnail to switch frames. At least one frame is retained. Add, delete, duplicate and duration edits can be undone.',
     roninProRsepriteStep8Hint:
       'Step 8 · “Duplicate current frame” deep-copies every layer cel and inserts after the current frame; duration is copied. Each thumb shows duration (ms); edit the active frame’s duration (playback/export not wired yet).',
     roninProRsepriteStep9Hint:
@@ -1581,7 +1581,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteTimelineAdd: 'Add frame',
     roninProRsepriteTimelineDelete: 'Delete current',
     roninProRsepriteFrameDurationLabel: 'Active frame duration',
-    roninProRsepriteFrameDurationHint: 'Placeholder; default 100 ms. Used later for playback & export.',
+    roninProRsepriteFrameDurationHint: 'Frame durations are saved with the document.',
     roninProRsepriteLayerPanelTitle: 'Layers',
     roninProRsepriteLayerVisibility: 'Toggle visibility',
     roninProRsepriteLayerLock: 'Toggle lock',
@@ -2682,9 +2682,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProFlowZipFailed: 'ZIP の作成に失敗しました',
     roninProRseprite: 'Rseprite',
     roninProRsepriteCardDesc:
-      'Aseprite 風ピクセルアニメ（フレーム・レイヤー・パレット・書き出し）開発中。他の RoninPro 機能はそのまま利用できます。',
+      'ピクセル描画、レイヤーと複数フレーム。オニオンスキンと保存に対応。',
     roninProRsepriteLead:
-      'ブラウザでピクセル描画とタイムライン編集（ワークフローは Aseprite を参考）。のちほど Sprite Sheet・連番画像と連携予定。',
+      'ピクセルアニメを描き、レイヤーと表示時間を編集します。変更はプロジェクトに自動保存されます。',
     roninProRsepritePlaceholder: 'キャンバス（開発中）',
     roninProRsepriteRoadmapTitle: 'マイルストーン',
     roninProRsepriteRoadmapM1: 'M0：ドキュメントモデルと useRsepriteState（ステップ1 完了・上のカードで確認）',
@@ -2692,9 +2692,9 @@ export const locales: Record<Lang, Record<string, string>> = {
       'M1：視点＋ブラシ＋パレット/消しゴム＋履歴＋レイヤー＋複製/表示時間＋オニオンスキン（ステップ2～9・下記）',
     roninProRsepriteRoadmapM3: 'M2：再生・PNG 連番（オニオンスキン済）；M3：選択と取り込み',
     roninProRsepriteDocLine: '詳細はリポジトリの docs/DEV_RSEPRITE_MODULE.md を参照。',
-    roninProRsepriteStep1Title: 'ステップ1・ドキュメント状態（検証）',
+    roninProRsepriteStep1Title: '文書',
     roninProRsepriteStep1Intro:
-      '既定は 1フレーム（フレーム条で増減）×2レイヤー×各1 Cel。下のキャンバス欄にフレーム/レイヤー。RESET で既定に。',
+      '透明なキャンバスを作成します。リセットも取り消せます。',
     roninProRsepriteStep1DocSize: 'キャンバスサイズ',
     roninProRsepriteStep1Frames: 'フレーム数',
     roninProRsepriteStep1Layers: 'レイヤー数',
@@ -2704,9 +2704,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteStep1Bytes: 'バイト',
     roninProRsepriteStep1Expect: '期待値',
     roninProRsepriteStep1Console: '開発者ツールの Console に [Rseprite Step1] のログが出ます。',
-    roninProRsepriteStep1Reset32: '32×32 にリセット（RESET 確認）',
-    roninProRsepriteStep1Reset64: '64×64 にリセット',
-    roninProRsepriteStep2Title: 'ステップ2～9・キャンバス（視点・ブラシ・フレーム・レイヤー・履歴）',
+    roninProRsepriteStep1Reset32: '新規 32×32',
+    roninProRsepriteStep1Reset64: '新規 64×64',
+    roninProRsepriteStep2Title: 'キャンバス・フレーム・レイヤー',
     roninProRsepriteStep2Hint:
       'ホイールでズーム。ホイールクリックドラッグ、または Alt + 左ドラッグでパン。補間オフでピクセルがくっきり表示されます。',
     roninProRsepriteStep3Hint:
@@ -2726,7 +2726,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteStep6Hint:
       'ステップ6・レイヤー：上が手前の層。キャンバスは下から合成。非表示は合成に含めず、ロック中は描画不可。',
     roninProRsepriteStep7Hint:
-      'ステップ7・フレーム：サムネで切替。削除は最低1枚。増減でアンドゥ/リドゥはクリア。',
+      'サムネイルで切り替えます。最低1枚のフレームを保持します。追加・削除・複製・表示時間の変更を取り消せます。',
     roninProRsepriteStep8Hint:
       'ステップ8・「現在フレームを複製」で全レイヤー Cel を深くコピーして直後に挿入；表示時間も引き継ぎ。各サムネ下に ms 表示。現在フレームの表示時間を編集可（再生・書き出しは未接続）。',
     roninProRsepriteStep9Hint:
@@ -2738,7 +2738,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProRsepriteTimelineAdd: 'フレーム追加',
     roninProRsepriteTimelineDelete: '現在フレーム削除',
     roninProRsepriteFrameDurationLabel: '現在フレームの表示時間',
-    roninProRsepriteFrameDurationHint: 'プレースホルダー。既定 100 ms。のちほど再生・書き出しで使用。',
+    roninProRsepriteFrameDurationHint: '表示時間は文書に保存されます。',
     roninProRsepriteLayerPanelTitle: 'レイヤー',
     roninProRsepriteLayerVisibility: '表示切替',
     roninProRsepriteLayerLock: 'ロック切替',

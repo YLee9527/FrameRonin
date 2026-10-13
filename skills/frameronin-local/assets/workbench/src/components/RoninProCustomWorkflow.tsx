@@ -23,7 +23,6 @@ import {
   computeWorkflowRunStrategy,
   createGraphNode,
   getStitchInputSlotCount,
-  parseWorkflowGraph,
   resizeRearrangeGrid,
   runDagExecution,
   runWorkflowOnBlob,
@@ -33,6 +32,7 @@ import {
   type WorkflowEdge,
   type WorkflowNodeType,
 } from '../lib/roninProWorkflow'
+import { importLegacyWorkflow } from '../lib/strictWorkflow'
 import { WORKFLOW_BPSET_PRESETS, WORKFLOW_BPSETI_DIRECT_PRESETS } from '../lib/workflowBpsetPresets'
 import StashDropZone from './StashDropZone'
 import WorkflowBlueprintCanvas, {
@@ -45,6 +45,12 @@ import WorkflowBlueprintCanvas, {
 
 const { Dragger } = Upload
 const { Text } = Typography
+
+function parseWorkflowGraph(text: string) {
+  const result = importLegacyWorkflow(text)
+  if (result.warnings.length) message.warning(result.warnings.join(' · '), 8)
+  return result
+}
 
 const STORAGE_KEY = 'roninProCustomWorkflow.v3'
 const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']

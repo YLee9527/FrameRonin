@@ -68,9 +68,9 @@ def validate(graph, count):
         node = nodes[target]
         if port not in REGISTRY[node['type']]['ports']:
             raise RoninError('WORKFLOW_PORT_INVALID', 'An edge references an invalid input port.')
-        if node['type'] == 'simpleStitchVertical' and int(port[2:]) > node['params']['stitchSlotCount']:
+        if node['type'] == 'simpleStitchVertical' and port and int(port[2:]) > node['params']['stitchSlotCount']:
             raise RoninError('WORKFLOW_STITCH_PORT_RANGE', 'A stitching port exceeds the configured slot count.')
-        if (target, port) in ports:
+        if (target, port) in ports and not (node['type'] == 'simpleStitchVertical' and port == ''):
             raise RoninError('WORKFLOW_PORT_DUPLICATE', 'Two edges target the same input port.')
         ports.add((target, port))
         indegree[target] += 1
@@ -79,6 +79,11 @@ def validate(graph, count):
             raise RoninError('WORKFLOW_MULTIPLE_OUTPUT', 'The existing graph semantics allow one outgoing edge per node.')
     if any(node['type'] == 'matteDoubleBackground' and indegree[key] != 2 for key, node in nodes.items()):
         raise RoninError('WORKFLOW_DOUBLE_BG_INCOMPLETE', 'Dual-background nodes need both selected inputs.')
+    for key, node in nodes.items():
+        if node['type'] == 'simpleStitchVertical':
+            incoming = [edge.get('targetPort', '') for edge in graph['edges'] if edge['target'] == key]
+            if not incoming or (any(not port for port in incoming) and any(incoming)):
+                raise RoninError('WORKFLOW_STITCH_PORTS', 'Stitching requires inputs in one consistent port mode.')
     queue = [key for key, value in indegree.items() if value == 0]
     visited = []
     while queue:

@@ -351,7 +351,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.paint",
+    "id": "fine.image.paint",
     "originalEntry": "图片精细",
     "implementation": "reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx",
     "inputs": "image",
@@ -364,7 +364,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.erase",
+    "id": "fine.image.erase",
     "originalEntry": "图片精细",
     "implementation": "reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx",
     "inputs": "image",
@@ -377,7 +377,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.crop",
+    "id": "fine.image.crop",
     "originalEntry": "图片精细",
     "implementation": "reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx",
     "inputs": "image",
@@ -572,7 +572,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.resize",
+    "id": "精灵表调整.image.resize",
     "originalEntry": "精灵表调整",
     "implementation": "reference/frontend/src/components/SpriteSheetAdjust.tsx",
     "inputs": "sprite sheet",
@@ -663,7 +663,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.resize",
+    "id": "自定义缩放.image.resize",
     "originalEntry": "自定义缩放",
     "implementation": "reference/frontend/src/components/RoninProCustomScale.tsx",
     "inputs": "image",
@@ -780,7 +780,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.grid",
+    "id": "单图Pro.image.grid",
     "originalEntry": "单图Pro",
     "implementation": "reference/frontend/src/components/RoninProSheetPro.tsx",
     "inputs": "image",
@@ -806,7 +806,7 @@
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
-    "id": "image.alpha-repair",
+    "id": "高级像素.image.alpha-repair",
     "originalEntry": "高级像素",
     "implementation": "reference/frontend/src/components/RoninProAdvancedPixel.tsx",
     "inputs": "images",
@@ -912,11 +912,11 @@
   {
     "id": "rseprite.draw",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-draw",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -925,11 +925,11 @@
   {
     "id": "rseprite.erase",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-erase",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -938,11 +938,11 @@
   {
     "id": "rseprite.layers",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-layers",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -951,11 +951,11 @@
   {
     "id": "rseprite.frames-add",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-frames-add",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -964,11 +964,11 @@
   {
     "id": "rseprite.frames-delete",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-frames-delete",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -977,11 +977,11 @@
   {
     "id": "rseprite.frames-copy",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-frames-copy",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -990,11 +990,11 @@
   {
     "id": "rseprite.frame-duration",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-frame-duration",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -1003,11 +1003,11 @@
   {
     "id": "rseprite.undo",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-undo",
     "evidence": null,
     "status": "awaiting module acceptance",
@@ -1016,25 +1016,12 @@
   {
     "id": "rseprite.redo",
     "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
     "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
+    "outputs": "editable document; original implementation has no export",
     "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
     "sample": "fixed-rseprite-redo",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
-  },
-  {
-    "id": "rseprite.export",
-    "originalEntry": "Rseprite",
-    "implementation": "reference/frontend/src/components/Rseprite/RsepriteEditor.tsx",
-    "inputs": "sprite frames",
-    "outputs": "PNG/GIF/ZIP",
-    "dependencies": "Canvas/React",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/Rseprite/RsepriteEditor.tsx",
-    "sample": "fixed-rseprite-export",
     "evidence": null,
     "status": "awaiting module acceptance",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"

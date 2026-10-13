@@ -1,7 +1,7 @@
 """Local operation registry shared by previews, validation and workers."""
 import math
 from .errors import RoninError
-from .project import memory_budget
+from .project import checked_id, memory_budget
 
 
 def integer(default, low, high):
@@ -100,6 +100,11 @@ def preview(project, payload):
     if not isinstance(inputs, list) or not 1 <= len(inputs) <= (1000 if multiple else 1):
         raise RoninError('INPUT_COUNT', 'The operation has an invalid input count.')
     versions = [project.version(version) for version in inputs]
+    if payload.get('assetId'):
+        checked_id(payload['assetId'])
+        with project.connection() as db:
+            if not db.execute('SELECT id FROM assets WHERE id=?', (payload['assetId'],)).fetchone():
+                raise RoninError('OUTPUT_ASSET_MISSING', 'Select an existing output asset, or omit assetId to create one.')
     expected = spec['inputs'][0].rstrip('+')
     if any(item['metadata']['kind'] != expected for item in versions):
         raise RoninError('INPUT_KIND', 'A selected asset has an incompatible media kind.')
@@ -127,7 +132,10 @@ def preview(project, payload):
         h = max(v['metadata']['height'] for v in versions) + 2 * values['padding'] + values['spacing']
         estimate += values['columns'] * w * math.ceil(len(versions) / values['columns']) * h * 8
     if name == 'sequence.gif':
-        estimate += sum(pixels) * 5
+        if len({(v['metadata']['width'], v['metadata']['height']) for v in versions}) != 1:
+            raise RoninError('FRAME_SIZE_MISMATCH', 'GIF frames must have identical dimensions.')
+        # RGBA frames, a global RGB palette surface, indexed frames, quantizer and encoder buffers.
+        estimate += sum(pixels) * 20
     if name == 'image.perfectPixel':
         if bool(values['gridCols']) != bool(values['gridRows']):
             raise RoninError('GRID_DIMENSIONS', 'Provide both manual grid dimensions, or neither.')

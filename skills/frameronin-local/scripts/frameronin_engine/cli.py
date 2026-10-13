@@ -11,7 +11,10 @@ from .project import Project, identifier, memory_budget
 
 
 def json_file(path):
-    with Path(path).expanduser().open() as source:
+    selected = Path(path).expanduser()
+    if selected.stat().st_size > 8 * 1024**2:
+        raise RoninError('JSON_INPUT_LIMIT', 'Task and proposal JSON is limited to 8 MiB.')
+    with selected.open() as source:
         return json.load(source)
 
 
@@ -33,8 +36,8 @@ def doctor():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=['doctor', 'init', 'import', 'assets', 'version', 'checkout', 'verify',
-        'recover', 'operations', 'preview', 'submit', 'status', 'wait', 'cancel', 'worker', 'ai-begin', 'ai-mark',
-        'document-save', 'document-get', 'document-restore', 'serve'])
+        'recover', 'operations', 'preview', 'submit', 'status', 'wait', 'cancel', 'worker', 'ai-begin', 'ai-mark', 'ai-accept', 'ai-status',
+        'document-save', 'document-get', 'document-restore', 'serve', 'dispatch', 'proposal-save', 'proposal-get', 'proposal-execute'])
     parser.add_argument('--project')
     parser.add_argument('--file')
     parser.add_argument('--name', default='FrameRonin')
@@ -48,8 +51,10 @@ def main():
     parser.add_argument('--prompt')
     parser.add_argument('--references', nargs='*', default=[])
     parser.add_argument('--attempt')
+    parser.add_argument('--quality')
     parser.add_argument('--state')
     parser.add_argument('--document')
+    parser.add_argument('--proposal')
     parser.add_argument('--kind')
     parser.add_argument('--revision', type=int, default=0)
     parser.add_argument('--history', type=int)
@@ -57,7 +62,11 @@ def main():
     args = parser.parse_args()
     try:
         command = args.command
-        if command == 'doctor':
+        if command == 'dispatch':
+            from .queue import dispatch
+            dispatch()
+            return 0
+        elif command == 'doctor':
             result = doctor()
         elif command == 'operations':
             from .operations import REGISTRY
@@ -106,10 +115,27 @@ def main():
                 result = project.begin_ai(args.sample, args.template, args.prompt, args.references)
             elif command == 'ai-mark':
                 result = project.mark_ai(args.attempt, args.state, args.version, json_file(args.file) if args.file else None)
+            elif command == 'ai-status':
+                result = project.ai_attempt(args.attempt)
+            elif command == 'ai-accept':
+                if not args.file or not args.quality:
+                    raise RoninError('ARGUMENT_REQUIRED', '--file must name the native PNG and --quality its quality record JSON.')
+                result = project.accept_ai(args.attempt, args.file, args.state, json_file(args.quality))
             elif command == 'document-save':
                 if not args.file:
                     raise RoninError('ARGUMENT_REQUIRED', '--file is required.')
                 result = project.save_document(args.document or identifier(), args.kind, json_file(args.file), args.revision)
+            elif command == 'proposal-save':
+                from .proposals import save
+                if not args.file:
+                    raise RoninError('ARGUMENT_REQUIRED', '--file must name the structured proposal task JSON.')
+                result = save(project, json_file(args.file), args.references, args.proposal, args.revision)
+            elif command == 'proposal-get':
+                from .proposals import get
+                result = get(project, args.proposal)
+            elif command == 'proposal-execute':
+                from .proposals import execute
+                result = execute(project, args.proposal, args.revision)
             elif command == 'document-get':
                 result = project.document(args.document)
             elif command == 'document-restore':

@@ -1,0 +1,60 @@
+{
+  "document": "6e2f017a-96e8-430d-89bb-46c88548a710",
+  "revision": 2,
+  "frames": 2,
+  "durations": [
+    100,
+    240
+  ],
+  "cels": [
+    {
+      "version": "3729c6ec-3603-4095-b63d-9c5d4f891188",
+      "sha256": "d1ec5a0aff399de47b62c2ce8e80db9bbb78b7bc085e696c6995c8457fe5c22f",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "nonTransparentPixels": 1
+    },
+    {
+      "version": "1cef3f96-387d-4c15-bf0c-c0134924ca18",
+      "sha256": "27e6e829950d2205e4103211ecb2b161d961a7d3a23dc4e8acd9d6601bf2c170",
+      "alphaExtrema": [
+        0,
+        0
+      ],
+      "nonTransparentPixels": 0
+    },
+    {
+      "version": "51e465e3-38c3-42eb-82ce-417afc10cf90",
+      "sha256": "27e6e829950d2205e4103211ecb2b161d961a7d3a23dc4e8acd9d6601bf2c170",
+      "alphaExtrema": [
+        0,
+        0
+      ],
+      "nonTransparentPixels": 0
+    },
+    {
+      "version": "5b6a5d99-34b8-4d1e-a9b1-041f6321d914",
+      "sha256": "27e6e829950d2205e4103211ecb2b161d961a7d3a23dc4e8acd9d6601bf2c170",
+      "alphaExtrema": [
+        0,
+        0
+      ],
+      "nonTransparentPixels": 0
+    }
+  ],
+  "browserSavedAndReopened": true,
+  "pixelDrawSaved": true,
+  "saveConflictPreservedEditor": true,
+  "saveCopyReopened": true,
+  "originalCurrentRevision": 4,
+  "copyDocument": {
+    "id": "34fee7ff-922f-4fc2-8252-efd1a4758958",
+    "revision": 1,
+    "durations": [
+      100,
+      320
+    ]
+  }
+}

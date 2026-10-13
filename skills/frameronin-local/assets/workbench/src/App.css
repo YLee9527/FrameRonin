@@ -420,10 +420,10 @@
 .image-stash-panel {
   position: fixed;
   left: 12px;
-  top: 12px;
+  bottom: 76px;
   z-index: 999;
   width: 232px;
-  max-height: min(92vh, 960px);
+  max-height: min(70vh, 720px);
   overflow: hidden;
   background: linear-gradient(135deg, rgba(44, 37, 32, 0.94) 0%, rgba(61, 47, 36, 0.92) 100%);
   border: 1px solid rgba(154, 139, 120, 0.6);

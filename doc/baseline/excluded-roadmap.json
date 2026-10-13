@@ -1,0 +1,15 @@
+[
+  {
+    "id": "rseprite.export",
+    "originalEntry": "Rseprite",
+    "implementation": "reference/frontend/src/components/RoninProRseprite.tsx",
+    "inputs": "sprite frames",
+    "outputs": "editable document; original implementation has no export",
+    "dependencies": "Canvas/React",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProRseprite.tsx",
+    "sample": "fixed-rseprite-export",
+    "evidence": null,
+    "status": "excluded roadmap: not implemented in original",
+    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+  }
+]

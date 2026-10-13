@@ -38,7 +38,7 @@ def application(project, port):
     def get_project():
         return {'project': project.manifest, 'assets': project.assets(), 'operations': REGISTRY}
 
-    async def import_upload(file):
+    async def import_upload(file, asset_id=None):
         suffix = Path(file.filename or 'upload').suffix.lower()
         temporary = project.safe(f'.pending/upload-{identifier()}{suffix}')
         written = 0
@@ -49,7 +49,7 @@ def application(project, port):
                     if written > 4 * 1024**3:
                         raise RoninError('FILE_LIMIT', 'The uploaded file exceeds 4 GiB.')
                     output.write(block)
-            version = await asyncio.to_thread(project.import_file, temporary)
+            version = await asyncio.to_thread(project.import_file, temporary, asset_id)
             with project.writer(), project.connection() as db:
                 db.execute('UPDATE assets SET name=? WHERE id=?', (Path(file.filename or 'Imported asset').name, version['asset_id']))
             return version
@@ -59,8 +59,8 @@ def application(project, port):
                 temporary.unlink()
 
     @app.post('/api/assets')
-    async def import_asset(file: UploadFile = File(...)):
-        return await import_upload(file)
+    async def import_asset(file: UploadFile = File(...), assetId: str | None = Form(None)):
+        return await import_upload(file, assetId)
 
     @app.get('/api/versions/{version_id}')
     def get_version(version_id: str):
@@ -80,6 +80,25 @@ def application(project, port):
     @app.post('/api/tasks')
     def create_task(payload: dict):
         return submit(project, payload)
+
+    @app.post('/api/proposals')
+    def create_proposal(payload: dict):
+        from .proposals import save
+        if set(payload) - {'id','revision','request','selectedVersions'} or not {'request','selectedVersions'} <= payload.keys():
+            raise RoninError('PROPOSAL_FIELDS_INVALID', 'Unexpected proposal fields.')
+        return save(project, payload['request'], payload['selectedVersions'], payload.get('id'), payload.get('revision', 0))
+
+    @app.get('/api/proposals/{proposal_id}')
+    def get_proposal(proposal_id: str):
+        from .proposals import get
+        return get(project, proposal_id)
+
+    @app.post('/api/proposals/{proposal_id}/execute')
+    def execute_proposal(proposal_id: str, payload: dict):
+        from .proposals import execute
+        if set(payload) != {'revision'}:
+            raise RoninError('PROPOSAL_FIELDS_INVALID', 'Execution requires the exact reviewed revision.')
+        return execute(project, proposal_id, payload['revision'])
 
     @app.get('/api/tasks/{task_id}')
     def task_status(task_id: str):
@@ -179,7 +198,7 @@ def application(project, port):
     @app.get('/api/documents')
     def documents():
         with project.connection() as db:
-            return [dict(row) for row in db.execute('SELECT id,kind,revision,updated_at FROM documents')]
+            return [dict(row) for row in db.execute('SELECT id,kind,revision,updated_at FROM documents ORDER BY updated_at DESC')]
 
     @app.get('/api/documents/{document_id}')
     def document(document_id: str):
@@ -193,13 +212,14 @@ def application(project, port):
 
     @app.post('/api/ai/requests')
     def ai_request(payload: dict):
-        if set(payload) != {'template', 'prompt', 'references'} or not isinstance(payload['prompt'], str):
+        if set(payload) != {'template', 'prompt', 'references'} or not isinstance(payload['prompt'], str) or not 0 < len(payload['prompt']) <= 32000 or not isinstance(payload['template'], str) or not 0 < len(payload['template']) <= 200 or not isinstance(payload['references'], list) or len(payload['references']) > 16 or not all(isinstance(value, str) for value in payload['references']) or len(set(payload['references'])) != len(payload['references']):
             raise RoninError('AI_REQUEST_INVALID', 'Invalid AI request.')
         for version_id in payload['references']:
-            project.version(version_id)
+            if project.version(version_id)['metadata']['kind'] != 'image':
+                raise RoninError('AI_REFERENCE_KIND', 'Select still images as references.')
         request_id = identifier()
         # A request is a reviewable document; creating it never dispatches ImageGen.
-        project.save_document(request_id, 'image', {'type': 'imagegen-request', **payload}, 0)
+        project.save_document(request_id, 'ai-request', {'type': 'imagegen-request', **payload}, 0)
         return {'id': request_id, 'state': 'awaiting_codex', 'instruction': f'Use $frameronin-local to execute image request {request_id} in the current project.'}
 
     if WORKBENCH.is_dir():

@@ -29,9 +29,9 @@
 | image.erase | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
 | image.flip | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
 | image.transparent-repair | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.paint | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| image.erase | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| image.crop | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
+| fine.image.paint | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
+| fine.image.erase | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
+| fine.image.crop | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
 | image.grid | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
 | image.palette | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
 | image.alpha | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
@@ -46,14 +46,14 @@
 | sequence.slice | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | image/frames → PNG/ZIP | 待逐项验收 |
 | sequence.compose | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | image/frames → PNG/ZIP | 待逐项验收 |
 | image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
-| image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
+| 精灵表调整.image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → PNG | 待逐项验收 |
 | image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → PNG ZIP | 待逐项验收 |
 | image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP | 待逐项验收 |
 | image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP | 待逐项验收 |
 | image.resize-hard | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 待逐项验收 |
-| image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 待逐项验收 |
+| 自定义缩放.image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 待逐项验收 |
 | audio.wav-to-mp3 | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.batch | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.zip | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
@@ -62,9 +62,9 @@
 | image.preprocess | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.matte | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.alpha-repair | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
-| image.grid | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
+| 单图Pro.image.grid | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.double-background | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |
-| image.alpha-repair | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |
+| 高级像素.image.alpha-repair | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |
 | image.frontier-erode | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |
 | workflow.node-edit | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
 | workflow.edge-edit | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
@@ -72,16 +72,15 @@
 | workflow.export | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
 | workflow.13-presets | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
 | workflow.execute | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
-| rseprite.draw | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.erase | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.layers | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.frames-add | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.frames-delete | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.frames-copy | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.frame-duration | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.undo | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.redo | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
-| rseprite.export | Rseprite | reference/frontend/src/components/Rseprite/RsepriteEditor.tsx | sprite frames → PNG/GIF/ZIP | 待逐项验收 |
+| rseprite.draw | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.erase | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.layers | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.frames-add | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.frames-delete | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.frames-copy | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.frame-duration | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.undo | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
+| rseprite.redo | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
 | map.tile-layout | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
 | map.save | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
 | map.adjacency | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
@@ -100,29 +99,29 @@
 | external.source | 素材源码 | reference/frontend/src/components/AssetsAndSourceShare.tsx | browser navigation → source/assets links | 待逐项验收 |
 | external.godot-code | 素材源码 | reference/frontend/src/components/AssetsAndSourceShare.tsx | browser navigation → source/assets links | 待逐项验收 |
 | external.finished-project | 素材源码 | reference/frontend/src/components/AssetsAndSourceShare.tsx | browser navigation → source/assets links | 待逐项验收 |
-| node.workflowInputImage | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.geminiWatermarkRemove | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.resize | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.resizeHard | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.crop | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.matteContiguous | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.matteGlobal | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.matteDoubleBackground | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.mattePostRepair | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.alphaFrontierErode | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.padExpand | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.evenSplitStrip | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.evenSplitPerCellEdge | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.mergeStrip | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.simpleStitchVertical | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridDeleteRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridDeleteCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridExpandRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridExpandCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridFlipRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridFlipCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridCopyRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.gridCopyCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
-| node.customGridRearrange | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | 待逐项验收 |
+| node.workflowInputImage | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.geminiWatermarkRemove | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.resize | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.resizeHard | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.crop | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.matteContiguous | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.matteGlobal | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.matteDoubleBackground | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.mattePostRepair | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.alphaFrontierErode | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.padExpand | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.evenSplitStrip | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.evenSplitPerCellEdge | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.mergeStrip | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.simpleStitchVertical | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridDeleteRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridDeleteCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridExpandRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridExpandCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridFlipRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridFlipCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridCopyRow | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.gridCopyCol | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
+| node.customGridRearrange | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
 
-JSON 清单还记录依赖、目标模块、固定样本、限制和证据。复制源码不是验收通过；完成各模块后更新证据。
+JSON 清单还记录依赖、目标模块、固定样本、限制和证据。原仓库未实现的 Rseprite 导出列入 excluded-roadmap.json，不计入复刻基线。复制源码不代表验收通过。

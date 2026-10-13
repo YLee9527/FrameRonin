@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Card, Checkbox, Slider, Space, Typography } from 'antd'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { App, Button, Card, Checkbox, Slider, Space, Typography } from 'antd'
 import {
   DEFAULT_PAINT_RGBA,
   EditorCanvas,
@@ -11,6 +11,9 @@ import {
 } from './Rseprite'
 import type { Rgba, RsepriteTool } from './Rseprite'
 import { useLanguage } from '../i18n/context'
+import DocumentSaveBar from '../localProject/DocumentSaveBar'
+import { RsepritePersistence, type StoredRseprite } from '../localProject/rsepriteDocument'
+import type { Document } from './Rseprite/types'
 
 const DEFAULT_W = 64
 const DEFAULT_H = 64
@@ -20,7 +23,8 @@ const DEFAULT_H = 64
  * 第 1 步：文档；第 2～5 步：画布与历史；第 6 步：图层；第 7～9 步：多帧、复制帧、延时、洋葱皮
  */
 export default function RoninProRseprite() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const { message } = App.useApp()
   const {
     doc,
     activeFrameIndex,
@@ -39,6 +43,8 @@ export default function RoninProRseprite() {
     canUndo,
     canRedo,
   } = useRsepriteState(DEFAULT_W, DEFAULT_H)
+  const persistence = useRef<RsepritePersistence | null>(null)
+  persistence.current ??= new RsepritePersistence()
 
   const [tool, setTool] = useState<RsepriteTool>('pencil')
   const [onionSkinEnabled, setOnionSkinEnabled] = useState(false)
@@ -55,6 +61,7 @@ export default function RoninProRseprite() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.isComposing) return
       const el = e.target as HTMLElement | null
       if (
         el instanceof HTMLInputElement ||
@@ -104,34 +111,16 @@ export default function RoninProRseprite() {
     [dispatch, activeFrameIndex, activeLayerIndex],
   )
 
-  useEffect(() => {
-    console.info('[Rseprite Step1] document', doc)
-  }, [doc])
-
   const activeLayerLocked = doc.layers[activeLayerIndex]?.locked ?? true
-
-  const step1Stats = useMemo(() => {
-    const cur = doc.frames[activeFrameIndex] ?? doc.frames[0]
-    const cel0 = cur?.cels[0]
-    const imageData = cel0?.imageData
-    return {
-      frameCount: doc.frames.length,
-      layerCount: doc.layers.length,
-      celCount: cur?.cels.length ?? 0,
-      celW: imageData?.width ?? 0,
-      celH: imageData?.height ?? 0,
-      bufferBytes: imageData?.data?.byteLength ?? 0,
-    }
-  }, [doc, activeFrameIndex])
-
-  const milestones: string[] = [
-    t('roninProRsepriteRoadmapM1'),
-    t('roninProRsepriteRoadmapM2'),
-    t('roninProRsepriteRoadmapM3'),
-  ]
 
   return (
     <div style={{ width: '100%', maxWidth: 'min(calc(100vw - 48px), 1920px)' }}>
+      <DocumentSaveBar<Document, StoredRseprite> kind="rseprite" snapshot={doc}
+        serialize={document => persistence.current!.serialize(document)} restore={async value => {
+          const document = await persistence.current!.deserialize(value)
+          dispatch({ type: 'RESTORE_DOCUMENT', document })
+          return document
+        }} />
       <Typography.Paragraph style={{ marginBottom: 16, fontSize: 15 }}>
         {t('roninProRsepriteLead')}
       </Typography.Paragraph>
@@ -150,24 +139,11 @@ export default function RoninProRseprite() {
         </Typography.Paragraph>
         <Typography.Paragraph style={{ marginBottom: 8 }}>
           <Typography.Text strong>{t('roninProRsepriteStep1Frames')}：</Typography.Text>{' '}
-          {step1Stats.frameCount}（{t('roninProRsepriteStep1Expect')} ≥ 1）
+          {doc.frames.length}
         </Typography.Paragraph>
         <Typography.Paragraph style={{ marginBottom: 8 }}>
           <Typography.Text strong>{t('roninProRsepriteStep1Layers')}：</Typography.Text>{' '}
-          {step1Stats.layerCount}（{t('roninProRsepriteStep1Expect')} ≥ 2）
-        </Typography.Paragraph>
-        <Typography.Paragraph style={{ marginBottom: 8 }}>
-          <Typography.Text strong>{t('roninProRsepriteStep1Cels')}：</Typography.Text>{' '}
-          {step1Stats.celCount}（{t('roninProRsepriteStep1Expect')}{' '}
-          {step1Stats.layerCount}）
-        </Typography.Paragraph>
-        <Typography.Paragraph style={{ marginBottom: 8 }}>
-          <Typography.Text strong>{t('roninProRsepriteStep1CelBuffer')}：</Typography.Text>{' '}
-          {t('roninProRsepriteStep1CurrentFrame')} {activeFrameIndex + 1} — {step1Stats.celW} ×{' '}
-          {step1Stats.celH} RGBA，{step1Stats.bufferBytes} {t('roninProRsepriteStep1Bytes')}
-        </Typography.Paragraph>
-        <Typography.Paragraph type="secondary" style={{ marginBottom: 12, fontSize: 12 }}>
-          {t('roninProRsepriteStep1Console')}
+          {doc.layers.length}
         </Typography.Paragraph>
         <Space wrap>
           <Button size="small" onClick={() => resetDocument(32, 32)}>
@@ -228,7 +204,13 @@ export default function RoninProRseprite() {
           doc={doc}
           activeFrameIndex={activeFrameIndex}
           onSelectFrame={setActiveFrame}
-          onDuplicateFrame={addFrame}
+          onDuplicateFrame={() => {
+            if (doc.frames.length >= 1000 || (doc.frames.length + 1) * doc.layers.length * doc.width * doc.height * 4 > 256 * 1024 ** 2) {
+              message.error(lang === 'zh' ? '添加帧将超过文档内存或帧数限制，请缩小画布或减少帧。' : lang === 'ja' ? 'フレーム数またはメモリの上限です。サイズやフレーム数を減らしてください。' : 'Adding a frame would exceed the document budget. Reduce the canvas size or frame count.')
+              return
+            }
+            addFrame()
+          }}
           onDeleteFrame={deleteFrame}
           onFrameDurationChange={setFrameDuration}
         />
@@ -299,20 +281,6 @@ export default function RoninProRseprite() {
         </Typography.Paragraph>
       </Card>
 
-      <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 12 }}>
-        {t('roninProRsepriteRoadmapTitle')}
-      </Typography.Title>
-      <ul style={{ margin: '0 0 16px 0', paddingLeft: 20, lineHeight: 1.8 }}>
-        {milestones.map((item) => (
-          <li key={item}>
-            <Typography.Text>{item}</Typography.Text>
-          </li>
-        ))}
-      </ul>
-
-      <Typography.Paragraph type="secondary" style={{ marginBottom: 0, fontSize: 13 }}>
-        {t('roninProRsepriteDocLine')}
-      </Typography.Paragraph>
     </div>
   )
 }

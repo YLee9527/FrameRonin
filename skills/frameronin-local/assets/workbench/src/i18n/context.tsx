@@ -46,15 +46,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   setLangRef.current = setLang
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.isComposing || !e.altKey || !(e.metaKey || e.ctrlKey)) return
       const target = e.target as HTMLElement
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return
-      if (e.key === 'j' || e.key === 'J') {
+      if (e.code === 'Digit3') {
         e.preventDefault()
         setLangRef.current('ja')
-      } else if (e.key === 'h' || e.key === 'H') {
+      } else if (e.code === 'Digit2') {
         e.preventDefault()
         setLangRef.current('en')
-      } else if (e.key === 'c' || e.key === 'C') {
+      } else if (e.code === 'Digit1') {
         e.preventDefault()
         setLangRef.current('zh')
       }

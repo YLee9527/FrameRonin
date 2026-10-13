@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-14",
+  "psd": {
+    "sha256": "9d8c45e5715fc581d1dfc81c48cab736c01971c80a8e687dd09dfb26f68a8cbc",
+    "dimensions": [
+      1894,
+      1024
+    ],
+    "decodedLayers": 2,
+    "kritaNativeAcceptance": "pending: Mac locked"
+  },
+  "godot": {
+    "version": "4.7.2",
+    "exportZipSha256": "340e3f1a0c63e664332635493f64e0f9e254e53db32a849ab450cca6f16fa426",
+    "trustedSceneOnly": true,
+    "aiScriptsRun": false,
+    "editorImportExit": 0,
+    "mainSceneRunExit": 0,
+    "framesRun": 3,
+    "sceneHashes": {
+      "map_stitch_second.tscn": "3d984b4f1559e66d43fbb2e90ac00cc22b8f96ff7c6f406f113c58bcaf8db911",
+      "map_stitch_godot.tscn": "3d984b4f1559e66d43fbb2e90ac00cc22b8f96ff7c6f406f113c58bcaf8db911"
+    }
+  }
+}

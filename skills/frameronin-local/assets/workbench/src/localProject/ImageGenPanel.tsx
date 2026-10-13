@@ -3,11 +3,12 @@ import { Alert, Button, Input, Modal, Select, Space, Typography } from 'antd'
 import { useLanguage } from '../i18n/context'
 import { jsonPost, localJson } from './api'
 import { requestImageGen } from './imagegen'
+import { GEM_PIXEL_POTPOURRI, GEM_PIXEL_POTPOURRI_HUB_SLOTS } from '../lib/gemPixelUrls'
 
-type Asset = { id: string; name: string; current_version: string }
+type Asset = { id: string; name: string; current_version: string; metadata?: { kind: string } }
 
 export default function ImageGenPanel() {
-  const { lang } = useLanguage()
+  const { lang, t } = useLanguage()
   const [template, setTemplate] = useState<string | null>(null)
   const [prompt, setPrompt] = useState('')
   const [assets, setAssets] = useState<Asset[]>([])
@@ -42,10 +43,12 @@ export default function ImageGenPanel() {
   }, [])
   return <Modal open={template !== null} title={text.title} onCancel={() => setTemplate(null)} footer={null} destroyOnHidden>
     <Space orientation="vertical" style={{ width: '100%' }}>
-      <Typography.Text>{template}</Typography.Text>
-      <Input.TextArea value={prompt} onChange={event => setPrompt(event.target.value)} placeholder={text.prompt} rows={5} />
+      <Typography.Text>{[...GEM_PIXEL_POTPOURRI, ...GEM_PIXEL_POTPOURRI_HUB_SLOTS].find(item => item?.url === `#imagegen/${template}`)?.labelKey
+        ? t([...GEM_PIXEL_POTPOURRI, ...GEM_PIXEL_POTPOURRI_HUB_SLOTS].find(item => item?.url === `#imagegen/${template}`)!.labelKey)
+        : text.title}</Typography.Text>
+      <Input.TextArea value={prompt} onChange={event => setPrompt(event.target.value)} placeholder={text.prompt} rows={5} maxLength={32000} />
       <Select mode="multiple" style={{ width: '100%' }} placeholder={text.reference} value={references} onChange={setReferences}
-        options={assets.map(asset => ({ label: asset.name, value: asset.current_version }))} />
+        maxCount={16} options={assets.filter(asset => asset.metadata?.kind === 'image').map(asset => ({ label: asset.name, value: asset.current_version }))} />
       {error && <Alert type="error" title={error} />}
       <Button type="primary" loading={busy} disabled={!prompt.trim()} onClick={async () => {
         setBusy(true); setError('')

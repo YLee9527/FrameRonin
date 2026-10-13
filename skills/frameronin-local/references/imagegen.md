@@ -7,8 +7,8 @@
 1. 明确模板、角色、方向、动作、帧布局、目标像素尺寸、背景要求和选定版本。
 2. `ai-begin --sample <固定样本名> --template <模板名> --prompt <明确提示词> --references <版本...>` 记录尝试。实际调用前标记 `ai-mark --attempt <id> --state running`。
 3. 用宿主 ImageGen 生成或参考图编辑。透明素材显式要求透明背景；避免把高分辨率像素风格图宣称为真实 64×64 文件。
-4. 完整解码、查看一致性、动作帧数、透明度与地图接缝；导入结果，必要时执行明确的最近邻缩放、切片、调色或抠图。
-5. `ai-mark --attempt <id> --state succeeded|quality_failed --version <正式结果版本> --file <质量记录.json>`。调用成功与质量合格分别记录。
+4. 完整解码、查看一致性、动作帧数、透明度与地图接缝；保存质量记录，必要时再执行明确的最近邻缩放、切片、调色或抠图。
+5. `ai-accept --attempt <id> --file <原生结果.png> --state succeeded|quality_failed --quality <质量记录.json>` 统一核验并登记结果。调用成功与质量合格分别记录；取消后不能普通导入再标记成功。
 
 每个质量样本最多首次加两次明确触发的重试。超时或断线标记 `unknown`，取消请求标记 `cancel_requested`；核对宿主原调用、线程和实际文件后才能判为最终失败或取消，禁止直接再次生成。引擎不虚构服务端取消证明。
 

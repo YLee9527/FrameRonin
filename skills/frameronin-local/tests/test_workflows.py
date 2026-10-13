@@ -43,6 +43,18 @@ class StrictWorkflowTests(unittest.TestCase):
         graph = {'version': 7, 'nodes': [{'id':'a','type':'crop','params':{}},{'id':'b','type':'crop','params':{}}],
                  'edges': [{'id':'ab','source':'a','target':'b'},{'id':'ba','source':'b','target':'a'}]}
         with self.assertRaises(RoninError): validate(graph, 1)
+
+    def test_stitch_shared_and_named_ports(self):
+        graph = {'version': 7, 'nodes': [
+            {'id':'a','type':'workflowInputImage','params':{'imageIndex':1}},
+            {'id':'b','type':'workflowInputImage','params':{'imageIndex':2}},
+            {'id':'s','type':'simpleStitchVertical','params':{'stitchMode':2}}],
+            'edges':[{'id':'a-s','source':'a','target':'s'},{'id':'b-s','source':'b','target':'s'}]}
+        validate(graph, 2)
+        graph['edges'][0]['targetPort'] = 'in1'; graph['edges'][1]['targetPort'] = 'in2'
+        validate(graph, 2)
+        del graph['edges'][0]['targetPort']
+        with self.assertRaises(RoninError): validate(graph, 2)
         graph = self.graph(); graph['nodes'][1] = {'id':'resize','type':'matteDoubleBackground','params':{}}
         graph['edges'][0]['targetPort'] = 'inA'
         with self.assertRaises(RoninError): validate(graph, 1)

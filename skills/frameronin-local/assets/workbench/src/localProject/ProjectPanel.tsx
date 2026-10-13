@@ -4,8 +4,8 @@ import { FolderOpenOutlined, UploadOutlined } from '@ant-design/icons'
 import { useLanguage } from '../i18n/context'
 import { jsonPost, localJson } from './api'
 
-type Asset = { id: string; name: string; current_version: string }
-type Task = { id: string; state: string; progress: number; results: string[]; error?: { message: string } }
+type Asset = { id: string; name: string; current_version: string; metadata?: { kind: string; width?: number; height?: number; thumbnailDataUrl?: string } }
+type Task = { id: string; state: string; progress: number; results: string[]; aiState?: string; error?: { message: string } }
 
 export default function ProjectPanel() {
   const { lang } = useLanguage()
@@ -14,9 +14,13 @@ export default function ProjectPanel() {
   const [assets, setAssets] = useState<Asset[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [error, setError] = useState('')
+  const [canceling, setCanceling] = useState<Set<string>>(() => new Set())
   const text = lang === 'zh' ? { project: '项目素材与任务', import: '导入素材', tasks: '后台任务', cancel: '取消', versions: '正式素材', error: '本地项目服务未连接' }
     : lang === 'ja' ? { project: '素材とタスク', import: '素材を読み込む', tasks: 'バックグラウンドタスク', cancel: 'キャンセル', versions: 'プロジェクト素材', error: 'ローカルサービスに接続できません' }
       : { project: 'Project assets and tasks', import: 'Import assets', tasks: 'Background tasks', cancel: 'Cancel', versions: 'Project assets', error: 'Local project service is disconnected' }
+  const statusNames: Record<string, string> = lang === 'zh' ? { queued: '等待', running: '处理中', succeeded: '已完成', failed: '失败', canceled: '已取消' }
+    : lang === 'ja' ? { queued: '待機中', running: '処理中', succeeded: '完了', failed: '失敗', canceled: 'キャンセル済み' }
+      : { queued: 'Queued', running: 'Processing', succeeded: 'Completed', failed: 'Failed', canceled: 'Canceled' }
   const refresh = useCallback(async () => {
     try {
       const [project, jobs] = await Promise.all([localJson<{ project: { name: string }; assets: Asset[] }>('/api/project'), localJson<Task[]>('/api/tasks')])
@@ -41,17 +45,30 @@ export default function ProjectPanel() {
           return false
         }}><Button icon={<UploadOutlined />}>{text.import}</Button></Upload>
         <Typography.Title level={5}>{text.versions}</Typography.Title>
-        <List dataSource={assets} renderItem={asset => <List.Item><a href={`/api/versions/${asset.current_version}/content`} target="_blank" rel="noreferrer">{asset.name}</a></List.Item>} />
+        <List dataSource={assets} renderItem={asset => <List.Item><Space>
+          {asset.metadata?.kind === 'image' && asset.metadata.thumbnailDataUrl && <img src={asset.metadata.thumbnailDataUrl} loading="lazy" width={48} height={48}
+            style={{ objectFit: 'contain', imageRendering: 'pixelated' }} alt={asset.name} draggable onDragStart={event => {
+              event.dataTransfer.setData('application/x-frameronin-stash-url', `/api/versions/${asset.current_version}/content`)
+              event.dataTransfer.effectAllowed = 'copy'
+            }} />}
+          <a href={`/api/versions/${asset.current_version}/content`} target="_blank" rel="noreferrer">{asset.name}</a>
+          {asset.metadata?.width && <Typography.Text type="secondary">{asset.metadata.width}×{asset.metadata.height}</Typography.Text>}
+        </Space></List.Item>} />
         <Typography.Title level={5}>{text.tasks}</Typography.Title>
         <List dataSource={tasks} renderItem={task => <List.Item><Space orientation="vertical">
-          <Space><Tag>{task.state}</Tag><Typography.Text>{Math.round(task.progress * 100)}%</Typography.Text>
-            {['queued', 'running'].includes(task.state) && <Button size="small" onClick={async () => {
+          <Space><Tag>{statusNames[task.state] ?? task.state}</Tag><Typography.Text>{Math.round(task.progress * 100)}%</Typography.Text>
+            {['queued', 'running'].includes(task.state) && <Button size="small" loading={canceling.has(task.id)} disabled={canceling.has(task.id)} onClick={async () => {
+              setCanceling(items => new Set([...items, task.id]))
               try { await localJson(`/api/tasks/${task.id}/cancel`, jsonPost({})); await refresh() }
               catch (error) { setError(String(error)) }
+              finally { setCanceling(items => { const next = new Set(items); next.delete(task.id); return next }) }
             }}>{text.cancel}</Button>}
           </Space>
           {task.error && <Typography.Text type="danger">{task.error.message}</Typography.Text>}
-          {task.results.map(version => <a key={version} href={`/api/versions/${version}/content`} target="_blank" rel="noreferrer">{version.slice(0, 8)}</a>)}
+          {task.aiState && <Typography.Text type="secondary">{task.aiState === 'cancel_requested'
+            ? (lang === 'zh' ? '结果已失效；请在 Codex 核对生成是否停止。' : lang === 'ja' ? '結果は無効です。Codex で生成の停止を確認してください。' : 'Result invalidated. Verify the original generation state in Codex.')
+            : `ImageGen · ${task.aiState}`}</Typography.Text>}
+          {task.results.map((version, index) => <a key={version} href={`/api/versions/${version}/content`} target="_blank" rel="noreferrer">{lang === 'zh' ? '查看结果' : lang === 'ja' ? '結果を表示' : 'View result'} {index + 1}</a>)}
         </Space></List.Item>} />
       </Space>
     </Drawer>

@@ -4,6 +4,17 @@
 
 | 文档 | 内容 |
 | --- | --- |
+| [产品与使用](product/USAGE.md) | 素材、编辑、保存、生成与导出 |
+| [架构开发](development/ARCHITECTURE.md) | 引擎、调度、存储与运行时 |
+| [API](development/API.md) | CLI、HTTP、提案及 AI 结果 |
+| [项目格式](data/PROJECT_FORMAT.md) | 版本、任务、文档与恢复 |
+| [AI 权限](ai/SKILL_PERMISSIONS.md) | 宿主边界、素材、取消与结果登记 |
+| [主题交互](design/INTERACTION.md) | 三语、快捷键、保存及未验收交互 |
+| [安装分发](distribution/INSTALLATION.md) | 环境、开发安装、最终包门禁 |
+| [依赖](development/DEPENDENCIES.md) | 固定版本、模型与实际审计 |
+| [排障](troubleshooting/LOCAL.md) | 错误、恢复、AI 状态和原生检查 |
+| [变更](management/CHANGELOG.md) | 已实现改变与剩余验收 |
+| [Skill 里程碑](management/SKILL_MILESTONES.md) | 当前阶段、检查点与提交 |
 | [当前实施基线](SKILL_IMPLEMENTATION.md) | 完整范围、宿主边界、阶段与提交条件 |
 | [功能对照](baseline/FEATURES.md) | 逐项来源、输入输出与验收状态 |
 | [归档](baseline/ARCHIVE.md) | 冻结提交、校验、运行产物去向 |

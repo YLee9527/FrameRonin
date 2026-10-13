@@ -27,7 +27,7 @@ export function runWorkerProcessing(
     }
     const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
     const timer = window.setTimeout(() => {
-      worker.terminate()
+      cleanup()
       reject(new Error('Worker timeout'))
     }, WORKER_TIMEOUT_MS)
 

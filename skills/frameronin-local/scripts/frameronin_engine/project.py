@@ -2,6 +2,8 @@
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import fcntl
+import base64
+import io
 import hashlib
 import json
 import os
@@ -69,6 +71,13 @@ def inspect_media(path):
                     durations.append(int(image.info.get('duration', 100)))
                     if image.mode == 'RGBA' or 'transparency' in image.info:
                         transparency |= image.convert('RGBA').getchannel('A').getextrema()[0] < 255
+                    if index == 0:
+                        thumbnail = image.convert('RGBA')
+                        thumbnail.thumbnail((128, 128), Image.Resampling.NEAREST)
+                        buffer = io.BytesIO()
+                        thumbnail.save(buffer, format='PNG')
+                        result['thumbnailDataUrl'] = 'data:image/png;base64,' + base64.b64encode(buffer.getvalue()).decode('ascii')
+                        del thumbnail
                 result.update(kind='image' if count == 1 else 'animation', width=width, height=height,
                               frames=count, durationsMs=durations, transparency=transparency,
                               pixelFormat='RGBA8', processingDimensions={'width': width, 'height': height})
@@ -79,6 +88,7 @@ def inspect_media(path):
     else:
         result['kind'] = ('video' if path.suffix.lower() in {'.mp4', '.mov', '.mkv', '.webm', '.avi'} else
                           'audio' if path.suffix.lower() in {'.wav', '.mp3', '.ogg'} else
+                          'archive' if path.suffix.lower() == '.zip' else
                           'script_pending_review' if path.suffix.lower() == '.gd' else 'document')
         if result['kind'] in ['video', 'audio']:
             import subprocess
@@ -211,7 +221,10 @@ class Project:
 
     def assets(self):
         with self.connection() as db:
-            return [dict(row) for row in db.execute('SELECT * FROM assets ORDER BY created_at,id')]
+            result = [dict(row) for row in db.execute('SELECT assets.*,versions.metadata FROM assets LEFT JOIN versions ON versions.id=assets.current_version ORDER BY assets.created_at,assets.id')]
+            for row in result:
+                row['metadata'] = json.loads(row['metadata']) if row['metadata'] else None
+            return result
 
     def version(self, version_id, verify=True):
         with self.connection() as db:
@@ -268,21 +281,42 @@ class Project:
             raise Cancelled()
 
     def _finalize_pending(self, version_id):
+        with self.connection() as db:
+            record = db.execute('SELECT * FROM pending WHERE version_id=?', (version_id,)).fetchone()
+        if not record:
+            return
+        fingerprint = self._validate_pending(record)
         with self.writer(), self.connection() as db:
             record = db.execute('SELECT * FROM pending WHERE version_id=?', (version_id,)).fetchone()
             if not record:
                 return
-            self._publish(db, record)
+            self._publish(db, record, fingerprint)
 
-    def _publish(self, db, record):
+    @staticmethod
+    def _fingerprint(path):
+        status = path.stat()
+        return status.st_dev, status.st_ino, status.st_size, status.st_mtime_ns
+
+    def _validate_pending(self, record):
+        temporary = self.safe(record['temp_path'])
+        final = self.safe(record['final_path'])
+        candidate = final if final.is_file() else temporary
+        if not candidate.is_file():
+            raise RoninError('PENDING_CONTENT_INVALID', 'An interrupted import has no complete file.')
+        fingerprint = self._fingerprint(candidate)
+        if digest(candidate) != record['sha256'] or self._fingerprint(candidate) != fingerprint:
+            raise RoninError('PENDING_CONTENT_INVALID', 'An interrupted import has invalid content.')
+        return fingerprint
+
+    def _publish(self, db, record, fingerprint):
         if record['task_id']:
             self._check_completion(db, record['task_id'], record['generation'])
         temporary = self.safe(record['temp_path'])
         final = self.safe(record['final_path'])
-        final.parent.mkdir(parents=True, exist_ok=True)
         candidate = final if final.is_file() else temporary
-        if not candidate.is_file() or digest(candidate) != record['sha256']:
-            raise RoninError('PENDING_CONTENT_INVALID', 'An interrupted import has invalid content.')
+        if not candidate.is_file() or self._fingerprint(candidate) != fingerprint:
+            raise RoninError('PENDING_CONTENT_INVALID', 'The staged output changed before publication.')
+        final.parent.mkdir(parents=True, exist_ok=True)
         if not final.is_file():
             os.replace(temporary, final)
             directory = os.open(final.parent, os.O_RDONLY)
@@ -298,17 +332,31 @@ class Project:
         db.execute('UPDATE assets SET current_version=? WHERE id=?', (record['version_id'], record['asset_id']))
         db.execute('DELETE FROM pending WHERE version_id=?', (record['version_id'],))
 
-    def finish_task(self, task_id, generation, results):
-        with self.writer(), self.connection() as db:
+    def finish_task(self, task_id, generation, results, ai_result=None):
+        with self.connection() as db:
             self._check_completion(db, task_id, generation)
             records = [db.execute('SELECT * FROM pending WHERE version_id=? AND task_id=?', (version, task_id)).fetchone()
                        for version in results]
             if not records or any(record is None for record in records):
                 raise RoninError('TASK_OUTPUT_MISSING', 'All task outputs must be staged before completion.')
-            for record in records:
-                self._publish(db, record)
+        # Full content reads happen outside the writer lock so cancellation can invalidate the task promptly.
+        fingerprints = [self._validate_pending(record) for record in records]
+        with self.writer(), self.connection() as db:
+            self._check_completion(db, task_id, generation)
+            if ai_result:
+                attempt = db.execute('SELECT * FROM ai_attempts WHERE id=?', (task_id,)).fetchone()
+                if not attempt or attempt['state'] not in ['requested', 'running', 'unknown']:
+                    raise Cancelled()
+            for record, fingerprint in zip(records, fingerprints):
+                current = db.execute('SELECT * FROM pending WHERE version_id=?', (record['version_id'],)).fetchone()
+                if current is None or dict(current) != dict(record):
+                    raise RoninError('PENDING_CONTENT_INVALID', 'A staged result changed during validation.')
+                self._publish(db, current, fingerprint)
             db.execute('UPDATE tasks SET state=?,progress=1,results=?,updated_at=? WHERE id=?',
                        ('succeeded', json.dumps(results), now(), task_id))
+            if ai_result:
+                db.execute('UPDATE ai_attempts SET state=?,result_version=?,quality=?,updated_at=? WHERE id=?',
+                           (ai_result['state'], results[0], json.dumps(ai_result['quality']), now(), task_id))
 
     def recover(self):
         with self.connection() as db:
@@ -331,11 +379,14 @@ class Project:
             remaining = [dict(row) for row in db.execute('SELECT * FROM pending')]
             known = {row[0] for row in db.execute('SELECT path FROM versions')} | {row['final_path'] for row in remaining}
             known_temp = {row['temp_path'] for row in remaining}
+            known_tasks = {row[0] for row in db.execute('SELECT id FROM tasks')}
         orphaned = [str(file.relative_to(self.root)) for file in self.safe('assets').rglob('*')
                     if file.is_file() and str(file.relative_to(self.root)) not in known]
         orphaned += [str(file.relative_to(self.root)) for file in self.safe('.pending').iterdir()
                      if file.is_file() and str(file.relative_to(self.root)) not in known_temp]
-        return {'pending': results, 'orphanedFiles': orphaned, 'policy': 'preserve_and_report'}
+        orphaned_tasks = [str(folder.relative_to(self.root)) for folder in self.safe('tasks').iterdir()
+                          if folder.is_dir() and folder.name not in known_tasks]
+        return {'pending': results, 'orphanedFiles': orphaned, 'orphanedTaskDirectories': orphaned_tasks, 'policy': 'preserve_and_report'}
 
     def checkout(self, asset_id, version_id):
         version = self.version(version_id)
@@ -347,7 +398,9 @@ class Project:
 
     def save_document(self, document_id, kind, payload, expected_revision):
         checked_id(document_id)
-        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'image', 'game']:
+        if type(expected_revision) is not int or expected_revision < 0:
+            raise RoninError('DOCUMENT_REVISION_INVALID', 'Document revisions are non-negative integers.')
+        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'image', 'game', 'ai-request']:
             raise RoninError('DOCUMENT_KIND_INVALID', 'Unknown editable document kind.')
         serialized = json.dumps(payload, ensure_ascii=False, allow_nan=False)
         if len(serialized.encode()) > 64 * 1024**2:
@@ -382,8 +435,13 @@ class Project:
         return self.save_document(document_id, current['kind'], json.loads(row['payload']), expected_revision)
 
     def begin_ai(self, sample_id, template, prompt, references):
+        if not all(isinstance(value, str) and 0 < len(value) <= limit for value, limit in [(sample_id, 200), (template, 200), (prompt, 32000)]):
+            raise RoninError('AI_REQUEST_INVALID', 'Provide bounded sample, template and prompt strings.')
+        if not isinstance(references, list) or not all(isinstance(value, str) for value in references) or len(references) > 16 or len(set(references)) != len(references):
+            raise RoninError('AI_REFERENCES_INVALID', 'Select at most 16 unique reference versions.')
         for version in references:
-            self.version(version)
+            if self.version(checked_id(version))['metadata']['kind'] != 'image':
+                raise RoninError('AI_REFERENCE_KIND', 'Select still images as ImageGen references.')
         with self.writer(), self.connection() as db:
             previous = list(db.execute('SELECT * FROM ai_attempts WHERE sample_id=? ORDER BY attempt', (sample_id,)))
             if previous and previous[-1]['state'] in ['requested', 'running', 'unknown', 'cancel_requested']:
@@ -394,24 +452,65 @@ class Project:
             db.execute('INSERT INTO ai_attempts VALUES(?,?,?,?,?,?,?,?,?,?,?)',
                        (attempt_id, sample_id, len(previous) + 1, 'requested', template, prompt,
                         json.dumps(references), None, None, now(), now()))
+            db.execute('INSERT INTO tasks(id,state,payload,created_at,updated_at) VALUES(?,?,?,?,?)',
+                       (attempt_id, 'running', json.dumps({'operation':'ai.imagegen','sampleId':sample_id,'references':references}), now(), now()))
         return {'id': attempt_id, 'sampleId': sample_id, 'attempt': len(previous) + 1, 'state': 'requested'}
 
     def mark_ai(self, attempt_id, state, result_version=None, quality=None):
         if state not in ['running', 'unknown', 'cancel_requested', 'canceled', 'failed', 'succeeded', 'quality_failed']:
             raise RoninError('AI_STATE_INVALID', 'Unsupported AI state.')
-        if result_version:
-            self.version(result_version)
-        if state in ['succeeded', 'quality_failed'] and not result_version:
-            raise RoninError('AI_RESULT_REQUIRED', 'A decoded registered result version is required.')
+        if state in ['succeeded', 'quality_failed'] or result_version:
+            raise RoninError('AI_ACCEPT_REQUIRED', 'Publish AI output through ai-accept so cancellation and result registration are checked together.')
         with self.writer(), self.connection() as db:
             record = db.execute('SELECT * FROM ai_attempts WHERE id=?', (attempt_id,)).fetchone()
             if not record:
                 raise RoninError('AI_ATTEMPT_MISSING', 'The AI attempt does not exist.')
             if record['state'] in ['canceled', 'failed', 'succeeded', 'quality_failed']:
                 raise RoninError('AI_ATTEMPT_FINAL', 'A final AI attempt cannot be overwritten.')
+            if record['state'] == 'cancel_requested' and state not in ['unknown', 'canceled', 'failed']:
+                raise RoninError('AI_CANCEL_PENDING', 'Confirm the original service state after cancellation; do not reopen generation.')
+            if state == 'running':
+                task = db.execute('SELECT state FROM tasks WHERE id=?', (attempt_id,)).fetchone()
+                if not task or task['state'] != 'running':
+                    raise RoninError('AI_RESULT_INVALIDATED', 'Generation cannot be reopened after its local result was invalidated.')
             db.execute('UPDATE ai_attempts SET state=?,result_version=?,quality=?,updated_at=? WHERE id=?',
                        (state, result_version, json.dumps(quality) if quality is not None else None, now(), attempt_id))
+            if state in ['cancel_requested', 'canceled', 'failed']:
+                db.execute('UPDATE tasks SET state=?,generation=generation+1,updated_at=? WHERE id=? AND state=?',
+                           ('failed' if state == 'failed' else 'canceled', now(), attempt_id, 'running'))
         return {'id': attempt_id, 'state': state, 'resultVersion': result_version}
+
+    def ai_attempt(self, attempt_id):
+        checked_id(attempt_id)
+        with self.connection() as db:
+            record = db.execute('SELECT * FROM ai_attempts WHERE id=?', (attempt_id,)).fetchone()
+        if not record:
+            raise RoninError('AI_ATTEMPT_MISSING', 'The AI attempt does not exist.')
+        result = dict(record)
+        result['reference_versions'] = json.loads(result['reference_versions'])
+        result['quality'] = json.loads(result['quality']) if result['quality'] else None
+        return result
+
+    def accept_ai(self, attempt_id, source, quality_state, quality):
+        attempt = self.ai_attempt(attempt_id)
+        if quality_state not in ['succeeded', 'quality_failed'] or not isinstance(quality, dict):
+            raise RoninError('AI_QUALITY_REQUIRED', 'Record the output quality decision separately from call completion.')
+        if attempt['state'] not in ['requested', 'running', 'unknown']:
+            raise RoninError('AI_RESULT_INVALIDATED', 'This AI attempt no longer accepts results.')
+        if attempt['state'] == 'unknown' and quality.get('reconciled') is not True:
+            raise RoninError('AI_RECONCILE_REQUIRED', 'Verify the original host call before accepting an uncertain result.')
+        for version_id in attempt['reference_versions']:
+            self.version(version_id)
+        with self.connection() as db:
+            task = db.execute('SELECT * FROM tasks WHERE id=?', (attempt_id,)).fetchone()
+            if not task:
+                raise RoninError('AI_LEGACY_RECONCILIATION', 'This older attempt has no cancellation epoch; reconcile it before creating a new attempt.')
+            self._check_completion(db, attempt_id, task['generation'])
+        if Path(source).suffix.lower() != '.png':
+            raise RoninError('AI_OUTPUT_FORMAT', 'ImageGen output must be a fully decoded PNG.')
+        staged = self.import_file(source, origin='codex-native-imagegen', task_id=attempt_id, generation=task['generation'], defer=True)
+        self.finish_task(attempt_id, task['generation'], [staged['id']], ai_result={'state':quality_state,'quality':quality})
+        return {'attempt':self.ai_attempt(attempt_id),'version':self.version(staged['id'])}
 
     def verify(self):
         with self.connection() as db:

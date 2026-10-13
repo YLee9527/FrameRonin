@@ -59,12 +59,16 @@ export function validateStrictWorkflow(value: unknown, fileCount: number) {
     const target = byId.get(edge.target)!
     const port = edge.targetPort ?? ''
     if (typeof port !== 'string' || !WORKFLOW_OPERATIONS[target.type]!.ports.includes(port)) throw new Error('WORKFLOW_PORT_INVALID')
-    if (target.type === 'simpleStitchVertical' && Number(port.slice(2)) > target.params.stitchSlotCount!) throw new Error('WORKFLOW_STITCH_PORT_RANGE')
+    if (target.type === 'simpleStitchVertical' && port && Number(port.slice(2)) > target.params.stitchSlotCount!) throw new Error('WORKFLOW_STITCH_PORT_RANGE')
     const identity = `${target.id}:${port}`
-    if (ports.has(identity)) throw new Error('WORKFLOW_PORT_DUPLICATE')
+    if (ports.has(identity) && !(target.type === 'simpleStitchVertical' && port === '')) throw new Error('WORKFLOW_PORT_DUPLICATE')
     ports.add(identity)
     return { id: uniqueId(edge.id), source: edge.source, target: edge.target, targetPort: port || undefined }
   })
+  for (const node of nodes.filter(node => node.type === 'simpleStitchVertical')) {
+    const incoming = edges.filter(edge => edge.target === node.id)
+    if (incoming.some(edge => !edge.targetPort) && incoming.some(edge => edge.targetPort)) throw new Error('WORKFLOW_STITCH_MIXED_PORTS')
+  }
   const strategy = computeWorkflowRunStrategy(nodes, edges, fileCount)
   if (!strategy.ok) throw new Error(`WORKFLOW_GRAPH_INVALID:${strategy.reason}`)
   return { nodes, edges, strategy: strategy.strategy }

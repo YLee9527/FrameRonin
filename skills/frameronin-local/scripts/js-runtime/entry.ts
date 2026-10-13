@@ -4,3 +4,5 @@ export { getPerfectPixel, PERFECT_PIXEL_MAX_SIDE } from '../../assets/workbench/
 export { doubleBackgroundMatteFromBlobs, postProcessDoubleBgMatteBlob, applyAlphaErosionToBlob } from '../../assets/workbench/src/lib/doubleBackgroundMatte'
 export { stitchImageBlobs } from '../../assets/workbench/src/lib/simpleStitchVertical'
 export { duplicateSpriteGridFrames } from '../../assets/workbench/src/lib/spriteGridDuplicate'
+export { createInitialState, rsepriteReducer } from '../../assets/workbench/src/components/Rseprite/useRsepriteState'
+export { validateStoredRseprite } from '../../assets/workbench/src/localProject/rsepriteDocument'

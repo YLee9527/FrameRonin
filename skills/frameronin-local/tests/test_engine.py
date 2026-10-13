@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from frameronin_engine.project import Project, identifier
 from frameronin_engine.errors import RoninError, Cancelled
 from frameronin_engine.operations import preview
-from frameronin_engine.tasks import submit, wait, cancel
+from frameronin_engine.tasks import submit, task, wait, cancel
 
 
 class ProjectTests(unittest.TestCase):
@@ -84,12 +84,30 @@ class ProjectTests(unittest.TestCase):
         self.project.mark_ai(attempt['id'], 'unknown')
         with self.assertRaises(RoninError):
             self.project.begin_ai('sample', 'free-image', 'red character', [])
+
         self.project.mark_ai(attempt['id'], 'failed')
         for _ in range(2):
             attempt = self.project.begin_ai('sample', 'free-image', 'red character', [])
             self.project.mark_ai(attempt['id'], 'failed')
         with self.assertRaises(RoninError):
             self.project.begin_ai('sample', 'free-image', 'red character', [])
+
+    def test_ai_result_acceptance_obeys_cancel_and_reconciliation(self):
+        attempt = self.project.begin_ai('accepted', 'free-image', 'character', [])
+        self.project.mark_ai(attempt['id'], 'running')
+        result = self.project.accept_ai(attempt['id'], self.source, 'succeeded', {'visual':'synthetic fixture'})
+        self.assertEqual(result['attempt']['result_version'], result['version']['id'])
+        self.assertEqual(task(self.project, attempt['id'])['state'], 'succeeded')
+        self.assertEqual(result['version']['origin'], 'codex-native-imagegen')
+        attempt = self.project.begin_ai('unknown', 'free-image', 'character', [])
+        self.project.mark_ai(attempt['id'], 'unknown')
+        with self.assertRaises(RoninError): self.project.accept_ai(attempt['id'], self.source, 'succeeded', {})
+        self.project.accept_ai(attempt['id'], self.source, 'quality_failed', {'reconciled':True,'reason':'fixture only'})
+        attempt = self.project.begin_ai('canceled', 'free-image', 'character', [])
+        canceled = cancel(self.project, attempt['id'])
+        self.assertEqual(canceled['aiState'], 'cancel_requested')
+        with self.assertRaises(RoninError): self.project.accept_ai(attempt['id'], self.source, 'succeeded', {})
+        self.project.mark_ai(attempt['id'], 'canceled')
 
     def test_worker_pixels_and_late_completion(self):
         submitted = submit(self.project, {'operation': 'image.flip', 'inputs': [self.version['id']], 'parameters': {}})
@@ -104,6 +122,59 @@ class ProjectTests(unittest.TestCase):
         self.assertLess(canceled['cancelElapsedSeconds'], 5)
         with self.assertRaises(Cancelled):
             self.project.import_file(self.source, task_id=pending['id'], generation=0)
+
+    def test_queue_keeps_later_tasks_without_worker_allocation(self):
+        source = self.root / 'larger.png'
+        Image.new('RGBA', (512, 512), (255, 40, 80, 255)).save(source)
+        version = self.project.import_file(source)
+        first = submit(self.project, {'operation':'sequence.zip','inputs':[version['id']] * 1000,'parameters':{}})
+        deadline = time.monotonic() + 5
+        while task(self.project, first['id'])['state'] == 'queued' and time.monotonic() < deadline:
+            time.sleep(0.02)
+        self.assertEqual(task(self.project, first['id'])['state'], 'running')
+        second = submit(self.project, {'operation':'image.flip','inputs':[version['id']],'parameters':{}})
+        queued = task(self.project, second['id'])
+        self.assertEqual(queued['state'], 'queued')
+        self.assertIsNone(queued['pid'])
+        self.assertEqual(cancel(self.project, first['id'])['state'], 'canceled')
+        self.assertEqual(wait(self.project, second['id'], 10)['state'], 'succeeded')
+
+    def test_cancel_during_output_checksum_rejects_publication(self):
+        task_id = identifier()
+        with self.project.connection() as db:
+            db.execute('INSERT INTO tasks(id,state,payload,created_at,updated_at) VALUES(?,?,?,?,?)',
+                       (task_id, 'running', '{}', 'now', 'now'))
+        staged = self.project.import_file(self.source, task_id=task_id, generation=0, defer=True)
+        original = self.project._validate_pending
+        def validate_then_cancel(record):
+            fingerprint = original(record)
+            cancel(self.project, task_id)
+            return fingerprint
+        with patch.object(self.project, '_validate_pending', side_effect=validate_then_cancel), self.assertRaises(Cancelled):
+            self.project.finish_task(task_id, 0, [staged['id']])
+        with self.project.connection() as db:
+            self.assertIsNone(db.execute('SELECT id FROM versions WHERE id=?', (staged['id'],)).fetchone())
+        self.assertEqual(task(self.project, task_id)['state'], 'canceled')
+
+    def test_revisioned_proposals_do_not_execute_on_preview(self):
+        from frameronin_engine.proposals import save, execute
+        payload = {'operation':'image.flip','inputs':[self.version['id']],'parameters':{}}
+        selected = [self.version['id']]
+        proposal = save(self.project, payload, selected)
+        other = self.project.import_file(self.source)
+        with self.assertRaises(RoninError): save(self.project, dict(payload, assetId=other['asset_id']), selected)
+        with self.project.connection() as db:
+            self.assertEqual(db.execute('SELECT count(*) FROM tasks').fetchone()[0], 0)
+        revised = save(self.project, payload, selected, proposal['id'], 1)
+        with self.assertRaises(RoninError): execute(self.project, proposal['id'], 1)
+        replacement = self.project.import_file(self.source, self.version['asset_id'])
+        with self.assertRaises(RoninError): execute(self.project, proposal['id'], 2)
+        with self.assertRaises(RoninError): save(self.project, dict(payload, inputs=[replacement['id']]), selected)
+        refreshed = save(self.project, payload, selected, revised['id'], 2)
+        submitted = execute(self.project, refreshed['id'], 3)
+        with self.assertRaises(RoninError): execute(self.project, refreshed['id'], 3)
+        self.assertEqual(wait(self.project, submitted['id'], 10)['state'], 'succeeded')
+        with self.assertRaises(RoninError): save(self.project, {'operation':'workflow.legacy','inputs':[self.version['id']],'parameters':{}}, selected)
 
 
 if __name__ == '__main__':

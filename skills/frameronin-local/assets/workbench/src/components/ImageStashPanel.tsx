@@ -35,9 +35,9 @@ export default function ImageStashPanel() {
   const [previewId, setPreviewId] = useState<string | null>(null)
   const [collapsed, setCollapsed] = useState(() => {
     try {
-      return localStorage.getItem(STASH_COLLAPSED_KEY) === '1'
+      return localStorage.getItem(STASH_COLLAPSED_KEY) !== '0'
     } catch {
-      return false
+      return true
     }
   })
 

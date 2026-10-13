@@ -42,3 +42,49 @@ test('PerfectPixel manual grid retains palette and reports a reduced grid', () =
   assert.equal(result.width,8);assert.equal(result.height,8)
   assert.deepEqual([...result.data.slice(0,4)],[255,0,0,255])
 })
+test('Rseprite shares one undo history across paint, frames, durations and layer state', () => {
+  let state = algorithms.createInitialState(16,16)
+  const reducer = algorithms.rsepriteReducer
+  const actions = [
+    {type:'PAINT_PIXELS',frameIndex:0,celIndex:0,pixels:[{x:2,y:3}],rgba:[255,0,0,255]},
+    {type:'ADD_FRAME'},
+    {type:'SET_FRAME_DURATION',frameIndex:1,durationMs:240},
+    {type:'SET_LAYER_VISIBLE',layerIndex:0,visible:false},
+    {type:'DELETE_FRAME',frameIndex:0},
+  ]
+  const snapshots = [state]
+  for (const action of actions) { state=reducer(state,action);snapshots.push(state) }
+  assert.equal(state.undoStack.length,5)
+  for(let index=actions.length-1;index>=0;index--) {
+    state=reducer(state,{type:'UNDO'})
+    assert.deepEqual(state.document,snapshots[index].document)
+    assert.equal(state.activeFrameIndex,snapshots[index].activeFrameIndex)
+  }
+  for(let index=1;index<snapshots.length;index++) {
+    state=reducer(state,{type:'REDO'})
+    assert.deepEqual(state.document,snapshots[index].document)
+  }
+  assert.equal(state.document.frames[0].durationMs,240)
+  assert.equal(state.document.layers[0].visible,false)
+})
+test('stored Rseprite documents reject extra fields, invalid references and resource overflow', () => {
+  const document = {formatVersion:1,width:16,height:16,layers:[{id:'layer',name:'Layer',visible:true,locked:false}],
+    frames:[{id:'frame',durationMs:100,cels:[{layerId:'layer',versionId:'00000000-0000-4000-8000-000000000001'}]}]}
+  algorithms.validateStoredRseprite(document)
+  for (const change of [value=>value.command='write',value=>value.layers[0].locked='false',
+    value=>value.layers.push(value.layers[0]),value=>value.frames[0].durationMs=0,
+    value=>value.frames[0].cels[0].layerId='missing',value=>value.frames[0].cels[0].versionId='../private.png',
+    value=>value.width=8192,value=>value.frames[0].cels[0].path='/secret']) {
+    const value=structuredClone(document);change(value);assert.throws(()=>algorithms.validateStoredRseprite(value))
+  }
+})
+test('stitch accepts shared or named ports and rejects mixing their semantics', () => {
+  const value={version:7,nodes:[{id:'a',type:'workflowInputImage',params:{imageIndex:1}},
+    {id:'b',type:'workflowInputImage',params:{imageIndex:2}},{id:'stitch',type:'simpleStitchVertical',params:{stitchMode:2}}],
+    edges:[{id:'a-s',source:'a',target:'stitch'},{id:'b-s',source:'b',target:'stitch'}]}
+  algorithms.validateStrictWorkflow(value,2)
+  value.edges[0].targetPort='in1';value.edges[1].targetPort='in2'
+  algorithms.validateStrictWorkflow(value,2)
+  delete value.edges[0].targetPort
+  assert.throws(()=>algorithms.validateStrictWorkflow(value,2))
+})

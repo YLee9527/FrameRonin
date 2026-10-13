@@ -1,5 +1,6 @@
 import ProjectPanel from './localProject/ProjectPanel'
 import ImageGenPanel from './localProject/ImageGenPanel'
+import { navigateWithSave } from './localProject/navigationGuard'
 import { lazy, Suspense, useCallback, useState, useEffect } from 'react'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { App as AntdApp, Button, Card, ConfigProvider, Layout, Spin, Steps } from 'antd'
@@ -70,7 +71,8 @@ function AppHeaderRight({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => v
 
 function App() {
   const { lang, setLang, t } = useLanguage()
-  const [mode, setMode] = useState<AppMode>(null)
+  const [mode, updateMode] = useState<AppMode>(null)
+  const setMode = useCallback((value: AppMode) => { void navigateWithSave(() => updateMode(value)) }, [])
   /** 首页快捷键：R/T/N → RoninPro 子模块、S → Sprite Sheet 调整等 */
   const [roninProDeepLink, setRoninProDeepLink] = useState<string | null>(null)
   const consumeRoninProDeepLink = useCallback(() => setRoninProDeepLink(null), [])
@@ -98,6 +100,7 @@ function App() {
   /** 任意大功能内按 B 返回首页（输入框内不触发，避免误触） */
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.isComposing) return
       if (mode === null) return
       if (e.code !== 'KeyB') return
       if (e.ctrlKey || e.metaKey || e.altKey) return

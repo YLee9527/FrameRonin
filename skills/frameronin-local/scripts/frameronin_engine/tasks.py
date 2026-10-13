@@ -10,7 +10,7 @@ import time
 import psutil
 from .errors import Cancelled, RoninError
 from .operations import preview
-from .project import Project, identifier, now
+from .project import Project, digest, identifier, now
 
 FINAL = {'succeeded', 'failed', 'canceled'}
 ENTRY = Path(__file__).resolve().parents[1] / 'frameronin.py'
@@ -24,21 +24,23 @@ def task(project, task_id):
     result = dict(row)
     for field in ['payload', 'results', 'error']:
         result[field] = json.loads(result[field]) if result[field] else None
+    if result['payload'].get('operation') == 'ai.imagegen':
+        result['aiState'] = project.ai_attempt(task_id)['state']
     return result
 
 
-def submit(project, payload):
+def submit(project, payload, precommit=None):
     details = preview(project, payload)
     task_id = identifier()
     directory = project.safe(f'tasks/{task_id}')
     directory.mkdir()
     with project.writer(), project.connection() as db:
+        if precommit:
+            precommit(db, task_id)
         db.execute('INSERT INTO tasks(id,state,payload,created_at,updated_at) VALUES(?,?,?,?,?)',
                    (task_id, 'queued', json.dumps(payload), now(), now()))
-    with (directory / 'worker.log').open('ab') as log:
-        process = subprocess.Popen([sys.executable, str(ENTRY), 'worker', '--project', str(project.root), '--task', task_id],
-                                   stdout=log, stderr=log, stdin=subprocess.DEVNULL, start_new_session=True)
-        threading.Thread(target=process.wait, daemon=True).start()
+    from .queue import enqueue
+    enqueue(project, task_id)
     return {'id': task_id, 'state': 'queued', 'preview': {k: v for k, v in details.items() if k != 'versions'}}
 
 
@@ -69,6 +71,8 @@ def cancel(project, task_id):
         # Invalidate all completion callbacks before delivering any process signal.
         db.execute('UPDATE tasks SET state=?,generation=generation+1,updated_at=? WHERE id=?',
                    ('canceled', now(), task_id))
+        db.execute('UPDATE ai_attempts SET state=?,updated_at=? WHERE id=? AND state IN (?,?,?)',
+                   ('cancel_requested', now(), task_id, 'requested', 'running', 'unknown'))
     process = _owned_process(record)
     if process:
         try:
@@ -111,6 +115,9 @@ def recover_tasks(project):
                            ('failed', json.dumps({'code': 'WORKER_INTERRUPTED', 'message': 'The worker stopped before completing.'}),
                             now(), record['id'], record['state']))
             results.append(record['id'])
+        elif record['state'] == 'queued' and not record['pid']:
+            from .queue import enqueue
+            enqueue(project, record['id'])
     return results
 
 
@@ -127,6 +134,19 @@ def worker(project, task_id):
     try:
         details = preview(project, json.loads(record['payload']))
         directory = project.safe(f'tasks/{task_id}/output')
+        frozen = project.safe(f'tasks/{task_id}/inputs')
+        frozen.mkdir(exist_ok=True)
+        copies = {}
+        for version in details['versions']:
+            if version['id'] not in copies:
+                import shutil
+                source = Path(version['absolutePath'])
+                target = frozen / (version['id'] + source.suffix)
+                shutil.copyfile(source, target)
+                if digest(target) != version['sha256']:
+                    raise RoninError('INPUT_COPY_CHANGED', 'A selected version changed while copying the task inputs.')
+                copies[version['id']] = target
+            version['absolutePath'] = str(copies[version['id']])
         peak = [0]
 
         def monitor():

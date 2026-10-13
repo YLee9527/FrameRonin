@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { navigateWithSave } from '../localProject/navigationGuard'
 import { Button, Card, Col, Row, Typography } from 'antd'
 import {
   AppstoreOutlined,
@@ -103,7 +104,8 @@ export default function RoninPro({
   onSendToFineProcess,
 }: RoninProProps) {
   const { t } = useLanguage()
-  const [activeFeature, setActiveFeature] = useState<string | null>(null)
+  const [activeFeature, updateFeature] = useState<string | null>(null)
+  const setActiveFeature = useCallback((value: string | null) => { void navigateWithSave(() => updateFeature(value)) }, [])
 
   useEffect(() => {
     if (!deepLinkFeature) return
