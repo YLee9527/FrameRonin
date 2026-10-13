@@ -1,0 +1,51 @@
+# Python
+__pycache__
+*.py[cod]
+*.pyo
+.Python
+.env
+.env.local
+frontend/.env.local
+# Hardhat / 合约：整个 contracts 目录不进入 Git（无例外）
+contracts/
+# 合约相关说明（仅本机，不推送）
+docs/CONTRACTS-LOCAL.md
+.venv
+venv
+*.egg-info
+.eggs
+
+# Node (root level if any)
+node_modules
+
+# Build outputs
+dist
+frontend/dist
+*.tsbuildinfo
+
+# User uploads / runtime data (禁止提交到任何远程)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# 临时提取的 base64（已嵌入代码）
+frontend/scripts/bg*.txt
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example

@@ -1,0 +1,281 @@
+[
+  {
+    "id": "Dfinal",
+    "source": "reference/frontend/public/bpset/Dfinal.json",
+    "version": 6,
+    "nodeTypes": [
+      "evenSplitPerCellEdge",
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "workflowInputImage",
+      "workflowInputImage",
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "crop",
+      "evenSplitPerCellEdge",
+      "simpleStitchVertical",
+      "customGridRearrange"
+    ],
+    "nodes": 13,
+    "edges": 12,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "RPGMakerVX",
+    "source": "reference/frontend/public/bpset/RPGMakerVX.json",
+    "version": 7,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "gridDeleteCol"
+    ],
+    "nodes": 4,
+    "edges": 3,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "RPGMakerXP",
+    "source": "reference/frontend/public/bpset/RPGMakerXP.json",
+    "version": 7,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "gridCopyRow",
+      "gridFlipRow",
+      "matteContiguous",
+      "evenSplitPerCellEdge"
+    ],
+    "nodes": 6,
+    "edges": 5,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "rpgmakerV3X",
+    "source": "reference/frontend/public/bpset/rpgmakerV3X.json",
+    "version": 5,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "customGridRearrange",
+      "workflowInputImage",
+      "workflowInputImage",
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "customGridRearrange",
+      "simpleStitchVertical"
+    ],
+    "nodes": 11,
+    "edges": 10,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "rpgmakerv1.1x",
+    "source": "reference/frontend/public/bpset/rpgmakerv1.1x.json",
+    "version": 6,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "matteContiguous",
+      "resize",
+      "gridCopyRow",
+      "gridFlipRow"
+    ],
+    "nodes": 5,
+    "edges": 4,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "八方向",
+    "source": "reference/frontend/public/bpset/八方向.json",
+    "version": 6,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "crop"
+    ],
+    "nodes": 4,
+    "edges": 3,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "吞食天地",
+    "source": "reference/frontend/public/bpset/吞食天地.json",
+    "version": 7,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "gridDeleteRow",
+      "gridDeleteCol",
+      "gridDeleteCol",
+      "gridDeleteRow",
+      "gridCopyCol",
+      "resize",
+      "matteGlobal",
+      "workflowInputImage",
+      "workflowInputImage",
+      "geminiWatermarkRemove",
+      "resize",
+      "gridDeleteRow",
+      "gridDeleteCol",
+      "matteGlobal",
+      "gridDeleteRow",
+      "gridDeleteCol",
+      "gridDeleteRow",
+      "crop",
+      "resize",
+      "workflowInputImage",
+      "resize",
+      "gridDeleteRow",
+      "gridDeleteCol",
+      "matteGlobal",
+      "gridDeleteCol",
+      "customGridRearrange"
+    ],
+    "nodes": 28,
+    "edges": 25,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "小苏剑士",
+    "source": "reference/frontend/public/bpset/小苏剑士.json",
+    "version": 7,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "workflowInputImage",
+      "matteContiguous",
+      "workflowInputImage",
+      "geminiWatermarkRemove",
+      "resize",
+      "crop",
+      "crop",
+      "customGridRearrange",
+      "evenSplitPerCellEdge",
+      "evenSplitPerCellEdge",
+      "matteContiguous",
+      "customGridRearrange",
+      "simpleStitchVertical"
+    ],
+    "nodes": 15,
+    "edges": 14,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "弓兵",
+    "source": "reference/frontend/public/bpset/弓兵.json",
+    "version": 6,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "crop",
+      "matteContiguous",
+      "customGridRearrange",
+      "evenSplitPerCellEdge",
+      "workflowInputImage",
+      "workflowInputImage",
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous",
+      "evenSplitPerCellEdge",
+      "customGridRearrange",
+      "simpleStitchVertical",
+      "gridCopyRow",
+      "gridCopyRow",
+      "gridDeleteRow",
+      "gridDeleteRow"
+    ],
+    "nodes": 18,
+    "edges": 17,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "普通V2&2.2",
+    "source": "reference/frontend/public/bpset/普通V2&2.2.json",
+    "version": 6,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "matteContiguous"
+    ],
+    "nodes": 3,
+    "edges": 2,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "狗",
+    "source": "reference/frontend/public/bpset/狗.json",
+    "version": 6,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "crop",
+      "matteContiguous"
+    ],
+    "nodes": 4,
+    "edges": 3,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "鸟怪",
+    "source": "reference/frontend/public/bpset/鸟怪.json",
+    "version": 5,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "crop",
+      "matteContiguous"
+    ],
+    "nodes": 4,
+    "edges": 3,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  },
+  {
+    "id": "128土豆",
+    "source": "reference/frontend/public/bpseti/128土豆.json",
+    "version": 7,
+    "nodeTypes": [
+      "geminiWatermarkRemove",
+      "resize",
+      "customGridRearrange",
+      "crop",
+      "matteContiguous",
+      "customGridRearrange",
+      "evenSplitPerCellEdge",
+      "customGridRearrange"
+    ],
+    "nodes": 8,
+    "edges": 7,
+    "sample": "fixed-rgba-grid-1024",
+    "expectedOutput": "PNG; source graph operations and layout preserved",
+    "acceptance": "pending actual pixel comparison"
+  }
+]

@@ -37,6 +37,16 @@ backend/uploads/*
 .DS_Store
 Thumbs.db
 
+# FrameRonin local skill: private runtimes, projects and validation scratch
+skills/*/.runtime/
+skills/*/assets/workbench/node_modules/
+skills/*/assets/workbench/dist/
+.frameronin-work/
+.frameronin-local-archive/
+*.frameronin/
+__pycache__/
+*.pyc
+
 # Logs
 *.log
 logs/

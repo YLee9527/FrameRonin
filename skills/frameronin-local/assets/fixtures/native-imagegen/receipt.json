@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "id": "native-generation",
+      "file": "generated-blue.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "0e54fb7fb7f6cbb955fb28e6e55dade6fdb022d4cb9887586b0d6b9336aa4828",
+      "attempt": 1,
+      "transport": "host-native-imagegen",
+      "decodePassed": true,
+      "visualReview": "full-body consistent ronin; sash blue to red; transparent background; no literal 64px output claimed"
+    },
+    {
+      "id": "native-reference-edit",
+      "file": "edited-red.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "d66b141714349911bd52cac9cdf93711fc23c257e5a7c6440311a402344be3ec",
+      "attempt": 1,
+      "transport": "host-native-imagegen",
+      "decodePassed": true,
+      "visualReview": "full-body consistent ronin; sash blue to red; transparent background; no literal 64px output claimed"
+    }
+  ],
+  "serviceCancellationVerified": false,
+  "hostContext": "inherited; no isolation assertion",
+  "quality": "single-character generation/edit passed; other templates not yet accepted"
+}

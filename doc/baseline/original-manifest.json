@@ -1,0 +1,2699 @@
+{
+  "sourceCommit": "4472253dbf848289a3631bef4bf4d101f2929490",
+  "files": [
+    {
+      "path": ".cnb.yml",
+      "bytes": 704,
+      "sha256": "7c4b1b6dead169e0afe69e9c1de40933fbff8df0d57f75f9e2bfc48c40243ca9",
+      "classification": "reference_source",
+      "archivePath": "reference/.cnb.yml"
+    },
+    {
+      "path": ".github/workflows/deploy-pages.yml",
+      "bytes": 1056,
+      "sha256": "c9f8d9f307c75ca22b6b9c10e5d22a436ed1dd7f6bce854c1d828afb29ede97b",
+      "classification": "reference_source",
+      "archivePath": "reference/.github/workflows/deploy-pages.yml"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 684,
+      "sha256": "c5752a7a56d10e371bed55b2fa9f866ec5ec694dc47fae7808a7594e39baa4cc",
+      "classification": "reference_source",
+      "archivePath": "reference/.gitignore"
+    },
+    {
+      "path": "DEPLOY.md",
+      "bytes": 1206,
+      "sha256": "a859a6687f4580ed49568e01007eb52bd4361b454ab15e1748dc70286c454fce",
+      "classification": "reference_source",
+      "archivePath": "reference/DEPLOY.md"
+    },
+    {
+      "path": "DEV_DOC_video2timesheet.md",
+      "bytes": 10309,
+      "sha256": "9abd2024c22fa786e239ee27d3154460f1b578a16d74fcbd207375e12a14b743",
+      "classification": "reference_source",
+      "archivePath": "reference/DEV_DOC_video2timesheet.md"
+    },
+    {
+      "path": "DEV_PLAN_extensions.md",
+      "bytes": 8385,
+      "sha256": "0ff6df0ab43107386e43c43eca8213ee0f63b2987dab31cc558b394b04826f12",
+      "classification": "reference_source",
+      "archivePath": "reference/DEV_PLAN_extensions.md"
+    },
+    {
+      "path": "Dockerfile.api",
+      "bytes": 575,
+      "sha256": "6c697446b819fafea4a2cb4f8a7a3c640ef0f0119ca277479eee83ce882112a2",
+      "classification": "reference_source",
+      "archivePath": "reference/Dockerfile.api"
+    },
+    {
+      "path": "Dockerfile.worker",
+      "bytes": 501,
+      "sha256": "dacf330e00623aede7e1cdea716502f17340dc2c95aa76ce1f2e0c874731e5f9",
+      "classification": "reference_source",
+      "archivePath": "reference/Dockerfile.worker"
+    },
+    {
+      "path": "README.en.md",
+      "bytes": 8305,
+      "sha256": "7084dfa8f5be7e15164edce5cd6f770451f04e44fa35a39b87503f330959cceb",
+      "classification": "reference_source",
+      "archivePath": "reference/README.en.md"
+    },
+    {
+      "path": "README.ja.md",
+      "bytes": 10213,
+      "sha256": "ad4241d61ddb76cfa01dd6319553d94e996417eafae06359eccc2d86b8467e14",
+      "classification": "reference_source",
+      "archivePath": "reference/README.ja.md"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8651,
+      "sha256": "17fb5d1b081141bb150fc0d5aba1fc4d3a49d8a55c834f27b2ede07a460c6b0b",
+      "classification": "reference_source",
+      "archivePath": "reference/README.md"
+    },
+    {
+      "path": "backend/app/__init__.py",
+      "bytes": 56,
+      "sha256": "87cd39aa54f6183377b52cfffe5e853034be3bedaffd9f181d4735a34d35e3cf",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/app/__init__.py"
+    },
+    {
+      "path": "backend/app/config.py",
+      "bytes": 917,
+      "sha256": "bc31117544f5eb76f3dc6408bc82662915a2855343be71a3819c76be0ad30f8d",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/app/config.py"
+    },
+    {
+      "path": "backend/app/main.py",
+      "bytes": 13186,
+      "sha256": "5b3599f3317883334f1edc9bc275a69b053e87b63ab321bc2eebf9dbc91574a4",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/app/main.py"
+    },
+    {
+      "path": "backend/app/models.py",
+      "bytes": 2046,
+      "sha256": "4455d4a3dcbe2dc14a644a9b749d7eded707c65a8c86e473b1b40fb959a7f1e3",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/app/models.py"
+    },
+    {
+      "path": "backend/app/storage.py",
+      "bytes": 2389,
+      "sha256": "17173505816f204ecf9c9cf699904b3124cc14a564509cb59c126beff923f093",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/app/storage.py"
+    },
+    {
+      "path": "backend/outputs/05f8f568-9a4/clean.mp4",
+      "bytes": 14947832,
+      "sha256": "93b3cc3d9d0629e2caa015a33578d979c0602a7b7c51669d3a649c70e5f00955",
+      "classification": "runtime_output",
+      "archivePath": ".frameronin-local-archive/backend/outputs/05f8f568-9a4/clean.mp4",
+      "classificationReason": "Tracked generated job output; no curated sample declaration or source reference. Preserved locally, excluded from source archive."
+    },
+    {
+      "path": "backend/outputs/50999501-ef1/clean.mp4",
+      "bytes": 5914502,
+      "sha256": "009bef06049e45a54e63ebddc31031d7daaa1d7e1ce7c0386464817108a6f9c9",
+      "classification": "runtime_output",
+      "archivePath": ".frameronin-local-archive/backend/outputs/50999501-ef1/clean.mp4",
+      "classificationReason": "Tracked generated job output; no curated sample declaration or source reference. Preserved locally, excluded from source archive."
+    },
+    {
+      "path": "backend/outputs/97a3e1c7-7c0/clean.mp4",
+      "bytes": 14947832,
+      "sha256": "93b3cc3d9d0629e2caa015a33578d979c0602a7b7c51669d3a649c70e5f00955",
+      "classification": "runtime_output",
+      "archivePath": ".frameronin-local-archive/backend/outputs/97a3e1c7-7c0/clean.mp4",
+      "classificationReason": "Tracked generated job output; no curated sample declaration or source reference. Preserved locally, excluded from source archive."
+    },
+    {
+      "path": "backend/outputs/cb2125bc-ce7/clean.mp4",
+      "bytes": 5104114,
+      "sha256": "6545317eaea193ca696e1e2df4d868c1caec39e0362e705c3472899e8d909783",
+      "classification": "runtime_output",
+      "archivePath": ".frameronin-local-archive/backend/outputs/cb2125bc-ce7/clean.mp4",
+      "classificationReason": "Tracked generated job output; no curated sample declaration or source reference. Preserved locally, excluded from source archive."
+    },
+    {
+      "path": "backend/outputs/dd1d4502-666/clean.mp4",
+      "bytes": 14947832,
+      "sha256": "93b3cc3d9d0629e2caa015a33578d979c0602a7b7c51669d3a649c70e5f00955",
+      "classification": "runtime_output",
+      "archivePath": ".frameronin-local-archive/backend/outputs/dd1d4502-666/clean.mp4",
+      "classificationReason": "Tracked generated job output; no curated sample declaration or source reference. Preserved locally, excluded from source archive."
+    },
+    {
+      "path": "backend/outputs/fda95140-055/clean.mp4",
+      "bytes": 24604084,
+      "sha256": "c02e0730b8c220ef8ccb2ecddbab07d15c6a12a5542841310bd8d3d11e90b96e",
+      "classification": "runtime_output",
+      "archivePath": ".frameronin-local-archive/backend/outputs/fda95140-055/clean.mp4",
+      "classificationReason": "Tracked generated job output; no curated sample declaration or source reference. Preserved locally, excluded from source archive."
+    },
+    {
+      "path": "backend/requirements.txt",
+      "bytes": 322,
+      "sha256": "aa36bd1593462c7ad66833e2114f6a38ad88ac4110a10ea227b204a829fbb3eb",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/requirements.txt"
+    },
+    {
+      "path": "backend/uploads/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "classification": "reference_source",
+      "archivePath": "reference/backend/uploads/.gitkeep"
+    },
+    {
+      "path": "docker-compose.yml",
+      "bytes": 1074,
+      "sha256": "ab6eb2939bafd20ad27e1d11bd62c43fa611c40ec7bb32b58cb2bdbbf1bca629",
+      "classification": "reference_source",
+      "archivePath": "reference/docker-compose.yml"
+    },
+    {
+      "path": "docs/DEV_RSEPRITE_MODULE.md",
+      "bytes": 1803,
+      "sha256": "b754cdaeb8a69cdfa470e7ffcf916c541f7fd2438b9e71ea796a63cea90728ae",
+      "classification": "reference_source",
+      "archivePath": "reference/docs/DEV_RSEPRITE_MODULE.md"
+    },
+    {
+      "path": "docs/RSEPRITE_DEVELOPMENT_PATH.md",
+      "bytes": 12009,
+      "sha256": "84e3c1b4e3f7746eac4da200371ea8e909b0e8c86a6cc18cfe87a4a7f6b31661",
+      "classification": "reference_source",
+      "archivePath": "reference/docs/RSEPRITE_DEVELOPMENT_PATH.md"
+    },
+    {
+      "path": "edgeone.json",
+      "bytes": 188,
+      "sha256": "9939cec9918ca154998ebbc06c3f4a4fc4be9c414b3e7d09ac763f4240fa63e5",
+      "classification": "reference_source",
+      "archivePath": "reference/edgeone.json"
+    },
+    {
+      "path": "frontend/.env.example",
+      "bytes": 222,
+      "sha256": "29a7b6c0fe26b0bfef6bc61c4410e0678f3fb0411326ab4db0c690f350750b22",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/.env.example"
+    },
+    {
+      "path": "frontend/.gitignore",
+      "bytes": 312,
+      "sha256": "6a0ea1ad147da61f7ffa95f2ec1452f9adbaa48f7bcc3cfc76e9bb01f8774d7c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/.gitignore"
+    },
+    {
+      "path": "frontend/Dockerfile",
+      "bytes": 267,
+      "sha256": "b27c4ae86b9eb90dcbff3d838500cc6a22e52f23e13621c673f4452ef3487b41",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/Dockerfile"
+    },
+    {
+      "path": "frontend/README.md",
+      "bytes": 1484,
+      "sha256": "18689e9c938b6901a2b928844c1cebf72853ae4d186c8325a94fea358d076b1b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/README.md"
+    },
+    {
+      "path": "frontend/acbgm.ogg",
+      "bytes": 1349435,
+      "sha256": "720de85e66adda51e20ccfc851210619b74b98e10307a989c3758a02855dfd76",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/acbgm.ogg"
+    },
+    {
+      "path": "frontend/bird (1).gif",
+      "bytes": 10718,
+      "sha256": "83426b2226e068770fdd6716fc3e24786aa33e3dac1f920067a3deb64f818002",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/bird (1).gif"
+    },
+    {
+      "path": "frontend/bird (2).gif",
+      "bytes": 11363,
+      "sha256": "4643902fde88d283814a38b40ced263d6f6dbb5f937be51da5d208911b78617f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/bird (2).gif"
+    },
+    {
+      "path": "frontend/bird (3).gif",
+      "bytes": 8033,
+      "sha256": "e6edb0b5d659e0e0713452ff6c2c728f323b3ed073f932e831684adc3234cfd5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/bird (3).gif"
+    },
+    {
+      "path": "frontend/bird (4).gif",
+      "bytes": 6533,
+      "sha256": "6df4fed8d2e51d7db4395471eede73c05c32ff9cf6d19c016076cb21f8e0132d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/bird (4).gif"
+    },
+    {
+      "path": "frontend/combined_10x1_320x64_T0B0L0R0.png",
+      "bytes": 31444,
+      "sha256": "c0d05a9b66603abb85f8007884c4a04f1a6ad8f70006771450fac4c7b5626954",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/combined_10x1_320x64_T0B0L0R0.png"
+    },
+    {
+      "path": "frontend/combined_6x1_192x64_T0B0L0R0.png",
+      "bytes": 17526,
+      "sha256": "85ba9bc1cd4f098987116290ec90dc9e4b717dc82db73e6d53c93363fdafbeff",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/combined_6x1_192x64_T0B0L0R0.png"
+    },
+    {
+      "path": "frontend/combined_7x1_224x64_T0B0L0R0 (1).png",
+      "bytes": 23184,
+      "sha256": "12ed8593e165a999649e28ec8a448905e9764eae7ed2765be979b4482202ea83",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/combined_7x1_224x64_T0B0L0R0 (1).png"
+    },
+    {
+      "path": "frontend/combined_7x1_224x64_T0B0L0R0.png",
+      "bytes": 20243,
+      "sha256": "e9f3cc6e4befc2a8c1f330a18bb6ef74e79c1c9d110957f089cb2b9e5602d725",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/combined_7x1_224x64_T0B0L0R0.png"
+    },
+    {
+      "path": "frontend/debg.png",
+      "bytes": 2182859,
+      "sha256": "439b7dc5a0b078f8f9e6fa04ed98cb695d07a04647f7d77ee75de500d81b5b1d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/debg.png"
+    },
+    {
+      "path": "frontend/decha.png",
+      "bytes": 112546,
+      "sha256": "13048584fb78c10320184c4cc78c909b9ada6915ef574378d3afc7d2b5db0e29",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/decha.png"
+    },
+    {
+      "path": "frontend/defultbgm.ogg",
+      "bytes": 4311558,
+      "sha256": "9badea8896db1328d271b6beef8ff1fdd0188e79ae6b36faa9b586e01406b3d3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/defultbgm.ogg"
+    },
+    {
+      "path": "frontend/dog (1).gif",
+      "bytes": 5510,
+      "sha256": "3c1fdc0244d924ad67b4650fe04c7dd6f1aec8033ce60832453240eddda87b0c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/dog (1).gif"
+    },
+    {
+      "path": "frontend/dog (2).gif",
+      "bytes": 4158,
+      "sha256": "4485c20ea63f2c641dd73f0a44b5fe294f9e3d28d7410b8d605503cccf615c86",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/dog (2).gif"
+    },
+    {
+      "path": "frontend/dog (3).gif",
+      "bytes": 4294,
+      "sha256": "6b76ff4b7d2b26ce930b3b0027a9659aea8364bab5d5a25ed69bacad79f100b7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/dog (3).gif"
+    },
+    {
+      "path": "frontend/dog (4).gif",
+      "bytes": 5170,
+      "sha256": "70eb590fd82e88f3b965e8495f670472c1f6e19486ac6cdaf3cc85a467ef5fb5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/dog (4).gif"
+    },
+    {
+      "path": "frontend/eslint.config.js",
+      "bytes": 616,
+      "sha256": "4efe97b16d1200fac0eaf07aa00930a8668b1f96a0be1891ace8c1e712ff0ccb",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/eslint.config.js"
+    },
+    {
+      "path": "frontend/index.html",
+      "bytes": 815,
+      "sha256": "fac19629db654f62a6a1ce2fd8d1b8e04dc60ac5251dea8291f68d225a0ec09b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/index.html"
+    },
+    {
+      "path": "frontend/monsterluf.gif",
+      "bytes": 10743,
+      "sha256": "f6116f298b522d0613403f861f336619000418a124c29e0d4c5fad6ebcf0021a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/monsterluf.gif"
+    },
+    {
+      "path": "frontend/nginx.conf",
+      "bytes": 483,
+      "sha256": "8be472a1ae96413716ca65e9c21885e86b6a603ce3dd04b1672a0f066429b31c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/nginx.conf"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "bytes": 257805,
+      "sha256": "888b35437cdf037ab718943f6c8916ac5d58240ad035157c68b19745ce4a888d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/package-lock.json"
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 1051,
+      "sha256": "e2acec0bf88c175e18df482813d1b3be78c44280db4a471572ca0b5270665869",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/package.json"
+    },
+    {
+      "path": "frontend/public/A2M_row1.gif",
+      "bytes": 3387,
+      "sha256": "edfb0eb7446e9b3d41dfe47f17d5b0bd32a13738c8f40b4e2011e4b393f91618",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/A2M_row1.gif"
+    },
+    {
+      "path": "frontend/public/A2M_row3.gif",
+      "bytes": 6393,
+      "sha256": "42fa6dde17dfce2ab16b01f816084f588ca7c8a0cb314457ab810fc07515b03a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/A2M_row3.gif"
+    },
+    {
+      "path": "frontend/public/K.png",
+      "bytes": 1262952,
+      "sha256": "d7c7d8d3507e65cf9d77574ac77532d15936eb0513d9830a2797c56251d1e6d4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/K.png"
+    },
+    {
+      "path": "frontend/public/acbgm.ogg",
+      "bytes": 1349435,
+      "sha256": "720de85e66adda51e20ccfc851210619b74b98e10307a989c3758a02855dfd76",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/acbgm.ogg"
+    },
+    {
+      "path": "frontend/public/animals/bird1.gif",
+      "bytes": 10718,
+      "sha256": "83426b2226e068770fdd6716fc3e24786aa33e3dac1f920067a3deb64f818002",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/bird1.gif"
+    },
+    {
+      "path": "frontend/public/animals/bird2.gif",
+      "bytes": 11363,
+      "sha256": "4643902fde88d283814a38b40ced263d6f6dbb5f937be51da5d208911b78617f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/bird2.gif"
+    },
+    {
+      "path": "frontend/public/animals/bird3.gif",
+      "bytes": 8033,
+      "sha256": "e6edb0b5d659e0e0713452ff6c2c728f323b3ed073f932e831684adc3234cfd5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/bird3.gif"
+    },
+    {
+      "path": "frontend/public/animals/bird4.gif",
+      "bytes": 6533,
+      "sha256": "6df4fed8d2e51d7db4395471eede73c05c32ff9cf6d19c016076cb21f8e0132d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/bird4.gif"
+    },
+    {
+      "path": "frontend/public/animals/dog1.gif",
+      "bytes": 5510,
+      "sha256": "3c1fdc0244d924ad67b4650fe04c7dd6f1aec8033ce60832453240eddda87b0c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/dog1.gif"
+    },
+    {
+      "path": "frontend/public/animals/dog2.gif",
+      "bytes": 4158,
+      "sha256": "4485c20ea63f2c641dd73f0a44b5fe294f9e3d28d7410b8d605503cccf615c86",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/dog2.gif"
+    },
+    {
+      "path": "frontend/public/animals/dog3.gif",
+      "bytes": 4294,
+      "sha256": "6b76ff4b7d2b26ce930b3b0027a9659aea8364bab5d5a25ed69bacad79f100b7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/dog3.gif"
+    },
+    {
+      "path": "frontend/public/animals/dog4.gif",
+      "bytes": 5170,
+      "sha256": "70eb590fd82e88f3b965e8495f670472c1f6e19486ac6cdaf3cc85a467ef5fb5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/animals/dog4.gif"
+    },
+    {
+      "path": "frontend/public/attack.gif",
+      "bytes": 7058,
+      "sha256": "bf4dd9ad0d2215f030dc6769bdd085e4f60d197e7c91827efdfc238d097297fc",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/attack.gif"
+    },
+    {
+      "path": "frontend/public/bagei.png",
+      "bytes": 7421,
+      "sha256": "307cd325b4b2111707307c77f8c656e15ad32944002b83d10e69a7f80e5563ee",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bagei.png"
+    },
+    {
+      "path": "frontend/public/bpset/Dfinal.json",
+      "bytes": 6851,
+      "sha256": "d9a85a9dffc6803b78f4ca1cf1195db6c3f0156605a2666ecb8892c5e44e0d48",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/Dfinal.json"
+    },
+    {
+      "path": "frontend/public/bpset/RPGMakerVX.json",
+      "bytes": 1698,
+      "sha256": "17573de31dbd86ee6fd70cf5c4a4bdfd55945a2bd209076c7e2854e72d84ec12",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/RPGMakerVX.json"
+    },
+    {
+      "path": "frontend/public/bpset/RPGMakerXP.json",
+      "bytes": 2761,
+      "sha256": "8dfd2addf465216e999c1cf009e5998fbb0f7802ff150c84377f4127a996cc9c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/RPGMakerXP.json"
+    },
+    {
+      "path": "frontend/public/bpset/rpgmakerV3X.json",
+      "bytes": 5828,
+      "sha256": "ef8d353146d5c24e69a9c79d58a181553fc169b4e56e64321d6b78c34ebe1ae2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/rpgmakerV3X.json"
+    },
+    {
+      "path": "frontend/public/bpset/rpgmakerv1.1x.json",
+      "bytes": 2181,
+      "sha256": "ef2987ef5e736067642e07c6cbbe52c73bb91a78b72c940ba0870fd1e26ef1f1",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/rpgmakerv1.1x.json"
+    },
+    {
+      "path": "frontend/public/bpset/八方向.json",
+      "bytes": 1707,
+      "sha256": "b22616d24378552b667615e22be631884e2b74b398fa13ce7b7f5a15150b9768",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/八方向.json"
+    },
+    {
+      "path": "frontend/public/bpset/吞食天地.json",
+      "bytes": 12685,
+      "sha256": "0b44469cb12eacbfc2567c59d9510c462bac4080b606df644e751eb288a9c3d5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/吞食天地.json"
+    },
+    {
+      "path": "frontend/public/bpset/小苏剑士.json",
+      "bytes": 8865,
+      "sha256": "5bfa5d7dc199d983fcd6199649664d2a3673aa19e47a7db6183e7199311aafaf",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/小苏剑士.json"
+    },
+    {
+      "path": "frontend/public/bpset/弓兵.json",
+      "bytes": 9203,
+      "sha256": "8e633b47f953b5fdfa9b19abd79ce9886ca97f7523d771f245250f32b107b30e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/弓兵.json"
+    },
+    {
+      "path": "frontend/public/bpset/普通V2&2.2.json",
+      "bytes": 1225,
+      "sha256": "36a40fe9fe4e0789c1e1375ff4aa3e44b79a800a564831cba6be8bcfff84a5b4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/普通V2&2.2.json"
+    },
+    {
+      "path": "frontend/public/bpset/狗.json",
+      "bytes": 1638,
+      "sha256": "721957c287fa59826d92a8900c331e000faf6925865a88d93164c4d0db769d1e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/狗.json"
+    },
+    {
+      "path": "frontend/public/bpset/鸟怪.json",
+      "bytes": 1702,
+      "sha256": "4715479579e56d1b1e0543c9c2e61bfe0f7ff91fb9c3f0f4823236fafa14c18b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpset/鸟怪.json"
+    },
+    {
+      "path": "frontend/public/bpseti/128土豆.json",
+      "bytes": 4170,
+      "sha256": "ffbb4f36e30ad5b69115756981bbd5ced687735e9cbf0586245cda230ad89fb4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/bpseti/128土豆.json"
+    },
+    {
+      "path": "frontend/public/d8s (1).gif",
+      "bytes": 8267,
+      "sha256": "7288d8ae76bbf30b599ccd0d27dbf172bcd5b4d5cf1fca3d74887ad2ed5a131a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/d8s (1).gif"
+    },
+    {
+      "path": "frontend/public/d8s (2).gif",
+      "bytes": 8517,
+      "sha256": "3f9f5e460a99645c77e010bbe3d83fc61f9e8f66f4e7adfcb12519befecd1f1d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/d8s (2).gif"
+    },
+    {
+      "path": "frontend/public/d8s (3).gif",
+      "bytes": 5487,
+      "sha256": "fef19700e789625a2888977bdd64f0046304e0d73794e611613f49cbc017ca1d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/d8s (3).gif"
+    },
+    {
+      "path": "frontend/public/d8s (4).gif",
+      "bytes": 7978,
+      "sha256": "21c17753174ee893fc2b0ac858b71332633bce8b61e3a7cad493e1c50e2aa839",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/d8s (4).gif"
+    },
+    {
+      "path": "frontend/public/d8s (5).gif",
+      "bytes": 8135,
+      "sha256": "80f6638482732c7d2e91ab021a8273884464ad2f42db18324dc280122d9ae4b6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/d8s (5).gif"
+    },
+    {
+      "path": "frontend/public/debg.png",
+      "bytes": 2182859,
+      "sha256": "439b7dc5a0b078f8f9e6fa04ed98cb695d07a04647f7d77ee75de500d81b5b1d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/debg.png"
+    },
+    {
+      "path": "frontend/public/decha.png",
+      "bytes": 112546,
+      "sha256": "13048584fb78c10320184c4cc78c909b9ada6915ef574378d3afc7d2b5db0e29",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/decha.png"
+    },
+    {
+      "path": "frontend/public/defultbgm.ogg",
+      "bytes": 4311558,
+      "sha256": "9badea8896db1328d271b6beef8ff1fdd0188e79ae6b36faa9b586e01406b3d3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/defultbgm.ogg"
+    },
+    {
+      "path": "frontend/public/fullchar/qf2-1.gif",
+      "bytes": 3480,
+      "sha256": "2fd15f9e865ed541d4fc67354c23535c481dfb08a9d5ad77f3d90dc3c70fe6b2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/fullchar/qf2-1.gif"
+    },
+    {
+      "path": "frontend/public/fullchar/qf2-2.gif",
+      "bytes": 7075,
+      "sha256": "1425420a9f8356ba9ff6d304684286142dda23b3f059708d82832a6851c83e2e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/fullchar/qf2-2.gif"
+    },
+    {
+      "path": "frontend/public/fullchar/qf2-3.gif",
+      "bytes": 7674,
+      "sha256": "3065a28b9fe700c8cf3480c099d176de031bc8bce39f1d63ea6facdaf63e2bab",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/fullchar/qf2-3.gif"
+    },
+    {
+      "path": "frontend/public/fullchar/qf2-4.gif",
+      "bytes": 3273,
+      "sha256": "883507f81515d471d5308afd14c45efae35880f029a70e43052deb81baa820ef",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/fullchar/qf2-4.gif"
+    },
+    {
+      "path": "frontend/public/fullchar/qf2-5.gif",
+      "bytes": 3503,
+      "sha256": "ae50a1792e92c33a61818623195c0b42a803252883ed08adf937853e1d1d921c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/fullchar/qf2-5.gif"
+    },
+    {
+      "path": "frontend/public/gempic/RPGMAKERv1.1案例.png",
+      "bytes": 33404,
+      "sha256": "f5d19859514c6c0f25ba53ac2dec69694c195c704c9282c72329006817ba64c8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/RPGMAKERv1.1案例.png"
+    },
+    {
+      "path": "frontend/public/gempic/RPGMAKERv1案例.png",
+      "bytes": 37891,
+      "sha256": "af64fe87edbe61beda96a731ae162ed9673b4252ac4032d9c5a16fd7ad4834f9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/RPGMAKERv1案例.png"
+    },
+    {
+      "path": "frontend/public/gempic/RPGMakerVX.png",
+      "bytes": 20337,
+      "sha256": "c04d63f2be5a2152416177bfaa8f50e385ee462fe038cdfabf917ca08e6fdf8b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/RPGMakerVX.png"
+    },
+    {
+      "path": "frontend/public/gempic/riderrpg.png",
+      "bytes": 50054,
+      "sha256": "9261eb8b4252acde4807cbad24078a04bdbd698a3c2f515aff657ac9e7d5a3bc",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/riderrpg.png"
+    },
+    {
+      "path": "frontend/public/gempic/rpgold.png",
+      "bytes": 35682,
+      "sha256": "30fb7405cea561546f3e19283a0662a7ab43cd91bb3160b3c02331f8c99a7ae7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/rpgold.png"
+    },
+    {
+      "path": "frontend/public/gempic/v2.3ot案例.gif",
+      "bytes": 26283,
+      "sha256": "3a3630472267e5a1dc67b80f5598b4e29717bbc618ba19826e9b9e2dd1e49e47",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/v2.3ot案例.gif"
+    },
+    {
+      "path": "frontend/public/gempic/僵尸B1案例1.gif",
+      "bytes": 11726,
+      "sha256": "53e7e99478370105f391ac1f4864fa72f41cd407c2033d2ac0ff58eeb9aa9241",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/僵尸B1案例1.gif"
+    },
+    {
+      "path": "frontend/public/gempic/僵尸B1案例2.gif",
+      "bytes": 10280,
+      "sha256": "c7cea6e8242c21bf5d71a82a922ec56c3c0a330d37ea9755c22f626039426409",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/僵尸B1案例2.gif"
+    },
+    {
+      "path": "frontend/public/gempic/僵尸B2案例.gif",
+      "bytes": 19985,
+      "sha256": "915723ef128a6f50eb6a5a820b35fbd569867a4ed48c2ae13cca26cd7c62cfb9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/僵尸B2案例.gif"
+    },
+    {
+      "path": "frontend/public/gempic/吞食天地.png",
+      "bytes": 7678,
+      "sha256": "bca571631900a3803d39f53781ef62696d32500acf2f5c08e3e3c4b6882f8117",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/吞食天地.png"
+    },
+    {
+      "path": "frontend/public/gempic/常规角色V2.2案例.gif",
+      "bytes": 18398,
+      "sha256": "c24b44bc579b86d92bbe53682ba755a3f703c71af7bca8c3bfc97a5ab087cfd3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/常规角色V2.2案例.gif"
+    },
+    {
+      "path": "frontend/public/gempic/常规角色V3案例.gif",
+      "bytes": 51729,
+      "sha256": "8e3c564b54968c56617f5862da58bfe4259dd5cdd662100fcd24d04a54907422",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/常规角色V3案例.gif"
+    },
+    {
+      "path": "frontend/public/gempic/常规角色v2案例.gif",
+      "bytes": 18931,
+      "sha256": "b77353a2ca2ff283beb584ccfb392de2cbd4e78ac81e783b407849c4d58ee9db",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/gempic/常规角色v2案例.gif"
+    },
+    {
+      "path": "frontend/public/h2s1 (1).gif",
+      "bytes": 6113,
+      "sha256": "8ee5e3f89c080dba9834049dfe07763dc4002a9d54cd6bb6945a5e21ef6f3b87",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/h2s1 (1).gif"
+    },
+    {
+      "path": "frontend/public/h2s1 (2).gif",
+      "bytes": 8864,
+      "sha256": "ca28426a122b2d91e47865cab8c1892e844e54915606fe759dda9cb36916c7b9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/h2s1 (2).gif"
+    },
+    {
+      "path": "frontend/public/h2s1 (3).gif",
+      "bytes": 5554,
+      "sha256": "8e4056a9ffd9c239b7ddbbe61bd03faf585d633bd59f8cc605894b6e5b503af0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/h2s1 (3).gif"
+    },
+    {
+      "path": "frontend/public/h2s1 (4).gif",
+      "bytes": 6104,
+      "sha256": "18b41895a70136cca630c4e1b08705fb5e090b0ec6560b47800be66eed982813",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/h2s1 (4).gif"
+    },
+    {
+      "path": "frontend/public/h2s1 (5).gif",
+      "bytes": 5683,
+      "sha256": "a5b4c6d6b0a8424684adf2836c78c371d5eb21d702a4315220809a19212f5804",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/h2s1 (5).gif"
+    },
+    {
+      "path": "frontend/public/hou384.png",
+      "bytes": 591066,
+      "sha256": "0a3c3d993d9ebe6b3af3512e3618f0fe48317c4f3fa8539f06f5ade6487fb993",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/hou384.png"
+    },
+    {
+      "path": "frontend/public/jiguo.gif",
+      "bytes": 5592,
+      "sha256": "77884a020f5bfa56816eeb7f25ba29aad403867f18a8b95d900d7dd78dfd6bac",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/jiguo.gif"
+    },
+    {
+      "path": "frontend/public/jiguo2.gif",
+      "bytes": 8242,
+      "sha256": "ec9d51e97e6b5395ba4f8b408be9e5880e9cb1dff144e38b0ac869e33a5d02a6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/jiguo2.gif"
+    },
+    {
+      "path": "frontend/public/jiguo3.gif",
+      "bytes": 5825,
+      "sha256": "22cef0d7dac11a15eb9b541698065cb0eebcca74da2046a9b95e45b400c4333e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/jiguo3.gif"
+    },
+    {
+      "path": "frontend/public/jiguo4.gif",
+      "bytes": 8287,
+      "sha256": "bab1fb3ae78e732822de33f857b225c2927fb8c95b94563aa742b71a6423d4b1",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/jiguo4.gif"
+    },
+    {
+      "path": "frontend/public/jiguo5.gif",
+      "bytes": 6485,
+      "sha256": "8ab573188c34870fe94eb6e2d08b54804cb5a773bc0a2814a8f6fe3299e7b0f2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/jiguo5.gif"
+    },
+    {
+      "path": "frontend/public/jump.gif",
+      "bytes": 6080,
+      "sha256": "c55454819f4c9c784263d4a539aff2476ac5890bd375b166e7627c8099917c74",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/jump.gif"
+    },
+    {
+      "path": "frontend/public/logopix.png",
+      "bytes": 185092,
+      "sha256": "efa1dc6eb77584eef0588728216b8afd18d2bbbc37bb5531f194fd025c7a29dc",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/logopix.png"
+    },
+    {
+      "path": "frontend/public/map/TINA.png",
+      "bytes": 109233,
+      "sha256": "fde930f2685685b90e27856419ad4be1e2c048a38fcdeca97dd63386ac19ae7b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/TINA.png"
+    },
+    {
+      "path": "frontend/public/map/blob/frame_000.png",
+      "bytes": 2851,
+      "sha256": "201bdccdcf79483c88bdfb0027970b2c4a3b75ca71effb51705c36b2ae6ab72e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/frame_000.png"
+    },
+    {
+      "path": "frontend/public/map/blob/frame_001.png",
+      "bytes": 25466,
+      "sha256": "7748c2e8ad4d7f6e9d18537c39635d31d7da2f903f07c6384a15353bcfbdb0fa",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/frame_001.png"
+    },
+    {
+      "path": "frontend/public/map/blob/frame_004.png",
+      "bytes": 24531,
+      "sha256": "89f84143a38fd98cbbcda1bb25c908ab9ab9fabfb25336019d45590eb1d5d06b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/frame_004.png"
+    },
+    {
+      "path": "frontend/public/map/blob/frame_004X1.png",
+      "bytes": 3055,
+      "sha256": "48efe2759e5daa00de0e185a0d3a6650ca138f454b35ad6540db39a52bf76058",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/frame_004X1.png"
+    },
+    {
+      "path": "frontend/public/map/blob/frame_004X2.png",
+      "bytes": 3268,
+      "sha256": "d8d47de114045c9af3cf91b4fe421bb82dce9221f67ad6b1c414abeeb63ada6d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/frame_004X2.png"
+    },
+    {
+      "path": "frontend/public/map/blob/frame_007.png",
+      "bytes": 26829,
+      "sha256": "da00786873ecebedb90d2922e1fb0bbe0030b0e61d3e838aa7c1c44f4dbca401",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/frame_007.png"
+    },
+    {
+      "path": "frontend/public/map/blob/map.html",
+      "bytes": 21468,
+      "sha256": "56e1fae52cbf4ba9865273894418cdb5aa8c8c12fea3920c4f08675f0d3b6c74",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/blob/map.html"
+    },
+    {
+      "path": "frontend/public/map/city/box1.png",
+      "bytes": 63186,
+      "sha256": "a50372a718cc44e7a6523b14b0f35c32e3ff494ebe2b8317a975812b09fa5d82",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/box1.png"
+    },
+    {
+      "path": "frontend/public/map/city/box2.png",
+      "bytes": 57337,
+      "sha256": "0b3f1666eb969bec86734166b6f895eff24353fa0c170f8f457becfce59d7b61",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/box2.png"
+    },
+    {
+      "path": "frontend/public/map/city/fence1.png",
+      "bytes": 84273,
+      "sha256": "40521076e26710f72574b97744d8043dd6579ba179da5e60d6ae5a52904fff3c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/fence1.png"
+    },
+    {
+      "path": "frontend/public/map/city/fire1.png",
+      "bytes": 46768,
+      "sha256": "82c778a3a1327bd365d93cb3eb14c2b937d6533233e4dafc82e59d6010a40d6b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/fire1.png"
+    },
+    {
+      "path": "frontend/public/map/city/ggrass1.png",
+      "bytes": 95444,
+      "sha256": "c8c805cc54531a37511ce1d432b0e0e7bc524ce32cc264d45f16ccf986add6c6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/ggrass1.png"
+    },
+    {
+      "path": "frontend/public/map/city/hight1.png",
+      "bytes": 112567,
+      "sha256": "279f9d5daab8c602cbe29fc8b1bc0a8040a1cdbf13b760866929f9f402095d25",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/hight1.png"
+    },
+    {
+      "path": "frontend/public/map/city/house1.png",
+      "bytes": 585338,
+      "sha256": "f9845f6e06b10701dc74f20ffa015e5aad2e73a3bda35b56c673e01dc18d5e29",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/house1.png"
+    },
+    {
+      "path": "frontend/public/map/city/house2.png",
+      "bytes": 452864,
+      "sha256": "55dae0d3b4bb996add0375f80082013787f0c89032198a78d496300578be94e4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/house2.png"
+    },
+    {
+      "path": "frontend/public/map/city/roadlight1.png",
+      "bytes": 44746,
+      "sha256": "3857058599099a7740f9512c331933b73f9498936e6b864fe22249ba39bd50c2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/roadlight1.png"
+    },
+    {
+      "path": "frontend/public/map/city/snowman1.png",
+      "bytes": 134751,
+      "sha256": "ce8a7d7b8fd08fe3f62d35aa148814c9e94d833d671ca5d75f2a52e641809850",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/snowman1.png"
+    },
+    {
+      "path": "frontend/public/map/city/wood1.png",
+      "bytes": 60298,
+      "sha256": "242bec98da0786cb3094300e64085031ac16de9f22ade07885e2ed8dfb8e671c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/city/wood1.png"
+    },
+    {
+      "path": "frontend/public/map/ff6.ogg",
+      "bytes": 2509139,
+      "sha256": "d0a11a88d8df6a783a16c0036273f4e6fccaea5510ed23bfbbff6b98f130314f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/ff6.ogg"
+    },
+    {
+      "path": "frontend/public/map/monster/0002_Walk-Anim.png",
+      "bytes": 8168,
+      "sha256": "294de55669bceca7e4c0904ce5f41203368c0f24261cedae09ed699cd2002576",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0002_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0003_Walk-Anim.png",
+      "bytes": 11481,
+      "sha256": "53547ad2b27a60f270a9cd698ab53fe55df8352d6ebc54fecae955362d8563c3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0003_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0004_Walk-Anim.png",
+      "bytes": 5626,
+      "sha256": "3e120c93b743fe30d10766114d54e230e851a43e4ffc174bcb7eb424a452a05a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0004_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0005_Walk-Anim.png",
+      "bytes": 6281,
+      "sha256": "851542353e3b77af75abde27abd0f4f9cafc8e025c6b0351d2230f2a14e9c54e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0005_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0006_Walk-Anim.png",
+      "bytes": 12077,
+      "sha256": "ceeb33e0db05817c2566e964d7b2264d0fb8fdecd480f7245faeafc864bc0d9b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0006_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0007_Walk-Anim.png",
+      "bytes": 5656,
+      "sha256": "0e71a8bf34299cf73e59eccebc0b9fc16dfb9bd9554d8009b2323c8e3c00504f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0007_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0008_Walk-Anim.png",
+      "bytes": 7570,
+      "sha256": "215892752dc98e5039fbe67d25c06ebe041d1ba9d7189ec329d4f998cc7e95dd",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0008_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0009_Walk-Anim.png",
+      "bytes": 11364,
+      "sha256": "90074aa6cea5dc4fd11a5ca2bd756f71d83798e2efc346d8d609907489f70350",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0009_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0015_Walk-Anim.png",
+      "bytes": 8257,
+      "sha256": "832dfdb59cdd0cd8a17671e077266028198d9497fcc0c31f5016f3abe4ddb0b0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0015_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0017_Walk-Anim.png",
+      "bytes": 8276,
+      "sha256": "f0b6c635e6f285a1eab19ea64e9f394925bd291b7b78133968af8778d0fb7237",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0017_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0018_Walk-Anim.png",
+      "bytes": 8417,
+      "sha256": "8861506f95b77d7a3ead8d972cab92ed943195f7fdc6ab79535bf6ff4b706978",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0018_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0025_Walk-Anim.png",
+      "bytes": 6437,
+      "sha256": "5cfc2c775708c28c11f98e027e883261ab3ae4276e51621eec11c979598651f9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0025_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0026_Walk-Anim.png",
+      "bytes": 10731,
+      "sha256": "6526184cf16f5b97a1fc2d051e423f96b83843e2bf052ac9b1f1b12f90c90a70",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0026_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0027_Walk-Anim.png",
+      "bytes": 5128,
+      "sha256": "23fc8ce093564ac34e54c1fe41b185c93364c35a3e6ff37c1583c47c9ae02e99",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0027_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0028_Walk-Anim.png",
+      "bytes": 8801,
+      "sha256": "1b6012d1d07e8b6821e702df9d6308f14b67c21cb0bddfefd797b4c4fb5bb1aa",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0028_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0030_Walk-Anim.png",
+      "bytes": 5681,
+      "sha256": "888554895442c52fdf986d5ecef69ae4287ee78784650d24eb6c297a8794b74e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0030_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0031_Walk-Anim.png",
+      "bytes": 8201,
+      "sha256": "f487e5b74299137a435e5c9004046748afc33f634a4244d6505e8b9cd7672cdb",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0031_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0033_Walk-Anim.png",
+      "bytes": 10394,
+      "sha256": "d2c4945944b04c29026d3c9423e41d384052d750ab0b8d6cb962e307b0dd4f22",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0033_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0034_Walk-Anim.png",
+      "bytes": 13128,
+      "sha256": "47e73a0dbadc870b3dba8ac816b1e43f0359aba2797bef2569883894793cef5c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0034_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0038_Walk-Anim.png",
+      "bytes": 8420,
+      "sha256": "905e6511666f0be13efc3317d4b95653085eac09698a8d05e1e39ee989f47ea4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0038_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0040_Walk-Anim.png",
+      "bytes": 8512,
+      "sha256": "ed5b6fc945882e49ba701043497d2e897f222e716b0979c34d4eb0d5d1cf17ab",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0040_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0044_Walk-Anim.png",
+      "bytes": 8052,
+      "sha256": "127c937837a92d22b9ba31bdc7ea5478626c9b678c8c5e4fd6c2631307c07700",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0044_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0045_Walk-Anim.png",
+      "bytes": 7002,
+      "sha256": "259f42559a1592fbdf43e0c6da1730ed972aaecb0b5411024a2b7644db581e1e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0045_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0046_Walk-Anim.png",
+      "bytes": 5503,
+      "sha256": "2b56f3d2a80c70c2dc2a6aa0802619576a8e4878c75afe537e9fc754747a023f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0046_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0047_Walk-Anim.png",
+      "bytes": 6900,
+      "sha256": "3fbb6c4ce9265c45239473c70b9fa553cbd88d43a2ed9f02d9482268a66347d6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0047_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0052_Walk-Anim.png",
+      "bytes": 5478,
+      "sha256": "c58d87c7bc111288963f7df341e7c38f444908104859810bc505107212cc6eb9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0052_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0053_Walk-Anim.png",
+      "bytes": 9155,
+      "sha256": "8a4a16f4409b34514adebc153ebb63d96bad812d5a9a0dc9cd090806c48969b0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0053_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0054_Walk-Anim.png",
+      "bytes": 6223,
+      "sha256": "890be68026823e8c9807c5978d7420665bac67db0f7f5126a30bbf4c1ce9611e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0054_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0055_Walk-Anim.png",
+      "bytes": 8426,
+      "sha256": "58e50d7f4b3f8999cc49e0399f3875f20b7bc73828df0210776fb77bc43f8cd4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0055_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0057_Walk-Anim.png",
+      "bytes": 9305,
+      "sha256": "6c852396b8c378864b82214ae78ea8f40710b3a18d7add5a0f6ffe4eed04424d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0057_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0058_Walk-Anim.png",
+      "bytes": 7081,
+      "sha256": "eefaea9bf9241ced7639e6adb976e8ccbc5b2ecac2fa3e1e37708e290302f529",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0058_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0059_Walk-Anim.png",
+      "bytes": 11192,
+      "sha256": "334750447c22099cf87fc6cf7804f4490bb47f87581c5134a05c0998aeb4537e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0059_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0061_Walk-Anim.png",
+      "bytes": 8043,
+      "sha256": "8482ee9bb2e530f56fcd37d3a0d6265640f5e1016d33a59b5aa3cc78262e9aed",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0061_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0062_Walk-Anim.png",
+      "bytes": 10222,
+      "sha256": "df824077d96c0196ff3e167eaf26c1c2ac4273d695eae7591440cdd6e1755eff",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0062_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0064_Walk-Anim.png",
+      "bytes": 7048,
+      "sha256": "ec6f1200ff54bafdd2bccfc1aa224c7ef1326d4bbb753564efebb7a6b31fdae8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0064_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0065_Walk-Anim.png",
+      "bytes": 6224,
+      "sha256": "472a6e8e1517ff6ddc6ae027d90d34d580cfc3acd57363c4907de959c2e37c0c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0065_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0066_Walk-Anim.png",
+      "bytes": 5204,
+      "sha256": "59f4ecd71b27453edeaa570032b13785d4a4c56108b947ccdcf19ea77331bf83",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0066_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0067_Walk-Anim.png",
+      "bytes": 9679,
+      "sha256": "deaab61e394346ea58351e299706a2748c6e750055c18948b80551253004b152",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0067_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0068_Walk-Anim.png",
+      "bytes": 11823,
+      "sha256": "e169fb82de0226d8abfbc73e6b837af41cfb19347f71943bea804dfe5fc6120f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0068_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0069_Walk-Anim.png",
+      "bytes": 4549,
+      "sha256": "fb97696bc3e3614d83f651723cdc8525d155a39f10b33f4de52aaa9cc5f93e93",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0069_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0070_Walk-Anim.png",
+      "bytes": 5810,
+      "sha256": "5ffeaf5af6a0e4180d52c82f2c005f67e85bb0c4b0df82f295b402c8a0c5f6b1",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0070_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0071_Walk-Anim.png",
+      "bytes": 9625,
+      "sha256": "dfe143633931a28f6fcb22b2857875e40968ba068b3949fdfdc4bbb1f1a4de64",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0071_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0072_Walk-Anim.png",
+      "bytes": 6677,
+      "sha256": "91449da3edb0b17d94d1d7cd2a5c32812438859077f9cb7de0f58a709291da29",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0072_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0073_Walk-Anim.png",
+      "bytes": 8575,
+      "sha256": "64be4736f766def612d9761bc03d4afbb64ffe1bed4e37b47d5fa7a8ce2c4e10",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0073_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0074_Walk-Anim.png",
+      "bytes": 6580,
+      "sha256": "a0d4753f962a93ee469bfb66e3a0acd8799f5d0a989f1527397689470384e0b2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0074_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0134_Walk-Anim.png",
+      "bytes": 10180,
+      "sha256": "7664f55b8d717981f49c88e96999686f236ad2a2f2dc9ef496d468737eced3ac",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0134_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0144_Walk-Anim.png",
+      "bytes": 21343,
+      "sha256": "2f1475714c40f7c68938bf6a2c5aa86c2edbd992a687562efb759630928045fd",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0144_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0417_Walk-Anim.png",
+      "bytes": 11537,
+      "sha256": "57ef9e5aea2d84050a6be6dc60e5a1e6fbe4da8372b676b59997c6b7daa5786d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0417_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0445_Walk-Anim.png",
+      "bytes": 13352,
+      "sha256": "f198f36fd9e1da36505db419e47f41c870d9a059928258267e93933e0d98b9f1",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0445_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0447_Walk-Anim.png",
+      "bytes": 6460,
+      "sha256": "6816ceb6127395063a69ad22a661a0374d72698edb26ce9ffee8b552211e64e0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0447_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monster/0448_Walk-Anim.png",
+      "bytes": 8714,
+      "sha256": "62544fbc4a0d033a146413bd95f91b78d8c1b947559a4cebb9e8561810d8428a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monster/0448_Walk-Anim.png"
+    },
+    {
+      "path": "frontend/public/map/monsterhut/monsterhut.png",
+      "bytes": 39947,
+      "sha256": "b281b44c1504af7360a8181e20dd346edd25b793e6c77352b233994571923d70",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/monsterhut/monsterhut.png"
+    },
+    {
+      "path": "frontend/public/map/tile/SNOW_H.png",
+      "bytes": 3989,
+      "sha256": "02a6c80f7f5d6100c4954b8602b08684bddc3fd010a03147c71b9296fa4f984a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tile/SNOW_H.png"
+    },
+    {
+      "path": "frontend/public/map/tile/SNOW_M.png",
+      "bytes": 2931,
+      "sha256": "fa0d1df4d096e152e8cf1e90a98b63f729d860b8fd4dc30290937e373a8654d0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tile/SNOW_M.png"
+    },
+    {
+      "path": "frontend/public/map/tile/SNOW_M1.png",
+      "bytes": 4288,
+      "sha256": "6861d22c89f1676f947fea01413f8592a5689fbdaed18c8bfd1c5220b11cfc2a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tile/SNOW_M1.png"
+    },
+    {
+      "path": "frontend/public/map/tile/SNOW_M2.png",
+      "bytes": 3386,
+      "sha256": "add796b82cfc500098c27a1af58ee70a66120933dc62c05f32bb571fb41ab17a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tile/SNOW_M2.png"
+    },
+    {
+      "path": "frontend/public/map/tile/SNOW_M3.png",
+      "bytes": 3116,
+      "sha256": "3006bd480d67bdb99c5bdc5974ecb7975cb706d3c282dddbb1d3b45dc7416533",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tile/SNOW_M3.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_000.png",
+      "bytes": 2851,
+      "sha256": "201bdccdcf79483c88bdfb0027970b2c4a3b75ca71effb51705c36b2ae6ab72e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_000.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_001.png",
+      "bytes": 31121,
+      "sha256": "22ae8d4d1bacab6562ca740a42687ddba923d92a1a058f18435d227329fd7b02",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_001.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_002.png",
+      "bytes": 5888,
+      "sha256": "06d7c718b483880b23c0175fbcf322acd75f60ef7fa24cc4125df193c70a6fa3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_002.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_003.png",
+      "bytes": 6051,
+      "sha256": "bab0140e5826443c2b0380b5019a3e680ebd3db04bf4961ccc0b00f135dffa7d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_003.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_004.png",
+      "bytes": 23392,
+      "sha256": "e90d4d109d189e87b9bb015a9f37b8f3da1cd8054a75c2483ef51f3864f44956",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_004.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_005.png",
+      "bytes": 3427,
+      "sha256": "7771b93c3d0c42a28033401a0a8c5550912e515efd413d790457955ce582dde8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_005.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_006.png",
+      "bytes": 3478,
+      "sha256": "62dac5300c2583829608ccb07c948fec55d3583f0a0d86a15d8baeaec2feff3a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_006.png"
+    },
+    {
+      "path": "frontend/public/map/tileg/frame_007.png",
+      "bytes": 26590,
+      "sha256": "dc60d5d5e50e17cb68af0cf8f6e50e03fb4aed167442aa6a1a8fc87ff6644759",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tileg/frame_007.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_000.png",
+      "bytes": 2851,
+      "sha256": "201bdccdcf79483c88bdfb0027970b2c4a3b75ca71effb51705c36b2ae6ab72e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_000.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_001.png",
+      "bytes": 25946,
+      "sha256": "530d339b9cab8d4190666c20c919cab4cba48a911bd5b7c8117792172275a47e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_001.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_002.png",
+      "bytes": 5768,
+      "sha256": "3dcb0cae1ea901f8852c4f4c17f087429a676f6e5ced570de8a23e5571c0770e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_002.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_003.png",
+      "bytes": 2689,
+      "sha256": "970eca9de292f24717c7f318cc7aa46e3604a4b78a6e2b1db6cd00a1c5ba7794",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_003.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_004.png",
+      "bytes": 20518,
+      "sha256": "3a57f31223416fbdfc1886d6778f07ab50f89673096fd6233e8295ce76bcb2cf",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_004.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_005.png",
+      "bytes": 3119,
+      "sha256": "7aa52ec992afb415510a97964738ff7cdbf45ec6df57a2bf7bad88109e400275",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_005.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_006.png",
+      "bytes": 3170,
+      "sha256": "5e4acc1216671fec2a008132e4b1cf14e17c3903585ceba8cd4a210788f97542",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_006.png"
+    },
+    {
+      "path": "frontend/public/map/tiler/frame_007.png",
+      "bytes": 31782,
+      "sha256": "137c0c7212df4b7e974f2687c3d15902bcc8c193fc9ced484b6142231de7710f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/tiler/frame_007.png"
+    },
+    {
+      "path": "frontend/public/map/trees/treegrass.png",
+      "bytes": 18363,
+      "sha256": "a5bfc3b7ebe2ee1bcf1563bb7536a66470e36b6358aa8d77e314ec0c8c99e062",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/trees/treegrass.png"
+    },
+    {
+      "path": "frontend/public/map/trees/treesnow.png",
+      "bytes": 18252,
+      "sha256": "594f4c8ce4b5734bf72caf455e6cc6aa4dba4336c2512e16f28cdcb3bdeeab94",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/map/trees/treesnow.png"
+    },
+    {
+      "path": "frontend/public/monster_sheet.png",
+      "bytes": 15653,
+      "sha256": "06d8895792931d75689f8fd3238590c5791c94a410bfa662a47c127a4dea649d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/monster_sheet.png"
+    },
+    {
+      "path": "frontend/public/monsterluf.gif",
+      "bytes": 10743,
+      "sha256": "f6116f298b522d0613403f861f336619000418a124c29e0d4c5fad6ebcf0021a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/monsterluf.gif"
+    },
+    {
+      "path": "frontend/public/otf-1.gif",
+      "bytes": 15234,
+      "sha256": "adb82118a8d45ad88be6613658aca8d5c8da0a50daa855b0c8097caeb2394a6a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/otf-1.gif"
+    },
+    {
+      "path": "frontend/public/otf-2.gif",
+      "bytes": 10568,
+      "sha256": "a1be68a69c1d07bdf403124051d5ae68f56b3ef991070bbf48bba941b168f4c2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/otf-2.gif"
+    },
+    {
+      "path": "frontend/public/otf-3.gif",
+      "bytes": 10801,
+      "sha256": "545c68db977d1408e208333ad7ca487942737e0bb8ac01ff8e6bf2eb87565954",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/otf-3.gif"
+    },
+    {
+      "path": "frontend/public/otf-4.gif",
+      "bytes": 7561,
+      "sha256": "2e506dc8d5a619dbdd1892c08d5d6ccf99ba82bc4e2524eaecefbaac5d6a8e92",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/otf-4.gif"
+    },
+    {
+      "path": "frontend/public/otf-5.gif",
+      "bytes": 12968,
+      "sha256": "402d0d5412bd46a796d0a1d0c0c7784a49c443c2af2fe9359b1b7b8cf95eab98",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/otf-5.gif"
+    },
+    {
+      "path": "frontend/public/otf-6.gif",
+      "bytes": 10978,
+      "sha256": "f20a1074d117f0dc80f0e19f9d31eb97c9a6083273b050524b683c83d5f0d36a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/otf-6.gif"
+    },
+    {
+      "path": "frontend/public/pixelmaster.png",
+      "bytes": 11271,
+      "sha256": "5b18285cb6bbe08f57b79b5b311441063b000f4070f419d69c6c03cbaf38cd55",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/pixelmaster.png"
+    },
+    {
+      "path": "frontend/public/qian384.png",
+      "bytes": 130563,
+      "sha256": "996b368702107384ad782de3101c876f17d4d4cb93c0d2d57e02631e8608ef2b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/qian384.png"
+    },
+    {
+      "path": "frontend/public/ride.gif",
+      "bytes": 13608,
+      "sha256": "61b72235ca524f9d1fb35a6d56c05284092b8846701b2d54e0109369b1cdb0cf",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/ride.gif"
+    },
+    {
+      "path": "frontend/public/ronincat.png",
+      "bytes": 205213,
+      "sha256": "363f9666f483a7e9cd8ef30f70c57bc4e2818400a5deb972c29f685940f0dc20",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/ronincat.png"
+    },
+    {
+      "path": "frontend/public/row_01.gif",
+      "bytes": 4696,
+      "sha256": "7d35ec3215c9d84fd6135a756d209362f8cabd71ce8c929b75bb0abc234f26bc",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/row_01.gif"
+    },
+    {
+      "path": "frontend/public/row_02.gif",
+      "bytes": 5090,
+      "sha256": "94cf9610e83c1b249b32c5e66cde578d9d99c9ed848e0279b831b9fc5a3b92e0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/row_02.gif"
+    },
+    {
+      "path": "frontend/public/row_03.gif",
+      "bytes": 4706,
+      "sha256": "e3e4c7169568399a46d074b07213b3d678446a8aceaccb2ae2d737c8f6257320",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/row_03.gif"
+    },
+    {
+      "path": "frontend/public/row_04.gif",
+      "bytes": 4826,
+      "sha256": "17f821afa1f0c1939edd35055b140991901a4960064d797985f916a3dec3bd15",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/row_04.gif"
+    },
+    {
+      "path": "frontend/public/row_05.gif",
+      "bytes": 4926,
+      "sha256": "f292ec9db019c4f08878ce0941066668477542e4f0ecb994ae3bd6bbd08c903f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/row_05.gif"
+    },
+    {
+      "path": "frontend/public/spr.gif",
+      "bytes": 4598,
+      "sha256": "353e2044731b73fa0d00ae8b6bff1c3f7263f1bef605d349739c47a3f9432af9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/spr.gif"
+    },
+    {
+      "path": "frontend/public/vendor/lame.min.js",
+      "bytes": 156043,
+      "sha256": "15d285e2587b3bdbfd18a68de6ce07cc074f7480a82c3815da2dc1c348ec6df4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/vendor/lame.min.js"
+    },
+    {
+      "path": "frontend/public/vite.svg",
+      "bytes": 1497,
+      "sha256": "4a748afd443918bb16591c834c401dae33e87861ab5dbad0811c3a3b4a9214fb",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/vite.svg"
+    },
+    {
+      "path": "frontend/public/zombie_walk.png",
+      "bytes": 17526,
+      "sha256": "85ba9bc1cd4f098987116290ec90dc9e4b717dc82db73e6d53c93363fdafbeff",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/zombie_walk.png"
+    },
+    {
+      "path": "frontend/public/zombie_walk2.png",
+      "bytes": 20243,
+      "sha256": "e9f3cc6e4befc2a8c1f330a18bb6ef74e79c1c9d110957f089cb2b9e5602d725",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/zombie_walk2.png"
+    },
+    {
+      "path": "frontend/public/zombie_walk3.png",
+      "bytes": 31444,
+      "sha256": "c0d05a9b66603abb85f8007884c4a04f1a6ad8f70006771450fac4c7b5626954",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/zombie_walk3.png"
+    },
+    {
+      "path": "frontend/public/zombie_walk4.png",
+      "bytes": 23184,
+      "sha256": "12ed8593e165a999649e28ec8a448905e9764eae7ed2765be979b4482202ea83",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/public/zombie_walk4.png"
+    },
+    {
+      "path": "frontend/qf2 (1).gif",
+      "bytes": 3480,
+      "sha256": "2fd15f9e865ed541d4fc67354c23535c481dfb08a9d5ad77f3d90dc3c70fe6b2",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/qf2 (1).gif"
+    },
+    {
+      "path": "frontend/qf2 (2).gif",
+      "bytes": 7075,
+      "sha256": "1425420a9f8356ba9ff6d304684286142dda23b3f059708d82832a6851c83e2e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/qf2 (2).gif"
+    },
+    {
+      "path": "frontend/qf2 (3).gif",
+      "bytes": 7674,
+      "sha256": "3065a28b9fe700c8cf3480c099d176de031bc8bce39f1d63ea6facdaf63e2bab",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/qf2 (3).gif"
+    },
+    {
+      "path": "frontend/qf2 (4).gif",
+      "bytes": 3273,
+      "sha256": "883507f81515d471d5308afd14c45efae35880f029a70e43052deb81baa820ef",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/qf2 (4).gif"
+    },
+    {
+      "path": "frontend/qf2 (5).gif",
+      "bytes": 3503,
+      "sha256": "ae50a1792e92c33a61818623195c0b42a803252883ed08adf937853e1d1d921c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/qf2 (5).gif"
+    },
+    {
+      "path": "frontend/scripts/extract-gemini-masks.mjs",
+      "bytes": 1209,
+      "sha256": "b2db49891e2e4bdfd42be8b64fb83d9ed2b9db1091d6b9b69ad9a1001e20e80b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/scripts/extract-gemini-masks.mjs"
+    },
+    {
+      "path": "frontend/scripts/fix-bg48.mjs",
+      "bytes": 399,
+      "sha256": "31bf5ceb8ab80e15ccc4f7c7dfd53c9f88c283c95e34afbe81c1ad3b6dfe16ab",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/scripts/fix-bg48.mjs"
+    },
+    {
+      "path": "frontend/scripts/get-base64.mjs",
+      "bytes": 985,
+      "sha256": "c9bd07925e05fd9a414227bdc6878784c460018859eb95caf478b90439720bd9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/scripts/get-base64.mjs"
+    },
+    {
+      "path": "frontend/src/App.css",
+      "bytes": 24884,
+      "sha256": "d95e4cbd43cd3d9fd385a0f66098563902d89410c45897857e3cc89e9b493588",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/App.css"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "bytes": 24427,
+      "sha256": "3cbf60011acd85e7e4e7909e0b42fea6d0792d3270b64cbd9aa793c818c37162",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/App.tsx"
+    },
+    {
+      "path": "frontend/src/api.ts",
+      "bytes": 3180,
+      "sha256": "0478fb045a0ceb213dc857757517f1d48b2788292d33e69eb5f5fc7fc3a279fe",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/api.ts"
+    },
+    {
+      "path": "frontend/src/assets/react.svg",
+      "bytes": 4126,
+      "sha256": "35ef61ed53b323ae94a16a8ec659b3d0af3880698791133f23b084085ab1c2e5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/assets/react.svg"
+    },
+    {
+      "path": "frontend/src/auth/context.tsx",
+      "bytes": 5390,
+      "sha256": "43cdf53d4b7b73975f0c1530461f60955671225da2066156c6cdc24321d8baf0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/auth/context.tsx"
+    },
+    {
+      "path": "frontend/src/components/AiPixelAnimalsHub.tsx",
+      "bytes": 4047,
+      "sha256": "9690b5ee6ad8295d25240cd08582103a88a193ba418ee52287ae66a8d6f6d8ba",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/AiPixelAnimalsHub.tsx"
+    },
+    {
+      "path": "frontend/src/components/AssetsAndSourceShare.tsx",
+      "bytes": 3367,
+      "sha256": "fcdcfba519801291be4f1168b3e4f1241f2e16d17080ad89ca783b50d9722767",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/AssetsAndSourceShare.tsx"
+    },
+    {
+      "path": "frontend/src/components/ControlTest.tsx",
+      "bytes": 38966,
+      "sha256": "4eba110b49a9d399ce87ffdac405fec0d928715a40864415f257aceab79d224d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ControlTest.tsx"
+    },
+    {
+      "path": "frontend/src/components/CropPreview.tsx",
+      "bytes": 16838,
+      "sha256": "23f26260fce8d9d784dbc613704bd81475c30fed5ac1d64cadb338516a715e0e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/CropPreview.tsx"
+    },
+    {
+      "path": "frontend/src/components/GemPixelPotpourriHub.tsx",
+      "bytes": 4211,
+      "sha256": "1b04c98b49927cb6bc575075d76742ee021c178122cff970bb2d4bbe23ba2510",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/GemPixelPotpourriHub.tsx"
+    },
+    {
+      "path": "frontend/src/components/GifFrameConverter.tsx",
+      "bytes": 61654,
+      "sha256": "a5bffa2949e1edf1610d7d5707d920a26d778da101c68006f2f054e95ac81061",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/GifFrameConverter.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageExpandShrink.tsx",
+      "bytes": 8060,
+      "sha256": "90de6e16d6d06ef9bf382f8e5f29cdc9f3f8150449938e8ceabfc2e12ad0caf0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageExpandShrink.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageGeminiWatermark.tsx",
+      "bytes": 7103,
+      "sha256": "38022ceddefd0a43880476eb9553464b2db6461ec35f2e1a825efbcdd503c3a7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageGeminiWatermark.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageMatte.tsx",
+      "bytes": 42039,
+      "sha256": "f9deb1c231bcafe69e2ae52ca3aee32d35e5f184fe694cd137b8075d413b9149",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageMatte.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImagePixelate.tsx",
+      "bytes": 44791,
+      "sha256": "6b8e1c670429d610b13bd63271d5cd447f4da0f8f7af1effc08763c694e4b612",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImagePixelate.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageResizeStroke.tsx",
+      "bytes": 25261,
+      "sha256": "2ba3c98e8db28eb17591f99395cf914f75f21f93617dfcef2ed9696158cd9ebd",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageResizeStroke.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageResizeStroke/ImageCropEditor.tsx",
+      "bytes": 7505,
+      "sha256": "5bda2efe12d3f79d57e03b02eb0a1c1da6b414290981c4af8ea201f8500111f8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageResizeStroke/ImageCropEditor.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx",
+      "bytes": 34813,
+      "sha256": "ed63fd2aa66a06206eb819700ff4679b77281cd49feaaca2b33235e3cac73a3c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx",
+      "bytes": 2998,
+      "sha256": "a75adc6ca341abf3182dbbcd2b28afc98521e3103f20780c0d43a2fe801fd133",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageResizeStroke/ImageModuleEntry.tsx",
+      "bytes": 2261,
+      "sha256": "3be67f4fa830eefaf4922d96a39cd52a509b02c84d1efcacfce63cbc36eb60f3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageResizeStroke/ImageModuleEntry.tsx"
+    },
+    {
+      "path": "frontend/src/components/ImageStashPanel.tsx",
+      "bytes": 14474,
+      "sha256": "5ece978d8cdb2c360847bc31f9a1d7147062e0bd83931413c1811984f3b583ad",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ImageStashPanel.tsx"
+    },
+    {
+      "path": "frontend/src/components/InfiniteMapPlaceholder.tsx",
+      "bytes": 982,
+      "sha256": "f664e0f756e50b0d120593cdd8a7ab2d6d0e959ed6b3ebfeb723b9fbb5f86926",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/InfiniteMapPlaceholder.tsx"
+    },
+    {
+      "path": "frontend/src/components/MapStitch.tsx",
+      "bytes": 60924,
+      "sha256": "1c2e7e0244bca86bafc36f08b3826c90653e5ae7a7a62f2d37576aa7e45eb628",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/MapStitch.tsx"
+    },
+    {
+      "path": "frontend/src/components/ModeSelector.tsx",
+      "bytes": 34930,
+      "sha256": "c0b54d6957e421e7af2d279b9cd571659c936aa7acce196d95f0185c1e6a399f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ModeSelector.tsx"
+    },
+    {
+      "path": "frontend/src/components/NanobananaFullChar.tsx",
+      "bytes": 5510,
+      "sha256": "336e82c72863c9b92b72621d8fc066028d9b730ce6ca176c952d1e7cc4148dd1",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/NanobananaFullChar.tsx"
+    },
+    {
+      "path": "frontend/src/components/ParamsStep.tsx",
+      "bytes": 69087,
+      "sha256": "040cd27b630b91895204db866035b6544b3fb15e21a4166e9849c7f78de9250a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ParamsStep.tsx"
+    },
+    {
+      "path": "frontend/src/components/ParamsStep/FrameAnimationPreview.tsx",
+      "bytes": 8975,
+      "sha256": "5078c7ff678d2bb8d0fa093dbffae888ed7432e2873f4adc6932dfabf583740f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ParamsStep/FrameAnimationPreview.tsx"
+    },
+    {
+      "path": "frontend/src/components/ParamsStep/FrameThumbnails.tsx",
+      "bytes": 2319,
+      "sha256": "fc8fdbc67e2985ba312628a3d7538cf8d9cdc5cb19705af415cb7e1d7599f744",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ParamsStep/FrameThumbnails.tsx"
+    },
+    {
+      "path": "frontend/src/components/ParamsStep/utils.ts",
+      "bytes": 33289,
+      "sha256": "51c2c0dd5253c665f76de50f4708508591a63cbcda9888d826bbbbd4cdd19c31",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ParamsStep/utils.ts"
+    },
+    {
+      "path": "frontend/src/components/ParamsStep/utilsResizeCanvasLegacy.ts",
+      "bytes": 1714,
+      "sha256": "19e1bbfe625579b7b75e2f0a4c748ed6e5fee9fd7f7b6aa6de7a6d7af9af0718",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/ParamsStep/utilsResizeCanvasLegacy.ts"
+    },
+    {
+      "path": "frontend/src/components/RoninLoginButton.tsx",
+      "bytes": 1904,
+      "sha256": "10e7c31929eaa4cdeccc5db375aedee9e1015123a86cf658c0f6d93303725937",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninLoginButton.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninPro.tsx",
+      "bytes": 8892,
+      "sha256": "290cbb3efe62e08eda4e84fdf77eb367da5368e83bcb4cb5a8812d92b6f5e1ea",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninPro.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProAdvancedPixel.tsx",
+      "bytes": 18820,
+      "sha256": "96313e220cb778780b42f4f6df2cb26a6418d6381b40b4d2280d0848b34d6b6f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProAdvancedPixel.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProAudioCompress.tsx",
+      "bytes": 10508,
+      "sha256": "9475c07d3b5a70d78e16f8b95ae411ddd397a26f6655dcbe11a96c2517791b99",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProAudioCompress.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProCustomScale.tsx",
+      "bytes": 17676,
+      "sha256": "dd339395bd50a58de7ef880f49ee6430d9a00beb87d29bfb29963d01b19bf666",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProCustomScale.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProCustomSlice.tsx",
+      "bytes": 67342,
+      "sha256": "4875bb264060546378196538f75ca432f1986203d5568c007f676fcdf1fc7a58",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProCustomSlice.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProCustomWorkflow.tsx",
+      "bytes": 61562,
+      "sha256": "6f9877d1e96b52baaaad0c45a36105bc23a9be5a865a321bf459041393c5e193",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProCustomWorkflow.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProDuplicateFrames.tsx",
+      "bytes": 9678,
+      "sha256": "08cf922b49079dac74b91197f5c649905afa69e7e9608e55639f0b18918d7db7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProDuplicateFrames.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProL7SeamPreview.tsx",
+      "bytes": 10052,
+      "sha256": "b033546fa01911cd242f0997f2180112bdec619a79596df2ef5c64a2b3724b61",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProL7SeamPreview.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProNftClaim.tsx",
+      "bytes": 4935,
+      "sha256": "01cac7fd60e23853a2e7f20afc137a2188a9049c23b5e6eb2b72a8ff8404551e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProNftClaim.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProRseprite.tsx",
+      "bytes": 10793,
+      "sha256": "893fe1c5edb41cd029993f51c037e961624973bf106855488cab9f4aa7e67074",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProRseprite.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProScatterSlice.tsx",
+      "bytes": 58808,
+      "sha256": "a51e6567b726f0aab709348a231734095169e7e7383ffd0a74613394ea08f4a7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProScatterSlice.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProSheetPro.tsx",
+      "bytes": 699,
+      "sha256": "03a867884ce3f514582a4dfc0b20c8a29895503cb341dd05cf0132cff274a7d7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProSheetPro.tsx"
+    },
+    {
+      "path": "frontend/src/components/RoninProUnifySize.tsx",
+      "bytes": 11615,
+      "sha256": "07150ee04ffbdb366769bcd1c0d2a0406cb66940e7f431872f6c76f86162de56",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/RoninProUnifySize.tsx"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/EditorCanvas.tsx",
+      "bytes": 13321,
+      "sha256": "c2f9876917d6813af40d2a56f5f99c817e20e25e5b616dd4d755dea07dc54a21",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/EditorCanvas.tsx"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/RsepriteLayerPanel.tsx",
+      "bytes": 3395,
+      "sha256": "b988e0e91946547c1515689b9c48fa2f413c3e7356386413508ca71958e450e6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/RsepriteLayerPanel.tsx"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/RsepritePaletteBar.tsx",
+      "bytes": 4793,
+      "sha256": "dac1109c2be714f818a36e976d6749f4a0168e37c4e6ad7a9550bcf268c67e73",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/RsepritePaletteBar.tsx"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/RsepriteTimeline.tsx",
+      "bytes": 5296,
+      "sha256": "f3126bd943fcf6ceb3165693d654ba05026a4ab53608b1b29b7661e188580282",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/RsepriteTimeline.tsx"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/bresenham.ts",
+      "bytes": 650,
+      "sha256": "845eb70f15414214a3aa6e66c9ee004ae436bc71515973e18dfce991367e6f64",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/bresenham.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/commands/paintCmd.ts",
+      "bytes": 3280,
+      "sha256": "56ee432102bbae1a9e9a83440bf8af113bc691add80d2e600755f7c1616aa71d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/commands/paintCmd.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/composeFrame.ts",
+      "bytes": 2814,
+      "sha256": "5eceeeac39b9dc968306d2fd3579b31b1d129fe5400eb5dbf23e3d83b7ce3a75",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/composeFrame.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/documentFactory.ts",
+      "bytes": 2199,
+      "sha256": "cae2567ecdd6552c3ced649536b8f252c3e5151c00de3decec11ed785ccc57c1",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/documentFactory.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/index.ts",
+      "bytes": 1137,
+      "sha256": "ff7ce4abed28fc60f65f5e7e8687ca7fd12793bc3bbd0c5ec68ba9eeb8ac6ca6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/index.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/paintDocument.ts",
+      "bytes": 1714,
+      "sha256": "c4c4f0a733f3b075d79acd6a67aef8b35178a024df06407b2bd5622705d4733d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/paintDocument.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/palettePresets.ts",
+      "bytes": 903,
+      "sha256": "171459b167997d17f781dccbc9b36e7e99437e1dfce3e456c000496e557c4c0a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/palettePresets.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/types.ts",
+      "bytes": 1084,
+      "sha256": "58c3733e69862179e2c65cf014f89dbe45c862bd253742d0242149b6168bbe38",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/types.ts"
+    },
+    {
+      "path": "frontend/src/components/Rseprite/useRsepriteState.ts",
+      "bytes": 10164,
+      "sha256": "8b494021f081d6ff70223d1fddc4e9749f9c10ef392345484f1c1c727de114b4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/Rseprite/useRsepriteState.ts"
+    },
+    {
+      "path": "frontend/src/components/SeedanceWatermarkRemover.tsx",
+      "bytes": 8536,
+      "sha256": "81bf7f1a0e089db158d071b7ba67497b6855889bee3728131c291326e9bb8426",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/SeedanceWatermarkRemover.tsx"
+    },
+    {
+      "path": "frontend/src/components/SpriteSheetAdjust.tsx",
+      "bytes": 109689,
+      "sha256": "fcd1d386f932c61ea4d36fc7eb34acab9a8b01d7554588365f81a62a7836e3a9",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/SpriteSheetAdjust.tsx"
+    },
+    {
+      "path": "frontend/src/components/SpriteSheetTool.tsx",
+      "bytes": 32544,
+      "sha256": "2eac6aee86fd26e20aa0e33a448bfa7dd0e8d9a8dce1d1a9e4a5b9a5f9b61486",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/SpriteSheetTool.tsx"
+    },
+    {
+      "path": "frontend/src/components/StashDropZone.tsx",
+      "bytes": 2439,
+      "sha256": "f13c403ad2ab9b1faf7696e42e0b07ba77096a6b7f2ac78a1f1e98347372d897",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/StashDropZone.tsx"
+    },
+    {
+      "path": "frontend/src/components/StashableImage.tsx",
+      "bytes": 940,
+      "sha256": "c2e0b09722f7595e0d26ecda4596d2231d285d1426784e06fd2ee2a13a4c3eca",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/StashableImage.tsx"
+    },
+    {
+      "path": "frontend/src/components/UploadStep.tsx",
+      "bytes": 1969,
+      "sha256": "7510d0d370e6c3e464a72fe9eac478d86300ef29d0c6a8abdb3bf5aa088e900d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/UploadStep.tsx"
+    },
+    {
+      "path": "frontend/src/components/WorkflowBlueprintCanvas.tsx",
+      "bytes": 27659,
+      "sha256": "18b7f88fdc93946f69e37191d8f5f56e559289537892218571e22c1f5532dcc7",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/WorkflowBlueprintCanvas.tsx"
+    },
+    {
+      "path": "frontend/src/components/_archive/ProcessStep.tsx",
+      "bytes": 2990,
+      "sha256": "611fe0a834a10236282e43d08be68b25c2954895aaa1e55f5a49438dfbbcc6aa",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/_archive/ProcessStep.tsx"
+    },
+    {
+      "path": "frontend/src/components/_archive/README.md",
+      "bytes": 345,
+      "sha256": "370e628c5b158c66a6fa97b5a30127df7e0da2c3c7c67878675d9c684ef5545a",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/_archive/README.md"
+    },
+    {
+      "path": "frontend/src/components/_archive/ResultStep.tsx",
+      "bytes": 1797,
+      "sha256": "3b43a2652f9e80bb12d745454236749bba0adcd1140567515c423a58e9e0ddd0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/_archive/ResultStep.tsx"
+    },
+    {
+      "path": "frontend/src/components/infiniteMap/InfiniteMapScene.tsx",
+      "bytes": 92075,
+      "sha256": "912d39842cf4a344bbd4dd7daed3bf26e2bf7ded32d1f5ccbdb5d19c8d689da5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/infiniteMap/InfiniteMapScene.tsx"
+    },
+    {
+      "path": "frontend/src/components/infiniteMap/blobTerrain.ts",
+      "bytes": 17805,
+      "sha256": "a79c55b08f87c48d8b7a21b795fd2ae5917e23ffdcfda4b289ad5a7f3ac1526d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/infiniteMap/blobTerrain.ts"
+    },
+    {
+      "path": "frontend/src/components/infiniteMap/infiniteMapCity.ts",
+      "bytes": 18512,
+      "sha256": "02be9f9b25a6b3fcc8156b01e07bb63a7258d219161f1fe0d9ba9a0cb08d52ab",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/infiniteMap/infiniteMapCity.ts"
+    },
+    {
+      "path": "frontend/src/components/infiniteMap/infiniteMapMonsters.ts",
+      "bytes": 5979,
+      "sha256": "df8107f4b836c84d64952002cf73228decbd5e685ea67da0418631a22fd4bb82",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/infiniteMap/infiniteMapMonsters.ts"
+    },
+    {
+      "path": "frontend/src/components/infiniteMap/infiniteMapSpriteData.ts",
+      "bytes": 4043,
+      "sha256": "4769e1d98a5824e31de9be4c788b6aad09ad1ef59501934abd451eb027728314",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/components/infiniteMap/infiniteMapSpriteData.ts"
+    },
+    {
+      "path": "frontend/src/config/features.ts",
+      "bytes": 364,
+      "sha256": "a4c129665d2c07ffedd2f59e31ca6aea183b6a130d3b08de2ddc7fce89a9e20e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/config/features.ts"
+    },
+    {
+      "path": "frontend/src/config/frameToken.ts",
+      "bytes": 357,
+      "sha256": "f32c4056166357a0e2ede0c0456d1c560ace4bf8df3d831e63b05777f9e78aac",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/config/frameToken.ts"
+    },
+    {
+      "path": "frontend/src/config/nftClaim.ts",
+      "bytes": 345,
+      "sha256": "3322f4d13fc4489ed5425866d13ce69a7f45b4301216d63c1ff6037e7c9c5b2b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/config/nftClaim.ts"
+    },
+    {
+      "path": "frontend/src/config/roninPublishedAddresses.ts",
+      "bytes": 490,
+      "sha256": "2e2decfa179b69f55dccea4360b64cec8aa38ad58b964f002bc06bf5fb90674d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/config/roninPublishedAddresses.ts"
+    },
+    {
+      "path": "frontend/src/hooks/useNftOwnership.ts",
+      "bytes": 2150,
+      "sha256": "24169d0f631dd86498c9ec9b59bd28068874650a81e8171d1454448e76b7b73c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/hooks/useNftOwnership.ts"
+    },
+    {
+      "path": "frontend/src/i18n/context.tsx",
+      "bytes": 2489,
+      "sha256": "5eced84b035108c9c7ca1fb9537f9e9493abd96e8aa02798e173d7b4521de635",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/i18n/context.tsx"
+    },
+    {
+      "path": "frontend/src/i18n/locales.ts",
+      "bytes": 225672,
+      "sha256": "647c86361ebbd2d03ccd90b43823ad43967aa449763901eba864d9743d58dc02",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/i18n/locales.ts"
+    },
+    {
+      "path": "frontend/src/index.css",
+      "bytes": 838,
+      "sha256": "f99c95f26754d2509b10c68b0dead8a6218b716eb1690fcef9c84c350f3a6535",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/index.css"
+    },
+    {
+      "path": "frontend/src/lib/audioMp3.ts",
+      "bytes": 4450,
+      "sha256": "c03d2add8ac43594d25f190d52a91b1208100f9b976a88b6e811101b1ec81b6f",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/audioMp3.ts"
+    },
+    {
+      "path": "frontend/src/lib/doubleBackgroundMatte.ts",
+      "bytes": 10143,
+      "sha256": "7d8be08fc74a40def90a57e6d21761f1c1aff9434c6fdfc9188ea46b73636681",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/doubleBackgroundMatte.ts"
+    },
+    {
+      "path": "frontend/src/lib/gemPixelUrls.ts",
+      "bytes": 6724,
+      "sha256": "53c5a3bffd5bdd7082490638e67296d976c31b5a616a8d89b34fcc5f69ced19c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/gemPixelUrls.ts"
+    },
+    {
+      "path": "frontend/src/lib/geminiWatermark.ts",
+      "bytes": 20921,
+      "sha256": "52e85580efadaaf90df84e5895c2bb06b09fb88c68b5f1c555bbc2db995799db",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/geminiWatermark.ts"
+    },
+    {
+      "path": "frontend/src/lib/lamejs.ts",
+      "bytes": 1499,
+      "sha256": "61fb9443db2f4bd8f9c548ec0eedb5cc4d1201a261f6c0a7f50276c4af6ad1f4",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/lamejs.ts"
+    },
+    {
+      "path": "frontend/src/lib/opticalFlowInterpolate.ts",
+      "bytes": 7487,
+      "sha256": "d372c4f5fea93ba572d11b873e17c99e13abcf7cf796bc75daf6513de5e232f3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/opticalFlowInterpolate.ts"
+    },
+    {
+      "path": "frontend/src/lib/perfectPixel/fft.ts",
+      "bytes": 2715,
+      "sha256": "ad20cd78cfef28304a6a03f1af3482057b5fb464e8b824aa1cbd6342e1c5e711",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/perfectPixel/fft.ts"
+    },
+    {
+      "path": "frontend/src/lib/perfectPixel/perfectPixel.ts",
+      "bytes": 24581,
+      "sha256": "b742db672d0a1f667ddd53981771a8f46147878706e0483885e77a27779a39fd",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/perfectPixel/perfectPixel.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/colors.ts",
+      "bytes": 1859,
+      "sha256": "22f318f06d2468c7da10ad5e9e2a1084a7381a36c9a1140fe1c56850425b249b",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/colors.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/imageDataOps.ts",
+      "bytes": 5285,
+      "sha256": "3ee24bc45d2735a6f3bd4b6a929c2d18632ec5595719c50891edc6653810b227",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/imageDataOps.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/mesh.ts",
+      "bytes": 7424,
+      "sha256": "79a1e84ec77d990e85778757e698b6a1e0c4ce2fc9b0de35563e907d87fd4c31",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/mesh.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/opencv.ts",
+      "bytes": 1983,
+      "sha256": "28f7de143f39279e03498a2acf4660fed33af5e50c078a6a8c8c17851936c024",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/opencv.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/pipeline.ts",
+      "bytes": 2024,
+      "sha256": "6f5d467856c1073764c2072fb984d04b45a53d7fa47c5693d7ea1aceab83f3c3",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/pipeline.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/pixelate.ts",
+      "bytes": 3907,
+      "sha256": "57629f82f3afc5f7b6256fbc6f02555402bb9cb84310425e5f9884d06da4f0a5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/pixelate.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/safeUpscale.ts",
+      "bytes": 695,
+      "sha256": "049f092bdb93ca126e8c534ddd277e81a602c70e2f45f424177828ffe15066a8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/safeUpscale.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/types.ts",
+      "bytes": 1037,
+      "sha256": "628beed4388ee64ed19c95846fe3a6a067098238f6233c33c77ec1e44f4a5fe8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/types.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/worker.ts",
+      "bytes": 1387,
+      "sha256": "d66a35deef665ff142a9a99627e15320ae6252f86435b9debb4553313710f9b6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/worker.ts"
+    },
+    {
+      "path": "frontend/src/lib/pixellise/workerBridge.ts",
+      "bytes": 2018,
+      "sha256": "5ed6a394fd324ea8bb11fb9d045cb7a024a8cb2cd3927d5e8da84eb981e9fb06",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/pixellise/workerBridge.ts"
+    },
+    {
+      "path": "frontend/src/lib/roninClaimCalldata.ts",
+      "bytes": 217,
+      "sha256": "131aafc03f6b1ef3a9c6b4e824b902217f1e37f78ac8d93fabc0a3fee064cca8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/roninClaimCalldata.ts"
+    },
+    {
+      "path": "frontend/src/lib/roninProWorkflow.ts",
+      "bytes": 35358,
+      "sha256": "4ab49a307cd0a7e5c5eecec54bd3e1d5b1ac0a8048d0ebce0c89a4808f1d4e5d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/roninProWorkflow.ts"
+    },
+    {
+      "path": "frontend/src/lib/roninProWorkflowGridOps.ts",
+      "bytes": 18372,
+      "sha256": "b7b993b8d061bf2d130dbc0c9c86c40fefb702e70c6400f40fe513848329f85e",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/roninProWorkflowGridOps.ts"
+    },
+    {
+      "path": "frontend/src/lib/sheetProPreprocess.ts",
+      "bytes": 3154,
+      "sha256": "dbeed9fa4c6442ec9304ff20d046e153d1e8eb7cb972a8be4a6c93d06e0fdb3c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/sheetProPreprocess.ts"
+    },
+    {
+      "path": "frontend/src/lib/simpleStitchVertical.ts",
+      "bytes": 2469,
+      "sha256": "5f13b35957e15b6c8a30b5c7aa23ecb970121550653d6b3cc9a23d40bc2016cf",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/simpleStitchVertical.ts"
+    },
+    {
+      "path": "frontend/src/lib/spriteGridDuplicate.ts",
+      "bytes": 4854,
+      "sha256": "8257d92932d0c2ca77345a01310c3fe6e5cf7a1dbe014d08c1602c6a98395f8d",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/spriteGridDuplicate.ts"
+    },
+    {
+      "path": "frontend/src/lib/superSplitTransparent.ts",
+      "bytes": 4443,
+      "sha256": "d88715cf23daee371d61682ddb5ecc440893b915a8fdf3ded1dc5fab4cd25796",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/superSplitTransparent.ts"
+    },
+    {
+      "path": "frontend/src/lib/workflowBpsetPresets.ts",
+      "bytes": 2439,
+      "sha256": "5b78d58254c6b18295278d561a1c9cf1805215df4eab5027b8dca43a3f08bed0",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/lib/workflowBpsetPresets.ts"
+    },
+    {
+      "path": "frontend/src/localWorkspace/context.tsx",
+      "bytes": 6919,
+      "sha256": "69d7f49a31250c0beeee5553b5ed6e6ae8405886b88a5315a2323a1aba49784c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/localWorkspace/context.tsx"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "bytes": 329,
+      "sha256": "654dea3dfd059fd22987720ff18dd379a2bce6ca80dbe34550e989b169f65787",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/main.tsx"
+    },
+    {
+      "path": "frontend/src/stash/context.tsx",
+      "bytes": 2851,
+      "sha256": "bc955a778d4efb4180e654e50a4af902a100ebff154c7072df7bbfcc004a489c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/stash/context.tsx"
+    },
+    {
+      "path": "frontend/src/vite-infinite-map-monsters.d.ts",
+      "bytes": 218,
+      "sha256": "d51148d017c60f8dcf9ed11a55dc67883d73f950908f03ebb34a8991c1a1e0d6",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/src/vite-infinite-map-monsters.d.ts"
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "bytes": 732,
+      "sha256": "922bc5bfb41bdc0768023b2487d54b3ae23c587d999024d4f32cde879ae6f4d8",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/tsconfig.app.json"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "bytes": 119,
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/tsconfig.json"
+    },
+    {
+      "path": "frontend/tsconfig.node.json",
+      "bytes": 653,
+      "sha256": "c3dd0fb522feba3596713f51b95bd53d781d845d24aedbfa2ac093d8b39c5120",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/tsconfig.node.json"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "bytes": 3152,
+      "sha256": "6fd0efb1cfb0faa22a10be0a75b37613da0e91aa45566c9cdbade7ab71f178ee",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/vite.config.ts"
+    },
+    {
+      "path": "frontend/wrangler.toml",
+      "bytes": 133,
+      "sha256": "5d24690d3369203591b0be2105255844f0ca9f4da0b6825e774960ca2ea7225c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/wrangler.toml"
+    },
+    {
+      "path": "frontend/只因 (1).gif",
+      "bytes": 1696,
+      "sha256": "6f4aa2288d7c472ef7988b946058feae30f805c41352dd64a0ff7fd76e06ac9c",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/只因 (1).gif"
+    },
+    {
+      "path": "frontend/只因 (2).gif",
+      "bytes": 4934,
+      "sha256": "cc7659ce2126dd489362394b73d09d6dea8aa4fcfcdd1a7d858b56b716f2f300",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/只因 (2).gif"
+    },
+    {
+      "path": "frontend/只因 (3).gif",
+      "bytes": 3367,
+      "sha256": "204ae1028476cf6ff6a7952c7ee37503198cfd002b9aa4442bb2f05cba931973",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/只因 (3).gif"
+    },
+    {
+      "path": "frontend/只因 (4).gif",
+      "bytes": 1654,
+      "sha256": "623397a760f0035ed9828b8ad95badafb306d6bcdc6f7eb34a59481597469083",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/只因 (4).gif"
+    },
+    {
+      "path": "frontend/只因 (5).gif",
+      "bytes": 1927,
+      "sha256": "2ae8d6e2311512d6947642de6c446df6cb70077d1cdb295a1be5bc09c534b3fe",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/只因 (5).gif"
+    },
+    {
+      "path": "frontend/只因 (6).gif",
+      "bytes": 1692,
+      "sha256": "aa07a7cd8edeb5daa1beda5a5193de8338cb8f0c90ab8e9a5cce1c7804c5e4b5",
+      "classification": "reference_source",
+      "archivePath": "reference/frontend/只因 (6).gif"
+    },
+    {
+      "path": "image/DEV_DOC_video2timesheet/1772251196866.png",
+      "bytes": 41585,
+      "sha256": "83c2a7f2db70034179740c45af98f30043b2ccbb6654d6b9d0d69f6ff39a09e6",
+      "classification": "reference_source",
+      "archivePath": "reference/image/DEV_DOC_video2timesheet/1772251196866.png"
+    },
+    {
+      "path": "image/DEV_DOC_video2timesheet/1772251199270.png",
+      "bytes": 41585,
+      "sha256": "83c2a7f2db70034179740c45af98f30043b2ccbb6654d6b9d0d69f6ff39a09e6",
+      "classification": "reference_source",
+      "archivePath": "reference/image/DEV_DOC_video2timesheet/1772251199270.png"
+    },
+    {
+      "path": "image/DEV_DOC_video2timesheet/1772251209276.png",
+      "bytes": 40372,
+      "sha256": "587806cec531622e57ce12592e5c05e6dcc7008afe255afd04d424a0e48d8caf",
+      "classification": "reference_source",
+      "archivePath": "reference/image/DEV_DOC_video2timesheet/1772251209276.png"
+    },
+    {
+      "path": "image/DEV_DOC_video2timesheet/1772251217349.png",
+      "bytes": 40372,
+      "sha256": "587806cec531622e57ce12592e5c05e6dcc7008afe255afd04d424a0e48d8caf",
+      "classification": "reference_source",
+      "archivePath": "reference/image/DEV_DOC_video2timesheet/1772251217349.png"
+    },
+    {
+      "path": "image/DEV_PLAN_extensions/1772256427443.png",
+      "bytes": 137643,
+      "sha256": "3871f539a7c5a9bf37affeff7782b1db14e8077b878bc62fe72bb03d66969c7f",
+      "classification": "reference_source",
+      "archivePath": "reference/image/DEV_PLAN_extensions/1772256427443.png"
+    },
+    {
+      "path": "image/README.en/1774339480104.png",
+      "bytes": 1509481,
+      "sha256": "96df92eac0d33bb0e0ea4e126d54f97413d4cae905d265fe46551d533f2077bc",
+      "classification": "reference_source",
+      "archivePath": "reference/image/README.en/1774339480104.png"
+    },
+    {
+      "path": "image/README/1774190207889.png",
+      "bytes": 12886,
+      "sha256": "2ac1eab415832c3cf609cb4f1a5d6f59924004319e3dcc697b78141b1392f815",
+      "classification": "reference_source",
+      "archivePath": "reference/image/README/1774190207889.png"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 48438,
+      "sha256": "92d1432753bc54c6431c5c6528cc4499b2ee2ec9f1c9551831e7c8a309ba81b3",
+      "classification": "reference_source",
+      "archivePath": "reference/package-lock.json"
+    },
+    {
+      "path": "package.json",
+      "bytes": 432,
+      "sha256": "9bc2feaf3d05537a43ae364f7784936c0dcfb01dfe25a2747137c3be810e43e1",
+      "classification": "reference_source",
+      "archivePath": "reference/package.json"
+    },
+    {
+      "path": "run_api.py",
+      "bytes": 213,
+      "sha256": "677bc20603e1c540191b511f8ce677e54068ab230b473b8b69e209912235e3fb",
+      "classification": "reference_source",
+      "archivePath": "reference/run_api.py"
+    },
+    {
+      "path": "run_worker.py",
+      "bytes": 451,
+      "sha256": "b9c8ac55b1c6c7e312cd2b5417b55e27343eaf611faf65b035cb24740cecf2ad",
+      "classification": "reference_source",
+      "archivePath": "reference/run_worker.py"
+    },
+    {
+      "path": "worker/__init__.py",
+      "bytes": 26,
+      "sha256": "a6406e84c0a4c74619257c8e3c52829292fa5b6dc2cdebb435d7b6334f46a03a",
+      "classification": "reference_source",
+      "archivePath": "reference/worker/__init__.py"
+    },
+    {
+      "path": "worker/processor.py",
+      "bytes": 10252,
+      "sha256": "ee590655c97725b5a086ff009389ffe9d95ba1b8e70837f6fe13278397d49531",
+      "classification": "reference_source",
+      "archivePath": "reference/worker/processor.py"
+    },
+    {
+      "path": "worker/tasks.py",
+      "bytes": 1329,
+      "sha256": "7a5f1cf1994cb2eea8f66f49ce22c794e1e443971b9a8e46f2e2155c6e6a0098",
+      "classification": "reference_source",
+      "archivePath": "reference/worker/tasks.py"
+    },
+    {
+      "path": "worker/watermark_remover.py",
+      "bytes": 5819,
+      "sha256": "ee075eb0f6086df27192fb9f9c9fafe26e57f437bcc62d88ff13edba7b280fe1",
+      "classification": "reference_source",
+      "archivePath": "reference/worker/watermark_remover.py"
+    },
+    {
+      "path": "wrangler.jsonc",
+      "bytes": 326,
+      "sha256": "17ee7381ee0038f022c85a4b8f83455db59e31082475e705ed1236dc039c598e",
+      "classification": "reference_source",
+      "archivePath": "reference/wrangler.jsonc"
+    }
+  ]
+}

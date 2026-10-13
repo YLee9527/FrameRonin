@@ -1,15 +1,11 @@
 {
-  "name": "pixelwork",
+  "name": "frameronin-local",
   "private": true,
+  "version": "0.1.0",
   "scripts": {
-    "deploy:ronin": "cd contracts && npm run deploy:ronin",
-    "dev:api": "uvicorn backend.app.main:app --reload --port 8000",
-    "dev:worker": "rq worker pixelwork --url redis://localhost:6379/0",
-    "dev:frontend": "cd frontend && npm run dev",
-    "deploy": "wrangler deploy",
-    "preview": "wrangler dev"
-  },
-  "devDependencies": {
-    "wrangler": "^4.71.0"
+    "test:engine": "skills/frameronin-local/.runtime/venv/bin/python -m unittest discover -s skills/frameronin-local/tests -v",
+    "build:workbench": "npm --prefix skills/frameronin-local/assets/workbench run build",
+    "dev:workbench": "npm --prefix skills/frameronin-local/assets/workbench run dev",
+    "test:preflight": "node --test tools/codex-preflight/preflight.test.mjs"
   }
 }
