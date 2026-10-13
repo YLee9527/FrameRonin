@@ -1,0 +1,606 @@
+{
+  "formatVersion": 1,
+  "graphVersion": 7,
+  "operations": {
+    "workflowInputImage": {
+      "parameters": {
+        "imageIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 1000,
+          "type": "integer"
+        }
+      },
+      "ports": [],
+      "output": "image"
+    },
+    "geminiWatermarkRemove": {
+      "parameters": {},
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "resize": {
+      "parameters": {
+        "w": {
+          "default": 256,
+          "minimum": 1,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "h": {
+          "default": 256,
+          "minimum": 1,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "keepAspect": {
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,
+          "type": "integer"
+        },
+        "pixelated": {
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "resizeHard": {
+      "parameters": {
+        "w": {
+          "default": 256,
+          "minimum": 1,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "h": {
+          "default": 256,
+          "minimum": 1,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "keepAspect": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "crop": {
+      "parameters": {
+        "left": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "top": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "right": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "bottom": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "matteContiguous": {
+      "parameters": {
+        "tolerance": {
+          "default": 80,
+          "minimum": 0,
+          "maximum": 255,
+          "type": "number"
+        },
+        "feather": {
+          "default": 5,
+          "minimum": 0,
+          "maximum": 100,
+          "type": "number"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "matteGlobal": {
+      "parameters": {
+        "tolerance": {
+          "default": 80,
+          "minimum": 0,
+          "maximum": 255,
+          "type": "number"
+        },
+        "feather": {
+          "default": 5,
+          "minimum": 0,
+          "maximum": 100,
+          "type": "number"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "matteDoubleBackground": {
+      "parameters": {
+        "tolerance": {
+          "default": 70,
+          "minimum": 0,
+          "maximum": 255,
+          "type": "number"
+        },
+        "edgeContrast": {
+          "default": 53,
+          "minimum": 0,
+          "maximum": 100,
+          "type": "number"
+        }
+      },
+      "ports": [
+        "inA",
+        "inB"
+      ],
+      "output": "image"
+    },
+    "mattePostRepair": {
+      "parameters": {},
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "alphaFrontierErode": {
+      "parameters": {
+        "erosion": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 100,
+          "type": "number"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "padExpand": {
+      "parameters": {
+        "padTop": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "padRight": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "padBottom": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "padLeft": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "evenSplitStrip": {
+      "parameters": {
+        "evenCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "evenRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "evenSplitPerCellEdge": {
+      "parameters": {
+        "evenCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "evenRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "cellEdgeMode": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "type": "integer"
+        },
+        "edgeL": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "edgeT": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "edgeR": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        },
+        "edgeB": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 8192,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "mergeStrip": {
+      "parameters": {
+        "mergeCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "frameCount": {
+          "default": 16,
+          "minimum": 1,
+          "maximum": 1000,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "simpleStitchVertical": {
+      "parameters": {
+        "stitchMode": {
+          "default": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "type": "integer"
+        },
+        "stitchSlotCount": {
+          "default": 2,
+          "minimum": 2,
+          "maximum": 16,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        "in1",
+        "in2",
+        "in3",
+        "in4",
+        "in5",
+        "in6",
+        "in7",
+        "in8",
+        "in9",
+        "in10",
+        "in11",
+        "in12",
+        "in13",
+        "in14",
+        "in15",
+        "in16"
+      ],
+      "output": "image"
+    },
+    "gridDeleteRow": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "rowIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridDeleteCol": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "colIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridExpandRow": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "atRow": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridExpandCol": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "atCol": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridFlipRow": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "rowIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridFlipCol": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "colIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridCopyRow": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "rowIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "atRow": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "gridCopyCol": {
+      "parameters": {
+        "gCols": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "gRows": {
+          "default": 4,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "colIndex": {
+          "default": 1,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "atCol": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    },
+    "customGridRearrange": {
+      "parameters": {
+        "splitCols": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "splitRows": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "outRows": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        },
+        "outCols": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 128,
+          "type": "integer"
+        }
+      },
+      "ports": [
+        ""
+      ],
+      "output": "image"
+    }
+  }
+}

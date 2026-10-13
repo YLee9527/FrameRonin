@@ -46,6 +46,7 @@ skills/*/assets/workbench/dist/
 *.frameronin/
 __pycache__/
 *.pyc
+skills/*/scripts/js-runtime/node_modules/
 
 # Logs
 *.log

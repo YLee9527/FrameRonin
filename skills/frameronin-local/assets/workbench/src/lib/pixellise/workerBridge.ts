@@ -5,6 +5,7 @@ const WORKER_TIMEOUT_MS = 5 * 60 * 1000
 
 export interface RunWorkerOptions {
   onProgress?: (message: string, percent?: number) => void
+  signal?: AbortSignal
 }
 
 export function runWorkerProcessing(
@@ -20,6 +21,10 @@ export function runWorkerProcessing(
   bridgeOpts?: RunWorkerOptions,
 ): Promise<ImageData> {
   return new Promise((resolve, reject) => {
+    if (bridgeOpts?.signal?.aborted) {
+      reject(new DOMException('Canceled', 'AbortError'))
+      return
+    }
     const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
     const timer = window.setTimeout(() => {
       worker.terminate()
@@ -31,7 +36,11 @@ export function runWorkerProcessing(
       worker.onmessage = null
       worker.onerror = null
       worker.terminate()
+      bridgeOpts?.signal?.removeEventListener('abort', abort)
     }
+
+    const abort = () => { cleanup(); reject(new DOMException('Canceled', 'AbortError')) }
+    bridgeOpts?.signal?.addEventListener('abort', abort, { once: true })
 
     worker.onerror = (ev) => {
       cleanup()
@@ -39,6 +48,7 @@ export function runWorkerProcessing(
     }
 
     worker.onmessage = (e: MessageEvent<WorkerOutput>) => {
+      if (bridgeOpts?.signal?.aborted) return
       const msg = e.data
       if (msg.type === 'progress') {
         bridgeOpts?.onProgress?.(msg.message, msg.percent)

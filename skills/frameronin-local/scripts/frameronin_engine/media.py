@@ -1,6 +1,7 @@
 """Deterministic media processing; filenames stay inside the owned task directory."""
 import json
 import math
+import shutil
 from pathlib import Path
 import subprocess
 import zipfile
@@ -15,6 +16,34 @@ def run(preview, directory, progress):
     parameters = preview['parameters']
     paths = [Path(v['absolutePath']) for v in preview['versions']]
     output = directory / 'result.png'
+    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy']:
+        from .workflows import ROOT
+        node = shutil.which('node')
+        compiled = ROOT / '.runtime/js/algorithms.mjs'
+        if not node or not compiled.is_file():
+            raise RoninError('JS_RUNTIME_MISSING', 'Install and build the private JavaScript algorithm runtime.')
+        inputs = directory / 'inputs'
+        inputs.mkdir()
+        selected = []
+        for index, path in enumerate(paths):
+            relative = f'inputs/{index:04d}{path.suffix}'
+            shutil.copy2(path, directory / relative)
+            selected.append(relative)
+        values = dict(parameters)
+        request = {'operation': 'workflow' if name.startswith('workflow.') else 'perfectPixel',
+                   'inputs': selected, 'parameters': values, 'budgetBytes': preview['budgetBytes']}
+        if name.startswith('workflow.'):
+            request['graph'] = values.pop('graph')
+            request['compatibility'] = name == 'workflow.legacy'
+        else:
+            cols, rows = values.pop('gridCols'), values.pop('gridRows')
+            values['gridSize'] = {'cols': cols, 'rows': rows} if cols else None
+        request_path = directory / 'request.json'
+        request_path.write_text(json.dumps(request))
+        subprocess.run([node, str(ROOT / 'scripts/js-runtime/run.mjs'), str(request_path)], check=True)
+        report_path = directory / 'output/report.json'
+        report = json.loads(report_path.read_text())
+        return [directory / file for file in report['files']] + [report_path]
     if name.startswith('image.') and name not in ['image.slice', 'image.matte']:
         with Image.open(paths[0]) as original:
             image = original.convert('RGBA')

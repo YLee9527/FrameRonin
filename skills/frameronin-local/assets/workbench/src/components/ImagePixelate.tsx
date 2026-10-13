@@ -7,6 +7,7 @@ import { formatError } from '../i18n/locales'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
 import { maxSafeUpscaleForImage } from '../lib/pixellise/safeUpscale'
+import { runPerfectPixelWorker } from '../lib/perfectPixel/workerBridge'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -372,6 +373,8 @@ function mergeNearbyColorsImage(img: HTMLImageElement, strength: number): Promis
 
 export default function ImagePixelate() {
   const { t } = useLanguage()
+  const computation = useRef<AbortController | null>(null)
+  useEffect(() => () => computation.current?.abort(), [])
   const [activeTab, setActiveTab] = useState<
     'pixelate' | 'mergeNearby' | 'color16' | 'advanced' | 'perfectPixel'
   >('perfectPixel')
@@ -583,6 +586,9 @@ export default function ImagePixelate() {
 
   const runPerfectPixel = async () => {
     if (!file) return
+    computation.current?.abort()
+    const controller = new AbortController()
+    computation.current = controller
     if (
       previewSelection &&
       (previewSelection.w < PREVIEW_SELECTION_MIN_SIDE ||
@@ -598,27 +604,29 @@ export default function ImagePixelate() {
     })
     setResultBlob(null)
     try {
-      await new Promise<void>((r) => requestAnimationFrame(() => r()))
-      const { getPerfectPixel, perfectPixelImageDataToPngBlob, PERFECT_PIXEL_MAX_SIDE } = await import(
+      const { perfectPixelImageDataToPngBlob, PERFECT_PIXEL_MAX_SIDE } = await import(
         '../lib/perfectPixel/perfectPixel'
       )
       const id = await loadImageDataForPerfectPixel(file, previewSelection, PERFECT_PIXEL_MAX_SIDE)
-      const out = getPerfectPixel(id, {
+      if (controller.signal.aborted) return
+      const out = await runPerfectPixelWorker(id, {
         sampleMethod: ppSample,
         gridSize: ppManualGrid ? { cols: ppGridCols, rows: ppGridRows } : null,
         minSize: ppMinSize,
         peakWidth: ppPeakWidth,
         refineIntensity: ppRefine,
         fixSquare: ppFixSquare,
-      })
+      }, controller.signal)
       const blob = await perfectPixelImageDataToPngBlob(out)
+      if (controller.signal.aborted || computation.current !== controller) return
       setResultBlob(blob)
       setResultUrl(URL.createObjectURL(blob))
       message.success(t('pixelatePerfectPixelSuccess', { w: out.width, h: out.height }))
     } catch (e) {
+      if (controller.signal.aborted) return
       message.error(t('pixelatePerfectPixelFailed') + ': ' + formatError(e, t))
     } finally {
-      setLoading(false)
+      if (computation.current === controller) setLoading(false)
     }
   }
 
@@ -1148,6 +1156,10 @@ export default function ImagePixelate() {
             {t('pixelatePerfectPixelApply')}
           </Button>
         )}
+        {activeTab === 'perfectPixel' && loading && <Button onClick={() => {
+          computation.current?.abort()
+          setLoading(false)
+        }}>{t('cancel')}</Button>}
         {activeTab === 'advanced' && advStatusKey && loading && (
           <Text type="secondary">{t(advStatusKey)}</Text>
         )}

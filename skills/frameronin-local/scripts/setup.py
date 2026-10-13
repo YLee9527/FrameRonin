@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--python', default='python3.11')
     parser.add_argument('--with-model', action='store_true', help='下载 rembg U2Net 模型到私有缓存')
     parser.add_argument('--workbench', action='store_true', help='安装并构建随包 npm 工作台')
+    parser.add_argument('--local-algorithms', action='store_true', help='安装并构建后台 TypeScript 图像算法')
     args = parser.parse_args()
     binary = shutil.which(args.python)
     if not binary:
@@ -39,13 +40,17 @@ def main():
         if args.with_model:
             env = {**os.environ, 'U2NET_HOME': str(runtime / 'models')}
             subprocess.run([str(python), '-c', 'from rembg import new_session;new_session("u2net")'], env=env, check=True)
-        if args.workbench:
+        if args.workbench or args.local_algorithms:
             npm = shutil.which('npm')
             if not npm:
                 raise SystemExit('npm and Node.js 22 are required for the visual workbench.')
             workbench = ROOT / 'assets/workbench'
             subprocess.run([npm, 'ci'], cwd=workbench, check=True)
-            subprocess.run([npm, 'run', 'build'], cwd=workbench, check=True)
+            if args.workbench:
+                subprocess.run([npm, 'run', 'build'], cwd=workbench, check=True)
+            javascript = ROOT / 'scripts/js-runtime'
+            subprocess.run([npm, 'ci', '--ignore-scripts'], cwd=javascript, check=True)
+            subprocess.run([shutil.which('node'), str(javascript / 'build.mjs')], check=True)
     print(json.dumps({'status': 'ready', 'python': str(python), 'modelRequested': args.with_model,
                       'workbenchRequested': args.workbench}))
 

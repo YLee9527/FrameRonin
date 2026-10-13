@@ -1,0 +1,1239 @@
+{
+  "date": "2026-10-14",
+  "presetRuns": [
+    {
+      "preset": "Dfinal",
+      "task": "c7e4b52a-2a35-41ce-896e-5277aeb20023",
+      "state": "succeeded",
+      "inputs": 2,
+      "results": [
+        "3d31ab92-8b6d-4821-af6e-4f426989e848",
+        "101de6a0-4911-4fa2-b88a-32c5525d9294"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 5544,
+          "extension": ".png",
+          "kind": "image",
+          "width": 1280,
+          "height": 640,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 1280,
+            "height": 640
+          }
+        },
+        {
+          "bytes": 243,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "3d31ab92-8b6d-4821-af6e-4f426989e848",
+          "sha256": "743ce877f40d696f9aa97e9292f53ac5d011f03a22362c8db34033ef07077d6b",
+          "metadata": {
+            "bytes": 5544,
+            "extension": ".png",
+            "kind": "image",
+            "width": 1280,
+            "height": 640,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 1280,
+              "height": 640
+            }
+          }
+        },
+        {
+          "versionId": "101de6a0-4911-4fa2-b88a-32c5525d9294",
+          "sha256": "a8c5a78138d94727782489afc8bb02c30ae533dfea19286ce72846ea96143166",
+          "metadata": {
+            "bytes": 243,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 198492160,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 420478976,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "RPGMakerVX",
+      "task": "18233f6c-cfb3-4948-935b-bfc4eec29075",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "5a9ada88-1b7a-4218-ab07-be0193efb5bb",
+        "03935785-183b-4d88-bae4-70d45c655c43"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 756,
+          "extension": ".png",
+          "kind": "image",
+          "width": 96,
+          "height": 128,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 96,
+            "height": 128
+          }
+        },
+        {
+          "bytes": 88,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "5a9ada88-1b7a-4218-ab07-be0193efb5bb",
+          "sha256": "e750c544eb3c3162a84949aa41d592ff728c70c05728504cad81ae4fdcc98fbd",
+          "metadata": {
+            "bytes": 756,
+            "extension": ".png",
+            "kind": "image",
+            "width": 96,
+            "height": 128,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 96,
+              "height": 128
+            }
+          }
+        },
+        {
+          "versionId": "03935785-183b-4d88-bae4-70d45c655c43",
+          "sha256": "48a03a0f6600ee7c4b38aa78d433403ca45d1c62c1072ddb0d26ac12e431bead",
+          "metadata": {
+            "bytes": 88,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 137379840,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 348258304,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "RPGMakerXP",
+      "task": "440507d1-2c57-4eef-bb53-90cd91a9c464",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "68a5dcdf-aece-40f1-a908-52aecc01d60d",
+        "e55752bd-0acf-4990-8337-ebb7ddba08e7"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 1170,
+          "extension": ".png",
+          "kind": "image",
+          "width": 128,
+          "height": 192,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 128,
+            "height": 192
+          }
+        },
+        {
+          "bytes": 88,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "68a5dcdf-aece-40f1-a908-52aecc01d60d",
+          "sha256": "531ff0b7b039f040caeb15372b38b37b03ae5af9b09a481d27ac426ddfda77f3",
+          "metadata": {
+            "bytes": 1170,
+            "extension": ".png",
+            "kind": "image",
+            "width": 128,
+            "height": 192,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 128,
+              "height": 192
+            }
+          }
+        },
+        {
+          "versionId": "e55752bd-0acf-4990-8337-ebb7ddba08e7",
+          "sha256": "48a03a0f6600ee7c4b38aa78d433403ca45d1c62c1072ddb0d26ac12e431bead",
+          "metadata": {
+            "bytes": 88,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138641408,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 365070336,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "rpgmakerV3X",
+      "task": "ac2a9414-af78-4183-b686-9777aec35d8b",
+      "state": "succeeded",
+      "inputs": 2,
+      "results": [
+        "44e95627-452c-4cb2-a796-56b9926cf915",
+        "5211a419-a671-44b5-8b34-2ec149e5e660"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 3088,
+          "extension": ".png",
+          "kind": "image",
+          "width": 576,
+          "height": 384,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 576,
+            "height": 384
+          }
+        },
+        {
+          "bytes": 183,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "44e95627-452c-4cb2-a796-56b9926cf915",
+          "sha256": "c2b0875bcf0709663524011f5e4468d7d45b3af35f1db7649a5da3831dd988b9",
+          "metadata": {
+            "bytes": 3088,
+            "extension": ".png",
+            "kind": "image",
+            "width": 576,
+            "height": 384,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 576,
+              "height": 384
+            }
+          }
+        },
+        {
+          "versionId": "5211a419-a671-44b5-8b34-2ec149e5e660",
+          "sha256": "681aa2febfa2054a7ccfe707339ae26dca7021ebce7ab1c4d075502b46b1557a",
+          "metadata": {
+            "bytes": 183,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 176259072,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 403701760,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "rpgmakerv1.1x",
+      "task": "a6a413fc-abda-46ba-a0c2-54bead608610",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "494bf611-db4c-4aa3-a5c8-e63ee9998286",
+        "505d7389-f297-4e11-a922-9b210703b45a"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 1370,
+          "extension": ".png",
+          "kind": "image",
+          "width": 144,
+          "height": 192,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 144,
+            "height": 192
+          }
+        },
+        {
+          "bytes": 238,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "494bf611-db4c-4aa3-a5c8-e63ee9998286",
+          "sha256": "a66701ef13b81f57d201aa76aab96e0f8bc25b37f9b61679ddfb0bdfca09e4ca",
+          "metadata": {
+            "bytes": 1370,
+            "extension": ".png",
+            "kind": "image",
+            "width": 144,
+            "height": 192,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 144,
+              "height": 192
+            }
+          }
+        },
+        {
+          "versionId": "505d7389-f297-4e11-a922-9b210703b45a",
+          "sha256": "3f9705f6424f10a873105b8ad3bbcc71b34cea8ad07c730e1cc9b3a16967bfbb",
+          "metadata": {
+            "bytes": 238,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138821632,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 356681728,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "八方向",
+      "task": "d4ba66cb-d5d1-4fe5-aa00-2c912dc91df9",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "2ff9d9ab-3e78-445b-9f8c-ffcd5d52701d",
+        "f5e295e5-ea67-4347-a770-68a303b825e3"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 1239,
+          "extension": ".png",
+          "kind": "image",
+          "width": 192,
+          "height": 190,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 192,
+            "height": 190
+          }
+        },
+        {
+          "bytes": 118,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "2ff9d9ab-3e78-445b-9f8c-ffcd5d52701d",
+          "sha256": "2faa59632cf8247f1f73ce0b91f1ddb7a80d07ae419b975a9b5af55f5e3152dd",
+          "metadata": {
+            "bytes": 1239,
+            "extension": ".png",
+            "kind": "image",
+            "width": 192,
+            "height": 190,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 192,
+              "height": 190
+            }
+          }
+        },
+        {
+          "versionId": "f5e295e5-ea67-4347-a770-68a303b825e3",
+          "sha256": "1ccbf6aeebaeb87a409da4e0278e08da63391f56a62513545530d3bc033936eb",
+          "metadata": {
+            "bytes": 118,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138919936,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 348422144,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "吞食天地",
+      "task": "45e758a7-cf0e-47de-b8bb-14eb42a0ae76",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "a88762d7-f9ba-4d80-b76f-67f02c8c42ad",
+        "7a5b65cf-0251-40fb-98da-0182f3de9957",
+        "532802ac-a690-4c5b-a6a5-fbeebbdb92a7",
+        "0a47ae58-3282-41e2-bd71-4e9e62c90e92"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 225,
+          "extension": ".png",
+          "kind": "image",
+          "width": 96,
+          "height": 96,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 96,
+            "height": 96
+          }
+        },
+        {
+          "bytes": 172,
+          "extension": ".png",
+          "kind": "image",
+          "width": 48,
+          "height": 32,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 48,
+            "height": 32
+          }
+        },
+        {
+          "bytes": 217,
+          "extension": ".png",
+          "kind": "image",
+          "width": 128,
+          "height": 16,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 128,
+            "height": 16
+          }
+        },
+        {
+          "bytes": 215,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "a88762d7-f9ba-4d80-b76f-67f02c8c42ad",
+          "sha256": "1edce0582f6e34455cbe67683f7ad768b0dff8940984c9aecd18f0bf22b74d8d",
+          "metadata": {
+            "bytes": 225,
+            "extension": ".png",
+            "kind": "image",
+            "width": 96,
+            "height": 96,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 96,
+              "height": 96
+            }
+          }
+        },
+        {
+          "versionId": "7a5b65cf-0251-40fb-98da-0182f3de9957",
+          "sha256": "12ba71ceed69e54627f102038e5333ee6d6249ac3bed6101220051c3e90f619b",
+          "metadata": {
+            "bytes": 172,
+            "extension": ".png",
+            "kind": "image",
+            "width": 48,
+            "height": 32,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 48,
+              "height": 32
+            }
+          }
+        },
+        {
+          "versionId": "532802ac-a690-4c5b-a6a5-fbeebbdb92a7",
+          "sha256": "8ebfdcb7ca097d9f5a037a3376e47b967b03c648f4d1efba00438ab0acea52bc",
+          "metadata": {
+            "bytes": 217,
+            "extension": ".png",
+            "kind": "image",
+            "width": 128,
+            "height": 16,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 128,
+              "height": 16
+            }
+          }
+        },
+        {
+          "versionId": "0a47ae58-3282-41e2-bd71-4e9e62c90e92",
+          "sha256": "6913cd683441f9fdaea7c595d0874d418d11cba35f6e049f336818728f702852",
+          "metadata": {
+            "bytes": 215,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 167100416,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 516378624,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "小苏剑士",
+      "task": "e90d5ac7-642b-4ee4-a511-3f82d2a45dd2",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "13f27c33-50e5-4ead-89cb-e46269e27216",
+        "dfe13d1a-e9e9-477b-9759-bb4a05c37aa0"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 3250,
+          "extension": ".png",
+          "kind": "image",
+          "width": 576,
+          "height": 384,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 576,
+            "height": 384
+          }
+        },
+        {
+          "bytes": 93,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "13f27c33-50e5-4ead-89cb-e46269e27216",
+          "sha256": "6b2ec05f1401ca5c4053978d1e2d079b56385bd480ce3ff816e90fd583189115",
+          "metadata": {
+            "bytes": 3250,
+            "extension": ".png",
+            "kind": "image",
+            "width": 576,
+            "height": 384,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 576,
+              "height": 384
+            }
+          }
+        },
+        {
+          "versionId": "dfe13d1a-e9e9-477b-9759-bb4a05c37aa0",
+          "sha256": "c686805df40cac9198249c1856e23104c1fe3c6c302933fb58da18ac23db06c6",
+          "metadata": {
+            "bytes": 93,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 176766976,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 433061888,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "弓兵",
+      "task": "149a5fe6-6fe9-4d1b-ae9b-ace61990adc9",
+      "state": "succeeded",
+      "inputs": 2,
+      "results": [
+        "02e6f9c8-b0e0-4345-b0d5-92730916cca4",
+        "60449d4e-5a55-43eb-a904-9576fc384085"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 4982,
+          "extension": ".png",
+          "kind": "image",
+          "width": 1024,
+          "height": 640,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 1024,
+            "height": 640
+          }
+        },
+        {
+          "bytes": 543,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "02e6f9c8-b0e0-4345-b0d5-92730916cca4",
+          "sha256": "9b595798c0e7fb8ac4b717bca5be5fd726fa9866a801362c40186bf2dbe0cc12",
+          "metadata": {
+            "bytes": 4982,
+            "extension": ".png",
+            "kind": "image",
+            "width": 1024,
+            "height": 640,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 1024,
+              "height": 640
+            }
+          }
+        },
+        {
+          "versionId": "60449d4e-5a55-43eb-a904-9576fc384085",
+          "sha256": "898e30206358a0cb0663214fafca681b3e9eb9cc84085eb646bdf389379eec8b",
+          "metadata": {
+            "bytes": 543,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 211075072,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 462422016,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "普通V2&2.2",
+      "task": "73f95560-aa29-41e9-8994-5bbccce32342",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "e2e91a90-662a-4473-b02a-470dee0d60e7",
+        "214b205e-6cb3-48b1-993a-a7176b2eb4fb"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 1161,
+          "extension": ".png",
+          "kind": "image",
+          "width": 160,
+          "height": 160,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 160,
+            "height": 160
+          }
+        },
+        {
+          "bytes": 118,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "e2e91a90-662a-4473-b02a-470dee0d60e7",
+          "sha256": "946b9f3c608ad018ec0e5fb9c4fc290d378630b84704f9eb3eb9f04a01d4997b",
+          "metadata": {
+            "bytes": 1161,
+            "extension": ".png",
+            "kind": "image",
+            "width": 160,
+            "height": 160,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 160,
+              "height": 160
+            }
+          }
+        },
+        {
+          "versionId": "214b205e-6cb3-48b1-993a-a7176b2eb4fb",
+          "sha256": "1ccbf6aeebaeb87a409da4e0278e08da63391f56a62513545530d3bc033936eb",
+          "metadata": {
+            "bytes": 118,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138772480,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 339943424,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "狗",
+      "task": "f2d99d99-c9cd-45f8-a2d4-c5c73a0c95fb",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "baebf9bf-bc69-4e2d-84fa-d377e4edd5cc",
+        "50a69f48-80a9-4c81-a75c-5b56b4e67c4f"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 1566,
+          "extension": ".png",
+          "kind": "image",
+          "width": 252,
+          "height": 256,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 252,
+            "height": 256
+          }
+        },
+        {
+          "bytes": 118,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "baebf9bf-bc69-4e2d-84fa-d377e4edd5cc",
+          "sha256": "363d7ad633ef401b2ee294e5f7b9fa80d43219f897e0addcb320c4488554e1d5",
+          "metadata": {
+            "bytes": 1566,
+            "extension": ".png",
+            "kind": "image",
+            "width": 252,
+            "height": 256,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 252,
+              "height": 256
+            }
+          }
+        },
+        {
+          "versionId": "50a69f48-80a9-4c81-a75c-5b56b4e67c4f",
+          "sha256": "1ccbf6aeebaeb87a409da4e0278e08da63391f56a62513545530d3bc033936eb",
+          "metadata": {
+            "bytes": 118,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138084352,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 348651520,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "鸟怪",
+      "task": "6afe012d-e77e-427b-9c3a-773834c2f8e2",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "d028b669-9066-41a0-9835-8d2d00763dba",
+        "288021f7-2943-4dc7-9150-ffe7b29da52c"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 1566,
+          "extension": ".png",
+          "kind": "image",
+          "width": 252,
+          "height": 255,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 252,
+            "height": 255
+          }
+        },
+        {
+          "bytes": 118,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "d028b669-9066-41a0-9835-8d2d00763dba",
+          "sha256": "ffc536817ff10f7a2cc91a6938a9f0fbcbaa8fa6a12855a8edc5cf4e7e182570",
+          "metadata": {
+            "bytes": 1566,
+            "extension": ".png",
+            "kind": "image",
+            "width": 252,
+            "height": 255,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 252,
+              "height": 255
+            }
+          }
+        },
+        {
+          "versionId": "288021f7-2943-4dc7-9150-ffe7b29da52c",
+          "sha256": "2e51aea864082eb6c1ce4b9d1d147074fd2ee2afc43f0ce5d9339b6fdf3855c7",
+          "metadata": {
+            "bytes": 118,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138870784,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 348651520,
+        "processingMode": "compatibility_graph"
+      }
+    },
+    {
+      "preset": "128土豆",
+      "task": "43d22e9b-dadd-4097-967f-338c1fdd8b79",
+      "state": "succeeded",
+      "inputs": 1,
+      "results": [
+        "68440fe3-0fbd-4d98-91a5-3be88bac02e6",
+        "0ada1cfd-abb5-4923-90de-a21a0e7ad792"
+      ],
+      "error": null,
+      "outputs": [
+        {
+          "bytes": 2544,
+          "extension": ".png",
+          "kind": "image",
+          "width": 1278,
+          "height": 299,
+          "frames": 1,
+          "durationsMs": [
+            100
+          ],
+          "transparency": true,
+          "pixelFormat": "RGBA8",
+          "processingDimensions": {
+            "width": 1278,
+            "height": 299
+          }
+        },
+        {
+          "bytes": 270,
+          "extension": ".json",
+          "kind": "document"
+        }
+      ],
+      "validatedVersions": [
+        {
+          "versionId": "68440fe3-0fbd-4d98-91a5-3be88bac02e6",
+          "sha256": "43b7a1bda75c4fb6ffc6296052bad97da59ba347a47eed4c1b2e9e343f5aa166",
+          "metadata": {
+            "bytes": 2544,
+            "extension": ".png",
+            "kind": "image",
+            "width": 1278,
+            "height": 299,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 1278,
+              "height": 299
+            }
+          }
+        },
+        {
+          "versionId": "0ada1cfd-abb5-4923-90de-a21a0e7ad792",
+          "sha256": "9d1ee01f63c54ae4461c76d9ab1b66ba63b8758109512f2c572f5497e312a90c",
+          "metadata": {
+            "bytes": 270,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 169082880,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 382205952,
+        "processingMode": "compatibility_graph"
+      }
+    }
+  ],
+  "mediaRuns": [
+    {
+      "operation": "audio.compress",
+      "task": "d938985c-b447-4ae1-a6aa-6be8e713ad72",
+      "state": "succeeded",
+      "results": [
+        "3641d705-73f0-45f7-a884-80a6087562ab"
+      ],
+      "error": null,
+      "validatedVersions": [
+        {
+          "versionId": "3641d705-73f0-45f7-a884-80a6087562ab",
+          "sha256": "0fc7ff3dfa51278da6458c40e6a0b63411047051cd8bc662e8457520bc9985f7",
+          "metadata": {
+            "bytes": 4346,
+            "extension": ".zip",
+            "kind": "document",
+            "entries": 1,
+            "decodedBytes": 5058
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 0,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 134217728,
+        "processingMode": "stream"
+      }
+    },
+    {
+      "operation": "video.watermark",
+      "task": "7681a6b6-f79d-4e26-895a-74fec5c15872",
+      "state": "succeeded",
+      "results": [
+        "42d76565-6095-4a51-b8c1-58d4f7db0ef6"
+      ],
+      "error": null,
+      "validatedVersions": [
+        {
+          "versionId": "42d76565-6095-4a51-b8c1-58d4f7db0ef6",
+          "sha256": "42c24665ee17f23fb296e856be443654882c9df9866c027a7f6bf25ef0d30aa5",
+          "metadata": {
+            "bytes": 3379,
+            "extension": ".mp4",
+            "kind": "video",
+            "durationSeconds": 2.0,
+            "codec": "h264",
+            "width": 256,
+            "height": 256
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 264372224,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 365428736,
+        "processingMode": "global_temporal"
+      }
+    },
+    {
+      "operation": "video.extract",
+      "task": "7f49838c-5157-4d2c-a388-f6678fb29933",
+      "state": "succeeded",
+      "results": [
+        "6efddc6a-580a-4bad-bada-8ec90ff2635d",
+        "7cc8b10e-cc78-410c-9ddd-7eb2d9012096",
+        "a479f2a6-1a4f-45ea-a0a4-fe7a510d5fdd"
+      ],
+      "error": null,
+      "validatedVersions": [
+        {
+          "versionId": "6efddc6a-580a-4bad-bada-8ec90ff2635d",
+          "sha256": "5e099769c29061559b235fd049b6c84bbca7ffc6f927bce04e69e6171df61497",
+          "metadata": {
+            "bytes": 1317,
+            "extension": ".png",
+            "kind": "image",
+            "width": 256,
+            "height": 64,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 256,
+              "height": 64
+            }
+          }
+        },
+        {
+          "versionId": "7cc8b10e-cc78-410c-9ddd-7eb2d9012096",
+          "sha256": "1d7b4d8ec7f9c8704f6195c6359454c9f0614eee7d1c07d547b17af1804fa7ab",
+          "metadata": {
+            "bytes": 1846,
+            "extension": ".zip",
+            "kind": "document",
+            "entries": 3,
+            "decodedBytes": 1730
+          }
+        },
+        {
+          "versionId": "a479f2a6-1a4f-45ea-a0a4-fe7a510d5fdd",
+          "sha256": "3533b12abe7b656c7a044cbb43551b67158e13160740ffde07e36addf20f0a70",
+          "metadata": {
+            "bytes": 336,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 2051080192,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 806453248,
+        "processingMode": "bounded_frames"
+      }
+    },
+    {
+      "operation": "image.matte",
+      "task": "c741ede8-4e1c-4d22-b750-346d18420c70",
+      "state": "succeeded",
+      "results": [
+        "2c8f23aa-d495-4393-af5f-812509493b9b"
+      ],
+      "error": null,
+      "validatedVersions": [
+        {
+          "versionId": "2c8f23aa-d495-4393-af5f-812509493b9b",
+          "sha256": "8057ba2b7d0e4f9114e1fbc342e92f7b00fe5ac7a46d72316c305c8462a3d3d4",
+          "metadata": {
+            "bytes": 447399,
+            "extension": ".png",
+            "kind": "image",
+            "width": 1254,
+            "height": 1254,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": true,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 1254,
+              "height": 1254
+            }
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 1845362688,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 830466624,
+        "processingMode": "original_resolution"
+      }
+    },
+    {
+      "operation": "image.perfectPixel",
+      "task": "8bb3a00d-1d04-476d-a030-3bbc9f9d3d30",
+      "state": "succeeded",
+      "results": [
+        "f98f86e1-fc45-4343-84ed-32f19066fed1",
+        "41331bfd-b199-49cd-bc05-92934942eec3"
+      ],
+      "error": null,
+      "validatedVersions": [
+        {
+          "versionId": "f98f86e1-fc45-4343-84ed-32f19066fed1",
+          "sha256": "34fb1d0449525b8a7cc83f130157cb4d0b8e0fea48b1632fa33682d8334e120d",
+          "metadata": {
+            "bytes": 116,
+            "extension": ".png",
+            "kind": "image",
+            "width": 8,
+            "height": 8,
+            "frames": 1,
+            "durationsMs": [
+              100
+            ],
+            "transparency": false,
+            "pixelFormat": "RGBA8",
+            "processingDimensions": {
+              "width": 8,
+              "height": 8
+            }
+          }
+        },
+        {
+          "versionId": "41331bfd-b199-49cd-bc05-92934942eec3",
+          "sha256": "251eca1d7204b040fe0167e5522507eafd2d83f8bbbe9f7e4aec6dedd7f9d673",
+          "metadata": {
+            "bytes": 189,
+            "extension": ".json",
+            "kind": "document"
+          }
+        }
+      ],
+      "resources": {
+        "peakControlledProcessBytes": 138477568,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 352321536,
+        "processingMode": "legacy_prescale_2048"
+      }
+    }
+  ],
+  "acceptanceScope": "Real local worker execution and full content decoding. Browser pixel oracle, broad resource samples and every editor interaction are still pending."
+}

@@ -49,6 +49,12 @@ REGISTRY = {
                               'gif', 'global_palette'),
     'image.slice': operation(['image'], {'columns': integer(4, 1, 128), 'rows': integer(4, 1, 128)},
                              'png_zip_index', 'stream'),
+    'image.perfectPixel': operation(['image'], {'sampleMethod': choice('center', ['center', 'median', 'majority']),
+        'gridCols': integer(0, 0, 2048), 'gridRows': integer(0, 0, 2048), 'minSize': integer(4, 2, 32),
+        'peakWidth': number(6, 3, 20), 'refineIntensity': number(0.25, 0, 1),
+        'fixSquare': {'type': 'boolean', 'default': True}}, 'png', 'legacy_prescale_2048', overhead=256),
+    'workflow.strict': operation(['image+'], {'graph': {'type': 'object', 'default': {}}}, 'png_report', 'global_graph', overhead=256),
+    'workflow.legacy': operation(['image+'], {'graph': {'type': 'object', 'default': {}}}, 'png_report', 'compatibility_graph', overhead=256),
 }
 
 
@@ -67,7 +73,8 @@ def parameters(name, supplied):
         kind = schema['type']
         valid = (type(value) is int if kind == 'integer' else
                  type(value) in [int, float] and math.isfinite(value) if kind == 'number' else
-                 type(value) is bool if kind == 'boolean' else isinstance(value, str))
+                 type(value) is bool if kind == 'boolean' else
+                 isinstance(value, dict) if kind == 'object' else isinstance(value, str))
         if not valid:
             raise RoninError('PARAMETER_TYPE', 'A parameter has the wrong type.', {'parameter': key})
         if kind in ['integer', 'number'] and not schema['minimum'] <= value <= schema['maximum']:
@@ -121,6 +128,32 @@ def preview(project, payload):
         estimate += values['columns'] * w * math.ceil(len(versions) / values['columns']) * h * 8
     if name == 'sequence.gif':
         estimate += sum(pixels) * 5
+    if name == 'image.perfectPixel':
+        if bool(values['gridCols']) != bool(values['gridRows']):
+            raise RoninError('GRID_DIMENSIONS', 'Provide both manual grid dimensions, or neither.')
+        estimate += min(2048**2, max(pixels)) * 64
+    if name in ['workflow.strict', 'workflow.legacy']:
+        graph = values['graph']
+        if name == 'workflow.strict':
+            from .workflows import validate
+            values['graph'] = validate(graph, len(inputs))
+        elif not isinstance(graph.get('nodes'), list) or len(graph['nodes']) > 200 or graph.get('version') not in [1, 5, 6, 7]:
+            raise RoninError('LEGACY_WORKFLOW_INVALID', 'Unsupported historical workflow format.')
+        estimate += sum(pixels) * 4
+        # Keep a conservative live decode/intermediate estimate for every graph stage.
+        sizes = []
+        for node in graph['nodes']:
+            params = node.get('params', {})
+            width = max(v['metadata']['width'] for v in versions)
+            height = max(v['metadata']['height'] for v in versions)
+            if node.get('type') in ['resize', 'resizeHard']:
+                width, height = params.get('w', width), params.get('h', height)
+            width += params.get('padLeft', 0) + params.get('padRight', 0)
+            height += params.get('padTop', 0) + params.get('padBottom', 0)
+            if type(width) not in [int, float] or type(height) not in [int, float] or not math.isfinite(width * height) or width < 1 or height < 1:
+                raise RoninError('WORKFLOW_SIZE_INVALID', 'A workflow stage has invalid dimensions.')
+            sizes.append(width * height)
+        estimate += sum(sizes) * 8 + max(sizes, default=0) * 32
     budget = memory_budget()
     if estimate > budget:
         raise RoninError('RESOURCE_LIMIT', 'The operation exceeds the memory budget; adjust its parameters.',

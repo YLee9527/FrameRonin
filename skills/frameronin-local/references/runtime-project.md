@@ -1,6 +1,6 @@
 # 私有运行时与项目
 
-所有路径以本技能目录为基准。运行 `python3 scripts/setup.py --python python3.11 --workbench --with-model` 安装 Python 3.11 私有环境、锁定依赖、npm 工作台和 U2Net 模型。需要 FFmpeg/ffprobe、Node 22、npm；`scripts/frameronin.py doctor` 给出实际检测，不把系统依赖不存在当作成功。依赖和模型落在 `.runtime/`，不修改系统 Python 或 Codex 配置。
+所有路径以本技能目录为基准。运行 `python3 scripts/setup.py --python python3.11 --workbench --with-model` 安装 Python 3.11 私有环境、锁定依赖、npm 工作台、后台 TypeScript 算法及 U2Net 模型。只需后台算法时用 `--local-algorithms` 替代 `--workbench`。需要 FFmpeg/ffprobe、Node 22、npm；`scripts/frameronin.py doctor` 给出实际检测，不把系统依赖不存在当作成功。依赖和模型落在 `.runtime/` 及私有 npm 包目录，不修改系统 Python 或 Codex 配置。
 
 命令返回 `{ok,result}` 或 `{ok:false,error:{code,message,details}}`，错误退出 2。示例中的 `<skill>` 和 `<project>` 换为真实绝对路径。可以从任意目录运行脚本。
 
