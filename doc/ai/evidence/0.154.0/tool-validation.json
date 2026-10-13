@@ -1,0 +1,21 @@
+{
+  "evidenceFormatVersion": 1,
+  "recordedOn": "2026-10-13",
+  "scope": "probe_tooling_only",
+  "milestonePassed": false,
+  "environment": {
+    "node": "v22.23.1",
+    "platform": "darwin",
+    "architecture": "arm64"
+  },
+  "tests": {
+    "command": "node --test tools/codex-preflight/preflight.test.mjs",
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0
+  },
+  "syntax": "passed",
+  "protocolManifest": "passed",
+  "realImageGeneration": "not_run",
+  "nativeApplication": "not_built"
+}

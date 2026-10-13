@@ -1,0 +1,91 @@
+{
+  "evidenceFormatVersion": 1,
+  "recordedOn": "2026-10-13",
+  "version": "0.154.0",
+  "mode": "proposal",
+  "status": "blocked",
+  "validationScope": "local_request_capture_only",
+  "milestonePassed": false,
+  "restrictions": {
+    "instructionDenials": false,
+    "taskFilesystem": false
+  },
+  "checks": {
+    "promptEnvelope": {
+      "bytes": 11790,
+      "startsWithJson": true
+    },
+    "promptInput": {
+      "sha256": "f030af56001b395568215e64b6aee3cfedbe0405bc79f16c4a66ed879c547545",
+      "bytes": 11188,
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedMarkers": [
+        "Global defaults for coding agents"
+      ]
+    },
+    "initialize": {
+      "succeeded": true
+    },
+    "threadStarted": true,
+    "request": {
+      "sha256": "7c5b78dc0c8f517e4f5d113e46dd4ea187c796f1fc626ed0ce6038a543b02d01",
+      "baseInstructionsMatch": true,
+      "inputItems": [
+        {
+          "role": "developer",
+          "type": "message",
+          "sha256": "0708046f28baef2ad094542947feb5aaaf7e619e6032366044e30118308025ea",
+          "bytes": 189
+        },
+        {
+          "role": "user",
+          "type": "message",
+          "sha256": "a05a25cb2b72d21155d19a680ee3c2dc249774df357e9551688cce4db42186b6",
+          "bytes": 7068
+        },
+        {
+          "role": "user",
+          "type": "message",
+          "sha256": "525e4cbe435f708dc1e818c53670bec202e9c249ec4183bd49ddbac3a368b616",
+          "bytes": 328
+        }
+      ],
+      "toolNames": [],
+      "unexpectedTools": [],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [
+        "Global defaults for coding agents"
+      ],
+      "nativeImageGeneration": false,
+      "taskInputCaptured": true,
+      "referenceExpected": true,
+      "selectedImageCaptured": true,
+      "bodyKeys": [
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "text",
+        "client_metadata"
+      ],
+      "imageToolSpec": [],
+      "unexpectedUserItems": 1,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    }
+  },
+  "blockers": [
+    "UNEXPECTED_CONTEXT",
+    "UNSELECTED_USER_CONTEXT"
+  ],
+  "environment": "isolated_candidate"
+}

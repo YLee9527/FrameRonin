@@ -1,0 +1,162 @@
+{
+  "evidenceFormatVersion": 1,
+  "recordedOn": "2026-10-13",
+  "version": "0.154.0",
+  "mode": "generation",
+  "status": "blocked",
+  "validationScope": "local_request_capture_only",
+  "milestonePassed": false,
+  "restrictions": {
+    "instructionDenials": true,
+    "taskFilesystem": false
+  },
+  "checks": {
+    "promptEnvelope": {
+      "bytes": 4447,
+      "startsWithJson": true
+    },
+    "promptInput": {
+      "sha256": "c2675a688e2f1eb875f0a52a415f976a6734a28f7af3a396616364b3a4293905",
+      "bytes": 3965,
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedMarkers": []
+    },
+    "initialize": {
+      "succeeded": true
+    },
+    "threadStarted": true,
+    "nativeBootstrap": {
+      "sha256": "0613b6010a19a6d20ec6b6d45c7bcb79eea8ad02c00a9a6fb7562d417c58b3f5",
+      "baseInstructionsMatch": true,
+      "inputItems": [],
+      "toolNames": [
+        "image_gen",
+        "skills"
+      ],
+      "unexpectedTools": [
+        "skills"
+      ],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [],
+      "nativeImageGeneration": true,
+      "taskInputCaptured": false,
+      "referenceExpected": true,
+      "selectedImageCaptured": false,
+      "bodyKeys": [
+        "type",
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "generate",
+        "client_metadata"
+      ],
+      "imageToolSpec": [
+        {
+          "type": "namespace",
+          "name": "image_gen",
+          "schemaSha256": "f069e0209d5470df03fd0f9d2f0e74a169e33e2cdac9b2b5ff0de4590ab29fcb",
+          "tools": [
+            {
+              "type": "function",
+              "name": "imagegen",
+              "parameterNames": [
+                "num_last_images_to_include",
+                "prompt",
+                "referenced_image_paths"
+              ],
+              "schemaSha256": "99a12a6991915d63e60bc421288c55c20edd571919927e8deff5e5b93476938a"
+            }
+          ]
+        }
+      ],
+      "unexpectedUserItems": 0,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    },
+    "request": {
+      "sha256": "62ed60963158e09242b6b7e38636f68c7e4e7fd752a0ef8ce74e66ca4ee16ef6",
+      "baseInstructionsMatch": true,
+      "inputItems": [
+        {
+          "role": "developer",
+          "type": "message",
+          "sha256": "4cd9bb6c26b36118729360200c4e704e38614fdbfe0400236016749e3fa5169b",
+          "bytes": 373
+        },
+        {
+          "role": "user",
+          "type": "message",
+          "sha256": "87115dca6f5f017c4fdb1dd1d219e0f7fd36636e1d9e9c5ba41716de08460fd4",
+          "bytes": 503
+        }
+      ],
+      "toolNames": [
+        "image_gen",
+        "skills"
+      ],
+      "unexpectedTools": [
+        "skills"
+      ],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [],
+      "nativeImageGeneration": true,
+      "taskInputCaptured": true,
+      "referenceExpected": true,
+      "selectedImageCaptured": true,
+      "bodyKeys": [
+        "type",
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "generate",
+        "client_metadata",
+        "previous_response_id"
+      ],
+      "imageToolSpec": [
+        {
+          "type": "namespace",
+          "name": "image_gen",
+          "schemaSha256": "f069e0209d5470df03fd0f9d2f0e74a169e33e2cdac9b2b5ff0de4590ab29fcb",
+          "tools": [
+            {
+              "type": "function",
+              "name": "imagegen",
+              "parameterNames": [
+                "num_last_images_to_include",
+                "prompt",
+                "referenced_image_paths"
+              ],
+              "schemaSha256": "99a12a6991915d63e60bc421288c55c20edd571919927e8deff5e5b93476938a"
+            }
+          ]
+        }
+      ],
+      "unexpectedUserItems": 0,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    }
+  },
+  "blockers": [
+    "UNEXPECTED_TOOLS"
+  ],
+  "environment": "isolated_candidate"
+}

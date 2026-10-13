@@ -1,0 +1,115 @@
+{
+  "evidenceFormatVersion": 1,
+  "recordedOn": "2026-10-13",
+  "transport": "native_provider_to_loopback",
+  "version": "0.154.0",
+  "mode": "proposal",
+  "status": "capture_passed",
+  "validationScope": "local_request_capture_only",
+  "milestonePassed": false,
+  "restrictions": {
+    "instructionDenials": true,
+    "taskFilesystem": false
+  },
+  "checks": {
+    "promptEnvelope": {
+      "bytes": 4445,
+      "startsWithJson": true
+    },
+    "promptInput": {
+      "sha256": "580e3a9a62e46e6bbbe9f557a5b34d9e0bfd39da9d4457867cc97c15c1bc27ea",
+      "bytes": 3963,
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedMarkers": []
+    },
+    "initialize": {
+      "succeeded": true
+    },
+    "threadStarted": true,
+    "nativeBootstrap": {
+      "sha256": "11764fe6e0ac87adc343262abf8760d8bff0d0f121892836b2dc00e9653680e4",
+      "baseInstructionsMatch": true,
+      "inputItems": [],
+      "toolNames": [],
+      "unexpectedTools": [],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [],
+      "nativeImageGeneration": false,
+      "taskInputCaptured": false,
+      "referenceExpected": true,
+      "selectedImageCaptured": false,
+      "bodyKeys": [
+        "type",
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "generate",
+        "client_metadata"
+      ],
+      "imageToolSpec": [],
+      "unexpectedUserItems": 0,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    },
+    "request": {
+      "sha256": "e1fd9cb35057edb4160a32d16b2bef693a9ec92de5113e536b7c0033caa4a046",
+      "baseInstructionsMatch": true,
+      "inputItems": [
+        {
+          "role": "developer",
+          "type": "message",
+          "sha256": "0c56934f76ded5f8fe243359366abd67cc8e195c69831273eaebc7160c4250de",
+          "bytes": 373
+        },
+        {
+          "role": "user",
+          "type": "message",
+          "sha256": "afbeac10a8a84b33407c5e2ea34a213d4d108501095da61537080dbb92df3072",
+          "bytes": 503
+        }
+      ],
+      "toolNames": [],
+      "unexpectedTools": [],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [],
+      "nativeImageGeneration": false,
+      "taskInputCaptured": true,
+      "referenceExpected": true,
+      "selectedImageCaptured": true,
+      "bodyKeys": [
+        "type",
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "generate",
+        "client_metadata",
+        "text"
+      ],
+      "imageToolSpec": [],
+      "unexpectedUserItems": 0,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    }
+  },
+  "blockers": [],
+  "environment": "isolated_candidate"
+}

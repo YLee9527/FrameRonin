@@ -1,0 +1,154 @@
+{
+  "evidenceFormatVersion": 1,
+  "recordedOn": "2026-10-13",
+  "version": "0.154.0",
+  "mode": "generation",
+  "status": "capture_passed",
+  "validationScope": "local_request_capture_only",
+  "milestonePassed": false,
+  "restrictions": {
+    "instructionDenials": true,
+    "taskFilesystem": false
+  },
+  "checks": {
+    "promptEnvelope": {
+      "bytes": 4447,
+      "startsWithJson": true
+    },
+    "promptInput": {
+      "sha256": "64ae7833eb6ce65798c21996188eff543c55cc59549dcd34b6f8debddfecf37d",
+      "bytes": 3965,
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedMarkers": []
+    },
+    "initialize": {
+      "succeeded": true
+    },
+    "threadStarted": true,
+    "nativeBootstrap": {
+      "sha256": "c54207ec2ad3ffd56d5404c5ff53330ede4762ed7927d8a868609d54799038db",
+      "baseInstructionsMatch": true,
+      "inputItems": [],
+      "toolNames": [
+        "image_gen"
+      ],
+      "unexpectedTools": [],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [],
+      "nativeImageGeneration": true,
+      "taskInputCaptured": false,
+      "referenceExpected": true,
+      "selectedImageCaptured": false,
+      "bodyKeys": [
+        "type",
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "generate",
+        "client_metadata"
+      ],
+      "imageToolSpec": [
+        {
+          "type": "namespace",
+          "name": "image_gen",
+          "schemaSha256": "f069e0209d5470df03fd0f9d2f0e74a169e33e2cdac9b2b5ff0de4590ab29fcb",
+          "tools": [
+            {
+              "type": "function",
+              "name": "imagegen",
+              "parameterNames": [
+                "num_last_images_to_include",
+                "prompt",
+                "referenced_image_paths"
+              ],
+              "schemaSha256": "99a12a6991915d63e60bc421288c55c20edd571919927e8deff5e5b93476938a"
+            }
+          ]
+        }
+      ],
+      "unexpectedUserItems": 0,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    },
+    "request": {
+      "sha256": "8b5bb20b9d83d37a530b8205726e210f24418ea92d636b809fa66b066d65956e",
+      "baseInstructionsMatch": true,
+      "inputItems": [
+        {
+          "role": "developer",
+          "type": "message",
+          "sha256": "956cfb115f78b55c3ada0ec4470ce60ccef0a1478eb9f094037b4694f8609139",
+          "bytes": 373
+        },
+        {
+          "role": "user",
+          "type": "message",
+          "sha256": "bc24b1a48b053d9de41e352d1bfdfd149f406288ccba78b8c111d921393e67f2",
+          "bytes": 504
+        }
+      ],
+      "toolNames": [
+        "image_gen"
+      ],
+      "unexpectedTools": [],
+      "canaryLeak": false,
+      "leakedCanaries": [],
+      "unrelatedContextMarkers": [],
+      "nativeImageGeneration": true,
+      "taskInputCaptured": true,
+      "referenceExpected": true,
+      "selectedImageCaptured": true,
+      "bodyKeys": [
+        "type",
+        "model",
+        "instructions",
+        "input",
+        "tools",
+        "tool_choice",
+        "parallel_tool_calls",
+        "reasoning",
+        "store",
+        "stream",
+        "include",
+        "prompt_cache_key",
+        "generate",
+        "client_metadata",
+        "previous_response_id"
+      ],
+      "imageToolSpec": [
+        {
+          "type": "namespace",
+          "name": "image_gen",
+          "schemaSha256": "f069e0209d5470df03fd0f9d2f0e74a169e33e2cdac9b2b5ff0de4590ab29fcb",
+          "tools": [
+            {
+              "type": "function",
+              "name": "imagegen",
+              "parameterNames": [
+                "num_last_images_to_include",
+                "prompt",
+                "referenced_image_paths"
+              ],
+              "schemaSha256": "99a12a6991915d63e60bc421288c55c20edd571919927e8deff5e5b93476938a"
+            }
+          ]
+        }
+      ],
+      "unexpectedUserItems": 0,
+      "unexpectedContextItems": 0,
+      "unexpectedImageFunctions": []
+    }
+  },
+  "blockers": [],
+  "environment": "isolated_candidate"
+}

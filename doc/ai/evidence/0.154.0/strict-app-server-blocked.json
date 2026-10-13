@@ -1,0 +1,33 @@
+{
+  "evidenceFormatVersion": 1,
+  "recordedOn": "2026-10-13",
+  "version": "0.154.0",
+  "mode": "proposal",
+  "status": "blocked",
+  "validationScope": "local_request_capture_only",
+  "milestonePassed": false,
+  "restrictions": {
+    "instructionDenials": true,
+    "taskFilesystem": true
+  },
+  "checks": {
+    "promptDebug": "not_run"
+  },
+  "blockers": [
+    "PROBE_ERROR"
+  ],
+  "environment": "isolated_candidate",
+  "error": {
+    "stage": "initialize",
+    "name": "Error",
+    "code": "REQUEST_FAILED",
+    "signal": null,
+    "stderrBytes": 457,
+    "stderrCategoryWords": [
+      "not",
+      "permitted"
+    ],
+    "permissionDenied": true,
+    "configLoadFailed": false
+  }
+}
