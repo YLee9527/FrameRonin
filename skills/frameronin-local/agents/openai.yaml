@@ -1,0 +1,4 @@
+interface:
+  display_name: "FrameRonin Local"
+  short_description: "用内置 ImageGen 创作像素素材，执行本地媒体加工、蓝图与游戏资源导出"
+  default_prompt: "使用 $frameronin-local 生成或编辑我的像素素材，并完成本地加工与可验证的导出。"

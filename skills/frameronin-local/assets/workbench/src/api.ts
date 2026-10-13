@@ -1,0 +1,110 @@
+import { localFetch } from './localProject/api'
+
+const API_BASE = '/api'
+
+export interface JobParams {
+  fps?: number
+  frame_range?: { start_sec?: number; end_sec?: number }
+  max_frames?: number
+  target_size?: { w: number; h: number }
+  bg_color?: string
+  transparent?: boolean
+  padding?: number
+  spacing?: number
+  layout_mode?: 'fixed_columns' | 'auto_square'
+  columns?: number
+  matte_strength?: number
+  crop_mode?: 'none' | 'tight_bbox' | 'safe_bbox'
+}
+
+export interface Job {
+  id: string
+  status: 'queued' | 'processing' | 'completed' | 'failed' | 'canceled'
+  progress: number
+  params?: JobParams
+  result?: { frame_count?: number; width?: number; height?: number }
+  error?: { code: string; message: string }
+}
+
+export async function createJob(file: File, params: JobParams): Promise<{ job_id: string }> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('params', JSON.stringify(params))
+  const res = await localFetch(`${API_BASE}/jobs`, {
+    method: 'POST',
+    body: formData,
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }))
+    throw new Error(err.detail || String(err))
+  }
+  return res.json()
+}
+
+export async function getJob(jobId: string): Promise<Job> {
+  const res = await localFetch(`${API_BASE}/jobs/${jobId}`)
+  if (!res.ok) throw new Error('任务不存在')
+  return res.json()
+}
+
+export function getResultUrl(jobId: string, format: 'png' | 'zip' = 'png'): string {
+  return `${API_BASE}/jobs/${jobId}/result?format=${format}`
+}
+
+export function getIndexUrl(jobId: string): string {
+  return `${API_BASE}/jobs/${jobId}/index`
+}
+
+export interface WatermarkJob {
+  id: string
+  status: 'queued' | 'processing' | 'completed' | 'failed'
+  progress: number
+  result?: { output?: string }
+  error?: { code: string; message: string }
+}
+
+export async function createWatermarkJob(file: File): Promise<{ job_id: string }> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const res = await localFetch(`${API_BASE}/watermark`, {
+    method: 'POST',
+    body: formData,
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }))
+    throw new Error(err.detail || String(err))
+  }
+  return res.json()
+}
+
+export async function getWatermarkJob(jobId: string): Promise<WatermarkJob> {
+  const res = await localFetch(`${API_BASE}/watermark/${jobId}`)
+  if (!res.ok) throw new Error('任务不存在')
+  return res.json()
+}
+
+export function getWatermarkResultUrl(jobId: string): string {
+  return `${API_BASE}/watermark/${jobId}/result`
+}
+
+/** AI 抠图：上传图片，返回透明背景 PNG Blob。首次调用需下载模型，可能较慢。 */
+export async function removeBackground(file: File): Promise<Blob> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const ctrl = new AbortController()
+  const timeout = setTimeout(() => ctrl.abort(), 120_000)
+  try {
+    const res = await localFetch(`${API_BASE}/matte`, {
+      method: 'POST',
+      body: formData,
+      signal: ctrl.signal,
+    })
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(text || res.statusText)
+    }
+    return res.blob()
+  } finally {
+    clearTimeout(timeout)
+  }
+}
