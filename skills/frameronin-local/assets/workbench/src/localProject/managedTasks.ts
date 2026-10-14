@@ -1,14 +1,17 @@
 import { jsonPost, localFetch, localJson } from './api'
 
-type Version = { id: string; metadata: { kind: string; width?: number; height?: number; extension?: string } }
+type Version = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number } }
 type Task = { id: string; state: string; progress: number; results: string[]; error?: { code: string; message: string } }
-type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void }
+type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void; outputFilter?: (version: Version) => boolean }
 const imported = new WeakMap<Blob, { project: string; version: string }>()
 
 export async function runManagedTask(operation: string, files: Blob[], parameters: object, options: Options = {}) {
   const { signal } = options
   signal?.throwIfAborted()
-  const { project } = await localJson<{ project: { id: string } }>('/api/project')
+  const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project')
+  if (!Number.isFinite(memoryBudgetBytes) || memoryBudgetBytes <= 0) {
+    throw new Error('The local project service does not provide a valid preview budget. Restart the matching skill runtime.')
+  }
   const inputs: string[] = []
   for (const [index, file] of files.entries()) {
     signal?.throwIfAborted()
@@ -24,7 +27,8 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     }
   }
   signal?.throwIfAborted()
-  let record = await localJson<Task>('/api/tasks', jsonPost({ operation, inputs, parameters }))
+  const created = await localJson<{ id: string; state: string }>('/api/tasks', jsonPost({ operation, inputs, parameters }))
+  let record: Task = { id: created.id, state: created.state, progress: 0, results: [] }
   options.onTask?.(record.id)
   const cancellation: { request: Promise<Task | null> | null; error?: unknown } = { request: null }
   const abort = () => {
@@ -46,9 +50,19 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     if (record.state === 'canceled') throw new DOMException('Task canceled', 'AbortError')
     if (record.state !== 'succeeded') throw new Error(`${record.error?.code ?? 'TASK_FAILED'}: ${record.error?.message ?? 'Processing did not complete'}`)
     const outputs: { version: Version; blob: Blob }[] = []
+    let retainedBytes = 0
     for (const id of record.results) {
       signal?.throwIfAborted()
       const version = await localJson<Version>(`/api/versions/${id}`, { signal })
+      if (options.outputFilter && !options.outputFilter(version)) continue
+      const decodedBytes = version.metadata.kind === 'image'
+        ? (version.metadata.width ?? 0) * (version.metadata.height ?? 0) * 4 : 0
+      retainedBytes += version.metadata.bytes * 2 + decodedBytes * 4
+      // Leave room for decoding and frontend copies. Larger results remain in
+      // the project and can be downloaded through its result links.
+      if (!Number.isFinite(memoryBudgetBytes) || retainedBytes > memoryBudgetBytes / 4) {
+        throw new Error(`Task ${record.id} succeeded, but its results exceed the preview budget. Download them from Project assets and tasks.`)
+      }
       const response = await localFetch(`/api/versions/${id}/content`, { signal })
       if (!response.ok) throw new Error('The registered result could not be read')
       outputs.push({ version, blob: await response.blob() })

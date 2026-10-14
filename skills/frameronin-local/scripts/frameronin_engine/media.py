@@ -116,14 +116,23 @@ def run(preview, directory, progress):
         return [output]
     if name == 'audio.compress':
         archive = directory / 'audio.zip'
+        outputs = []
+        records = []
         with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as bundle:
             for index, path in enumerate(paths):
-                target = directory / f'{index + 1:04d}-{path.stem}.mp3'
+                import re
+                version = preview['versions'][index]
+                base = re.sub(r'[\\/:\x00-\x1f]', '_', Path(version.get('name', path.name)).stem).strip(' .')[:120] or 'audio'
+                target = directory / f'{index + 1:04d}-{base}_{parameters["bitrate"]}kbps.mp3'
                 subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-i', str(path), '-b:a',
                                 f"{parameters['bitrate']}k", str(target)], check=True, capture_output=True)
                 bundle.write(target, target.name)
+                outputs.append(target)
+                records.append({'inputVersion': version['id'], 'file': target.name, 'bitrateKbps': parameters['bitrate']})
                 progress((index + 1) / len(paths))
-        return [archive]
+        report = directory / 'audio-report.json'
+        report.write_text(json.dumps({'encoder': 'ffmpeg-libmp3lame', 'files': records}))
+        return outputs + [archive, report]
     if name in ['gif.split', 'image.slice', 'sequence.zip']:
         frames = directory / 'frames'
         frames.mkdir()

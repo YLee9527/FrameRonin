@@ -1,0 +1,66 @@
+{
+  "criteria": {
+    "channels": 2,
+    "outputCodec": "mp3",
+    "durationErrorSeconds": 0.1,
+    "compareRate": 44100,
+    "maximumAlignmentSeconds": 0.08,
+    "minimumCorrelation": 0.99,
+    "maximumAlignedRelativeRms": 0.08,
+    "note": "Fixed before original browser audio encoding. Sample-rate differences caused by AudioContext are recorded explicitly."
+  },
+  "rows": [
+    {
+      "file": "tone-1.wav",
+      "originalBrowserSampleRate": 48000,
+      "backgroundSampleRate": 44100,
+      "originalEncodedDuration": 1.032,
+      "backgroundEncodedDuration": 1.0,
+      "channels": 2,
+      "alignmentSamples": 1015,
+      "correlation": 0.999894400818133,
+      "alignedRelativeRms": 0.014532347608918163,
+      "passed": true,
+      "channelComparisons": [
+        {
+          "channel": 0,
+          "correlation": 0.999894400818133,
+          "alignedRelativeRms": 0.014532347608918163
+        },
+        {
+          "channel": 1,
+          "correlation": 0.9998943856123506,
+          "alignedRelativeRms": 0.014533369845267525
+        }
+      ],
+      "backgroundCodec": "mp3"
+    },
+    {
+      "file": "tone-2.wav",
+      "originalBrowserSampleRate": 48000,
+      "backgroundSampleRate": 44100,
+      "originalEncodedDuration": 2.04,
+      "backgroundEncodedDuration": 2.0,
+      "channels": 2,
+      "alignmentSamples": 1015,
+      "correlation": 0.9997854556090365,
+      "alignedRelativeRms": 0.020714866899227417,
+      "passed": true,
+      "channelComparisons": [
+        {
+          "channel": 0,
+          "correlation": 0.9997854556090365,
+          "alignedRelativeRms": 0.020714866899227417
+        },
+        {
+          "channel": 1,
+          "correlation": 0.9997850125796713,
+          "alignedRelativeRms": 0.02073628412034047
+        }
+      ],
+      "backgroundCodec": "mp3"
+    }
+  ],
+  "passed": true,
+  "note": "Encoded bytes are not compared for lossy codecs. Original browser uses Lame.js and AudioContext; local engine uses FFmpeg/libmp3lame and keeps the input-supported sample rate."
+}

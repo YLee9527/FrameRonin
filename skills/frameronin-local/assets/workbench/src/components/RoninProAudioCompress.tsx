@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AudioOutlined, DownloadOutlined, InboxOutlined } from '@ant-design/icons'
 import { Button, Card, Progress, Radio, Space, Typography, Upload, message } from 'antd'
 import type { UploadFile } from 'antd'
 import JSZip from 'jszip'
 import { useLanguage } from '../i18n/context'
-import { compressWavToMp3 } from '../lib/audioMp3'
+import { runManagedTask } from '../localProject/managedTasks'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -21,6 +21,7 @@ interface AudioResultItem {
   durationSec: number
   sampleRate: number
   channels: number
+  bitrate: number
 }
 
 function fileKey(file: File): string {
@@ -63,6 +64,13 @@ export default function RoninProAudioCompress() {
   const [progress, setProgress] = useState(0)
   const [activeFileName, setActiveFileName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [canceling, setCanceling] = useState(false)
+  const execution = useRef<AbortController | null>(null)
+  const mounted = useRef(true)
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
   const [zipLoading, setZipLoading] = useState(false)
   const [results, setResults] = useState<AudioResultItem[]>([])
 
@@ -121,43 +129,59 @@ export default function RoninProAudioCompress() {
     }
 
     setLoading(true)
+    setCanceling(false)
     clearResults()
+    const controller = new AbortController()
+    execution.current = controller
+    const selected = [...files]
+    const selectedBitrate = bitrate
+    const nextResults: AudioResultItem[] = []
 
     try {
-      const nextResults: AudioResultItem[] = []
-      for (let index = 0; index < files.length; index++) {
-        const file = files[index]!
-        setActiveFileName(file.name)
-        const result = await compressWavToMp3(file, bitrate, (filePercent) => {
-          const overall = Math.round(((index + filePercent / 100) / files.length) * 100)
-          setProgress(overall)
-        })
+      const result = await runManagedTask('audio.compress', selected, { bitrate: selectedBitrate }, {
+        signal: controller.signal, outputFilter: version => version.metadata.kind === 'audio',
+        onProgress: value => {
+          if (!mounted.current) return
+          setProgress(Math.round(value * 100))
+          setActiveFileName(selected[Math.min(selected.length - 1, Math.floor(value * selected.length))].name)
+        },
+      })
+      controller.signal.throwIfAborted()
+      if (!mounted.current) return
+      if (result.outputs.length !== selected.length) throw new Error('Registered audio result count does not match selected files')
+      for (const [index, output] of result.outputs.entries()) {
+        const file = selected[index]
         nextResults.push({
           key: fileKey(file),
           file,
-          blob: result.blob,
-          url: URL.createObjectURL(result.blob),
-          durationSec: result.durationSec,
-          sampleRate: result.sampleRate,
-          channels: result.channels,
+          blob: output.blob,
+          url: URL.createObjectURL(output.blob),
+          durationSec: output.version.metadata.durationSeconds ?? 0,
+          sampleRate: output.version.metadata.sampleRate ?? 0,
+          channels: output.version.metadata.channels ?? 0,
+          bitrate: selectedBitrate,
         })
       }
       setResults(nextResults)
       message.success(
-        files.length > 1
-          ? t('roninProAudioCompressBatchSuccess', { count: files.length })
+        selected.length > 1
+          ? t('roninProAudioCompressBatchSuccess', { count: selected.length })
           : t('roninProAudioCompressSuccess')
       )
     } catch (error) {
-      message.error(`${t('exportFailed')}: ${error instanceof Error ? error.message : String(error)}`)
+      nextResults.forEach(item => URL.revokeObjectURL(item.url))
+      if (mounted.current) {
+        if (error instanceof DOMException && error.name === 'AbortError') message.info(t('localTaskCanceled'))
+        else message.error(`${t('exportFailed')}: ${error instanceof Error ? error.message : String(error)}`)
+      }
     } finally {
-      setLoading(false)
-      setActiveFileName('')
+      execution.current = null
+      if (mounted.current) { setLoading(false); setCanceling(false); setActiveFileName('') }
     }
   }
 
   const downloadSingle = (item: AudioResultItem) => {
-    downloadBlob(item.blob, `${item.file.name.replace(/\.[^.]+$/, '')}_${bitrate}kbps.mp3`)
+    downloadBlob(item.blob, `${item.file.name.replace(/\.[^.]+$/, '')}_${item.bitrate}kbps.mp3`)
     message.success(t('downloadStarted'))
   }
 
@@ -166,11 +190,11 @@ export default function RoninProAudioCompress() {
     setZipLoading(true)
     try {
       const zip = new JSZip()
-      for (const item of results) {
-        zip.file(`${item.file.name.replace(/\.[^.]+$/, '')}_${bitrate}kbps.mp3`, item.blob)
+      for (const [index, item] of results.entries()) {
+        zip.file(`${String(index + 1).padStart(4, '0')}-${item.file.name.replace(/\.[^.]+$/, '')}_${item.bitrate}kbps.mp3`, item.blob)
       }
       const zipBlob = await zip.generateAsync({ type: 'blob' })
-      downloadBlob(zipBlob, `audio_mp3_${bitrate}kbps.zip`)
+      downloadBlob(zipBlob, `audio_mp3_${results[0].bitrate}kbps.zip`)
       message.success(t('downloadStarted'))
     } catch (error) {
       message.error(`${t('exportFailed')}: ${error instanceof Error ? error.message : String(error)}`)
@@ -207,6 +231,7 @@ export default function RoninProAudioCompress() {
           optionType="button"
           buttonStyle="solid"
           value={bitrate}
+          disabled={loading}
           onChange={(e) => setBitrate(e.target.value)}
           options={BITRATE_OPTIONS.map((value) => ({
             label: `${value} kbps`,
@@ -229,6 +254,9 @@ export default function RoninProAudioCompress() {
               ? t('roninProAudioCompressRunBatch')
               : t('roninProAudioCompressRun')}
         </Button>
+        {loading && <Button disabled={canceling} onClick={() => {
+          setCanceling(true); execution.current?.abort()
+        }}>{t(canceling ? 'localTaskCanceling' : 'localTaskCancel')}</Button>}
         {results.length > 0 && (
           <Button icon={<DownloadOutlined />} loading={zipLoading} onClick={downloadZip}>
             {t('roninProAudioCompressDownloadZip')}

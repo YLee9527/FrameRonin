@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 from .errors import RoninError
 from .operations import REGISTRY, preview
-from .project import Project, checked_id, identifier, now
+from .project import Project, checked_id, identifier, now, memory_budget
 from .tasks import submit, task, cancel, recover_tasks
 
 WORKBENCH = Path(__file__).resolve().parents[2] / 'assets/workbench/dist'
@@ -36,7 +36,7 @@ def application(project, port):
 
     @app.get('/api/project')
     def get_project():
-        return {'project': project.manifest, 'assets': project.assets(), 'operations': REGISTRY}
+        return {'project': project.manifest, 'assets': project.assets(), 'operations': REGISTRY, 'memoryBudgetBytes': memory_budget()}
 
     async def import_upload(file, asset_id=None):
         suffix = Path(file.filename or 'upload').suffix.lower()

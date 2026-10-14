@@ -19,3 +19,5 @@
 `sequence.opticalFlow` 直接复用原 OpenCV.js 双向 Farneback、平滑、位移限制与融合算法，在受控 Node 进程执行。参数为 alpha、nearestNeighbor、bidirectional、quality（fast/balanced/high）、smoothFlow、maxMotionRelative；2–500 张同尺寸帧输出 2N−1 PNG 帧和报告。每帧对完整处理，不独立分块。16×512 固定样本的 31 帧通过浏览器与后台严格 RGBA 对照。工作台补帧页支持取消；离开页面后任务继续，在项目面板读取正式结果。
 
 本地取消返回 processStopConfirmed 和 cancelElapsedSeconds，并保存任务 cancellation.json；此确认只涵盖本地受控进程。身份或停止权限无法核验时，结果先失效，再报告 CANCEL_* 错误，不伪造停止成功。AI 服务端状态仍需核对宿主调用。
+
+`audio.compress` 接收按顺序选定的音频版本及 bitrate（32–320 kbps），产生各 MP3、ZIP 和对应报告。同名文件以序号区分，核对声道、时长、码率与采样率。当前本地 FFmpeg/libmp3lame 保留支持的输入采样率；旧浏览器 Lame.js 使用 AudioContext 的设备采样率，编码字节及延迟不要求完全一致。不要把该差异称为严格像素式复刻。

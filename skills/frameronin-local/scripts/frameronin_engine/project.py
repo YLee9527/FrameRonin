@@ -102,6 +102,8 @@ def inspect_media(path):
                 raise RoninError('INVALID_MEDIA', 'The selected media has no required stream.')
             result.update(durationSeconds=float(decoded.get('format', {}).get('duration', 0)),
                           codec=selected.get('codec_name'), width=selected.get('width', 0), height=selected.get('height', 0))
+            if result['kind'] == 'audio':
+                result.update(sampleRate=int(selected.get('sample_rate', 0)), channels=int(selected.get('channels', 0)))
         elif path.suffix.lower() == '.zip':
             try:
                 with zipfile.ZipFile(path) as bundle:
@@ -228,7 +230,7 @@ class Project:
 
     def version(self, version_id, verify=True):
         with self.connection() as db:
-            row = db.execute('SELECT * FROM versions WHERE id=?', (version_id,)).fetchone()
+            row = db.execute('SELECT v.*,a.name FROM versions v JOIN assets a ON a.id=v.asset_id WHERE v.id=?', (version_id,)).fetchone()
         if not row:
             raise RoninError('VERSION_MISSING', 'The selected asset version no longer exists.')
         result = dict(row)

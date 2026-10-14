@@ -24,8 +24,6 @@ import {
   createGraphNode,
   getStitchInputSlotCount,
   resizeRearrangeGrid,
-  runDagExecution,
-  runWorkflowOnBlob,
   sanitizeWorkflowPresetFileBase,
   serializeWorkflowGraph,
   type GraphNode,
@@ -33,6 +31,7 @@ import {
   type WorkflowNodeType,
 } from '../lib/roninProWorkflow'
 import { importLegacyWorkflow } from '../lib/strictWorkflow'
+import { runManagedTask } from '../localProject/managedTasks'
 import { WORKFLOW_BPSET_PRESETS, WORKFLOW_BPSETI_DIRECT_PRESETS } from '../lib/workflowBpsetPresets'
 import StashDropZone from './StashDropZone'
 import WorkflowBlueprintCanvas, {
@@ -150,6 +149,14 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
   fileItemsRef.current = fileItems
   const [results, setResults] = useState<{ name: string; url: string }[]>([])
   const [running, setRunning] = useState(false)
+  const [canceling, setCanceling] = useState(false)
+  const [taskProgress, setTaskProgress] = useState(0)
+  const execution = useRef<AbortController | null>(null)
+  const mounted = useRef(true)
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
   /** 导出预设名：写入 JSON 的 presetName，并用于下载文件名 */
   const [presetName, setPresetName] = useState('')
   const [finishedPresetsOpen, setFinishedPresetsOpen] = useState(false)
@@ -349,7 +356,11 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         message.warning(t(`roninProWorkflowGraphErr_${strategyResult.reason}`))
         return
       }
+      const controller = new AbortController()
+      execution.current = controller
       setRunning(true)
+      setCanceling(false)
+      setTaskProgress(0)
       setResults((prev) => {
         prev.forEach((r) => URL.revokeObjectURL(r.url))
         return []
@@ -357,69 +368,39 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
       const out: { name: string; url: string }[] = []
       try {
         const { strategy } = strategyResult
-        if (strategy.kind === 'all') {
-          for (const { file } of fileItems) {
-            const blob = await runWorkflowOnBlob(file, strategy.order)
-            const url = URL.createObjectURL(blob)
-            const base = file.name.replace(/\.[^.]+$/, '')
-            out.push({ name: `${base}_workflow.png`, url })
-          }
-        } else if (strategy.kind === 'targeted') {
-          for (const plan of strategy.plans) {
-            const item = fileItems[plan.fileIndex0]
-            if (!item) continue
-            const blob = await runWorkflowOnBlob(item.file, plan.steps)
-            const url = URL.createObjectURL(blob)
-            const base = item.file.name.replace(/\.[^.]+$/, '')
-            out.push({ name: `${base}_workflow.png`, url })
-          }
-        } else if (strategy.kind === 'dag_per_file') {
-          for (const { file } of fileItems) {
-            const blob = await runDagExecution(
-              strategy.topo,
-              strategy.edges,
-              strategy.sinkId,
-              () => file
-            )
-            const url = URL.createObjectURL(blob)
-            const base = file.name.replace(/\.[^.]+$/, '')
-            out.push({ name: `${base}_workflow.png`, url })
-          }
-        } else if (strategy.kind === 'dag_once') {
-          const blob = await runDagExecution(
-            strategy.topo,
-            strategy.edges,
-            strategy.sinkId,
-            (h) => {
-              const maxIdx = Math.max(1, fileItems.length)
-              const idx1 = Math.min(
-                Math.max(1, Math.round(h.params.imageIndex ?? 1)),
-                maxIdx
-              )
-              return fileItems[idx1 - 1]!.file
-            }
-          )
-          const url = URL.createObjectURL(blob)
-          const heads = strategy.topo.filter((n) => !strategy.edges.some((e) => e.target === n.id))
-          const firstIn = heads.find((n) => n.type === 'workflowInputImage')
-          const maxIdx = Math.max(1, fileItems.length)
-          const idx1 = firstIn
-            ? Math.min(Math.max(1, Math.round(firstIn.params.imageIndex ?? 1)), maxIdx)
-            : 1
-          const refFile = fileItems[idx1 - 1]?.file ?? fileItems[0]!.file
-          const base = refFile.name.replace(/\.[^.]+$/, '')
-          const dagSuffix = strategy.topo.some((x) => x.type === 'matteDoubleBackground')
-            ? '_workflow_doublebg.png'
-            : '_workflow.png'
-          out.push({ name: `${base}${dagSuffix}`, url })
+        const selected = [...fileItems]
+        const serialized = serializeWorkflowGraph(nodes, edges)
+        const result = await runManagedTask('workflow.legacy', selected.map(item => item.file),
+          { graph: JSON.parse(serialized) }, { signal: controller.signal,
+            outputFilter: version => version.metadata.kind === 'image',
+            onProgress: value => { if (mounted.current) setTaskProgress(Math.round(value * 100)) },
+          })
+        controller.signal.throwIfAborted()
+        if (!mounted.current) return
+        const names = strategy.kind === 'targeted'
+          ? strategy.plans.map(plan => selected[plan.fileIndex0].file.name)
+          : strategy.kind === 'dag_once'
+            ? [selected[Math.min(selected.length - 1, Math.max(0, (strategy.topo.find(node =>
+                node.type === 'workflowInputImage' && !strategy.edges.some(edge => edge.target === node.id))?.params.imageIndex ?? 1) - 1))].file.name]
+            : selected.map(item => item.file.name)
+        if (result.outputs.length !== names.length) throw new Error('Registered workflow outputs do not match the execution plan')
+        for (const [index, output] of result.outputs.entries()) {
+          const base = names[index].replace(/\.[^.]+$/, '')
+          const suffix = strategy.kind === 'dag_once' && strategy.topo.some(node => node.type === 'matteDoubleBackground')
+            ? '_workflow_doublebg.png' : '_workflow.png'
+          out.push({ name: `${base}${suffix}`, url: URL.createObjectURL(output.blob) })
         }
         setResults(out)
         message.success(t('roninProWorkflowDone'))
       } catch (e) {
-        console.error(e)
-        message.error(t('roninProWorkflowFailed'))
+        out.forEach(item => URL.revokeObjectURL(item.url))
+        if (mounted.current) {
+          if (e instanceof DOMException && e.name === 'AbortError') message.info(t('localTaskCanceled'))
+          else message.error(`${t('roninProWorkflowFailed')}: ${String(e)}`)
+        }
       } finally {
-        setRunning(false)
+        execution.current = null
+        if (mounted.current) { setRunning(false); setCanceling(false) }
       }
     },
     [fileItems, t]
@@ -1504,6 +1485,12 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         </StashDropZone>
       </div>
 
+      {running && <Space>
+        <Button disabled={canceling} onClick={() => { setCanceling(true); execution.current?.abort() }}>
+          {t(canceling ? 'localTaskCanceling' : 'localTaskCancel')}
+        </Button>
+        <Text>{taskProgress}%</Text>
+      </Space>}
       <Button type="primary" loading={running} onClick={handleRunAll} block>
         {t(
           graphNodes.some((n) => n.type === 'workflowInputImage')

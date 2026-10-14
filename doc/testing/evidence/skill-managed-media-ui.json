@@ -1,0 +1,66 @@
+{
+  "audio": {
+    "task": "f320df6c-06f9-41e8-abcf-64db24cadeba",
+    "state": "succeeded",
+    "fileCount": 2,
+    "zipNames": [
+      "0001-tone-1_128kbps.mp3",
+      "0002-tone-2_128kbps.mp3"
+    ],
+    "downloadHashesEqualToRegisteredVersions": true,
+    "metadata": [
+      {
+        "bytes": 17179,
+        "extension": ".mp3",
+        "kind": "audio",
+        "durationSeconds": 1.0,
+        "codec": "mp3",
+        "width": 0,
+        "height": 0,
+        "sampleRate": 44100,
+        "channels": 2
+      },
+      {
+        "bytes": 33061,
+        "extension": ".mp3",
+        "kind": "audio",
+        "durationSeconds": 2.0,
+        "codec": "mp3",
+        "width": 0,
+        "height": 0,
+        "sampleRate": 44100,
+        "channels": 2
+      }
+    ],
+    "browserAudioElements": [
+      {
+        "duration": 1,
+        "readyState": 4,
+        "error": null
+      },
+      {
+        "duration": 2,
+        "readyState": 4,
+        "error": null
+      }
+    ],
+    "screenshot": "skill-audio-ui.png",
+    "singleFileAcceptance": {
+      "task": "88965b03-c995-4812-98b2-4a21eb3bb747",
+      "state": "succeeded",
+      "downloadHashEqualToRegisteredVersion": true
+    }
+  },
+  "workflow": {
+    "task": "0979fabb-4a17-4d39-9606-8664e3c41c8d",
+    "state": "succeeded",
+    "preset": "普通V2&2.2",
+    "dimensions": [
+      160,
+      160
+    ],
+    "strictRgbaEqualToRegisteredAndOriginalBrowserOracle": true,
+    "screenshot": "skill-workflow-task-ui.png"
+  },
+  "initialUiFailure": "Queued task creation omits progress. Undefined progress caused an audio UI callback failure while the durable task succeeded. SDK now initializes progress to zero; dedicated regression passed."
+}

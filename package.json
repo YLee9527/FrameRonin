@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "test:engine": "skills/frameronin-local/.runtime/venv/bin/python -m unittest discover -s skills/frameronin-local/tests -v",
+    "build:runtime": "node skills/frameronin-local/scripts/js-runtime/build.mjs",
+    "test:js": "node --test skills/frameronin-local/tests/*.test.mjs",
     "build:workbench": "npm --prefix skills/frameronin-local/assets/workbench run build",
     "dev:workbench": "npm --prefix skills/frameronin-local/assets/workbench run dev",
     "test:preflight": "node --test tools/codex-preflight/preflight.test.mjs"

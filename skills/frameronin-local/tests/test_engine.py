@@ -6,6 +6,12 @@ import tempfile
 import time
 import unittest
 import psutil
+import wave
+import math
+import struct
+import subprocess
+import hashlib
+import zipfile
 from unittest.mock import patch, Mock
 from PIL import Image
 
@@ -191,6 +197,41 @@ class ProjectTests(unittest.TestCase):
         with self.assertRaises(RoninError): cancel(self.project, task_id)
         receipt = json.loads((self.project.root / f'tasks/{task_id}/cancellation.json').read_text())
         self.assertFalse(receipt['processStopConfirmed'])
+
+    def test_audio_batch_preserves_duplicate_names_metadata_and_decodable_outputs(self):
+        inputs = []
+        original = []
+        for index in range(2):
+            directory = self.root / f'audio-{index}'
+            directory.mkdir()
+            source = directory / 'tone.wav'
+            samples = [round(math.sin(2 * math.pi * (440 + index * 220) * i / 44100) * 0.2 * 32767) for i in range(11025)]
+            original.append(samples)
+            with wave.open(str(source), 'wb') as output:
+                output.setparams((2, 2, 44100, 11025, 'NONE', 'not compressed'))
+                output.writeframes(b''.join(struct.pack('<hh', value, -value) for value in samples))
+            inputs.append(self.project.import_file(source)['id'])
+        job = submit(self.project, {'operation':'audio.compress','inputs':inputs,'parameters':{'bitrate':128}})
+        result = wait(self.project, job['id'], 15)
+        self.assertEqual(result['state'], 'succeeded', result)
+        versions = [self.project.version(value) for value in result['results']]
+        audio = [value for value in versions if value['metadata']['kind'] == 'audio']
+        self.assertEqual(len(audio), 2)
+        archive = next(value for value in versions if value['metadata']['kind'] == 'archive')
+        with zipfile.ZipFile(archive['absolutePath']) as bundle:
+            self.assertEqual(bundle.namelist(), ['0001-tone_128kbps.mp3', '0002-tone_128kbps.mp3'])
+            for index, version in enumerate(audio):
+                self.assertEqual(version['metadata']['sampleRate'], 44100)
+                self.assertEqual(version['metadata']['channels'], 2)
+                self.assertLess(abs(version['metadata']['durationSeconds'] - 0.25), 0.08)
+                self.assertEqual(hashlib.sha256(bundle.read(bundle.namelist()[index])).hexdigest(), version['sha256'])
+                decoded = subprocess.check_output(['ffmpeg','-v','error','-i',version['absolutePath'],'-f','s16le','-'])
+                actual = [sample[0] for sample in struct.iter_unpack('<hh', decoded)]
+                self.assertEqual(len(actual), len(original[index]))
+                # Fixed before running: MP3 is lossy, with LAME's default scaling.
+                # Bound decoded tone RMS error to 8%, including codec quantization.
+                relative = math.sqrt(sum((a-b)**2 for a,b in zip(actual, original[index])) / sum(b*b for b in original[index]))
+                self.assertLess(relative, 0.08)
 
     def test_cancel_during_output_checksum_rejects_publication(self):
         task_id = identifier()

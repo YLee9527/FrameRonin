@@ -15,3 +15,5 @@ await build({ entryPoints: [path.join(directory, 'entry.ts')], outfile: path.joi
   } }],
   define: { 'import.meta.env.BASE_URL': 'globalThis.__frameroninAssetsBase', '__FRAMERONIN_LOCAL_NODE__': 'true' }, logLevel: 'warning' })
 process.stdout.write(JSON.stringify({ status: 'built', output: path.join(output, 'algorithms.mjs') }) + '\n')
+await build({ entryPoints: [path.join(skill, 'assets/workbench/src/localProject/managedTasks.ts')],
+  outfile: path.join(output, 'managed-tasks.mjs'), bundle: true, platform: 'node', target: 'node22', format: 'esm' })

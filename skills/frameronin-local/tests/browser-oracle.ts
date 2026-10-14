@@ -2,6 +2,7 @@ import { interpolateMidFrameOpticalFlow } from '../assets/workbench/src/lib/opti
 import { computeWorkflowRunStrategy, runDagExecution, runWorkflowOnBlob } from '../assets/workbench/src/lib/roninProWorkflow'
 import { importLegacyWorkflow } from '../assets/workbench/src/lib/strictWorkflow'
 import JSZip from '../assets/workbench/node_modules/jszip'
+import { compressWavToMp3 } from '../assets/workbench/src/lib/audioMp3'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -60,7 +61,22 @@ async function runPresets() {
   }
   await publish(zip, 'browser-preset-oracles.zip'); status.textContent = `Browser preset oracle complete: ${presets.length} presets`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets]] as const) {
+async function runAudio() {
+  const selected = [...document.querySelector<HTMLInputElement>('#audio')!.files ?? []]
+  if (!selected.length || selected.length > 2) throw new Error('Select 1–2 fixed WAV samples')
+  const zip = new JSZip()
+  const report: object[] = []
+  for (const [index, file] of selected.entries()) {
+    status.textContent = `Original browser audio: ${index + 1}/${selected.length}`
+    const result = await compressWavToMp3(file, 128)
+    zip.file(`${file.name}.mp3`, result.blob)
+    report.push({ file: file.name, duration: result.durationSec, sampleRate: result.sampleRate, channels: result.channels })
+  }
+  zip.file('report.json', JSON.stringify(report))
+  await publish(zip, 'browser-audio-oracle.zip')
+  status.textContent = `Original browser audio complete: ${selected.length} files`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }
