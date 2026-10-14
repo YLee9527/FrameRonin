@@ -486,5 +486,6 @@
     "macOS 14 and native accessibility",
     "full AI catalog and portable distribution"
   ],
-  "scopeOfMeasuredMemory": "owned Python/Node process family only; does not prove full browser/API total"
+  "scopeOfMeasuredMemory": "owned Python/Node process family only; does not prove full browser/API total",
+  "codeCommit": "65d25ec"
 }
