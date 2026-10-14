@@ -7,7 +7,8 @@
   <label>Fixed frame sequence <input id="frames" type="file" accept="image/png" multiple></label>
   <p><button id="flow">Run optical flow oracle</button><button id="presets">Run all 13 preset oracles</button></p>
   <p><label>Fixed audio samples <input id="audio" type="file" accept="audio/wav" multiple></label><button id="audio-run">Run original audio oracle</button></p>
-  <p id="status" role="status">Ready. This separate test page never submits project tasks.</p>
+  <p><label>Map source and right neighbor <input id="map" type="file" accept="image/png" multiple></label><button id="map-run">Run original map oracle</button></p>
+<p id="status" role="status">Ready. This separate test page never submits project tasks.</p>
   <a id="download" hidden>Download oracle result</a>
   <script type="module" src="./browser-oracle.ts"></script>
 </html>

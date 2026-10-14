@@ -9,3 +9,10 @@ export { validateStoredRseprite } from '../../assets/workbench/src/localProject/
 export { interpolateMidFrameOpticalFlow, expandFramesWithOpticalMidpoints } from '../../assets/workbench/src/lib/opticalFlowInterpolate'
 export { createWorkflowHistory, workflowHistoryReducer } from '../../assets/workbench/src/localProject/workflowHistory'
 export { validateStoredWorkflow } from '../../assets/workbench/src/localProject/workflowDocument'
+
+export { renderMapExport } from '../../assets/workbench/src/lib/mapRender'
+export { applyMapFeather } from '../../assets/workbench/src/lib/mapFeather'
+export { validateStoredMap } from '../../assets/workbench/src/localProject/mapDocument'
+export { createMapHistory, mapHistoryReducer, mapImages } from '../../assets/workbench/src/localProject/mapHistory'
+export { validateMapZipBudget } from '../../assets/workbench/src/lib/mapArchiveFormat'
+export { expansionTilesFrom, isOutwardExpansionTile } from '../../assets/workbench/src/lib/mapLayout'

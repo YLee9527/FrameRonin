@@ -20,6 +20,7 @@ for (const input of request.inputs) {
   blobs.push(new Blob([await fs.readFile(resolved)]))
 }
 const outputs = []
+const extensions = []
 let report = {}
 if (request.operation === 'workflow') {
   const parsed = request.compatibility ? algorithms.importLegacyWorkflow(JSON.stringify(request.graph))
@@ -64,12 +65,19 @@ if (request.operation === 'workflow') {
   for (const canvas of expanded) outputs.push(new Blob([await canvas.encode('png')]))
   report = { inputFrames: frames.length, outputFrames: expanded.length, method: 'original-opencv-farneback',
     processingDimensions: { width: frames[0].width, height: frames[0].height } }
+} else if (request.operation === 'map') {
+  const images=[]
+  for(const blob of blobs)images.push(await dom.loadImage(Buffer.from(await blob.arrayBuffer())))
+  const {layout,format,target}=request.parameters
+  outputs.push(await algorithms.renderMapExport(images,layout,format,target))
+  extensions.push(format==='psd'?'psd':format==='godot'?'zip':'png')
+  report={method:'original-map-canvas-exporter',format,layout,target:target??null}
 } else throw new Error('OPERATION_UNKNOWN')
 const outputDirectory = path.join(directory, 'output')
 await fs.mkdir(outputDirectory, { recursive: true })
 const files = []
 for (let index = 0; index < outputs.length; index++) {
-  const output = path.join(outputDirectory, `result-${String(index).padStart(4, '0')}.png`)
+  const output = path.join(outputDirectory, `result-${String(index).padStart(4, '0')}.${extensions[index]??'png'}`)
   await fs.writeFile(output, Buffer.from(await outputs[index].arrayBuffer()), { flag: 'wx' })
   files.push(path.relative(directory, output))
 }

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type WheelEvent as ReactWheelEvent } from 'react'
+import { createPortal } from 'react-dom'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState, type SetStateAction, type WheelEvent as ReactWheelEvent } from 'react'
 import {
   ArrowDownOutlined,
   ArrowLeftOutlined,
@@ -11,9 +12,19 @@ import {
   EyeOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
-import { Button, message, Select, Slider, Space, Typography } from 'antd'
-import JSZip from 'jszip'
-import { removeGeminiWatermarkFromBlob } from '../lib/geminiWatermark'
+import { Alert, Button, message, Select, Slider, Space, Typography } from 'antd'
+import { runMapArchive } from '../lib/mapArchive'
+import { localJson } from '../localProject/api'
+import { cacheManagedInput, runManagedTask } from '../localProject/managedTasks'
+import { expansionTilesFrom,isOutwardExpansionTile,tilesRecord } from '../lib/mapLayout'
+import { mapFeatherPreview } from '../lib/mapPreview'
+import type { MapRenderLayout } from '../lib/mapRender'
+import { useLanguage } from '../i18n/context'
+import { mapText } from '../i18n/mapText'
+import type { Lang } from '../i18n/locales'
+import DocumentSaveBar from '../localProject/DocumentSaveBar'
+import { loadMapImage, serializeMapDocument, restoreMapDocument, validateMapDraft, validateStoredMap, type MapDraft, type MapImage, type StoredMap } from '../localProject/mapDocument'
+import { createMapHistory, mapHistoryReducer, mapImages } from '../localProject/mapHistory'
 
 const { Text, Title } = Typography
 
@@ -21,13 +32,7 @@ type Side = 'top' | 'right' | 'bottom' | 'left'
 type TileKey = string
 type ExpandSplit = 4 | 8 | 12
 
-type LoadedImage = {
-  file: File
-  url: string
-  image: HTMLImageElement
-  width: number
-  height: number
-}
+type LoadedImage = MapImage
 
 type Tile = {
   x: number
@@ -49,7 +54,6 @@ const MAX_ZOOM = 8
 const WHEEL_ZOOM_SENSITIVITY = 0.0015
 const GENERATE_STITCH_URL = '#imagegen/map-stitch'
 const STATE_ARCHIVE_VERSION = 2
-const STATE_MANIFEST_NAME = 'map_stitch_state.json'
 
 type SavedImageState = {
   fileName?: string
@@ -89,140 +93,6 @@ function tileKey(x: number, y: number): TileKey {
   return `${fmt(x)},${fmt(y)}`
 }
 
-function splitSegments(start: number, size: number, count: number, overlapRatio: number): Array<{ start: number; size: number }> {
-  if (count <= 1) return [{ start, size }]
-  const clampedOverlap = Math.max(0, Math.min(0.95, overlapRatio))
-  const segmentSize = size / (count - (count - 1) * clampedOverlap)
-  const segmentStep = segmentSize * (1 - clampedOverlap)
-  return Array.from({ length: count }, (_, i) => ({
-    start: i === count - 1 ? start + size - segmentSize : start + i * segmentStep,
-    size: segmentSize,
-  }))
-}
-
-function expansionTilesFrom(origin: Tile, split: ExpandSplit, horizontalOverlapRatio: number, verticalOverlapRatio: number): Tile[] {
-  const count = split / 4
-  const clampedHorizontalOverlap = Math.max(0, Math.min(0.95, horizontalOverlapRatio))
-  const clampedVerticalOverlap = Math.max(0, Math.min(0.95, verticalOverlapRatio))
-  const horizontalSegments = splitSegments(origin.x, origin.w, count, horizontalOverlapRatio)
-  const verticalSegments = splitSegments(origin.y, origin.h, count, verticalOverlapRatio)
-  const out: Tile[] = []
-  for (const segment of horizontalSegments) {
-    const tileSize = segment.size
-    out.push({ x: segment.start, y: origin.y - tileSize * (1 - clampedVerticalOverlap), w: tileSize, h: tileSize })
-    out.push({ x: segment.start, y: origin.y + origin.h - tileSize * clampedVerticalOverlap, w: tileSize, h: tileSize })
-  }
-  for (const segment of verticalSegments) {
-    const tileSize = segment.size
-    out.push({ x: origin.x + origin.w - tileSize * clampedHorizontalOverlap, y: segment.start, w: tileSize, h: tileSize })
-    out.push({ x: origin.x - tileSize * (1 - clampedHorizontalOverlap), y: segment.start, w: tileSize, h: tileSize })
-  }
-  return out
-}
-
-function isOutwardExpansionTile(origin: Tile, target: Tile): boolean {
-  if (tileKey(origin.x, origin.y) === CENTER_KEY) return true
-  if (origin.x > 0 && target.x < origin.x) return false
-  if (origin.x < 0 && target.x > origin.x) return false
-  if (origin.y > 0 && target.y < origin.y) return false
-  if (origin.y < 0 && target.y > origin.y) return false
-  return true
-}
-
-function tilesRecord(items: Tile[]): Record<TileKey, Tile> {
-  return Object.fromEntries(items.map((tile) => [tileKey(tile.x, tile.y), tile])) as Record<TileKey, Tile>
-}
-
-function loadImageFile(file: File): Promise<LoadedImage> {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file)
-    const image = new Image()
-    image.onload = () => {
-      resolve({
-        file,
-        url,
-        image,
-        width: image.naturalWidth,
-        height: image.naturalHeight,
-      })
-    }
-    image.onerror = () => {
-      URL.revokeObjectURL(url)
-      reject(new Error('图片读取失败'))
-    }
-    image.src = url
-  })
-}
-
-function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('导出失败'))), 'image/png')
-  })
-}
-
-type TemplateLayer = {
-  image: LoadedImage
-  offsetX: number
-  offsetY: number
-  drawWidth: number
-  drawHeight: number
-}
-
-async function makeRelativeTemplate(layers: TemplateLayer[], canvasWidth: number, canvasHeight: number): Promise<Blob> {
-  const canvas = document.createElement('canvas')
-  canvas.width = canvasWidth
-  canvas.height = canvasHeight
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('画布创建失败')
-  ctx.imageSmoothingEnabled = false
-  for (const layer of layers) {
-    ctx.drawImage(layer.image.image, layer.offsetX, layer.offsetY, layer.drawWidth, layer.drawHeight)
-  }
-  return canvasToBlob(canvas)
-}
-
-function featheredImageCanvas(image: HTMLImageElement, width: number, height: number, feather: Feather): HTMLCanvasElement {
-  const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return canvas
-  ctx.imageSmoothingEnabled = false
-  ctx.drawImage(image, 0, 0, width, height)
-
-  const alphaForDistancePct = (distancePct: number, featherPct: number) => {
-    if (featherPct <= 0) return 1
-    const endPct = Math.max(0, Math.min(MAX_FEATHER, featherPct))
-    const startPct = Math.max(0, endPct - FEATHER_STEP)
-    if (distancePct <= startPct) return 0
-    if (distancePct >= endPct) return 1
-    return (distancePct - startPct) / Math.max(0.0001, endPct - startPct)
-  }
-
-  const imageData = ctx.getImageData(0, 0, width, height)
-  const data = imageData.data
-  const xDenom = Math.max(1, width - 1)
-  const yDenom = Math.max(1, height - 1)
-  for (let y = 0; y < height; y++) {
-    const topPct = (y / yDenom) * 100
-    const bottomPct = ((height - 1 - y) / yDenom) * 100
-    const yAlpha =
-      alphaForDistancePct(topPct, feather.top) *
-      alphaForDistancePct(bottomPct, feather.bottom)
-    for (let x = 0; x < width; x++) {
-      const leftPct = (x / xDenom) * 100
-      const rightPct = ((width - 1 - x) / xDenom) * 100
-      const alpha =
-        yAlpha *
-        alphaForDistancePct(leftPct, feather.left) *
-        alphaForDistancePct(rightPct, feather.right)
-      data[(y * width + x) * 4 + 3] = Math.round((data[(y * width + x) * 4 + 3] ?? 0) * alpha)
-    }
-  }
-  ctx.putImageData(imageData, 0, 0)
-  return canvas
-}
-
 function FeatheredPreviewImage({
   upload,
   width,
@@ -242,21 +112,15 @@ function FeatheredPreviewImage({
 
   useEffect(() => {
     if (!hasFeather) return
-
     let revokedUrl: string | null = null
-    let cancelled = false
-    const canvas = featheredImageCanvas(upload.image, Math.max(1, Math.round(width)), Math.max(1, Math.round(height)), feather)
-    canvas.toBlob((blob) => {
-      if (!blob || cancelled) return
-      revokedUrl = URL.createObjectURL(blob)
-      setGeneratedPreview({ key: previewKey, url: revokedUrl })
-    }, 'image/png')
-
-    return () => {
-      cancelled = true
-      if (revokedUrl) URL.revokeObjectURL(revokedUrl)
-    }
-  }, [feather, hasFeather, height, previewKey, upload.image, width])
+    const controller=new AbortController()
+    void mapFeatherPreview(upload.file,Math.max(1,Math.round(width)),Math.max(1,Math.round(height)),feather,upload.memoryBudgetBytes,controller.signal)
+      .then(blob=>{
+        if(controller.signal.aborted)return
+        revokedUrl=URL.createObjectURL(blob);setGeneratedPreview({key:previewKey,url:revokedUrl})
+      }).catch(error=>{if(!controller.signal.aborted)message.error(String(error))})
+    return()=>{controller.abort();if(revokedUrl)URL.revokeObjectURL(revokedUrl)}
+  },[feather,hasFeather,height,previewKey,upload.file,upload.memoryBudgetBytes,width])
 
   const src = hasFeather && generatedPreview?.key === previewKey ? generatedPreview.url : upload.url
   return <img src={src} alt={alt} />
@@ -272,16 +136,6 @@ function downloadBlob(blob: Blob, filename: string) {
   link.click()
   link.remove()
   window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
-}
-
-function dataUrlToFile(dataUrl: string, fileName: string, fallbackType = 'image/png'): File {
-  const [meta = '', payload = ''] = dataUrl.split(',', 2)
-  if (!payload) throw new Error('拼接状态中的图片数据不完整')
-  const mime = meta.match(/^data:([^;,]+)/)?.[1] || fallbackType
-  const binary = atob(payload)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
-  return new File([bytes], fileName, { type: mime })
 }
 
 function fileExtensionFor(file: File): string {
@@ -306,21 +160,9 @@ function uniqueArchiveImagePath(used: Set<string>, baseName: string, file: File)
   return path
 }
 
-async function savedImageStateToFile(
-  image: SavedImageState | undefined,
-  fallbackName: string,
-  zip?: JSZip,
-): Promise<File> {
-  if (!image) throw new Error('拼接状态缺少图片数据')
-  if (image.dataUrl) return dataUrlToFile(image.dataUrl, image.fileName || fallbackName, image.type || 'image/png')
-  if (!image.path || !zip) throw new Error('拼接状态中的图片引用无效')
-
-  const entry = zip.file(image.path)
-  if (!entry) throw new Error(`拼接状态缺少图片文件：${image.path}`)
-  const blob = await entry.async('blob')
-  return new File([blob], image.fileName || image.path.split('/').pop() || fallbackName, {
-    type: image.type || blob.type || 'image/png',
-  })
+async function savedImageStateToFile(image:SavedImageState|undefined,_fallbackName:string,images?:Record<string,File>):Promise<File>{
+  if(!image?.path||!images?.[image.path])throw new Error('MAP_ARCHIVE_IMAGE_MISSING')
+  return images[image.path]
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -370,150 +212,6 @@ function normalizeFeathersState(value: unknown): Partial<Record<TileKey, Feather
   ) as Partial<Record<TileKey, Feather>>
 }
 
-async function ensureImageReady(image: HTMLImageElement): Promise<void> {
-  if (image.complete && image.naturalWidth > 0) return
-  if (typeof image.decode === 'function') {
-    await image.decode()
-    return
-  }
-  await new Promise<void>((resolve, reject) => {
-    image.onload = () => resolve()
-    image.onerror = () => reject(new Error('鍥剧墖璇诲彇澶辫触'))
-  })
-}
-
-function writeAscii(out: number[], value: string) {
-  for (let i = 0; i < value.length; i++) out.push(value.charCodeAt(i) & 0xff)
-}
-
-function writeU16(out: number[], value: number) {
-  out.push((value >>> 8) & 0xff, value & 0xff)
-}
-
-function writeU32(out: number[], value: number) {
-  out.push((value >>> 24) & 0xff, (value >>> 16) & 0xff, (value >>> 8) & 0xff, value & 0xff)
-}
-
-function writeI16(out: number[], value: number) {
-  writeU16(out, value < 0 ? 0x10000 + value : value)
-}
-
-function bytesFromWriter(write: (out: number[]) => void): Uint8Array<ArrayBuffer> {
-  const out: number[] = []
-  write(out)
-  return new Uint8Array(out)
-}
-
-function psdPascalName(name: string): Uint8Array<ArrayBuffer> {
-  const bytes = Array.from(name).map((ch) => ch.charCodeAt(0) & 0x7f)
-  const len = Math.min(255, bytes.length)
-  const total = 1 + len
-  const padded = total + ((4 - (total % 4)) % 4)
-  const out = new Uint8Array(padded)
-  out[0] = len
-  for (let i = 0; i < len; i++) out[i + 1] = bytes[i] ?? 0
-  return out
-}
-
-function imageDataChannelBytes(imageData: ImageData, channel: 0 | 1 | 2 | 3): Uint8Array<ArrayBuffer> {
-  const out = new Uint8Array(imageData.width * imageData.height)
-  const data = imageData.data
-  for (let src = channel, dst = 0; src < data.length; src += 4, dst++) {
-    out[dst] = data[src] ?? 0
-  }
-  return out
-}
-
-type PsdLayer = {
-  name: string
-  left: number
-  top: number
-  imageData: ImageData
-}
-
-function layeredPsdBlob(width: number, height: number, composite: ImageData, layers: PsdLayer[]): Blob {
-  if (width > 30000 || height > 30000) {
-    throw new Error('PSD 尺寸超过 30000px，请减少扩展范围后再导出')
-  }
-
-  const chunks: BlobPart[] = []
-  chunks.push(bytesFromWriter((out) => {
-    writeAscii(out, '8BPS')
-    writeU16(out, 1)
-    out.push(0, 0, 0, 0, 0, 0)
-    writeU16(out, 4)
-    writeU32(out, height)
-    writeU32(out, width)
-    writeU16(out, 8)
-    writeU16(out, 3)
-    writeU32(out, 0)
-    writeU32(out, 0)
-  }))
-
-  const layerRecordChunks: BlobPart[] = []
-  const channelDataChunks: BlobPart[] = []
-  let layerRecordsLen = 2
-  let layerChannelsLen = 0
-
-  for (const layer of layers) {
-    const layerW = layer.imageData.width
-    const layerH = layer.imageData.height
-    const channelByteLen = layerW * layerH
-    const channelDataLen = 2 + channelByteLen
-    const nameBytes = psdPascalName(layer.name)
-    const extraLen = 4 + 4 + nameBytes.length
-
-    const record = bytesFromWriter((out) => {
-      writeU32(out, layer.top)
-      writeU32(out, layer.left)
-      writeU32(out, layer.top + layerH)
-      writeU32(out, layer.left + layerW)
-      writeU16(out, 4)
-      for (const channelId of [0, 1, 2, -1]) {
-        writeI16(out, channelId)
-        writeU32(out, channelDataLen)
-      }
-      writeAscii(out, '8BIM')
-      writeAscii(out, 'norm')
-      out.push(255, 0, 8, 0)
-      writeU32(out, extraLen)
-      writeU32(out, 0)
-      writeU32(out, 0)
-      for (const b of nameBytes) out.push(b)
-    })
-    layerRecordChunks.push(record)
-    layerRecordsLen += record.length
-
-    for (const channel of [0, 1, 2, 3] as const) {
-      channelDataChunks.push(bytesFromWriter((out) => writeU16(out, 0)))
-      channelDataChunks.push(imageDataChannelBytes(layer.imageData, channel))
-      layerChannelsLen += channelDataLen
-    }
-  }
-
-  const layerInfoLenRaw = layerRecordsLen + layerChannelsLen
-  const layerInfoPad = layerInfoLenRaw % 2
-  const layerInfoLen = layerInfoLenRaw + layerInfoPad
-  const layerMaskLen = 4 + layerInfoLen + 4
-
-  chunks.push(bytesFromWriter((out) => {
-    writeU32(out, layerMaskLen)
-    writeU32(out, layerInfoLen)
-    writeI16(out, layers.length)
-  }))
-  chunks.push(...layerRecordChunks)
-  chunks.push(...channelDataChunks)
-  if (layerInfoPad) chunks.push(new Uint8Array([0]) as Uint8Array<ArrayBuffer>)
-  chunks.push(bytesFromWriter((out) => writeU32(out, 0)))
-
-  chunks.push(bytesFromWriter((out) => writeU16(out, 0)))
-  for (const channel of [0, 1, 2, 3] as const) {
-    chunks.push(imageDataChannelBytes(composite, channel))
-  }
-
-  return new Blob(chunks, { type: 'image/vnd.adobe.photoshop' })
-}
-
 function getBaseName(file: File | null): string {
   return file?.name.replace(/\.[^.]+$/, '') || 'map_tile'
 }
@@ -522,44 +220,21 @@ function safeFilename(value: string): string {
   return value.replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+|_+$/g, '') || 'tile'
 }
 
-function tscnString(value: string): string {
-  return JSON.stringify(value)
-}
-
-function godotSceneTscn(
-  sceneName: string,
-  tiles: Array<{ name: string; image: string; pixel: { x: number; y: number } }>,
-): string {
-  const lines = ['[gd_scene load_steps=' + (tiles.length + 1) + ' format=3 uid="uid://pixelwork_map_stitch"]', '']
-  tiles.forEach((tile, index) => {
-    lines.push(`[ext_resource type="Texture2D" path=${tscnString(`res://${tile.image}`)} id=${tscnString(`tex_${index + 1}`)}]`)
-  })
-  lines.push('', `[node name=${tscnString(sceneName)} type="Node2D"]`, '')
-  tiles.forEach((tile, index) => {
-    lines.push(`[node name=${tscnString(safeFilename(tile.name))} type="Sprite2D" parent="."]`)
-    lines.push(`position = Vector2(${tile.pixel.x}, ${tile.pixel.y})`)
-    lines.push('centered = false')
-    lines.push(`texture = ExtResource(${tscnString(`tex_${index + 1}`)})`)
-    lines.push('')
-  })
-  return lines.join('\n')
-}
-
 function toneForTile(tile: Tile): Side {
   if (Math.abs(tile.x) >= Math.abs(tile.y) && tile.x !== 0) return tile.x > 0 ? 'right' : 'left'
   if (tile.y !== 0) return tile.y > 0 ? 'bottom' : 'top'
   return 'right'
 }
 
-function labelForTile(tile: Tile): string {
+function labelForTile(tile: Tile,lang:Lang): string {
   const near = (a: number, b: number) => Math.abs(a - b) < 0.0001
-  if (near(tile.x, 0) && tile.y < 0 && near(tile.w, 1) && near(tile.h, 1)) return '上方'
-  if (tile.x > 0 && near(tile.y, 0) && near(tile.w, 1) && near(tile.h, 1)) return '右侧'
-  if (near(tile.x, 0) && tile.y > 0 && near(tile.w, 1) && near(tile.h, 1)) return '下方'
-  if (tile.x < 0 && near(tile.y, 0) && near(tile.w, 1) && near(tile.h, 1)) return '左侧'
+  if (near(tile.x, 0) && tile.y < 0 && near(tile.w, 1) && near(tile.h, 1)) return mapText('上方',lang)
+  if (tile.x > 0 && near(tile.y, 0) && near(tile.w, 1) && near(tile.h, 1)) return mapText('右侧',lang)
+  if (near(tile.x, 0) && tile.y > 0 && near(tile.w, 1) && near(tile.h, 1)) return mapText('下方',lang)
+  if (tile.x < 0 && near(tile.y, 0) && near(tile.w, 1) && near(tile.h, 1)) return mapText('左侧',lang)
   const format = (n: number) => Number.isInteger(n) ? String(Math.abs(n)) : Math.abs(n).toFixed(2)
-  const xText = tile.x === 0 ? '' : tile.x > 0 ? `右${format(tile.x)}` : `左${format(tile.x)}`
-  const yText = tile.y === 0 ? '' : tile.y > 0 ? `下${format(tile.y)}` : `上${format(tile.y)}`
+  const xText = tile.x === 0 ? '' : tile.x > 0 ? `${mapText('右侧',lang)} ${format(tile.x)}` : `${mapText('左侧',lang)} ${format(tile.x)}`
+  const yText = tile.y === 0 ? '' : tile.y > 0 ? `${mapText('下方',lang)} ${format(tile.y)}` : `${mapText('上方',lang)} ${format(tile.y)}`
   return [xText, yText].filter(Boolean).join(' ')
 }
 
@@ -568,47 +243,66 @@ interface Props {
 }
 
 export default function MapStitch({ onBack }: Props) {
-  const [source, setSource] = useState<LoadedImage | null>(null)
-  const [tiles, setTiles] = useState<Record<TileKey, Tile>>(() =>
-    tilesRecord(expansionTilesFrom(CENTER_TILE, 4, 0.15, 0.15)),
-  )
-  const [tileUploads, setTileUploads] = useState<Partial<Record<TileKey, LoadedImage>>>({})
-  const [tileFeathers, setTileFeathers] = useState<Partial<Record<TileKey, Feather>>>({})
-  const [selectedKey, setSelectedKey] = useState<TileKey | null>(null)
-  const [horizontalOverlapPercent, setHorizontalOverlapPercent] = useState(15)
-  const [verticalOverlapPercent, setVerticalOverlapPercent] = useState(15)
-  const [expandSplit, setExpandSplit] = useState<ExpandSplit>(4)
+  const { lang,setLang } = useLanguage()
+  const [history,dispatchHistory]=useReducer(mapHistoryReducer,undefined,()=>createMapHistory({
+    source:null,tiles:tilesRecord(expansionTilesFrom(CENTER_TILE,4,0.15,0.15)),tileUploads:{},tileFeathers:{},
+    horizontalOverlapPercent:15,verticalOverlapPercent:15,expandSplit:4,hidePreviewBorders:false,hiddenPreviewTiles:{},
+  }))
+  const {source,tiles,tileUploads,tileFeathers,horizontalOverlapPercent,verticalOverlapPercent,expandSplit,hidePreviewBorders,hiddenPreviewTiles}=history.present
+  const updateMap=useCallback((update:(draft:MapDraft)=>MapDraft)=>dispatchHistory({type:'change',update}),[])
+  const setter=useCallback(<K extends keyof MapDraft>(key:K)=>(value:SetStateAction<MapDraft[K]>)=>updateMap(draft=>({...draft,
+    [key]:typeof value==='function'?(value as (current:MapDraft[K])=>MapDraft[K])(draft[key]):value})),[updateMap])
+  const setTiles=useMemo(()=>setter('tiles'),[setter])
+  const setTileUploads=useMemo(()=>setter('tileUploads'),[setter])
+  const setTileFeathers=useMemo(()=>setter('tileFeathers'),[setter])
+  const setHorizontalOverlapPercent=useMemo(()=>setter('horizontalOverlapPercent'),[setter])
+  const setVerticalOverlapPercent=useMemo(()=>setter('verticalOverlapPercent'),[setter])
+  const setExpandSplit=useMemo(()=>setter('expandSplit'),[setter])
+  const setHidePreviewBorders=useMemo(()=>setter('hidePreviewBorders'),[setter])
+  const setHiddenPreviewTiles=useMemo(()=>setter('hiddenPreviewTiles'),[setter])
+  const [selectedKey,setSelectedKey]=useState<TileKey|null>(null)
   const [processingKey, setProcessingKey] = useState<TileKey | null>(null)
   const [viewport, setViewport] = useState({ width: window.innerWidth, height: window.innerHeight })
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
-  const [hidePreviewBorders, setHidePreviewBorders] = useState(false)
-  const [hiddenPreviewTiles, setHiddenPreviewTiles] = useState<Partial<Record<TileKey, boolean>>>({})
   const [pendingUploadKey, setPendingUploadKey] = useState<TileKey | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const tileFileInputRef = useRef<HTMLInputElement>(null)
   const stateFileInputRef = useRef<HTMLInputElement>(null)
   const panDragRef = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null)
-  const cleanupRef = useRef<{
-    source: LoadedImage | null
-    tileUploads: Partial<Record<TileKey, LoadedImage>>
-  }>({ source: null, tileUploads: {} })
-  cleanupRef.current = { source, tileUploads }
-
-  useEffect(() => {
-    const onResize = () => setViewport({ width: window.innerWidth, height: window.innerHeight })
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  useEffect(
-    () => () => {
-      const current = cleanupRef.current
-      if (current.source) URL.revokeObjectURL(current.source.url)
-      Object.values(current.tileUploads).forEach((item) => item && URL.revokeObjectURL(item.url))
-    },
-    [],
-  )
+  const currentDraft=useRef(history.present)
+  useLayoutEffect(()=>{currentDraft.current=history.present},[history.present])
+  const loadImageFile=(file:File,prepared:LoadedImage[]=[],signal?:AbortSignal)=>loadMapImage(file,[...ownedImages.current,...prepared],signal)
+  const snapshot=useMemo(()=>({draft:history.present,view:{pan,zoom,selectedKey:selectedKey===CENTER_KEY||(selectedKey&&history.present.tiles[selectedKey])?selectedKey:null}}),[history.present,pan,zoom,selectedKey])
+  const archiveViews=useRef(new WeakMap<MapDraft,NonNullable<StoredMap['view']>>())
+  const currentView=useRef(snapshot.view)
+  useLayoutEffect(()=>{currentView.current=snapshot.view},[snapshot.view])
+  const moveHistory=useCallback((type:'undo'|'redo')=>{
+    const next=mapHistoryReducer(history,{type})
+    const view=archiveViews.current.get(next.present)
+    if(view){setPan(view.pan);setZoom(view.zoom);setSelectedKey(view.selectedKey)}
+    dispatchHistory({type})
+  },[history])
+  const ownedImages=useRef(new Set<LoadedImage>())
+  useLayoutEffect(()=>{
+    const retained=mapImages([history.present,...history.past,...history.future,...(history.checkpoint?[history.checkpoint]:[])])
+    for(const image of ownedImages.current)if(!retained.has(image))URL.revokeObjectURL(image.url)
+    ownedImages.current=retained
+  },[history])
+  useEffect(()=>()=>{for(const image of ownedImages.current)URL.revokeObjectURL(image.url);ownedImages.current.clear()},[])
+  useEffect(()=>{
+    const onResize=()=>setViewport({width:window.innerWidth,height:window.innerHeight})
+    window.addEventListener('resize',onResize);return()=>window.removeEventListener('resize',onResize)
+  },[])
+  useEffect(()=>{
+    const onKey=(event:KeyboardEvent)=>{
+      if(event.isComposing||!(event.metaKey||event.ctrlKey)||event.altKey)return
+      const target=event.target as HTMLElement
+      if(target.closest('input,textarea,select,[contenteditable="true"]'))return
+      if(event.code==='KeyZ'||event.code==='KeyY'){event.preventDefault();moveHistory(event.shiftKey||event.code==='KeyY'?'redo':'undo')}
+    }
+    window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey)
+  },[moveHistory])
 
   const allTiles = useMemo(() => [CENTER_TILE, ...Object.values(tiles)], [tiles])
   const horizontalOverlapRatio = horizontalOverlapPercent / 100
@@ -648,22 +342,6 @@ export default function MapStitch({ onBack }: Props) {
 
   const completedTiles = () => allTiles.filter((tile) => hasCompletedImage(tileKey(tile.x, tile.y)))
 
-  const exportBoundsFor = (items: Tile[]) => {
-    if (!source || items.length === 0) return null
-    const minX = Math.min(...items.map((tile) => tile.x))
-    const maxX = Math.max(...items.map((tile) => tile.x + tile.w))
-    const minY = Math.min(...items.map((tile) => tile.y))
-    const maxY = Math.max(...items.map((tile) => tile.y + tile.h))
-    return {
-      minX,
-      minY,
-      unitW: source.width,
-      unitH: source.height,
-      width: Math.max(1, Math.round((maxX - minX) * source.width)),
-      height: Math.max(1, Math.round((maxY - minY) * source.height)),
-    }
-  }
-
   const tilePosition = (tile: Tile) => {
     if (!stage) return {}
     return {
@@ -695,81 +373,20 @@ export default function MapStitch({ onBack }: Props) {
     return ar.left < br.right && ar.right > br.left && ar.top < br.bottom && ar.bottom > br.top
   }
 
-  const createStitchedCanvas = async (): Promise<HTMLCanvasElement | null> => {
-    if (!source) return null
-    const exportTiles = completedTiles()
-    const bounds = exportBoundsFor(exportTiles)
-    if (!bounds) return null
-    const canvas = document.createElement('canvas')
-    canvas.width = bounds.width
-    canvas.height = bounds.height
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return null
-    ctx.imageSmoothingEnabled = false
-
-    for (const tile of exportTiles) {
-      const key = tileKey(tile.x, tile.y)
-      const image = completedImageForKey(key)
-      if (!image) continue
-      await ensureImageReady(image.image)
-      const left = Math.round((tile.x - bounds.minX) * bounds.unitW)
-      const top = Math.round((tile.y - bounds.minY) * bounds.unitH)
-      const drawWidth = Math.max(1, Math.round(tile.w * bounds.unitW))
-      const drawHeight = Math.max(1, Math.round(tile.h * bounds.unitH))
-      const feather = featherForKey(key)
-      const drawable = key === CENTER_KEY || (feather.top === 0 && feather.right === 0 && feather.bottom === 0 && feather.left === 0)
-        ? image.image
-        : featheredImageCanvas(image.image, drawWidth, drawHeight, feather)
-      ctx.drawImage(drawable, left, top, drawWidth, drawHeight)
-    }
-
-    return canvas
-  }
-
-  const createPsdLayers = (): PsdLayer[] | null => {
-    if (!source) return null
-    const exportTiles = completedTiles()
-    const bounds = exportBoundsFor(exportTiles)
-    if (!bounds) return null
-    const layers: PsdLayer[] = []
-    for (const tile of exportTiles) {
-      const key = tileKey(tile.x, tile.y)
-      const image = completedImageForKey(key)
-      if (!image) continue
-      void image.image.decode?.().catch(() => undefined)
-      const layerCanvas = document.createElement('canvas')
-      layerCanvas.width = Math.max(1, Math.round(tile.w * bounds.unitW))
-      layerCanvas.height = Math.max(1, Math.round(tile.h * bounds.unitH))
-      const layerCtx = layerCanvas.getContext('2d')
-      if (!layerCtx) continue
-      layerCtx.imageSmoothingEnabled = false
-      const feather = featherForKey(key)
-      const drawable = key === CENTER_KEY || (feather.top === 0 && feather.right === 0 && feather.bottom === 0 && feather.left === 0)
-        ? image.image
-        : featheredImageCanvas(image.image, layerCanvas.width, layerCanvas.height, feather)
-      layerCtx.drawImage(drawable, 0, 0, layerCanvas.width, layerCanvas.height)
-      layers.push({
-        name: key === CENTER_KEY ? 'source' : `tile_${key.replace(',', '_')}`,
-        left: Math.round((tile.x - bounds.minX) * bounds.unitW),
-        top: Math.round((tile.y - bounds.minY) * bounds.unitH),
-        imageData: layerCtx.getImageData(0, 0, layerCanvas.width, layerCanvas.height),
-      })
-    }
-    return layers
-  }
-
   const selectSource = async (file: File | null) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      message.error('请选择图片文件')
+      message.error(mapText('请选择图片文件',lang))
       return
     }
     if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
-      message.error(`图片不能超过 ${MAX_IMAGE_MB}MB`)
+      message.error(lang==='zh'?`图片不能超过 ${MAX_IMAGE_MB}MB`:lang==='ja'?`画像は ${MAX_IMAGE_MB}MB 以下にしてください`:`Images must be at most ${MAX_IMAGE_MB}MB`)
       return
     }
+    const before=currentDraft.current
     try {
       const loaded = await loadImageFile(file)
+      if(!alive.current||currentDraft.current!==before){URL.revokeObjectURL(loaded.url);throw new Error('Map changed while loading; retry the selected import')}
       const initTiles = [CENTER_TILE, ...initialTilesForSplit]
       const minX = Math.min(...initTiles.map((tile) => tile.x))
       const maxX = Math.max(...initTiles.map((tile) => tile.x + tile.w))
@@ -779,21 +396,9 @@ export default function MapStitch({ onBack }: Props) {
       const initialStageH = (maxY - minY) * loaded.height
       const availableW = Math.max(320, viewport.width - 48)
       const availableH = Math.max(320, viewport.height - 160)
-      setSource((prev) => {
-        if (prev) URL.revokeObjectURL(prev.url)
-        return loaded
-      })
-      setSelectedKey(null)
-      setPan({ x: 0, y: 0 })
-      setZoom(Math.min(1, availableW / initialStageW, availableH / initialStageH))
-      setTiles(tilesRecord(initialTilesForSplit))
-      setTileUploads((prev) => {
-        Object.values(prev).forEach((item) => item && URL.revokeObjectURL(item.url))
-        return {}
-      })
-      setTileFeathers({})
-      setHiddenPreviewTiles({})
-      setHidePreviewBorders(false)
+      updateMap(draft=>({...draft,source:loaded,tiles:tilesRecord(initialTilesForSplit),tileUploads:{},tileFeathers:{},
+        hiddenPreviewTiles:{},hidePreviewBorders:false}))
+      setSelectedKey(null);setPan({x:0,y:0});setZoom(clampZoom(Math.min(1,availableW/initialStageW,availableH/initialStageH)))
     } catch (error) {
       message.error(String(error))
     }
@@ -802,17 +407,18 @@ export default function MapStitch({ onBack }: Props) {
   const selectTileUpload = async (key: TileKey, file: File | null) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      message.error('请选择图片文件')
+      message.error(mapText('请选择图片文件',lang))
       return
     }
     if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
-      message.error(`图片不能超过 ${MAX_IMAGE_MB}MB`)
+      message.error(lang==='zh'?`图片不能超过 ${MAX_IMAGE_MB}MB`:lang==='ja'?`画像は ${MAX_IMAGE_MB}MB 以下にしてください`:`Images must be at most ${MAX_IMAGE_MB}MB`)
       return
     }
+    const before=currentDraft.current
     try {
       const upload = await loadImageFile(file)
+      if(!alive.current||currentDraft.current!==before){URL.revokeObjectURL(upload.url);throw new Error('Map changed while loading; retry the selected import')}
       setTileUploads((prev) => {
-        if (prev[key]) URL.revokeObjectURL(prev[key]!.url)
         return { ...prev, [key]: upload }
       })
       setSelectedKey(key)
@@ -845,29 +451,10 @@ export default function MapStitch({ onBack }: Props) {
     try {
       const neighbors = findTemplateNeighbors(tile)
       if (neighbors.length === 0) {
-        message.warning('周边没有可用于生成重叠像素的已完成图片')
+        message.warning(mapText('周边没有可用于生成重叠像素的已完成图片',lang))
         return
       }
-      const targetRect = tileRect(tile)
-      if (!targetRect || !stage) return
-      const layers = neighbors.flatMap((neighbor): TemplateLayer[] => {
-        const neighborRect = tileRect(neighbor.tile)
-        if (!neighborRect) return []
-        return [{
-          image: neighbor.image,
-          offsetX: Math.round(neighborRect.left - targetRect.left),
-          offsetY: Math.round(neighborRect.top - targetRect.top),
-          drawWidth: Math.max(1, Math.round(neighborRect.width)),
-          drawHeight: Math.max(1, Math.round(neighborRect.height)),
-        }]
-      })
-      const blob = await makeRelativeTemplate(
-        layers,
-        Math.max(1, Math.round(targetRect.width)),
-        Math.max(1, Math.round(targetRect.height)),
-      )
-      downloadBlob(blob, `${getBaseName(source?.file ?? null)}_${key.replace(',', '_')}_overlap_template.png`)
-      message.success('模板已下载')
+      await runMapExport('template',tile)
     } catch (error) {
       message.error(String(error))
     }
@@ -875,21 +462,29 @@ export default function MapStitch({ onBack }: Props) {
 
   const removeWatermarkForTile = async (key: TileKey) => {
     const upload = tileUploads[key]
-    if (!upload) return
-    setProcessingKey(key)
+    if (!upload||exportExecution.current) return
+    const before=currentDraft.current
+    const controller=new AbortController();exportExecution.current=controller
+    setProcessingKey(key);setExporting(true);setExportProgress(0);setExportError('')
     try {
-      const blob = await removeGeminiWatermarkFromBlob(upload.file)
+      const {outputs}=await runManagedTask('workflow.legacy',[upload.file],{graph:{version:7,nodes:[{id:'watermark',type:'geminiWatermarkRemove',params:{}}],edges:[]}},
+        {signal:controller.signal,onProgress:value=>{if(alive.current)setExportProgress(value)},outputFilter:version=>version.metadata.kind==='image'})
+      if(!alive.current||currentDraft.current!==before)throw new Error('Map changed while processing; result remains in Project assets')
+      const blob=outputs[0].blob
       const cleanFile = new File([blob], `${getBaseName(upload.file)}_no_watermark.png`, { type: 'image/png' })
-      const cleanImage = await loadImageFile(cleanFile)
+      const {project}=await localJson<{project:{id:string}}>('/api/project')
+      cacheManagedInput(cleanFile,project.id,outputs[0].version.id)
+      const cleanImage = await loadImageFile(cleanFile,[],controller.signal)
+      if(!alive.current||currentDraft.current!==before){URL.revokeObjectURL(cleanImage.url);throw new Error('Map changed while processing; result remains in Project assets')}
       setTileUploads((prev) => {
-        if (prev[key]) URL.revokeObjectURL(prev[key]!.url)
         return { ...prev, [key]: cleanImage }
       })
-      message.success('去水印完成')
+      message.success(mapText('去水印完成',lang))
     } catch (error) {
-      message.error(`去水印失败：${String(error)}`)
+      if(alive.current)setExportError(`${mapText('去水印失败',lang)}: ${String(error)}`)
     } finally {
-      setProcessingKey(null)
+      if(exportExecution.current===controller)exportExecution.current=null
+      if(alive.current){setProcessingKey(null);setExporting(false)}
     }
   }
 
@@ -924,178 +519,79 @@ export default function MapStitch({ onBack }: Props) {
   }
 
   const unloadTileUpload = (key: TileKey) => {
-    setTileUploads((prev) => {
-      const current = prev[key]
-      if (!current) return prev
-      URL.revokeObjectURL(current.url)
-      const next = { ...prev }
-      delete next[key]
-      return next
+    updateMap(draft=>{
+      const uploads={...draft.tileUploads};const feathers={...draft.tileFeathers};const hidden={...draft.hiddenPreviewTiles}
+      delete uploads[key];delete feathers[key];delete hidden[key]
+      return {...draft,tileUploads:uploads,tileFeathers:feathers,hiddenPreviewTiles:hidden}
     })
-    setTileFeathers((prev) => {
-      if (!prev[key]) return prev
-      const next = { ...prev }
-      delete next[key]
-      return next
-    })
-    setHiddenPreviewTiles((prev) => {
-      if (!prev[key]) return prev
-      const next = { ...prev }
-      delete next[key]
-      return next
-    })
-    message.success('图片已卸载')
+    message.success(mapText('图片已卸载',lang))
   }
 
   const expandFromTile = (key: TileKey) => {
     const origin = key === CENTER_KEY ? CENTER_TILE : tiles[key]
     if (!origin || !hasCompletedImage(key)) return
     const split = key === CENTER_KEY ? expandSplit : 4
+    const next = { ...tiles }
     let added = 0
-    setTiles((prev) => {
-      const next = { ...prev }
-      for (const target of expansionTilesFrom(origin, split, horizontalOverlapRatio, verticalOverlapRatio)) {
-        if (!isOutwardExpansionTile(origin, target)) continue
-        const targetKey = tileKey(target.x, target.y)
-        if (hasCompletedImage(targetKey)) continue
-        if (!next[targetKey]) {
-          next[targetKey] = target
-          added += 1
-        }
-      }
-      return next
-    })
-    if (added > 0) message.success(`已扩展 ${added} 个空框`)
-    else message.info('周边已有空框或已完成图片，无需扩展')
-  }
-
-  const downloadStitchedPng = async () => {
-    const canvas = await createStitchedCanvas()
-    if (!canvas || !source) return
-    try {
-      const blob = await canvasToBlob(canvas)
-      downloadBlob(blob, `${getBaseName(source.file)}_stitched.png`)
-      message.success('拼接 PNG 已下载')
-    } catch (error) {
-      message.error(String(error))
+    for (const target of expansionTilesFrom(origin, split, horizontalOverlapRatio, verticalOverlapRatio)) {
+      if (!isOutwardExpansionTile(origin, target)) continue
+      const targetKey = tileKey(target.x, target.y)
+      if (hasCompletedImage(targetKey) || next[targetKey]) continue
+      next[targetKey] = target
+      added += 1
     }
+    if(Object.keys(next).length>1000){message.error('MAP_DOCUMENT_TILE_LIMIT');return}
+    if(added) setTiles(next)
+    if (added > 0) message.success(lang==='zh'?`已扩展 ${added} 个空框`:lang==='ja'?`${added} 個のタイルを追加`:`Added ${added} empty tiles`)
+    else message.info(mapText('周边已有空框或已完成图片，无需扩展',lang))
   }
 
-  const downloadStitchedPsd = async () => {
-    const canvas = await createStitchedCanvas()
-    if (!canvas || !source) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    try {
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const layers = createPsdLayers()
-      if (!layers || layers.length === 0) throw new Error('没有可导出的图层')
-      downloadBlob(layeredPsdBlob(canvas.width, canvas.height, imageData, layers), `${getBaseName(source.file)}_stitched.psd`)
-      message.success('PSD 已下载')
-    } catch (error) {
-      message.error(String(error))
-    }
+  const exportExecution=useRef<AbortController|null>(null)
+  const archiveExecution=useRef<AbortController|null>(null)
+  const alive=useRef(true)
+  const [exporting,setExporting]=useState(false)
+  const [exportProgress,setExportProgress]=useState(0)
+  const [exportError,setExportError]=useState('')
+  useEffect(()=>{alive.current=true;return()=>{alive.current=false;archiveExecution.current?.abort()}},[])
+  const runMapExport=async(format:'png'|'psd'|'godot'|'template',target?:Tile)=>{
+    if(!source||exportExecution.current)return
+    const controller=new AbortController();exportExecution.current=controller
+    setExporting(true);setExportProgress(0);setExportError('')
+    const images=completedTiles().map(tile=>({tile,key:tileKey(tile.x,tile.y),image:completedImageForKey(tileKey(tile.x,tile.y))!}))
+    const layout:MapRenderLayout={sourceName:source.file.name,width:source.width,height:source.height,horizontalOverlapPercent,verticalOverlapPercent,
+      layers:images.map(({tile,key},inputIndex)=>({tile,key,inputIndex,feather:featherForKey(key)}))}
+    const frontendBytes=Math.ceil([...ownedImages.current].reduce((bytes,image)=>bytes+image.width*image.height*32+image.file.size*2,0))
+    const extension=format==='psd'?'.psd':format==='godot'?'.zip':'.png'
+    try{
+      const {outputs}=await runManagedTask(format==='template'?'map.template':'map.export',images.map(item=>item.image.file),
+        format==='template'?{layout,target,frontendBytes}:{layout,format,frontendBytes},
+        {signal:controller.signal,onProgress:value=>{if(alive.current)setExportProgress(value)},outputFilter:version=>version.metadata.extension===extension})
+      if(controller.signal.aborted||!alive.current)return
+      if(outputs.length!==1)throw new Error('MAP_EXPORT_RESULT_INVALID')
+      const suffix=format==='godot'?'godot_package.zip':format==='template'?`${tileKey(target!.x,target!.y).replace(',', '_')}_overlap_template.png`:`stitched${extension}`
+      downloadBlob(outputs[0].blob,`${getBaseName(source.file)}_${suffix}`)
+      message.success(lang==='zh'?'地图已导出并保存到项目':lang==='ja'?'マップを出力してプロジェクトに保存しました':'Map exported and saved to project')
+    }catch(error){if(alive.current){
+      if(error instanceof DOMException&&error.name==='AbortError')message.info(mapText('导出已取消',lang))
+      else setExportError(String(error))
+    }}
+    finally{if(exportExecution.current===controller)exportExecution.current=null;if(alive.current)setExporting(false)}
   }
-
-  const downloadGodotPackage = async () => {
-    if (!source) return
-    const exportTiles = completedTiles()
-    const bounds = exportBoundsFor(exportTiles)
-    if (!bounds) return
-
-    try {
-      const zip = new JSZip()
-      const imageFolder = zip.folder('images')
-      if (!imageFolder) throw new Error('Godot 图片目录创建失败')
-      const manifestTiles: Array<{
-        key: string
-        name: string
-        image: string
-        pixel: { x: number; y: number; width: number; height: number }
-        tile: Tile
-        feather: Feather
-      }> = []
-
-      for (const tile of exportTiles) {
-        const key = tileKey(tile.x, tile.y)
-        const image = completedImageForKey(key)
-        if (!image) continue
-        await ensureImageReady(image.image)
-        const width = Math.max(1, Math.round(tile.w * bounds.unitW))
-        const height = Math.max(1, Math.round(tile.h * bounds.unitH))
-        const feather = featherForKey(key)
-        const tileCanvas = document.createElement('canvas')
-        tileCanvas.width = width
-        tileCanvas.height = height
-        const tileCtx = tileCanvas.getContext('2d')
-        if (!tileCtx) continue
-        tileCtx.imageSmoothingEnabled = false
-        const drawable =
-          key === CENTER_KEY || (feather.top === 0 && feather.right === 0 && feather.bottom === 0 && feather.left === 0)
-            ? image.image
-            : featheredImageCanvas(image.image, width, height, feather)
-        tileCtx.drawImage(drawable, 0, 0, width, height)
-        const blob = await canvasToBlob(tileCanvas)
-        const name = key === CENTER_KEY ? 'source' : `tile_${key.replace(',', '_')}`
-        const filename = `images/${safeFilename(name)}.png`
-        imageFolder.file(filename.replace(/^images\//, ''), blob)
-        manifestTiles.push({
-          key,
-          name,
-          image: filename,
-          pixel: {
-            x: Math.round((tile.x - bounds.minX) * bounds.unitW),
-            y: Math.round((tile.y - bounds.minY) * bounds.unitH),
-            width,
-            height,
-          },
-          tile,
-          feather,
-        })
-      }
-
-      zip.file(
-        'map_stitch_godot.json',
-        JSON.stringify(
-          {
-            version: 1,
-            coordinate_system: 'top_left_origin_y_down_pixels',
-            canvas: { width: bounds.width, height: bounds.height },
-            source: {
-              file: source.file.name,
-              width: source.width,
-              height: source.height,
-            },
-            overlap: {
-              horizontal_percent: horizontalOverlapPercent,
-              vertical_percent: verticalOverlapPercent,
-            },
-            tiles: manifestTiles,
-          },
-          null,
-          2,
-        ),
-      )
-      zip.file('map_stitch_godot.tscn', godotSceneTscn(safeFilename(getBaseName(source.file)), manifestTiles))
-      const blob = await zip.generateAsync({ type: 'blob' })
-      downloadBlob(blob, `${safeFilename(getBaseName(source.file))}_godot_package.zip`)
-      message.success('Godot 打包已下载')
-    } catch (error) {
-      message.error(`Godot 打包失败：${String(error)}`)
-    }
-  }
+  const downloadStitchedPng=()=>runMapExport('png')
+  const downloadStitchedPsd=()=>runMapExport('psd')
+  const downloadGodotPackage=()=>runMapExport('godot')
 
   const downloadEditStateJson = async () => {
-    if (!source) return
+    if (!source||exportExecution.current) return
     try {
-      const zip = new JSZip()
-      const imageFolder = zip.folder('images')
-      if (!imageFolder) throw new Error('拼接状态图片目录创建失败')
+      const archiveImages:Record<string,Blob>={}
+      const controller=new AbortController();exportExecution.current=controller;archiveExecution.current=controller
+      setExporting(true);setExportProgress(0);setExportError('')
 
       const usedImagePaths = new Set<string>()
       const addImageToArchive = (image: LoadedImage, baseName: string): SavedImageState => {
         const path = uniqueArchiveImagePath(usedImagePaths, baseName, image.file)
-        imageFolder.file(path.replace(/^images\//, ''), image.file)
+        archiveImages[path]=image.file
         return {
           fileName: image.file.name,
           type: image.file.type,
@@ -1129,83 +625,70 @@ export default function MapStitch({ onBack }: Props) {
         hiddenPreviewTiles,
       }
 
-      zip.file(STATE_MANIFEST_NAME, JSON.stringify(state, null, 2))
+      const archive=await runMapArchive<Blob>({action:'write',files:archiveImages,state,budgetBytes:source.memoryBudgetBytes},controller.signal)
+      if(!alive.current||controller.signal.aborted)return
       downloadBlob(
-        await zip.generateAsync({ type: 'blob', compression: 'STORE' }),
+        archive,
         `${safeFilename(getBaseName(source.file))}_map_stitch_state.zip`,
       )
-      message.success('拼接状态已保存')
+      message.success(mapText('拼接状态已保存',lang))
     } catch (error) {
-      message.error(`保存拼接状态失败：${String(error)}`)
-    }
+      if(!alive.current)return
+      setExportError(`${mapText('保存拼接状态失败',lang)}: ${String(error)}`)
+    }finally{exportExecution.current=null;archiveExecution.current=null;if(alive.current)setExporting(false)}
   }
 
-  const applyEditState = async (state: SavedMapStitchState, zip?: JSZip) => {
-    if ((state.version !== 1 && state.version !== STATE_ARCHIVE_VERSION) || !state.source) {
-      throw new Error('不是有效的拼接状态文件')
-    }
-
-    const nextSource = await loadImageFile(await savedImageStateToFile(
-      state.source,
-      'map_tile.png',
-      zip,
-    ))
-
-    const uploads = await Promise.all(
-      Object.entries(state.tileUploads ?? {}).map(async ([key, upload]) => {
-        const loaded = await loadImageFile(await savedImageStateToFile(
-          upload,
-          `tile_${key.replace(',', '_')}.png`,
-          zip,
-        ))
-        return [key, loaded] as const
-      }),
-    )
-
-    const nextTiles = normalizeTilesState(state.tiles)
-    const nextTileUploads = Object.fromEntries(uploads) as Partial<Record<TileKey, LoadedImage>>
-    const nextExpandSplit: ExpandSplit = state.expandSplit === 8 || state.expandSplit === 12 ? state.expandSplit : 4
-    const nextPan = isRecord(state.pan)
-      ? { x: numberOr(state.pan.x, 0), y: numberOr(state.pan.y, 0) }
-      : { x: 0, y: 0 }
-
-    setSource((prev) => {
-      if (prev) URL.revokeObjectURL(prev.url)
-      return nextSource
-    })
-    setTileUploads((prev) => {
-      Object.values(prev).forEach((item) => item && URL.revokeObjectURL(item.url))
-      return nextTileUploads
-    })
-    setTiles(nextTiles)
-    setTileFeathers(normalizeFeathersState(state.tileFeathers))
-    setSelectedKey(typeof state.selectedKey === 'string' ? state.selectedKey : null)
-    setHorizontalOverlapPercent(Math.max(0, Math.min(50, numberOr(state.horizontalOverlapPercent, 15))))
-    setVerticalOverlapPercent(Math.max(0, Math.min(50, numberOr(state.verticalOverlapPercent, 15))))
-    setExpandSplit(nextExpandSplit)
-    setPan(nextPan)
-    setZoom(clampZoom(numberOr(state.zoom, 1)))
-    setHidePreviewBorders(typeof state.hidePreviewBorders === 'boolean' ? state.hidePreviewBorders : false)
-    setHiddenPreviewTiles(booleanRecord(state.hiddenPreviewTiles))
-    setProcessingKey(null)
-    setPendingUploadKey(null)
+  const applyEditState = async (state: SavedMapStitchState, archiveImages:Record<string,File>,before:MapDraft,signal:AbortSignal) => {
+    if ((state.version !== 1 && state.version !== STATE_ARCHIVE_VERSION) || !state.source) throw new Error('不是有效的拼接状态文件')
+    signal.throwIfAborted()
+    const created:LoadedImage[]=[]
+    try {
+      signal.throwIfAborted()
+      const nextSource=await loadImageFile(await savedImageStateToFile(state.source,'map_tile.png',archiveImages),created,signal)
+      created.push(nextSource)
+      const nextTiles=normalizeTilesState(state.tiles)
+      const nextTileUploads:Partial<Record<TileKey,LoadedImage>>={}
+      for(const [key,upload]of Object.entries(state.tileUploads??{})){
+        signal.throwIfAborted()
+        if(!nextTiles[key])throw new Error('MAP_DOCUMENT_TILE_REFERENCE')
+        const loaded=await loadImageFile(await savedImageStateToFile(upload,`tile_${key.replace(',', '_')}.png`,archiveImages),created,signal)
+        created.push(loaded);nextTileUploads[key]=loaded
+      }
+      signal.throwIfAborted()
+      if(!alive.current||currentDraft.current!==before)throw new Error('Map changed while loading; current edits are preserved')
+      const nextExpandSplit:ExpandSplit=state.expandSplit===8||state.expandSplit===12?state.expandSplit:4
+      const nextPan=isRecord(state.pan)?{x:numberOr(state.pan.x,0),y:numberOr(state.pan.y,0)}:{x:0,y:0}
+      const keys=new Set([CENTER_KEY,...Object.keys(nextTiles)])
+      const restored:MapDraft={source:nextSource,tileUploads:nextTileUploads,tiles:nextTiles,
+        tileFeathers:Object.fromEntries(Object.entries(normalizeFeathersState(state.tileFeathers)).filter(([key])=>keys.has(key))),
+        horizontalOverlapPercent:Math.max(0,Math.min(50,numberOr(state.horizontalOverlapPercent,15))),
+        verticalOverlapPercent:Math.max(0,Math.min(50,numberOr(state.verticalOverlapPercent,15))),expandSplit:nextExpandSplit,
+        hidePreviewBorders:typeof state.hidePreviewBorders==='boolean'?state.hidePreviewBorders:false,
+        hiddenPreviewTiles:Object.fromEntries(Object.entries(booleanRecord(state.hiddenPreviewTiles)).filter(([key])=>keys.has(key))),
+      }
+      const nextView={pan:nextPan,zoom:clampZoom(numberOr(state.zoom,1)),selectedKey:typeof state.selectedKey==='string'&&keys.has(state.selectedKey)?state.selectedKey:null}
+      validateMapDraft(restored,nextView)
+      archiveViews.current.set(before,currentView.current);archiveViews.current.set(restored,nextView)
+      updateMap(()=>restored)
+      setSelectedKey(nextView.selectedKey);setPan(nextView.pan);setZoom(nextView.zoom)
+      setProcessingKey(null);setPendingUploadKey(null)
+    }catch(error){created.forEach(image=>URL.revokeObjectURL(image.url));throw error}
   }
 
   const loadEditStateJson = async (file: File | null) => {
-    if (!file) return
+    if (!file||exportExecution.current) return
+    const before=currentDraft.current
     try {
-      if (file.name.toLowerCase().endsWith('.zip') || file.type === 'application/zip' || file.type === 'application/x-zip-compressed') {
-        const zip = await JSZip.loadAsync(file)
-        const manifest = zip.file(STATE_MANIFEST_NAME)
-        if (!manifest) throw new Error('拼接状态 ZIP 缺少 map_stitch_state.json')
-        await applyEditState(JSON.parse(await manifest.async('text')) as SavedMapStitchState, zip)
-      } else {
-        await applyEditState(JSON.parse(await file.text()) as SavedMapStitchState)
-      }
-      message.success('拼接状态已加载')
+      const controller=new AbortController();exportExecution.current=controller;archiveExecution.current=controller;setExporting(true);setExportError('')
+      const {memoryBudgetBytes}=await localJson<{memoryBudgetBytes:number}>('/api/project')
+      const {state,images}=await runMapArchive<{state:SavedMapStitchState;images:Record<string,File>}>({action:'read',file,budgetBytes:memoryBudgetBytes},controller.signal)
+      controller.signal.throwIfAborted()
+      await applyEditState(state,images,before,controller.signal)
+      message.success(mapText('拼接状态已加载',lang))
     } catch (error) {
-      message.error(`加载拼接状态失败：${String(error)}`)
-    }
+      if(!alive.current)return
+      setExportError(`${mapText('加载拼接状态失败',lang)}: ${String(error)}`)
+    }finally{exportExecution.current=null;archiveExecution.current=null;if(alive.current)setExporting(false)}
   }
 
   const handlePanMouseDown = (event: React.MouseEvent<HTMLElement>) => {
@@ -1261,7 +744,7 @@ export default function MapStitch({ onBack }: Props) {
         target="_blank"
         rel="noreferrer"
         >
-          生成拼接
+          {mapText('生成拼接',lang)}
         </Button>
         <Button
           className="map-stitch-generate-float"
@@ -1269,85 +752,104 @@ export default function MapStitch({ onBack }: Props) {
           icon={<UploadOutlined />}
           onClick={() => stateFileInputRef.current?.click()}
         >
-          加载拼接状态
+          {mapText('加载拼接状态',lang)}
         </Button>
         <Button
           className="map-stitch-generate-float"
           type="primary"
-          disabled={!source}
+          disabled={!source||exporting}
           icon={<DownloadOutlined />}
           onClick={() => void downloadEditStateJson()}
         >
-          保存拼接状态
+          {mapText('保存拼接状态',lang)}
         </Button>
         <Button
           className="map-stitch-generate-float"
           type="primary"
-          disabled={!source}
+          disabled={!source||exporting}
           icon={<DownloadOutlined />}
           onClick={() => void downloadGodotPackage()}
         >
-          godot打包下载
+          {mapText('godot打包下载',lang)}
         </Button>
       </div>
       <header className="map-stitch-toolbar">
         <Button type="text" icon={<ArrowLeftOutlined />} onClick={onBack}>
-          返回首页
+          {mapText('返回首页',lang)}
         </Button>
         <div className="map-stitch-title">
-          <Title level={4}>地图拼接</Title>
+          <Title level={4}>{mapText('地图拼接',lang)}</Title>
           <Text type="secondary" className="map-stitch-title-hint">
-            右键拖动画布，滚轮缩放视图
+            {mapText('右键拖动画布，滚轮缩放视图',lang)}
           </Text>
         </div>
         <Space wrap>
+          <Select aria-label="Language" value={lang} onChange={setLang}
+            getPopupContainer={trigger => trigger.parentElement ?? document.body}
+            options={[{value:'zh',label:'中文'},{value:'en',label:'English'},{value:'ja',label:'日本語'}]}/>
           <div className="map-stitch-split-control">
-            <Text type="secondary">扩图细分数</Text>
+            <Text type="secondary">{mapText('扩图细分数',lang)}</Text>
             <Select<ExpandSplit>
               value={expandSplit}
               onChange={setExpandSplit}
               popupClassName="map-stitch-split-popup"
               getPopupContainer={(trigger) => trigger.parentElement ?? document.body}
               options={[
-                { value: 4, label: '4分扩图' },
-                { value: 8, label: '8分扩图' },
-                { value: 12, label: '12分扩图' },
+                { value: 4, label: mapText('4分扩图',lang) },
+                { value: 8, label: mapText('8分扩图',lang) },
+                { value: 12, label: mapText('12分扩图',lang) },
               ]}
             />
           </div>
           <div className="map-stitch-overlap-control">
-            <Text type="secondary">左右重叠 {horizontalOverlapPercent}%</Text>
+            <Text type="secondary">{mapText('左右重叠',lang)} {horizontalOverlapPercent}%</Text>
             <Slider
               min={0}
               max={50}
               step={1}
               value={horizontalOverlapPercent}
-              onChange={setHorizontalOverlapPercent}
+              onChange={value=>{dispatchHistory({type:'begin'});setHorizontalOverlapPercent(value)}}
+              onChangeComplete={()=>dispatchHistory({type:'end'})}
               tooltip={{ formatter: (value) => `${value}%` }}
             />
           </div>
           <div className="map-stitch-overlap-control">
-            <Text type="secondary">上下重叠 {verticalOverlapPercent}%</Text>
+            <Text type="secondary">{mapText('上下重叠',lang)} {verticalOverlapPercent}%</Text>
             <Slider
               min={0}
               max={50}
               step={1}
               value={verticalOverlapPercent}
-              onChange={setVerticalOverlapPercent}
+              onChange={value=>{dispatchHistory({type:'begin'});setVerticalOverlapPercent(value)}}
+              onChangeComplete={()=>dispatchHistory({type:'end'})}
               tooltip={{ formatter: (value) => `${value}%` }}
             />
           </div>
           <Button icon={<UploadOutlined />} onClick={() => fileInputRef.current?.click()}>
-            {source ? '重新导入图片' : '导入图片'}
+            {source ? mapText('重新导入图片',lang) : mapText('导入图片',lang)}
           </Button>
-          <Button icon={<DownloadOutlined />} disabled={!source} onClick={() => void downloadStitchedPng()}>
-            下载全部PNG
+          <Button icon={<DownloadOutlined />} disabled={!source||exporting} onClick={() => void downloadStitchedPng()}>
+            {mapText('下载全部PNG',lang)}
           </Button>
-          <Button icon={<DownloadOutlined />} disabled={!source} onClick={() => void downloadStitchedPsd()}>
-            下载PSD
+          <Button icon={<DownloadOutlined />} disabled={!source||exporting} onClick={() => void downloadStitchedPsd()}>
+            {mapText('下载PSD',lang)}
           </Button>
         </Space>
       </header>
+      <div className="map-stitch-project-toolbar">
+        <DocumentSaveBar<typeof snapshot,StoredMap> kind="map" snapshot={snapshot}
+          sameSnapshot={(a,b)=>a.draft===b.draft&&a.view.pan===b.view.pan&&a.view.zoom===b.view.zoom&&a.view.selectedKey===b.view.selectedKey}
+          serialize={async value=>validateStoredMap({...await serializeMapDocument(value.draft),view:value.view})}
+          restore={async value=>({draft:await restoreMapDocument(value,[...ownedImages.current]),view:value.view??{pan:{x:0,y:0},zoom:1,selectedKey:null}})}
+          discardSnapshot={value=>{for(const image of mapImages([value.draft]))URL.revokeObjectURL(image.url)}}
+          applySnapshot={value=>{archiveViews.current=new WeakMap();dispatchHistory({type:'restore',draft:value.draft});setSelectedKey(value.view.selectedKey);setPan(value.view.pan);setZoom(value.view.zoom);setProcessingKey(null)}} />
+        <Space>
+          <Button disabled={!history.past.length} onClick={()=>moveHistory('undo')}>{lang==='zh'?'撤销':lang==='ja'?'元に戻す':'Undo'}</Button>
+          <Button disabled={!history.future.length} onClick={()=>moveHistory('redo')}>{lang==='zh'?'重做':lang==='ja'?'やり直す':'Redo'}</Button>
+          {exporting&&<Button danger onClick={()=>exportExecution.current?.abort()}>{lang==='zh'?'取消导出':lang==='ja'?'出力を中止':'Cancel export'} · {Math.round(exportProgress*100)}%</Button>}
+        </Space>
+      </div>
+      {exportError&&<Alert type="error" showIcon closable onClose={()=>setExportError('')} message={exportError} />}
 
       <input
         ref={fileInputRef}
@@ -1396,11 +898,11 @@ export default function MapStitch({ onBack }: Props) {
           }}
         >
           <UploadOutlined />
-          <Title level={3}>导入地图图片</Title>
+          <Title level={3}>{mapText('导入地图图片',lang)}</Title>
           <Button type="primary" size="large" icon={<UploadOutlined />}>
-            点击上传图片
+            {mapText('点击上传图片',lang)}
           </Button>
-          <Text type="secondary">也可以把 PNG / JPG / WebP 拖到这里上传。</Text>
+          <Text type="secondary">{mapText('也可以把 PNG / JPG / WebP 拖到这里上传。',lang)}</Text>
         </main>
       ) : (
         <main
@@ -1436,7 +938,7 @@ export default function MapStitch({ onBack }: Props) {
                   height: stage.unitH,
                 }}
               >
-                <img src={source.url} alt="原图" />
+                <img src={source.url} alt={mapText('原图',lang)} />
               </div>
 
               {Object.entries(tiles).map(([key, tile]) => {
@@ -1451,6 +953,8 @@ export default function MapStitch({ onBack }: Props) {
                   <div
                     key={tileId}
                     role="button"
+                    aria-label={`${labelForTile(tile,lang)} · ${tileId}`}
+                    aria-pressed={isSelected}
                     tabIndex={0}
                     className={`map-stitch-neighbor-frame map-stitch-neighbor-${tone} ${upload ? 'map-stitch-neighbor-uploaded' : ''} ${isSelected ? 'selected' : ''} ${isImageHidden ? 'map-stitch-tile-image-hidden' : ''}`}
                     style={{
@@ -1469,24 +973,26 @@ export default function MapStitch({ onBack }: Props) {
                     }}
                   >
                     {upload && rect ? (
-                      <FeatheredPreviewImage upload={upload} width={rect.width} height={rect.height} feather={feather} alt={`${labelForTile(tile)} preview`} />
+                      <FeatheredPreviewImage upload={upload} width={rect.width} height={rect.height} feather={feather} alt={`${labelForTile(tile,lang)} preview`} />
                     ) : upload ? (
-                      <img src={upload.url} alt={`${labelForTile(tile)}预览`} />
+                      <img src={upload.url} alt={`${labelForTile(tile,lang)}预览`} />
                     ) : null}
                     <span
                       className="map-stitch-frame-label"
                       style={{ transform: `translate(-50%, -50%) scale(${1 / stage.scale})` }}
                     >
-                      {labelForTile(tile)}
-                      {!isSelected && <strong>{upload ? '点击操作' : '点击激活'}</strong>}
-                      <small>{upload ? '已上传，可去水印或扩展' : '上传或下载透明模板'}</small>
+                      {labelForTile(tile,lang)}
+                      {!isSelected && <strong>{upload ? mapText('点击操作',lang) : mapText('点击激活',lang)}</strong>}
+                      <small>{upload ? mapText('已上传，可去水印或扩展',lang) : mapText('上传或下载透明模板',lang)}</small>
                     </span>
-                    {isSelected && (
+                    {isSelected && createPortal(
                       <span
-                        className={`map-stitch-frame-actions ${upload ? 'map-stitch-frame-actions-wide' : ''}`}
-                        style={{ transform: `translate(-50%, -50%) scale(${1 / stage.scale})` }}
+                        className={`map-stitch-frame-actions map-stitch-inspector ${upload ? 'map-stitch-frame-actions-wide' : ''}`}
+                        role="group" aria-label={mapText('图块参数',lang)}
                         onClick={(event) => event.stopPropagation()}
+                        onKeyDown={(event) => event.stopPropagation()}
                       >
+                        <Text style={{gridColumn:'1 / -1'}}>{labelForTile(tile,lang)} · {tileId}</Text>
                         <Button
                           className="map-stitch-action-btn"
                           icon={<UploadOutlined />}
@@ -1496,10 +1002,10 @@ export default function MapStitch({ onBack }: Props) {
                             openTileUpload(tileId)
                           }}
                         >
-                          上传
+                          {mapText('上传',lang)}
                         </Button>
                         <Button className="map-stitch-action-btn" type="primary" icon={<DownloadOutlined />} onClick={() => void downloadTileTemplate(tileId)}>
-                          下载
+                          {mapText('下载',lang)}
                         </Button>
                         {upload && (
                           <>
@@ -1508,22 +1014,22 @@ export default function MapStitch({ onBack }: Props) {
                               loading={processingKey === tileId}
                               onClick={() => void removeWatermarkForTile(tileId)}
                             >
-                              去水印
+                              {mapText('去水印',lang)}
                             </Button>
                             <Button className="map-stitch-action-btn" icon={<ExpandOutlined />} onClick={() => expandFromTile(tileId)}>
-                              扩展
+                              {mapText('扩展',lang)}
                             </Button>
                             <Button
                               className="map-stitch-unload-btn"
                               danger
                               icon={<DeleteOutlined />}
-                              title="卸载图片"
+                              title={mapText('卸载图片',lang)}
                               onClick={(event) => {
                                 event.stopPropagation()
                                 unloadTileUpload(tileId)
                               }}
                             >
-                              卸载图片
+                              {mapText('卸载图片',lang)}
                             </Button>
                           </>
                         )}
@@ -1532,7 +1038,7 @@ export default function MapStitch({ onBack }: Props) {
                             <Button
                               className="map-stitch-feather-btn map-stitch-feather-top"
                               icon={<ArrowUpOutlined />}
-                              title="左键增加羽化，右键减少羽化"
+                              title={mapText('左键增加羽化，右键减少羽化',lang)}
                               onClick={() => increaseFeather(tileId, 'top')}
                               onContextMenu={(event) => {
                                 event.preventDefault()
@@ -1545,7 +1051,7 @@ export default function MapStitch({ onBack }: Props) {
                               <Button
                                 className="map-stitch-feather-btn"
                                 icon={<ArrowLeftOutlined />}
-                                title="左键增加羽化，右键减少羽化"
+                                title={mapText('左键增加羽化，右键减少羽化',lang)}
                                 onClick={() => increaseFeather(tileId, 'left')}
                                 onContextMenu={(event) => {
                                   event.preventDefault()
@@ -1557,7 +1063,7 @@ export default function MapStitch({ onBack }: Props) {
                               <Button
                                 className="map-stitch-feather-image-toggle"
                                 icon={isImageHidden ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                                title={isImageHidden ? '显示图片' : '隐藏图片'}
+                                title={isImageHidden ? mapText('显示图片',lang) : mapText('隐藏图片',lang)}
                                 onClick={(event) => {
                                   event.stopPropagation()
                                   togglePreviewTileVisibility(tileId)
@@ -1569,12 +1075,12 @@ export default function MapStitch({ onBack }: Props) {
                               type={hidePreviewBorders ? 'primary' : 'default'}
                               onClick={() => setHidePreviewBorders((prev) => !prev)}
                             >
-                              不显示边框
+                              {mapText('不显示边框',lang)}
                             </Button>
                             <Button
                               className="map-stitch-feather-btn map-stitch-feather-right"
                               icon={<ArrowRightOutlined />}
-                              title="左键增加羽化，右键减少羽化"
+                              title={mapText('左键增加羽化，右键减少羽化',lang)}
                               onClick={() => increaseFeather(tileId, 'right')}
                               onContextMenu={(event) => {
                                 event.preventDefault()
@@ -1587,7 +1093,7 @@ export default function MapStitch({ onBack }: Props) {
                               <Button
                                 className="map-stitch-feather-btn"
                                 icon={<ArrowDownOutlined />}
-                                title="左键增加羽化，右键减少羽化"
+                                title={mapText('左键增加羽化，右键减少羽化',lang)}
                                 onClick={() => increaseFeather(tileId, 'bottom')}
                                 onContextMenu={(event) => {
                                   event.preventDefault()
@@ -1599,7 +1105,7 @@ export default function MapStitch({ onBack }: Props) {
                               <Button
                                 className="map-stitch-feather-image-toggle"
                                 icon={isImageHidden ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                                title={isImageHidden ? '显示图片' : '隐藏图片'}
+                                title={isImageHidden ? mapText('显示图片',lang) : mapText('隐藏图片',lang)}
                                 onClick={(event) => {
                                   event.stopPropagation()
                                   togglePreviewTileVisibility(tileId)
@@ -1608,7 +1114,8 @@ export default function MapStitch({ onBack }: Props) {
                             </span>
                           </span>
                         )}
-                      </span>
+                        <Button style={{gridColumn:'1 / -1'}} onClick={()=>setSelectedKey(null)}>{mapText('关闭图块参数',lang)}</Button>
+                      </span>,document.body
                     )}
                   </div>
                 )

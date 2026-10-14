@@ -16,7 +16,7 @@ def run(preview, directory, progress):
     parameters = preview['parameters']
     paths = [Path(v['absolutePath']) for v in preview['versions']]
     output = directory / 'result.png'
-    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow']:
+    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow', 'map.export', 'map.template']:
         from .workflows import ROOT
         node = shutil.which('node')
         compiled = ROOT / '.runtime/js/algorithms.mjs'
@@ -30,7 +30,7 @@ def run(preview, directory, progress):
             shutil.copy2(path, directory / relative)
             selected.append(relative)
         values = dict(parameters)
-        request = {'operation': 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
+        request = {'operation': 'map' if name.startswith('map.') else 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
                    'inputs': selected, 'parameters': values, 'budgetBytes': preview['budgetBytes']}
         if name.startswith('workflow.'):
             request['graph'] = values.pop('graph')
@@ -38,6 +38,8 @@ def run(preview, directory, progress):
         elif name == 'image.perfectPixel':
             cols, rows = values.pop('gridCols'), values.pop('gridRows')
             values['gridSize'] = {'cols': cols, 'rows': rows} if cols else None
+        elif name == 'map.template':
+            values['format'] = 'template'
         request_path = directory / 'request.json'
         request_path.write_text(json.dumps(request))
         process = subprocess.Popen([node, str(ROOT / 'scripts/js-runtime/run.mjs'), str(request_path)],

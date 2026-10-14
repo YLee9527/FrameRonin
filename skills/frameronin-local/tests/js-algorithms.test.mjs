@@ -137,3 +137,96 @@ test('all 13 historical preset layouts can be stored without relaxing strict AI 
   const value = graph();value.edges[0].id='e'.repeat(95)
   assert.throws(()=>algorithms.validateStrictWorkflow(value,1), /WORKFLOW_ID_INVALID/)
 })
+
+test('map undo keeps replaced images and coalesces an entire overlap gesture', () => {
+  const image=(name)=>({file:new File(['fixture'],name),url:`blob:${name}`,image:{},width:64,height:64,memoryBudgetBytes:2*1024**3})
+  const source=image('source.png'),old=image('old.png'),replacement=image('new.png')
+  const initial={source,tiles:{'0.85,0':{x:.85,y:0,w:1,h:1}},tileUploads:{'0.85,0':old},
+    tileFeathers:{'0.85,0':{top:5,right:10,bottom:15,left:20}},horizontalOverlapPercent:15,verticalOverlapPercent:15,
+    expandSplit:4,hidePreviewBorders:false,hiddenPreviewTiles:{'0.85,0':true}}
+  const reducer=algorithms.mapHistoryReducer
+  let history=algorithms.createMapHistory(initial)
+  history=reducer(history,{type:'begin'})
+  for(let value=16;value<=30;value++)history=reducer(history,{type:'change',update:draft=>({...draft,horizontalOverlapPercent:value})})
+  history=reducer(history,{type:'end'});assert.equal(history.past.length,1)
+  history=reducer(history,{type:'change',update:draft=>({...draft,tileUploads:{'0.85,0':replacement}})})
+  history=reducer(history,{type:'change',update:draft=>({...draft,tileUploads:{},tileFeathers:{},hiddenPreviewTiles:{}})})
+  assert.deepEqual([...algorithms.mapImages([history.present,...history.past,...history.future])],[source,old,replacement])
+  history=reducer(history,{type:'undo'});assert.equal(history.present.tileUploads['0.85,0'],replacement)
+  assert.equal(history.present.tileFeathers['0.85,0'].left,20);assert.equal(history.present.hiddenPreviewTiles['0.85,0'],true)
+  history=reducer(history,{type:'undo'});assert.equal(history.present.tileUploads['0.85,0'],old)
+  history=reducer(history,{type:'undo'});assert.equal(history.present,initial)
+  for(let i=0;i<3;i++)history=reducer(history,{type:'redo'})
+  assert.deepEqual(history.present.tileUploads,{})
+  history=reducer(history,{type:'restore',draft:initial});assert.equal(history.past.length,0);assert.equal(history.future.length,0)
+})
+test('stored maps reject unsafe resources, noncanonical coordinates and invalid view state', () => {
+  const image={versionId:'00000000-0000-4000-8000-000000000001',name:'tile.png'}
+  const value={formatVersion:1,source:image,tiles:{'0.85,0':{x:.85,y:0,w:1,h:1}},tileUploads:{'0.85,0':image},tileFeathers:{},
+    horizontalOverlapPercent:15,verticalOverlapPercent:15,expandSplit:4,hidePreviewBorders:false,hiddenPreviewTiles:{},
+    view:{pan:{x:24,y:-12},zoom:2,selectedKey:'0.85,0'}}
+  algorithms.validateStoredMap(value)
+  for(const change of [v=>v.execute='script',v=>v.source.name='../secret.png',v=>v.source.versionId='/secret.png',
+    v=>v.tiles['0.85,0'].x=.9,v=>v.tiles['0,0']={x:0,y:0,w:1,h:1},v=>v.tiles['0.85,0'].w=101,
+    v=>v.tileUploads.missing=image,v=>v.view.zoom=9,v=>v.view.pan.x=Infinity,v=>v.view.selectedKey='missing',
+    v=>v.tileFeathers['0.85,0']={top:51,right:0,bottom:0,left:0}]){
+    const invalid=structuredClone(value);change(invalid);assert.throws(()=>algorithms.validateStoredMap(invalid))
+  }
+})
+test('map exporters preserve original compositing, PSD channels and trusted Godot structure', async () => {
+  const source=dom.createCanvas(16,12),neighbor=dom.createCanvas(16,12)
+  source.getContext('2d').fillStyle='#ff0000';source.getContext('2d').fillRect(0,0,16,12)
+  neighbor.getContext('2d').fillStyle='#0033ff';neighbor.getContext('2d').fillRect(0,0,16,12)
+  const feather={top:0,right:0,bottom:0,left:0}
+  const layout={sourceName:'source.png',width:16,height:12,horizontalOverlapPercent:15,verticalOverlapPercent:15,
+    layers:[{inputIndex:0,key:'0,0',tile:{x:0,y:0,w:1,h:1},feather},
+      {inputIndex:1,key:'0.85,0',tile:{x:.85,y:0,w:1,h:1},feather}]}
+  const png=await algorithms.renderMapExport([source,neighbor],layout,'png')
+  const decoded=await dom.loadImage(Buffer.from(await png.arrayBuffer()))
+  assert.equal(decoded.width,30);assert.equal(decoded.height,12)
+  const canvas=dom.createCanvas(30,12),ctx=canvas.getContext('2d');ctx.drawImage(decoded,0,0)
+  assert.deepEqual([...ctx.getImageData(0,0,1,1).data],[255,0,0,255])
+  assert.deepEqual([...ctx.getImageData(14,0,1,1).data],[0,51,255,255])
+  const psd=Buffer.from(await(await algorithms.renderMapExport([source,neighbor],layout,'psd')).arrayBuffer())
+  assert.equal(psd.subarray(0,4).toString(),'8BPS');assert.equal(psd.readUInt32BE(14),12);assert.equal(psd.readUInt32BE(18),30)
+  const {default:JSZip}=await import('../assets/workbench/node_modules/jszip/lib/index.js')
+  const archive=await JSZip.loadAsync(await(await algorithms.renderMapExport([source,neighbor],layout,'godot')).arrayBuffer())
+  const manifest=JSON.parse(await archive.file('map_stitch_godot.json').async('text'))
+  assert.equal(manifest.tiles.length,2);assert.equal(manifest.tiles[1].pixel.x,14)
+  assert.equal(Object.keys(archive.files).some(name=>/\.(gd|cs|gdextension)$/.test(name)),false)
+  const scene=await archive.file('map_stitch_godot.tscn').async('text');assert.match(scene,/centered = false/)
+  const template=await algorithms.renderMapExport([source,neighbor],layout,'template',{x:-.85,y:0,w:1,h:1})
+  const tile=await dom.loadImage(Buffer.from(await template.arrayBuffer()));assert.equal(tile.width,16)
+  const preview=dom.createCanvas(16,12);preview.getContext('2d').drawImage(tile,0,0)
+  assert.deepEqual([...preview.getContext('2d').getImageData(0,0,1,1).data],[0,0,0,0])
+  assert.deepEqual([...preview.getContext('2d').getImageData(14,0,1,1).data],[255,0,0,255])
+})
+test('legacy map archive preflight rejects traversal, ZIP64 and declared memory overflow before inflation', async () => {
+  const {default:JSZip}=await import('../assets/workbench/node_modules/jszip/lib/index.js')
+  const zip=new JSZip();zip.file('map_stitch_state.json','{}');zip.file('images/tile.png',new Uint8Array([1,2,3]))
+  const bytes=await zip.generateAsync({type:'arraybuffer',compression:'STORE'})
+  algorithms.validateMapZipBudget(bytes,2*1024**3)
+  const centralOffset=new DataView(bytes).getUint32(bytes.byteLength-6,true)
+  for(const change of [view=>view.setUint32(centralOffset+24,0xffffffff,true),view=>view.setUint32(centralOffset+24,1024**3,true),
+    view=>view.setUint16(bytes.byteLength-18,1,true),view=>view.setUint16(bytes.byteLength-12,65535,true)]){
+    const altered=bytes.slice(0);change(new DataView(altered));assert.throws(()=>algorithms.validateMapZipBudget(altered,2*1024**3))
+  }
+  const traversal=new JSZip();traversal.file('../private.png',new Uint8Array([1]))
+  const unsafe=await traversal.generateAsync({type:'arraybuffer'})
+  assert.throws(()=>algorithms.validateMapZipBudget(unsafe,2*1024**3))
+})
+
+test('map expansion preserves four, eight and twelve neighbors and directional restrictions', () => {
+  for(const split of [4,8,12]){
+    const tiles=algorithms.expansionTilesFrom({x:0,y:0,w:1,h:1},split,.15,.25)
+    assert.equal(tiles.length,split)
+    const sides={top:tiles.filter(t=>t.y<0),bottom:tiles.filter(t=>t.y+t.h>1+1e-9),
+      right:tiles.filter(t=>t.x+t.w>1+1e-9),left:tiles.filter(t=>t.x<0)}
+    for(const side of Object.values(sides))assert.equal(side.length,split/4)
+    for(const tile of tiles){assert.equal(tile.w,tile.h);assert(tile.w>0&&tile.w<=1)}
+  }
+  const right={x:.85,y:0,w:1,h:1}
+  const candidates=algorithms.expansionTilesFrom(right,4,.15,.15)
+  assert.equal(candidates.filter(tile=>algorithms.isOutwardExpansionTile(right,tile)).length,3)
+  assert.equal(algorithms.isOutwardExpansionTile(right,{x:0,y:0,w:1,h:1}),false)
+})

@@ -34,7 +34,48 @@ class ProjectTests(unittest.TestCase):
         self.version = self.project.import_file(self.source)
 
     def tearDown(self):
+        # Publication precedes worker exit and dispatcher bookkeeping. Wait for
+        # this test project's queue acknowledgments before deleting its database.
+        from frameronin_engine.queue import connection as queue_connection
+        deadline = time.monotonic() + 10
+        while True:
+            with queue_connection() as database:
+                jobs = database.execute('SELECT task FROM jobs WHERE project=?', (str(self.project.root),)).fetchall()
+            if not jobs:
+                break
+            for job in jobs:
+                record = task(self.project, job['task'])
+                if record['state'] in ['queued', 'running']:
+                    cancel(self.project, job['task'])
+            if time.monotonic() >= deadline:
+                self.fail('The test project still has unacknowledged dispatcher jobs; retain it for diagnosis')
+            time.sleep(.02)
         self.directory.cleanup()
+
+    def test_map_layout_permissions_resources_and_formal_outputs(self):
+        feather = {'top':0,'right':0,'bottom':0,'left':0}
+        layout = {'sourceName':'source.png','width':16,'height':12,'horizontalOverlapPercent':15,'verticalOverlapPercent':15,
+                  'layers':[{'inputIndex':0,'key':'0,0','tile':{'x':0,'y':0,'w':1,'h':1},'feather':feather}]}
+        payload = {'operation':'map.export','inputs':[self.version['id']],'parameters':{'layout':layout,'format':'godot'}}
+        preview(self.project,payload)
+        changes = [lambda v:v['layers'][0].update(inputIndex=1),lambda v:v['layers'][0].update(command='run'),
+                   lambda v:v.update(width=32),lambda v:v.update(sourceName='../secret.png'),
+                   lambda v:v['layers'][0]['feather'].update(left=51)]
+        for change in changes:
+            invalid=json.loads(json.dumps(payload));change(invalid['parameters']['layout'])
+            with self.assertRaises(RoninError):preview(self.project,invalid)
+        invalid=json.loads(json.dumps(payload));invalid['parameters']['frontendBytes']=2*1024**3
+        with self.assertRaises(RoninError):preview(self.project,invalid)
+        submitted=submit(self.project,payload);result=wait(self.project,submitted['id'],15)
+        self.assertEqual(result['state'],'succeeded',result)
+        versions=[self.project.version(version) for version in result['results']]
+        archive=next(version for version in versions if version['metadata']['extension']=='.zip')
+        with zipfile.ZipFile(archive['absolutePath']) as zip:
+            self.assertIn('map_stitch_godot.tscn',zip.namelist())
+            self.assertFalse(any(name.endswith(('.gd','.cs','.gdextension')) for name in zip.namelist()))
+            manifest=json.loads(zip.read('map_stitch_godot.json'))
+            self.assertEqual(manifest['canvas'],{'width':16,'height':12})
+        self.assertTrue(self.project.verify()['valid'])
 
     def test_copy_reopen_tamper_and_checkout(self):
         original = self.source.read_bytes()

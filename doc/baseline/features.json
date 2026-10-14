@@ -1034,10 +1034,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-tile-layout",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "4/8/12 邻接、正式布局/视图重开、替换与卸载撤销通过；完整格式及竞态待验收",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.save",
@@ -1047,10 +1047,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-save",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "正式项目与便携 ZIP/旧 JSON 重开、统一撤销、读取超限保留内容通过",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.adjacency",
@@ -1060,10 +1060,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-adjacency",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "左侧透明模板严格像素对照、4/8/12 分割及方向约束通过；全部方向交互待验收",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.feather",
@@ -1073,10 +1073,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-feather",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "三组四边羽化 Worker/PNG/PSD 严格像素对照通过；联合实测内存待验收",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.seam-preview",
@@ -1086,10 +1086,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-seam-preview",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "64px 羽化预览严格像素相等；隐藏/边框与完整接缝交互待验收",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.psd",
@@ -1099,10 +1099,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-psd",
-    "evidence": "doc/testing/evidence/skill-interop.json",
-    "status": "固定两层样本原生 Krita 验收通过；保留首次严格比较失败",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "后台 PSD 严格合成对照与取消通过；新导出器 Krita 复验待完成，旧独立样本原生通过",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.godot-scene",
@@ -1112,10 +1112,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-godot-scene",
-    "evidence": "doc/testing/evidence/skill-interop.json",
-    "status": "固定可信无脚本工程导入运行通过",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "新后台场景在固定可信无脚本 Godot 4.7.2 工程导入及三帧运行通过",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "map.godot-pack",
@@ -1125,10 +1125,10 @@
     "outputs": "PNG/PSD/Godot/ZIP",
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
-    "sample": "fixed-map-godot-pack",
-    "evidence": "doc/testing/evidence/skill-interop.json",
-    "status": "工作台 ZIP 下载、解包及可信工程运行通过",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "map-persistence-and-export-64",
+    "evidence": "doc/testing/evidence/skill-map-document.json",
+    "status": "工作台后台 ZIP/正式版本一致、解包及可信工程导入运行通过",
+    "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
     "id": "game.topdown",

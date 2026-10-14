@@ -1,0 +1,39 @@
+{
+  "sample": "map-persistence-and-export-64",
+  "source": "composition-source.png",
+  "neighbor": "composition-neighbor.png",
+  "inputDimensions": [
+    64,
+    64
+  ],
+  "pixelFormat": "RGBA8",
+  "rightNeighborPosition": [
+    0.85,
+    0
+  ],
+  "featherSamples": {
+    "plain": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    },
+    "left10": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 10
+    },
+    "edges20": {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    }
+  },
+  "criterion": "strict decoded RGBA equality against original browser exporter; identical dimensions, layout, layer count and template alpha",
+  "sha256": {
+    "composition-source.png": "705d92967cba316cb5e0e1cfdfc69224259ebc2b4d1a5f7957cdeea471d16e06",
+    "composition-neighbor.png": "511ec858420b46c7ac0ddf31edfa833abdc18617171b4b12b1305f5f40460574"
+  }
+}

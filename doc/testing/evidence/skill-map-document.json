@@ -1,0 +1,667 @@
+{
+  "date": "2026-10-14",
+  "baselineCommit": "3027d16",
+  "scope": "map documents, managed exports and bounded workers; S2/S3/S4 remain incomplete",
+  "fixture": {
+    "sample": "map-persistence-and-export-64",
+    "source": "composition-source.png",
+    "neighbor": "composition-neighbor.png",
+    "inputDimensions": [
+      64,
+      64
+    ],
+    "pixelFormat": "RGBA8",
+    "rightNeighborPosition": [
+      0.85,
+      0
+    ],
+    "featherSamples": {
+      "plain": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "left10": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 10
+      },
+      "edges20": {
+        "top": 20,
+        "right": 20,
+        "bottom": 20,
+        "left": 20
+      }
+    },
+    "criterion": "strict decoded RGBA equality against original browser exporter; identical dimensions, layout, layer count and template alpha",
+    "sha256": {
+      "composition-source.png": "705d92967cba316cb5e0e1cfdfc69224259ebc2b4d1a5f7957cdeea471d16e06",
+      "composition-neighbor.png": "511ec858420b46c7ac0ddf31edfa833abdc18617171b4b12b1305f5f40460574"
+    }
+  },
+  "browserOracle": {
+    "source": "original MapStitch helpers extracted only for the independent test page",
+    "comparisons": [
+      {
+        "sample": "plain",
+        "format": "png",
+        "dimensions": [
+          118,
+          64
+        ],
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "plain",
+        "format": "psd",
+        "dimensions": [
+          118,
+          64
+        ],
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "plain",
+        "format": "worker-preview",
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "left10",
+        "format": "png",
+        "dimensions": [
+          118,
+          64
+        ],
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "left10",
+        "format": "psd",
+        "dimensions": [
+          118,
+          64
+        ],
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "left10",
+        "format": "worker-preview",
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "edges20",
+        "format": "png",
+        "dimensions": [
+          118,
+          64
+        ],
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "edges20",
+        "format": "psd",
+        "dimensions": [
+          118,
+          64
+        ],
+        "strictRgbaEqual": true
+      },
+      {
+        "sample": "edges20",
+        "format": "worker-preview",
+        "strictRgbaEqual": true
+      }
+    ],
+    "archiveSha256": "f9e625dd049e69be883f3bb786c88c0187cb3e0cbd1731728420ba0b9de963ce",
+    "tolerance": "strict decoded RGBA equality"
+  },
+  "exports": [
+    {
+      "taskId": "8a9d5499-7686-47d5-a2e1-c94897052829",
+      "format": "png",
+      "versionId": "a0801ea5-fba9-4c01-9570-0d9446e8d496",
+      "sha256": "865c458a97264f77b540089c906772ec16358470dd3ad9f76bc07075d8f3a89b",
+      "downloadMatchesFormalVersion": true
+    },
+    {
+      "taskId": "01bd542d-32b5-4c26-ac42-f5c8ba8d6514",
+      "format": "psd",
+      "versionId": "717ba8c9-695e-4607-ad3d-b66f73abf519",
+      "sha256": "a95b8ebb5ee01113f6f9d2c3df35dfa1046f9b550a1a3c7ea2bc89935b156f07",
+      "downloadMatchesFormalVersion": true
+    },
+    {
+      "taskId": "4faf6562-1a51-4ed0-ae83-0c98c5393450",
+      "format": "godot",
+      "versionId": "616f722d-4c82-42d1-a8e8-66533e9abdea",
+      "sha256": "c7d2ebc84a9173af38231a95682631bf828d9f0a1f8298465023aa2f92c43d61",
+      "downloadMatchesFormalVersion": true
+    }
+  ],
+  "leftTemplate": {
+    "taskId": "951fdfe8-9ff2-4db7-9348-ed67fe2daad2",
+    "versionId": "50ceb9e5-8837-4d45-8f9a-2aec9c1ee703",
+    "strictRgbaEqual": true,
+    "dimensions": [
+      64,
+      64
+    ]
+  },
+  "document": {
+    "reopenObservedAtRevision": {
+      "documentId": "43d56686-aeac-4cda-ac4c-7fb8d3b204fb",
+      "revision": 7,
+      "payload": {
+        "source": {
+          "versionId": "768abb84-6ad3-4450-96aa-8cc302a85841",
+          "name": "composition-source.png"
+        },
+        "tiles": {
+          "0,-0.85": {
+            "x": 0,
+            "y": -0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0,0.85": {
+            "x": 0,
+            "y": 0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0.85,0": {
+            "x": 0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          },
+          "-0.85,0": {
+            "x": -0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          }
+        },
+        "tileUploads": {
+          "0.85,0": {
+            "versionId": "852f3c8c-0f1e-4232-a6c3-b24082f025a5",
+            "name": "composition-neighbor.png"
+          }
+        },
+        "tileFeathers": {
+          "0.85,0": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 10
+          }
+        },
+        "horizontalOverlapPercent": 15,
+        "verticalOverlapPercent": 15,
+        "expandSplit": 4,
+        "hidePreviewBorders": false,
+        "hiddenPreviewTiles": {},
+        "formatVersion": 1,
+        "view": {
+          "pan": {
+            "x": -408.38270572376007,
+            "y": 49.43740046224394
+          },
+          "zoom": 2.944679551065524,
+          "selectedKey": "0.85,0"
+        }
+      },
+      "viewRestoredThroughDOM": true,
+      "restoredImageDimensions": [
+        64,
+        64
+      ]
+    },
+    "currentSaved": {
+      "id": "43d56686-aeac-4cda-ac4c-7fb8d3b204fb",
+      "revision": 11,
+      "payload": {
+        "source": {
+          "versionId": "768abb84-6ad3-4450-96aa-8cc302a85841",
+          "name": "composition-source.png"
+        },
+        "tiles": {
+          "0,-0.85": {
+            "x": 0,
+            "y": -0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0,0.85": {
+            "x": 0,
+            "y": 0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0.85,0": {
+            "x": 0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          },
+          "-0.85,0": {
+            "x": -0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          }
+        },
+        "tileUploads": {
+          "0.85,0": {
+            "versionId": "852f3c8c-0f1e-4232-a6c3-b24082f025a5",
+            "name": "composition-neighbor.png"
+          }
+        },
+        "tileFeathers": {
+          "0.85,0": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 10
+          }
+        },
+        "horizontalOverlapPercent": 15,
+        "verticalOverlapPercent": 15,
+        "expandSplit": 4,
+        "hidePreviewBorders": false,
+        "hiddenPreviewTiles": {},
+        "formatVersion": 1,
+        "view": {
+          "pan": {
+            "x": -408.38270572376007,
+            "y": 49.43740046224394
+          },
+          "zoom": 2.944679551065524,
+          "selectedKey": "0.85,0"
+        }
+      }
+    },
+    "sourceAndNeighborReferencesPreservedAfterWatermarkUndo": true
+  },
+  "ui": {
+    "featherUndoRedo": [
+      0,
+      10
+    ],
+    "unloadOneUndoRestoresImageAndFeather": true,
+    "zipRestoreUndoRedo": [
+      15,
+      10,
+      15,
+      10
+    ],
+    "legacyJsonV1ImportUndoRedo": "4 small tiles -> 12 large tiles -> 4 small tiles",
+    "legacyArchiveViewUndo": {
+      "before": {
+        "zoom": 1.38265,
+        "pan": [
+          -80.3559,
+          17.3806
+        ]
+      },
+      "imported": {
+        "zoom": 1,
+        "pan": [
+          0,
+          0
+        ]
+      },
+      "commandZRestoredDOMStyle": true,
+      "measurement": "rounded DOM style values"
+    },
+    "neighborCountsAfterSourceImport": [
+      4,
+      8,
+      12
+    ],
+    "leftTileSelectionAfterInspectorFix": true,
+    "inspectorClose": true,
+    "savedDocumentDropdown": "menu is visible above full-screen map; selecting original document and reopening passed",
+    "languageMenu": {
+      "zh": true,
+      "en": true,
+      "ja": true,
+      "method": "actual menu click after popup stacking fix"
+    },
+    "screenshots": [
+      "skill-map-document.png",
+      "skill-map-document-en.png",
+      "skill-map-document-ja.png"
+    ]
+  },
+  "watermarkIntegration": {
+    "tasks": [
+      {
+        "id": "9717d984-37e0-4943-a94e-a862512a5b1b",
+        "state": "succeeded",
+        "generation": 0,
+        "payload": {
+          "operation": "workflow.legacy",
+          "inputs": [
+            "852f3c8c-0f1e-4232-a6c3-b24082f025a5"
+          ],
+          "parameters": {
+            "graph": {
+              "version": 7,
+              "nodes": [
+                {
+                  "id": "watermark",
+                  "type": "geminiWatermarkRemove",
+                  "params": {}
+                }
+              ],
+              "edges": []
+            }
+          }
+        },
+        "results": [
+          "898cfdcf-46db-4fe4-ac39-e2149dbc45e4",
+          "b4171cf6-f266-499f-a8cb-650b10e26cc0"
+        ]
+      },
+      {
+        "id": "951fdfe8-9ff2-4db7-9348-ed67fe2daad2",
+        "state": "succeeded",
+        "generation": 0,
+        "payload": {
+          "operation": "map.template",
+          "inputs": [
+            "779c4a35-9706-44b0-9f86-1cab46b84260",
+            "6a88aa7a-9977-430f-977b-ede085a0d0b8"
+          ],
+          "parameters": {
+            "layout": {
+              "sourceName": "composition-source.png",
+              "width": 64,
+              "height": 64,
+              "horizontalOverlapPercent": 15,
+              "verticalOverlapPercent": 15,
+              "layers": [
+                {
+                  "tile": {
+                    "x": 0,
+                    "y": 0,
+                    "w": 1,
+                    "h": 1
+                  },
+                  "key": "0,0",
+                  "inputIndex": 0,
+                  "feather": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 0
+                  }
+                },
+                {
+                  "tile": {
+                    "x": 0.85,
+                    "y": 0,
+                    "w": 1,
+                    "h": 1
+                  },
+                  "key": "0.85,0",
+                  "inputIndex": 1,
+                  "feather": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 10
+                  }
+                }
+              ]
+            },
+            "target": {
+              "x": -0.85,
+              "y": 0,
+              "w": 1,
+              "h": 1
+            },
+            "frontendBytes": 263020
+          }
+        },
+        "results": [
+          "50ceb9e5-8837-4d45-8f9a-2aec9c1ee703",
+          "d5e1adec-75c2-4d44-98af-5841e0c9aff7"
+        ]
+      }
+    ],
+    "document": {
+      "id": "43d56686-aeac-4cda-ac4c-7fb8d3b204fb",
+      "revision": 8,
+      "payload": {
+        "source": {
+          "versionId": "768abb84-6ad3-4450-96aa-8cc302a85841",
+          "name": "composition-source.png"
+        },
+        "tiles": {
+          "0,-0.85": {
+            "x": 0,
+            "y": -0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0,0.85": {
+            "x": 0,
+            "y": 0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0.85,0": {
+            "x": 0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          },
+          "-0.85,0": {
+            "x": -0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          }
+        },
+        "tileUploads": {
+          "0.85,0": {
+            "versionId": "898cfdcf-46db-4fe4-ac39-e2149dbc45e4",
+            "name": "composition-neighbor_no_watermark.png"
+          }
+        },
+        "tileFeathers": {
+          "0.85,0": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 10
+          }
+        },
+        "horizontalOverlapPercent": 15,
+        "verticalOverlapPercent": 15,
+        "expandSplit": 4,
+        "hidePreviewBorders": false,
+        "hiddenPreviewTiles": {},
+        "formatVersion": 1,
+        "view": {
+          "pan": {
+            "x": -408.38270572376007,
+            "y": 49.43740046224394
+          },
+          "zoom": 2.944679551065524,
+          "selectedKey": "0.85,0"
+        }
+      }
+    },
+    "afterUndoRedoSave": {
+      "revision": 10,
+      "payload": {
+        "source": {
+          "versionId": "768abb84-6ad3-4450-96aa-8cc302a85841",
+          "name": "composition-source.png"
+        },
+        "tiles": {
+          "0,-0.85": {
+            "x": 0,
+            "y": -0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0,0.85": {
+            "x": 0,
+            "y": 0.85,
+            "w": 1,
+            "h": 1
+          },
+          "0.85,0": {
+            "x": 0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          },
+          "-0.85,0": {
+            "x": -0.85,
+            "y": 0,
+            "w": 1,
+            "h": 1
+          }
+        },
+        "tileUploads": {
+          "0.85,0": {
+            "versionId": "898cfdcf-46db-4fe4-ac39-e2149dbc45e4",
+            "name": "composition-neighbor_no_watermark.png"
+          }
+        },
+        "tileFeathers": {
+          "0.85,0": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 10
+          }
+        },
+        "horizontalOverlapPercent": 15,
+        "verticalOverlapPercent": 15,
+        "expandSplit": 4,
+        "hidePreviewBorders": false,
+        "hiddenPreviewTiles": {},
+        "formatVersion": 1,
+        "view": {
+          "pan": {
+            "x": -408.38270572376007,
+            "y": 49.43740046224394
+          },
+          "zoom": 2.944679551065524,
+          "selectedKey": "0.85,0"
+        }
+      }
+    },
+    "taskCountForSelectedInput": 1,
+    "reusePublishedResult": true
+  },
+  "watermarkQuality": "not tested by this watermark-free fixture; record proves task, version and undo/redo integration only",
+  "cancellation": {
+    "direct": {
+      "taskId": "baa64f0c-5445-4740-b0ee-b61938c1e809",
+      "state": "canceled",
+      "generation": 1,
+      "cancelElapsedSeconds": 0.009479166998062283,
+      "ownedChildPids": [
+        34069
+      ],
+      "results": [],
+      "confirmation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.009479166998062283,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 2
+      }
+    },
+    "ui": {
+      "taskId": "7a849165-6e7a-4c13-99d8-fe37981c3f21",
+      "cancelControlAvailableMillisecondsAfterExportClick": 291,
+      "confirmation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.013155041029676795,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 2
+      },
+      "timingScope": "291ms measures control availability, not click-to-ack latency"
+    },
+    "laterDatabaseReconciliation": [
+      {
+        "id": "7a849165-6e7a-4c13-99d8-fe37981c3f21",
+        "state": "canceled",
+        "generation": 1,
+        "results": []
+      },
+      {
+        "id": "baa64f0c-5445-4740-b0ee-b61938c1e809",
+        "state": "canceled",
+        "generation": 1,
+        "results": []
+      }
+    ]
+  },
+  "negativeChecks": {
+    "automated": [
+      "unknown fields",
+      "invalid image/version references",
+      "noncanonical coordinates",
+      "wrong input indices",
+      "bad dimensions",
+      "retained frontend resource estimate",
+      "ZIP64",
+      "path traversal",
+      "declared inflation overflow"
+    ],
+    "actualUI": {
+      "archive": "controlled ZIP declaring 1 GiB",
+      "error": "MAP_ARCHIVE_RESOURCE_LIMIT",
+      "previousMapPreserved": true,
+      "screenshot": "skill-map-archive-rejected.png"
+    }
+  },
+  "godot": {
+    "version": "4.7.2",
+    "project": "fixed trusted no-script test project",
+    "editorImportExit": 0,
+    "threeFrameRunExit": 0,
+    "packageTaskId": "4faf6562-1a51-4ed0-ae83-0c98c5393450",
+    "aiGeneratedScriptsRun": false
+  },
+  "krita": {
+    "status": "not accepted for this new managed PSD",
+    "priorIndependentSample": "skill-interop.json",
+    "latestNativeToolObservation": "Mac locked despite user reply; no native file open or export confirmed",
+    "required": "open new two-layer PSD and compare independent Krita composite with fixed RGB tolerance 1 and exact alpha"
+  },
+  "checks": {
+    "pythonTests": 19,
+    "jsTests": 20,
+    "workbenchBuild": "passed",
+    "changedModuleESLint": "passed",
+    "skillStructure": "passed"
+  },
+  "correctedFailures": [
+    "map inspector intercepted left-tile clicks; moved to a separate portal panel",
+    "document and language dropdowns rendered behind full-screen map; popups now anchored inside their stacking context",
+    "temporary test cleanup raced queue bookkeeping; teardown now waits for its own project queue acknowledgement",
+    "initial expansion direction assertion counted overlapping rows; classify by geometric outside-boundary criterion instead"
+  ],
+  "remaining": [
+    "new managed PSD native Krita revalidation",
+    "combined actual peak for browser, API and all owned processes",
+    "macOS 14 and VoiceOver acceptance",
+    "complete image-format and map editing race acceptance",
+    "other editors, full AI quality catalog and portable distribution"
+  ]
+}

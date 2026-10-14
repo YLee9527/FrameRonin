@@ -59,6 +59,10 @@ REGISTRY = {
         'fixSquare': {'type': 'boolean', 'default': True}}, 'png', 'legacy_prescale_2048', overhead=256),
     'workflow.strict': operation(['image+'], {'graph': {'type': 'object', 'default': {}}}, 'png_report', 'global_graph', overhead=256),
     'workflow.legacy': operation(['image+'], {'graph': {'type': 'object', 'default': {}}}, 'png_report', 'compatibility_graph', overhead=256),
+    'map.export': operation(['image+'], {'layout': {'type':'object','default':{}},
+        'format': choice('png',['png','psd','godot']), 'frontendBytes': integer(0,0,2*1024**3)}, 'map_file_report', 'global_composite', overhead=256),
+    'map.template': operation(['image+'], {'layout': {'type':'object','default':{}},
+        'target': {'type':'object','default':{}}, 'frontendBytes': integer(0,0,2*1024**3)}, 'png_report', 'overlap_template', overhead=256),
 }
 
 
@@ -170,6 +174,9 @@ def preview(project, payload):
                 raise RoninError('WORKFLOW_SIZE_INVALID', 'A workflow stage has invalid dimensions.')
             sizes.append(width * height)
         estimate += sum(sizes) * 8 + max(sizes, default=0) * 32
+    if name in ['map.export', 'map.template']:
+        from .maps import estimate as map_estimate
+        estimate = map_estimate(values, versions, name == 'map.template')
     budget = memory_budget()
     if estimate > budget:
         raise RoninError('RESOURCE_LIMIT', 'The operation exceeds the memory budget; adjust its parameters.',

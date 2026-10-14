@@ -97,6 +97,7 @@ export default function DocumentSaveBar<S extends object, T>({ kind, snapshot, s
     <Button loading={saving} onClick={() => { void save(true).catch(() => {}) }}>{text.save}</Button>
     <Button disabled={saving} onClick={() => { void saveAs().catch(() => {}) }}>{text.saveAs}</Button>
     <Select aria-label={text.select} placeholder={text.select} style={{ minWidth: 230 }} value={selected}
+      getPopupContainer={trigger => trigger.parentElement ?? document.body}
       disabled={saving} onChange={setSelected} options={available.map(item => ({ value: item.id, label: `${item.id.slice(0, 8)} · v${item.revision}` }))} />
     <Button disabled={saving || !selected} onClick={async () => {
       const documentId = selected

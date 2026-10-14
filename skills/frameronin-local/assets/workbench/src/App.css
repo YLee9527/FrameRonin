@@ -829,6 +829,18 @@
   box-shadow: 0 2px 10px rgba(40, 32, 24, 0.14);
 }
 
+.map-stitch-project-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 10px 20px;
+  background: rgba(237, 230, 220, 0.94);
+  border-bottom: 1px solid #9a8b78;
+}
+.map-stitch-project-toolbar > .ant-space { margin-bottom: 0 !important; }
+
 .map-stitch-title {
   flex: 1 1 240px;
   min-width: 200px;
@@ -1274,4 +1286,19 @@
 
 .image-stash-item-draggable:active {
   cursor: grabbing;
+}
+
+/* Keep controls outside the transformed tile; small maps must not intercept
+   clicks on neighboring tiles. Portal coordinates stay in viewport pixels. */
+.map-stitch-inspector.map-stitch-frame-actions {
+  --tile-accent: #9a8b78;
+  position: fixed;
+  left: 20px;
+  right: auto;
+  top: auto;
+  bottom: 80px;
+  transform: none !important;
+  max-height: calc(100vh - 300px);
+  overflow: auto;
+  z-index: 2004;
 }
