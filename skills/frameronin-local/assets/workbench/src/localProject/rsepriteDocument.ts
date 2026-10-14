@@ -4,6 +4,7 @@ import { localJson } from './api'
 type Version = { id: string; asset_id: string; metadata: { width: number; height: number; kind: string } }
 type StoredCel = { layerId: string; versionId: string }
 type StoredFrame = { id: string; durationMs?: number; cels: StoredCel[] }
+type CachedCel = { key: string; imageData: ImageData; version: Version }
 export type StoredRseprite = { formatVersion: 1; width: number; height: number; layers: Document['layers']; frames: StoredFrame[] }
 
 export function validateStoredRseprite(value: unknown): asserts value is StoredRseprite {
@@ -44,6 +45,15 @@ export function validateStoredRseprite(value: unknown): asserts value is StoredR
 export class RsepritePersistence {
   private versions = new WeakMap<ImageData, Version>()
   private celAssets = new Map<string, string>()
+  private prepared = new WeakMap<Document, CachedCel[]>()
+
+  activate(document: Document) {
+    const cached = this.prepared.get(document)
+    if (!cached) throw new Error('The loaded document was not prepared by this project session')
+    this.celAssets.clear()
+    for (const { key, imageData, version } of cached) { this.versions.set(imageData, version); this.celAssets.set(key, version.asset_id) }
+    this.prepared.delete(document)
+  }
 
   async serialize(document: Document): Promise<StoredRseprite> {
     const frames: StoredFrame[] = []
@@ -73,7 +83,7 @@ export class RsepritePersistence {
 
   async deserialize(value: StoredRseprite): Promise<Document> {
     validateStoredRseprite(value)
-    const cached: { key: string; imageData: ImageData; version: Version }[] = []
+    const cached: CachedCel[] = []
     const frames: Document['frames'] = []
     for (const frame of value.frames) {
       const cels: Document['frames'][number]['cels'] = []
@@ -93,7 +103,8 @@ export class RsepritePersistence {
       }
       frames.push({ id: frame.id, durationMs: frame.durationMs, cels })
     }
-    for (const { key, imageData, version } of cached) { this.versions.set(imageData, version); this.celAssets.set(key, version.asset_id) }
-    return { width: value.width, height: value.height, layers: value.layers, frames }
+    const document = { width: value.width, height: value.height, layers: value.layers, frames }
+    this.prepared.set(document, cached)
+    return document
   }
 }

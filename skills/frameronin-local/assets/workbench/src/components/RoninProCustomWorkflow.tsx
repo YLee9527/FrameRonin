@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useReducer, useRef, useState, type CSSProperties, type SetStateAction } from 'react'
 import {
   Button,
   Checkbox,
@@ -32,15 +32,13 @@ import {
 } from '../lib/roninProWorkflow'
 import { importLegacyWorkflow } from '../lib/strictWorkflow'
 import { runManagedTask } from '../localProject/managedTasks'
+import DocumentSaveBar from '../localProject/DocumentSaveBar'
+import { createWorkflowHistory, workflowHistoryReducer, type WorkflowDraft } from '../localProject/workflowHistory'
+import { serializeWorkflowDocument, restoreWorkflowDocument, type WorkflowSnapshot, type StoredWorkflow, type WorkflowInputFile } from '../localProject/workflowDocument'
 import { WORKFLOW_BPSET_PRESETS, WORKFLOW_BPSETI_DIRECT_PRESETS } from '../lib/workflowBpsetPresets'
 import StashDropZone from './StashDropZone'
-import WorkflowBlueprintCanvas, {
-  BLUEPRINT_INPUT_IMAGE_NODE_WIDTH,
-  BLUEPRINT_WORLD_W,
-  type BlueprintToolPlaceAction,
-  getBlueprintNodeWidth,
-  getCustomRearrangeInputWidth,
-} from './WorkflowBlueprintCanvas'
+import WorkflowBlueprintCanvas, { type BlueprintToolPlaceAction } from './WorkflowBlueprintCanvas'
+import { BLUEPRINT_INPUT_IMAGE_NODE_WIDTH, BLUEPRINT_WORLD_W, getBlueprintNodeWidth, getCustomRearrangeInputWidth } from '../lib/workflowBlueprintGeometry'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -125,8 +123,6 @@ function wfClampInt(
 
 const INPUT_FULL: CSSProperties = { width: '100%' }
 
-type WorkflowInputFile = { id: string; file: File; thumbUrl: string }
-
 function createWorkflowInputFile(file: File): WorkflowInputFile {
   const id =
     typeof crypto !== 'undefined' && crypto.randomUUID
@@ -142,8 +138,12 @@ export interface RoninProCustomWorkflowProps {
 
 export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninProCustomWorkflowProps = {}) {
   const { t } = useLanguage()
-  const [graphNodes, setGraphNodes] = useState<GraphNode[]>([])
-  const [graphEdges, setGraphEdges] = useState<WorkflowEdge[]>([])
+  const [history, dispatchHistory] = useReducer(workflowHistoryReducer, undefined, () => createWorkflowHistory())
+  const { nodes: graphNodes, edges: graphEdges, presetName } = history.present
+  const setGraphNodes = useCallback((value: SetStateAction<GraphNode[]>) => dispatchHistory({ type: 'nodes', value }), [])
+  const setGraphEdges = useCallback((value: SetStateAction<WorkflowEdge[]>) => dispatchHistory({ type: 'edges', value }), [])
+  const setPresetName = useCallback((value: SetStateAction<string>) => dispatchHistory({ type: 'name', value }), [])
+  const setDraft = useCallback((value: SetStateAction<WorkflowDraft>) => dispatchHistory({ type: 'change', value }), [])
   const [fileItems, setFileItems] = useState<WorkflowInputFile[]>([])
   const fileItemsRef = useRef(fileItems)
   fileItemsRef.current = fileItems
@@ -158,10 +158,23 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
     return () => { mounted.current = false }
   }, [])
   /** 导出预设名：写入 JSON 的 presetName，并用于下载文件名 */
-  const [presetName, setPresetName] = useState('')
   const [finishedPresetsOpen, setFinishedPresetsOpen] = useState(false)
   const [directRunPresetsOpen, setDirectRunPresetsOpen] = useState(false)
   const [bpsetLoadingId, setBpsetLoadingId] = useState<string | null>(null)
+  const snapshot = useMemo<WorkflowSnapshot>(() => ({ draft: history.present, files: fileItems }), [history.present, fileItems])
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if (event.isComposing || !(event.ctrlKey || event.metaKey) || event.altKey) return
+      const target = event.target as HTMLElement
+      if (target.closest('input,textarea,select,[contenteditable="true"]')) return
+      if (event.code === 'KeyZ' || event.code === 'KeyY') {
+        event.preventDefault()
+        dispatchHistory({ type: event.shiftKey || event.code === 'KeyY' ? 'redo' : 'undo' })
+      }
+    }
+    window.addEventListener('keydown', key)
+    return () => window.removeEventListener('keydown', key)
+  }, [])
 
   useEffect(() => {
     return () => {
@@ -185,34 +198,29 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
     setGraphNodes((list) =>
       list.map((n) => (n.id === id ? { ...n, params: { ...n.params, [key]: value } } : n))
     )
-  }, [])
+  }, [setGraphNodes])
 
   const adjustStitchSlotCount = useCallback((id: string, delta: number) => {
-    let nextCount: number | null = null
-    setGraphNodes((list) => {
-      const node = list.find((x) => x.id === id && x.type === 'simpleStitchVertical')
-      if (!node) return list
+    setDraft(draft => {
+      const node = draft.nodes.find((x) => x.id === id && x.type === 'simpleStitchVertical')
+      if (!node) return draft
       const cur = getStitchInputSlotCount(node)
       const next = Math.max(2, Math.min(16, cur + delta))
-      if (next === cur) return list
-      nextCount = next
-      return list.map((n) =>
+      if (next === cur) return draft
+      const nodes = draft.nodes.map((n) =>
         n.id === id && n.type === 'simpleStitchVertical'
           ? { ...n, params: { ...n.params, stitchSlotCount: next } }
           : n
       )
-    })
-    if (nextCount !== null) {
-      setGraphEdges((prev) =>
-        prev.filter((ed) => {
+      const edges = draft.edges.filter((ed) => {
           if (ed.target !== id) return true
           const m = /^in(\d+)$/.exec(ed.targetPort ?? '')
           if (!m) return true
-          return parseInt(m[1], 10) <= nextCount!
+          return parseInt(m[1], 10) <= next
         })
-      )
-    }
-  }, [])
+      return { ...draft, nodes, edges }
+    })
+  }, [setDraft])
 
   const updateCustomRearrangeDimension = useCallback(
     (id: string, key: 'splitCols' | 'splitRows' | 'outRows' | 'outCols', value: number) => {
@@ -235,7 +243,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         })
       )
     },
-    []
+    [setGraphNodes]
   )
 
   const updateCustomRearrangeCell = useCallback(
@@ -262,7 +270,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         })
       )
     },
-    []
+    [setGraphNodes]
   )
 
   /** 按行主序自动填入 1、2、3…（超出切块数填 0），与新建节点默认一致 */
@@ -280,9 +288,10 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         }
       })
     )
-  }, [])
+  }, [setGraphNodes])
 
   const addNodeAt = useCallback((type: WorkflowNodeType, x?: number, y?: number) => {
+    const template = createGraphNode(type, 0, 0)
     setGraphNodes((prev) => {
       let nx: number
       if (x != null) {
@@ -295,14 +304,17 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         nx = 220
       }
       const ny = y ?? (prev.length ? prev[prev.length - 1]!.y : 200)
-      return [...prev, createGraphNode(type, nx, ny)]
+      return [...prev, { ...template, x: nx, y: ny }]
     })
-  }, [])
+  }, [setGraphNodes])
 
   /**
    * 添加「输入图」节点。传入 x,y 时用该位置（如画布点击/拖放）；省略时按最后一个节点右侧自动排布。
    */
   const addInputImageAt = useCallback((imageIndex1: number, x?: number, y?: number) => {
+    const template = createGraphNode('workflowInputImage', 0, 0)
+    const nFiles = fileItemsRef.current.length
+    const idx = Math.min(Math.max(1, Math.round(imageIndex1)), Math.max(1, nFiles))
     setGraphNodes((prev) => {
       let nx: number
       let ny: number
@@ -319,12 +331,9 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         nx = 220
         ny = 200
       }
-      const node = createGraphNode('workflowInputImage', nx, ny)
-      const nFiles = fileItemsRef.current.length
-      const idx = Math.min(Math.max(1, Math.round(imageIndex1)), Math.max(1, nFiles))
-      return [...prev, { ...node, params: { ...node.params, imageIndex: idx } }]
+      return [...prev, { ...template, x: nx, y: ny, params: { ...template.params, imageIndex: idx } }]
     })
-  }, [])
+  }, [setGraphNodes])
 
   const onBlueprintToolPlaceAt = useCallback(
     (action: BlueprintToolPlaceAction, x: number, y: number) => {
@@ -376,7 +385,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
             onProgress: value => { if (mounted.current) setTaskProgress(Math.round(value * 100)) },
           })
         controller.signal.throwIfAborted()
-        if (!mounted.current) return
+        if (!mounted.current || execution.current !== controller) return
         const names = strategy.kind === 'targeted'
           ? strategy.plans.map(plan => selected[plan.fileIndex0].file.name)
           : strategy.kind === 'dag_once'
@@ -399,8 +408,10 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
           else message.error(`${t('roninProWorkflowFailed')}: ${String(e)}`)
         }
       } finally {
-        execution.current = null
-        if (mounted.current) { setRunning(false); setCanceling(false) }
+        if (execution.current === controller) {
+          execution.current = null
+          if (mounted.current) { setRunning(false); setCanceling(false) }
+        }
       }
     },
     [fileItems, t]
@@ -458,9 +469,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         return
       }
       const { nodes, edges, presetName: loadedName } = parseWorkflowGraph(raw)
-      setGraphNodes(nodes)
-      setGraphEdges(edges)
-      setPresetName(loadedName ?? '')
+      setDraft({ nodes, edges, presetName: loadedName ?? '' })
       message.success(t('roninProWorkflowLoadSuccess'))
     } catch {
       message.error(t('roninProWorkflowLoadFailed'))
@@ -470,9 +479,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
   const applyFinishedPresetJson = (json: string) => {
     try {
       const { nodes, edges, presetName: loadedName } = parseWorkflowGraph(json)
-      setGraphNodes(nodes)
-      setGraphEdges(edges)
-      setPresetName(loadedName ?? '')
+      setDraft({ nodes, edges, presetName: loadedName ?? '' })
       try {
         localStorage.setItem(STORAGE_KEY, json)
       } catch {
@@ -506,9 +513,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
     reader.onload = () => {
       try {
         const { nodes, edges, presetName: loadedName } = parseWorkflowGraph(String(reader.result))
-        setGraphNodes(nodes)
-        setGraphEdges(edges)
-        setPresetName(loadedName ?? '')
+        setDraft({ nodes, edges, presetName: loadedName ?? '' })
         try {
           localStorage.setItem(STORAGE_KEY, String(reader.result))
         } catch {
@@ -1265,6 +1270,21 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
   return (
     <Fragment>
     <Space direction="vertical" size="large" style={{ width: '100%', maxWidth: '100%', marginRight: 'min(336px, calc(100vw - 32px))' }}>
+      <DocumentSaveBar<WorkflowSnapshot, StoredWorkflow> kind="workflow" snapshot={snapshot}
+        serialize={serializeWorkflowDocument} restore={restoreWorkflowDocument}
+        discardSnapshot={restored => restored.files.forEach(item => { if (item.thumbUrl.startsWith('blob:')) URL.revokeObjectURL(item.thumbUrl) })}
+        sameSnapshot={(a, b) => a.draft === b.draft && a.files === b.files} applySnapshot={restored => {
+          execution.current = null
+          setRunning(false); setCanceling(false)
+          fileItems.forEach(item => { if (item.thumbUrl.startsWith('blob:')) URL.revokeObjectURL(item.thumbUrl) })
+          setFileItems(restored.files)
+          dispatchHistory({ type: 'restore', value: restored.draft })
+          setResults(items => { items.forEach(item => URL.revokeObjectURL(item.url)); return [] })
+        }} />
+      <Space>
+        <Button disabled={!history.past.length} onClick={() => dispatchHistory({ type: 'undo' })}>{t('localDocumentUndo')}</Button>
+        <Button disabled={!history.future.length} onClick={() => dispatchHistory({ type: 'redo' })}>{t('localDocumentRedo')}</Button>
+      </Space>
       <Text type="secondary">{t('roninProCustomWorkflowHint')}</Text>
 
       <WorkflowBlueprintCanvas
@@ -1272,6 +1292,10 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         edges={graphEdges}
         setNodes={setGraphNodes}
         setEdges={setGraphEdges}
+        onDeleteNode={id => setDraft(draft => ({ ...draft, nodes: draft.nodes.filter(node => node.id !== id),
+          edges: draft.edges.filter(edge => edge.source !== id && edge.target !== id) }))}
+        onBeginNodeMove={() => dispatchHistory({ type: 'begin' })}
+        onEndNodeMove={() => dispatchHistory({ type: 'end' })}
         getNodeTitle={(n) => t(NODE_LABEL_I18N[n.type])}
         renderNodeBody={renderNodeBody}
         tHint={t}

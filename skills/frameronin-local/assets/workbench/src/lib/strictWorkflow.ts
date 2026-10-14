@@ -13,13 +13,13 @@ function record(value: unknown, fields: string[], required: string[]): Record<st
   return object
 }
 
-export function validateStrictWorkflow(value: unknown, fileCount: number) {
+export function validateWorkflowStructure(value: unknown, fileCount: number, editable = false) {
   const graph = record(value, ['version', 'nodes', 'edges', 'presetName'], ['version', 'nodes', 'edges'])
-  if (graph.version !== 7 || !Array.isArray(graph.nodes) || !Array.isArray(graph.edges) || !graph.nodes.length || graph.nodes.length > 200 || graph.edges.length > 400) throw new Error('WORKFLOW_SIZE_OR_VERSION')
+  if (graph.version !== 7 || !Array.isArray(graph.nodes) || !Array.isArray(graph.edges) || (!editable && !graph.nodes.length) || graph.nodes.length > 200 || graph.edges.length > 400) throw new Error('WORKFLOW_SIZE_OR_VERSION')
   if (graph.presetName !== undefined && (typeof graph.presetName !== 'string' || graph.presetName.length > 120)) throw new Error('WORKFLOW_NAME_INVALID')
   const ids = new Set<string>()
   const uniqueId = (id: unknown) => {
-    if (typeof id !== 'string' || !/^[A-Za-z0-9_-]{1,80}$/.test(id) || ids.has(id)) throw new Error('WORKFLOW_ID_INVALID')
+    if (typeof id !== 'string' || !/^[A-Za-z0-9_-]+$/.test(id) || id.length > (editable ? 256 : 80) || ids.has(id)) throw new Error('WORKFLOW_ID_INVALID')
     ids.add(id); return id
   }
   const nodes: GraphNode[] = graph.nodes.map(value => {
@@ -29,13 +29,13 @@ export function validateStrictWorkflow(value: unknown, fileCount: number) {
     const parameters = record(node.params, Object.keys(spec.parameters), [])
     const params: Record<string, number> = {}
     for (const [key, schema] of Object.entries(spec.parameters)) {
-      const value = parameters[key] ?? schema.default
+      const value = Object.prototype.hasOwnProperty.call(parameters, key) ? parameters[key] : schema.default
       if (typeof value !== 'number' || !Number.isFinite(value) || value < schema.minimum || value > schema.maximum || (schema.type === 'integer' && !Number.isInteger(value))) throw new Error(`WORKFLOW_PARAMETER_INVALID:${key}`)
       params[key] = value
     }
-    if (node.type === 'workflowInputImage' && params.imageIndex! > fileCount) throw new Error('WORKFLOW_INPUT_MISSING')
+    if (!editable && node.type === 'workflowInputImage' && params.imageIndex! > fileCount) throw new Error('WORKFLOW_INPUT_MISSING')
     for (const [key, size] of [['rowIndex', 'gRows'], ['colIndex', 'gCols'], ['atRow', 'gRows'], ['atCol', 'gCols']] as const) {
-      if (params[key] !== undefined && params[key]! > params[size]! + (key.startsWith('at') ? 1 : 0)) throw new Error('WORKFLOW_GRID_INDEX_INVALID')
+      if (!editable && params[key] !== undefined && params[key]! > params[size]! + (key.startsWith('at') ? 1 : 0)) throw new Error('WORKFLOW_GRID_INDEX_INVALID')
     }
     const result: GraphNode = { id: uniqueId(node.id), type: node.type as WorkflowNodeType, params, x: 0, y: 0 }
     for (const axis of ['x', 'y'] as const) {
@@ -69,6 +69,11 @@ export function validateStrictWorkflow(value: unknown, fileCount: number) {
     const incoming = edges.filter(edge => edge.target === node.id)
     if (incoming.some(edge => !edge.targetPort) && incoming.some(edge => edge.targetPort)) throw new Error('WORKFLOW_STITCH_MIXED_PORTS')
   }
+  return { nodes, edges }
+}
+
+export function validateStrictWorkflow(value: unknown, fileCount: number) {
+  const { nodes, edges } = validateWorkflowStructure(value, fileCount)
   const strategy = computeWorkflowRunStrategy(nodes, edges, fileCount)
   if (!strategy.ok) throw new Error(`WORKFLOW_GRAPH_INVALID:${strategy.reason}`)
   return { nodes, edges, strategy: strategy.strategy }

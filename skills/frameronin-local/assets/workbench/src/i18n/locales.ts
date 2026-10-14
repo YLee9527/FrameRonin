@@ -290,6 +290,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProCustomScaleApply: '应用缩放',
     roninProAudioCompress: '音频压缩',
     localTaskCancel: '取消任务',
+    localDocumentUndo: '撤销',
+    localDocumentRedo: '重做',
+
     localTaskCanceling: '正在确认取消…',
     localTaskCanceled: '任务已取消',
 
@@ -1457,6 +1460,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProCustomScaleApply: 'Apply',
     roninProAudioCompress: 'Audio Compress',
     localTaskCancel: 'Cancel task',
+    localDocumentUndo: 'Undo',
+    localDocumentRedo: 'Redo',
+
     localTaskCanceling: 'Confirming cancellation…',
     localTaskCanceled: 'Task canceled',
 
@@ -2621,6 +2627,9 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProCustomScaleApply: '適用',
     roninProAudioCompress: '音声圧縮',
     localTaskCancel: 'タスクをキャンセル',
+    localDocumentUndo: '元に戻す',
+    localDocumentRedo: 'やり直す',
+
     localTaskCanceling: 'キャンセルを確認中…',
     localTaskCanceled: 'タスクをキャンセルしました',
 

@@ -1,0 +1,67 @@
+{
+  "id": "91e2c4a8-f5fe-4dce-adb6-6dad95f20c96",
+  "formatVersion": 1,
+  "initialRevision": 1,
+  "finalRevision": 7,
+  "reopenedNodes": 3,
+  "reopenedEdges": 2,
+  "reopenedSelectedInputs": 1,
+  "stableInputVersion": "01bd5ba8-be52-441c-be56-e7ca52c68834",
+  "noDuplicateImportsOnReopenAndSave": true,
+  "parameterUndoRedo": [
+    160,
+    128
+  ],
+  "nodeDeletionExport": {
+    "nodes": 2,
+    "edges": 0
+  },
+  "oneUndoRestoredNodeAndBothEdges": true,
+  "keyboardDeleteAfterClick": "passed after focusable node header with click/Enter/Space selection",
+  "screenshot": "skill-workflow-document.png",
+  "macOsCommandZRestoredNode": true,
+  "keyboardScreenshot": "skill-workflow-keyboard.png",
+  "conflictInjectedAfterRevision": 6,
+  "conflictAcceptance": {
+    "originalId": "91e2c4a8-f5fe-4dce-adb6-6dad95f20c96",
+    "originalRevision": 7,
+    "originalWidth": 160,
+    "copyId": "acfac185-2ffb-4599-9ee5-2aaad3ee66ce",
+    "copyRevision": 1,
+    "copyWidth": 144,
+    "returnBlockedAndEditedWidthPreserved": true,
+    "sameInputVersion": true,
+    "versionCountUnchanged": true,
+    "screenshot": "skill-workflow-conflict.png",
+    "reopenScreenshot": "skill-workflow-reopen-copy.png"
+  },
+  "loadRace": {
+    "controlledDelaySecondsPerVersionRead": 1.5,
+    "lateLoadedContentRejected": true,
+    "newNamePreserved": "\u8bfb\u53d6\u671f\u95f4\u7684\u65b0\u7f16\u8f91",
+    "newDocumentSaved": "6634deea-16ba-480c-9a60-6a248d52957f",
+    "originalCopyNotOverwritten": true,
+    "screenshot": "skill-workflow-load-race.png"
+  },
+  "sharedSaveBarRsepriteRegression": {
+    "document": "34fee7ff-922f-4fc2-8252-efd1a4758958",
+    "revision": 2,
+    "contentUnchanged": true,
+    "noDuplicateCelVersions": true,
+    "durations": [
+      100,
+      320
+    ]
+  },
+  "documentSaveShortcut": {
+    "commandS": true,
+    "savedFrameDuration": 120,
+    "document": "34fee7ff-922f-4fc2-8252-efd1a4758958",
+    "revision": 3,
+    "commandShiftS": true,
+    "copyDocument": "c0824936-b711-4b0b-b409-029b24c0ba28",
+    "originalDurationRestored": 100,
+    "noDuplicateCelVersions": true,
+    "screenshot": "skill-document-save-shortcut.png"
+  }
+}

@@ -1,12 +1,13 @@
 import { jsonPost, localFetch, localJson } from './api'
 
-type Version = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number } }
+export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
+type Version = ManagedVersion
 type Task = { id: string; state: string; progress: number; results: string[]; error?: { code: string; message: string } }
 type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void; outputFilter?: (version: Version) => boolean }
 const imported = new WeakMap<Blob, { project: string; version: string }>()
+const importing = new WeakMap<Blob, { project: string; promise: Promise<Version> }>()
 
-export async function runManagedTask(operation: string, files: Blob[], parameters: object, options: Options = {}) {
-  const { signal } = options
+export async function importManagedInputs(files: Blob[], signal?: AbortSignal) {
   signal?.throwIfAborted()
   const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project')
   if (!Number.isFinite(memoryBudgetBytes) || memoryBudgetBytes <= 0) {
@@ -20,12 +21,31 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
       await localJson(`/api/versions/${existing.version}`)
       inputs.push(existing.version)
     } else {
-      const name = file instanceof File ? file.name : `selected-${String(index).padStart(4, '0')}.png`
-      const form = new FormData(); form.append('file', new File([file], name, { type: file.type || 'image/png' }))
-      const version = await localJson<Version>('/api/assets', { method: 'POST', body: form, signal })
-      imported.set(file, { project: project.id, version: version.id }); inputs.push(version.id)
+      let pending = importing.get(file)
+      if (pending?.project !== project.id) {
+        const name = file instanceof File ? file.name : `selected-${String(index).padStart(4, '0')}.png`
+        const form = new FormData(); form.append('file', new File([file], name, { type: file.type || 'image/png' }))
+        const promise = localJson<Version>('/api/assets', { method: 'POST', body: form, signal })
+          .then(version => { imported.set(file, { project: project.id, version: version.id }); return version })
+        pending = { project: project.id, promise }; importing.set(file, pending)
+      }
+      try { inputs.push((await pending.promise).id) }
+      finally { if (importing.get(file) === pending) importing.delete(file) }
     }
   }
+  signal?.throwIfAborted()
+  return { project, memoryBudgetBytes, inputs }
+}
+
+export function cacheManagedInput(file: Blob, project: string, version: string) {
+  // Call only after loading and verifying this version in the current project.
+  // Every subsequent use still revalidates it through the scoped version API.
+  imported.set(file, { project, version })
+}
+
+export async function runManagedTask(operation: string, files: Blob[], parameters: object, options: Options = {}) {
+  const { signal } = options
+  const { inputs, memoryBudgetBytes } = await importManagedInputs(files, signal)
   signal?.throwIfAborted()
   const created = await localJson<{ id: string; state: string }>('/api/tasks', jsonPost({ operation, inputs, parameters }))
   let record: Task = { id: created.id, state: created.state, progress: 0, results: [] }

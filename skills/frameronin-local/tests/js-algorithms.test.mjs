@@ -16,7 +16,8 @@ function graph() {
 test('strict graph and legacy repairs have separate behavior', () => {
   assert.equal(algorithms.validateStrictWorkflow(graph(),1).nodes[1].params.keepAspect,0)
   for(const change of [value=>value.nodes[1].type='unknown',value=>value.nodes[1].params.shell=1,
-    value=>value.nodes[1].id='input',value=>value.edges[0].source='missing',value=>value.edges[0].targetPort='inA']) {
+    value=>value.nodes[1].id='input',value=>value.edges[0].source='missing',value=>value.edges[0].targetPort='inA',
+    value=>value.nodes[1].params.w=null]) {
     const value=graph();change(value);assert.throws(()=>algorithms.validateStrictWorkflow(value,1))
   }
   const historical=graph();historical.nodes.push({id:'unknown',type:'unknown',params:{},x:0,y:0})
@@ -97,4 +98,42 @@ test('private OpenCV loader preserves original optical-flow behavior without a t
   assert.equal(output.width,64);assert.equal(output.height,64)
   assert.deepEqual([...output.getContext('2d').getImageData(20,25,1,1).data],[221,102,51,255])
   assert.deepEqual([...output.getContext('2d').getImageData(0,0,1,1).data],[0,0,0,0])
+})
+test('blueprint history treats a node deletion with its edges and a complete drag as single undo steps', () => {
+  const initial = {nodes:[{id:'a',type:'resizeHard',params:{w:8,h:8},x:0,y:0},
+    {id:'b',type:'resizeHard',params:{w:8,h:8},x:300,y:0}],edges:[{id:'edge',source:'a',target:'b'}],presetName:'Original'}
+  const reducer = algorithms.workflowHistoryReducer
+  let history = algorithms.createWorkflowHistory(initial)
+  history = reducer(history,{type:'begin'})
+  for (let x=1;x<=20;x++) history = reducer(history,{type:'nodes',value:nodes=>nodes.map(node=>node.id==='a'?{...node,x}:node)})
+  history = reducer(history,{type:'end'});assert.equal(history.past.length,1)
+  history = reducer(history,{type:'change',value:draft=>({...draft,nodes:draft.nodes.filter(node=>node.id!=='a'),edges:[]})})
+  assert.equal(history.past.length,2)
+  history = reducer(history,{type:'undo'})
+  assert.equal(history.present.nodes[0].x,20);assert.equal(history.present.edges.length,1)
+  history = reducer(history,{type:'undo'});assert.deepEqual(history.present,initial)
+  history = reducer(history,{type:'redo'});history = reducer(history,{type:'redo'})
+  assert.deepEqual(history.present.nodes.map(node=>node.id),['b']);assert.equal(history.present.edges.length,0)
+  history = reducer(history,{type:'restore',value:initial});assert.equal(history.past.length,0);assert.equal(history.future.length,0)
+})
+test('stored blueprints allow incomplete editing while rejecting unsafe fields and references', () => {
+  const draft = {formatVersion:1,graph:{version:7,nodes:[],edges:[],presetName:'Draft'},inputs:[]}
+  algorithms.validateStoredWorkflow(draft)
+  assert.throws(()=>algorithms.validateStrictWorkflow(draft.graph,0))
+  for (const change of [value=>value.execute='shell',value=>value.graph.nodes.push({id:'n',type:'unknown',params:{}}),
+    value=>value.inputs.push({id:'00000000-0000-4000-8000-000000000001',name:'../secret.png',versionId:'00000000-0000-4000-8000-000000000002'}),
+    value=>value.graph.edges.push({id:'e',source:'missing',target:'other'})]) {
+    const value=structuredClone(draft);change(value);assert.throws(()=>algorithms.validateStoredWorkflow(value))
+  }
+})
+test('all 13 historical preset layouts can be stored without relaxing strict AI identifier limits', async () => {
+  const manifest = JSON.parse(await fs.readFile(path.resolve(skill, '../../doc/baseline/presets.json'), 'utf8'))
+  for (const preset of manifest) {
+    const relative = preset.source.replace('reference/frontend/public/', '')
+    const text = await fs.readFile(path.join(skill, 'assets/workbench/public', relative), 'utf8')
+    const { nodes, edges, presetName } = algorithms.importLegacyWorkflow(text)
+    algorithms.validateStoredWorkflow({ formatVersion: 1, graph: { version: 7, nodes, edges, presetName: presetName ?? preset.id }, inputs: [] })
+  }
+  const value = graph();value.edges[0].id='e'.repeat(95)
+  assert.throws(()=>algorithms.validateStrictWorkflow(value,1), /WORKFLOW_ID_INVALID/)
 })

@@ -7,3 +7,5 @@ export { duplicateSpriteGridFrames } from '../../assets/workbench/src/lib/sprite
 export { createInitialState, rsepriteReducer } from '../../assets/workbench/src/components/Rseprite/useRsepriteState'
 export { validateStoredRseprite } from '../../assets/workbench/src/localProject/rsepriteDocument'
 export { interpolateMidFrameOpticalFlow, expandFramesWithOpticalMidpoints } from '../../assets/workbench/src/lib/opticalFlowInterpolate'
+export { createWorkflowHistory, workflowHistoryReducer } from '../../assets/workbench/src/localProject/workflowHistory'
+export { validateStoredWorkflow } from '../../assets/workbench/src/localProject/workflowDocument'

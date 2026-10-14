@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { runManagedTask } from '../.runtime/js/managed-tasks.mjs'
+import { runManagedTask, importManagedInputs } from '../.runtime/js/managed-tasks.mjs'
 
 globalThis.window = globalThis
 const nativeFetch = globalThis.fetch
@@ -53,5 +53,14 @@ test('missing runtime budget rejects before imports or job creation', async () =
   try {
     await assert.rejects(runManagedTask('image.flip', [new Blob(['input'])], {}), /valid preview budget/)
     assert.equal(requests.length, 1)
+  } finally { globalThis.fetch = nativeFetch }
+})
+test('concurrent document save and processing share one selected input import', async () => {
+  let imports = 0
+  fixture({ '/api/assets': async () => { imports++;await new Promise(resolve=>setTimeout(resolve,20));return response({id:'shared-input'}) } })
+  const selected = new Blob(['same selected file'])
+  try {
+    const [a,b] = await Promise.all([importManagedInputs([selected]),importManagedInputs([selected])])
+    assert.equal(imports,1);assert.deepEqual(a.inputs,['shared-input']);assert.deepEqual(a.inputs,b.inputs)
   } finally { globalThis.fetch = nativeFetch }
 })

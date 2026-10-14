@@ -116,10 +116,10 @@ export default function RoninProRseprite() {
   return (
     <div style={{ width: '100%', maxWidth: 'min(calc(100vw - 48px), 1920px)' }}>
       <DocumentSaveBar<Document, StoredRseprite> kind="rseprite" snapshot={doc}
-        serialize={document => persistence.current!.serialize(document)} restore={async value => {
-          const document = await persistence.current!.deserialize(value)
+        serialize={document => persistence.current!.serialize(document)} restore={value => persistence.current!.deserialize(value)}
+        applySnapshot={document => {
+          persistence.current!.activate(document)
           dispatch({ type: 'RESTORE_DOCUMENT', document })
-          return document
         }} />
       <Typography.Paragraph style={{ marginBottom: 16, fontSize: 15 }}>
         {t('roninProRsepriteLead')}

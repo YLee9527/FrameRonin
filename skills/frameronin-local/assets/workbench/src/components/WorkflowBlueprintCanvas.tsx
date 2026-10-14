@@ -1,17 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { CloseOutlined } from '@ant-design/icons'
 import type { GraphNode, WorkflowEdge, WorkflowNodeType } from '../lib/roninProWorkflow'
 import { getStitchInputSlotCount, WORKFLOW_DRAG_INPUT_IMAGE_INDEX } from '../lib/roninProWorkflow'
 
-export const BLUEPRINT_WORLD_W = 8192
-export const BLUEPRINT_WORLD_H = 6144
+import { BLUEPRINT_WORLD_W, BLUEPRINT_WORLD_H, BLUEPRINT_NODE_WIDTH, BLUEPRINT_INPUT_IMAGE_NODE_WIDTH, BLUEPRINT_PIN_Y, getBlueprintNodeWidth } from '../lib/workflowBlueprintGeometry'
+
 const WORLD_W = BLUEPRINT_WORLD_W
 const WORLD_H = BLUEPRINT_WORLD_H
-export const BLUEPRINT_NODE_WIDTH = 252
-/** 「输入图」节点收窄，宽度与缩略图列大致一致 */
-export const BLUEPRINT_INPUT_IMAGE_NODE_WIDTH = 136
 const HEADER_H = 40
-export const BLUEPRINT_PIN_Y = HEADER_H / 2
 const PIN_HIT = 28
 /** 双背景抠图：左列上下两个输入口（世界坐标系内相对节点 top 的 Y 偏移） */
 const DOUBLE_BG_PIN_A_Y = 16
@@ -35,34 +31,6 @@ function inputPinWorld(n: GraphNode, port?: string): { x: number; y: number } {
     return { x: n.x, y: n.y + STITCH_PIN_FIRST_Y + (slot - 1) * STITCH_PIN_STEP }
   }
   return { x: n.x, y: n.y + BLUEPRINT_PIN_Y }
-}
-
-/** 自定义均分重组：按列数与切块编号位数估算节点宽度，避免表格局部横向滚动条 */
-function customRearrangeMetrics(n: GraphNode) {
-  const oc = Math.max(1, Math.round(n.params.outCols ?? 2))
-  const sc = Math.max(1, Math.round(n.params.splitCols ?? 2))
-  const sr = Math.max(1, Math.round(n.params.splitRows ?? 2))
-  const maxIdx = Math.max(1, sc * sr)
-  const maxStrLen = String(maxIdx).length + 1
-  const inputW = Math.min(76, Math.max(38, 18 + maxStrLen * 10))
-  return { oc, inputW, maxIdx }
-}
-
-export function getBlueprintNodeWidth(n: GraphNode): number {
-  if (n.type === 'workflowInputImage') return BLUEPRINT_INPUT_IMAGE_NODE_WIDTH
-  if (n.type === 'matteDoubleBackground') return Math.max(BLUEPRINT_NODE_WIDTH, 268)
-  if (n.type !== 'customGridRearrange') return BLUEPRINT_NODE_WIDTH
-  const { oc, inputW } = customRearrangeMetrics(n)
-  const perCell = inputW + 10
-  const inner = oc * perCell
-  const w = 24 + inner + 12
-  return Math.min(980, Math.max(BLUEPRINT_NODE_WIDTH, Math.ceil(w)))
-}
-
-/** 格子内 InputNumber 宽度（与 getBlueprintNodeWidth 一致） */
-export function getCustomRearrangeInputWidth(n: GraphNode): number {
-  if (n.type !== 'customGridRearrange') return 48
-  return customRearrangeMetrics(n).inputW
 }
 
 type ConnectingState = { sourceId: string } | null
@@ -96,6 +64,9 @@ export interface WorkflowBlueprintCanvasProps {
   edges: WorkflowEdge[]
   setNodes: React.Dispatch<React.SetStateAction<GraphNode[]>>
   setEdges: React.Dispatch<React.SetStateAction<WorkflowEdge[]>>
+  onDeleteNode: (id: string) => void
+  onBeginNodeMove: () => void
+  onEndNodeMove: () => void
   getNodeTitle: (n: GraphNode) => string
   renderNodeBody: (n: GraphNode) => React.ReactNode
   tHint: (key: string, params?: Record<string, string | number>) => string
@@ -116,6 +87,9 @@ export default function WorkflowBlueprintCanvas({
   edges,
   setNodes,
   setEdges,
+  onDeleteNode,
+  onBeginNodeMove,
+  onEndNodeMove,
   getNodeTitle,
   renderNodeBody,
   tHint,
@@ -134,7 +108,7 @@ export default function WorkflowBlueprintCanvas({
   const connectRef = useRef<ConnectingState>(null)
   const wireEndRef = useRef<{ x: number; y: number } | null>(null)
   const nodesRef = useRef(nodes)
-  nodesRef.current = nodes
+  useLayoutEffect(() => { nodesRef.current = nodes }, [nodes])
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null)
@@ -198,6 +172,7 @@ export default function WorkflowBlueprintCanvas({
       }
       if (nodeDrag.current) {
         nodeDrag.current = null
+        onEndNodeMove()
         return
       }
       const c = connectRef.current
@@ -253,6 +228,7 @@ export default function WorkflowBlueprintCanvas({
               : best.n.type === 'simpleStitchVertical'
                 ? best.port
                 : undefined
+          const edgeId = crypto.randomUUID()
           setEdges((prev) => {
             let next = prev.filter((ed) => ed.source !== sid)
             if (tPort === 'inA' || tPort === 'inB') {
@@ -264,7 +240,7 @@ export default function WorkflowBlueprintCanvas({
               next = next.filter((ed) => ed.target !== tid)
             }
             next.push({
-              id: `e-${sid}-${tid}-${tPort ?? 'in'}-${Date.now()}`,
+              id: edgeId,
               source: sid,
               target: tid,
               ...(tPort ? { targetPort: tPort } : {}),
@@ -280,11 +256,17 @@ export default function WorkflowBlueprintCanvas({
     }
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseup', onUp)
+    const onBlur = () => {
+      if (nodeDrag.current) { nodeDrag.current = null; onEndNodeMove() }
+      panDrag.current = null
+    }
+    window.addEventListener('blur', onBlur)
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseup', onUp)
+      window.removeEventListener('blur', onBlur)
     }
-  }, [setNodes, setEdges, scale, clientToWorld])
+  }, [setNodes, setEdges, scale, clientToWorld, onEndNodeMove])
 
   useEffect(() => {
     const isTypingTarget = (el: EventTarget | null) => {
@@ -295,7 +277,7 @@ export default function WorkflowBlueprintCanvas({
       return !!t.closest?.('input, textarea, select, [contenteditable="true"]')
     }
     const onKeyDown = (e: KeyboardEvent) => {
-      if (isTypingTarget(e.target)) return
+      if (e.isComposing || isTypingTarget(e.target)) return
       const d = digitFromKeyCode(e.code)
       if (d !== null) {
         heldPlaceRef.current.heldDigit = d
@@ -335,7 +317,7 @@ export default function WorkflowBlueprintCanvas({
     }
     const onKey = (e: KeyboardEvent) => {
       // 输入框内不删节点；Backspace 不用于删除（避免误触），仅 Delete 删除选中连线/节点
-      if (e.key !== 'Delete') return
+      if (e.isComposing || e.key !== 'Delete') return
       if (isTypingTarget(e.target)) return
       if (e.repeat) return
       if (selectedEdgeId) {
@@ -344,14 +326,13 @@ export default function WorkflowBlueprintCanvas({
         return
       }
       if (selectedId) {
-        setNodes((prev) => prev.filter((n) => n.id !== selectedId))
-        setEdges((prev) => prev.filter((ed) => ed.source !== selectedId && ed.target !== selectedId))
+        onDeleteNode(selectedId)
         setSelectedId(null)
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [selectedId, selectedEdgeId, setNodes, setEdges])
+  }, [selectedId, selectedEdgeId, onDeleteNode, setEdges])
 
   const onViewportWheel = (e: React.WheelEvent) => {
     if (!e.ctrlKey && !e.metaKey) return
@@ -412,6 +393,7 @@ export default function WorkflowBlueprintCanvas({
     e.stopPropagation()
     e.preventDefault()
     setSelectedId(n.id)
+    onBeginNodeMove()
     nodeDrag.current = {
       id: n.id,
       sx: e.clientX,
@@ -701,6 +683,16 @@ export default function WorkflowBlueprintCanvas({
                 />
                 <div
                   onMouseDown={(e) => onHeaderMouseDown(e, n)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={getNodeTitle(n)}
+                  aria-pressed={selectedId === n.id}
+                  onClick={event => { setSelectedId(n.id); event.currentTarget.focus() }}
+                  onKeyDown={event => {
+                    if (!event.nativeEvent.isComposing && (event.key === 'Enter' || event.key === ' ')) {
+                      event.preventDefault(); setSelectedId(n.id)
+                    }
+                  }}
                   style={{
                     height: HEADER_H,
                     padding: '0 28px 0 14px',
@@ -730,8 +722,7 @@ export default function WorkflowBlueprintCanvas({
                     style={{ fontSize: 12, color: '#8b93a5', cursor: 'pointer' }}
                     onClick={(e) => {
                       e.stopPropagation()
-                      setNodes((prev) => prev.filter((x) => x.id !== n.id))
-                      setEdges((prev) => prev.filter((ed) => ed.source !== n.id && ed.target !== n.id))
+                      onDeleteNode(n.id)
                       if (selectedId === n.id) setSelectedId(null)
                     }}
                   />
