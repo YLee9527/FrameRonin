@@ -34,8 +34,8 @@ export default function ProjectPanel() {
     return () => clearInterval(interval)
   }, [open, refresh])
   return <>
-    <Button icon={<FolderOpenOutlined />} style={{ position: 'fixed', right: 20, bottom: 20, zIndex: 100 }} onClick={() => setOpen(true)}>{text.project}</Button>
-    <Drawer width={480} title={`${text.project}${name ? ` · ${name}` : ''}`} open={open} onClose={() => setOpen(false)}>
+    <Button icon={<FolderOpenOutlined />} style={{ position: 'fixed', left: 64, bottom: 20, zIndex: 2100 }} onClick={() => setOpen(true)}>{text.project}</Button>
+    <Drawer width={480} zIndex={2400} title={`${text.project}${name ? ` · ${name}` : ''}`} open={open} onClose={() => setOpen(false)}>
       <Space orientation="vertical" style={{ width: '100%' }}>
         {error && <Alert type="error" title={text.error} description={error} />}
         <Upload multiple showUploadList={false} beforeUpload={async file => {

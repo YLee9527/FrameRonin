@@ -88,3 +88,13 @@ test('stitch accepts shared or named ports and rejects mixing their semantics', 
   delete value.edges[0].targetPort
   assert.throws(()=>algorithms.validateStrictWorkflow(value,2))
 })
+test('private OpenCV loader preserves original optical-flow behavior without a thenable initialization loop', {timeout:10000}, async () => {
+  const first=dom.createCanvas(64,64),second=dom.createCanvas(64,64)
+  for (const [canvas,x] of [[first,10],[second,14]]) {
+    const context=canvas.getContext('2d');context.fillStyle='#dd6633';context.fillRect(x,20,20,20)
+  }
+  const output=await algorithms.interpolateMidFrameOpticalFlow(first,second,{quality:'fast'})
+  assert.equal(output.width,64);assert.equal(output.height,64)
+  assert.deepEqual([...output.getContext('2d').getImageData(20,25,1,1).data],[221,102,51,255])
+  assert.deepEqual([...output.getContext('2d').getImageData(0,0,1,1).data],[0,0,0,0])
+})

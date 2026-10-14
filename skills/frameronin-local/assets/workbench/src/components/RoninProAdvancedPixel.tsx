@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Button,
   Checkbox,
@@ -73,6 +73,14 @@ export default function RoninProAdvancedPixel() {
   const [maxMotionRel, setMaxMotionRel] = useState(0.35)
 
   const [loading, setLoading] = useState(false)
+  const [canceling, setCanceling] = useState(false)
+  const execution = useRef<AbortController | null>(null)
+  const mounted = useRef(true)
+  useEffect(() => {
+    mounted.current = true
+    // Leaving this tool does not cancel its durable project task.
+    return () => { mounted.current = false }
+  }, [])
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null)
   const [resultUrls, setResultUrls] = useState<string[]>([])
   const [resultCanvases, setResultCanvases] = useState<HTMLCanvasElement[]>([])
@@ -170,9 +178,13 @@ export default function RoninProAdvancedPixel() {
       return
     }
     clearResults()
+    const controller = new AbortController()
+    execution.current = controller
     setLoading(true)
+    setCanceling(false)
     setProgress({ done: 0, total: loadedImages.length - 1 })
     const key = 'opencv-flow'
+    const urls: string[] = []
     try {
       message.loading({ content: t('roninProFlowOpenCvLoading'), key, duration: 0 })
       const canvases = await expandFramesWithOpticalMidpoints(
@@ -185,15 +197,14 @@ export default function RoninProAdvancedPixel() {
           quality,
           maxMotionRelative: maxMotionRel,
         },
-        (done, total) => setProgress({ done, total }),
+        (done, total) => { if (mounted.current) setProgress({ done, total }) },
+        controller.signal,
       )
       message.destroy(key)
+      controller.signal.throwIfAborted()
+      if (!mounted.current) return
 
-      setResultCanvases(canvases)
       const n = canvases.length
-      setSheetOutCols(Math.max(1, Math.ceil(Math.sqrt(n))))
-
-      const urls: string[] = []
       for (let i = 0; i < canvases.length; i++) {
         const c = canvases[i]!
         const blob = await new Promise<Blob>((resolve, reject) => {
@@ -201,14 +212,29 @@ export default function RoninProAdvancedPixel() {
         })
         urls.push(URL.createObjectURL(blob))
       }
+      if (controller.signal.aborted || !mounted.current) {
+        urls.forEach(URL.revokeObjectURL)
+        controller.signal.throwIfAborted()
+        return
+      }
+      setResultCanvases(canvases)
+      setSheetOutCols(Math.max(1, Math.ceil(Math.sqrt(n))))
       setResultUrls(urls)
       message.success(t('roninProFlowDone', { out: canvases.length, src: loadedImages.length }))
     } catch (e) {
+      urls.forEach(URL.revokeObjectURL)
       message.destroy(key)
-      message.error(t('roninProFlowFailed') + ': ' + String(e))
+      if (mounted.current) {
+        if (e instanceof DOMException && e.name === 'AbortError') message.info(t('roninProFlowCanceled'))
+        else message.error(t('roninProFlowFailed') + ': ' + String(e))
+      }
     } finally {
-      setLoading(false)
-      setProgress(null)
+      execution.current = null
+      if (mounted.current) {
+        setLoading(false)
+        setCanceling(false)
+        setProgress(null)
+      }
     }
   }
 
@@ -496,6 +522,14 @@ export default function RoninProAdvancedPixel() {
           >
             {t('roninProFlowRun')}
           </Button>
+          {loading && (
+            <Button disabled={canceling} onClick={() => {
+              setCanceling(true)
+              execution.current?.abort()
+            }}>
+              {t(canceling ? 'roninProFlowCanceling' : 'roninProFlowCancel')}
+            </Button>
+          )}
           {progress && (
             <Text type="secondary">
               {t('roninProFlowProgress', { done: progress.done, total: progress.total })}

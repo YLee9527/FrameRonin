@@ -820,6 +820,7 @@
 .map-stitch-toolbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   min-height: 72px;
   padding: 12px 20px;
@@ -829,8 +830,8 @@
 }
 
 .map-stitch-title {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 240px;
+  min-width: 200px;
   display: flex;
   align-items: baseline;
   gap: 12px;
@@ -839,6 +840,12 @@
 
 .map-stitch-title h4 {
   margin: 0 0 2px 0;
+  white-space: nowrap;
+}
+
+.map-stitch-toolbar > .ant-space {
+  flex: 1 1 640px;
+  min-width: 0;
 }
 
 .map-stitch-title-hint {
@@ -1007,6 +1014,11 @@
     0 0 0 8px color-mix(in srgb, var(--tile-accent) 30%, transparent),
     0 12px 32px rgba(35, 28, 20, 0.24);
   filter: saturate(1.12);
+}
+
+.map-stitch-neighbor-frame.selected {
+  overflow: visible;
+  z-index: 10;
 }
 
 .map-stitch-stage-hide-borders .map-stitch-source-frame,

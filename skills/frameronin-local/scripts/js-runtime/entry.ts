@@ -6,3 +6,4 @@ export { stitchImageBlobs } from '../../assets/workbench/src/lib/simpleStitchVer
 export { duplicateSpriteGridFrames } from '../../assets/workbench/src/lib/spriteGridDuplicate'
 export { createInitialState, rsepriteReducer } from '../../assets/workbench/src/components/Rseprite/useRsepriteState'
 export { validateStoredRseprite } from '../../assets/workbench/src/localProject/rsepriteDocument'
+export { interpolateMidFrameOpticalFlow, expandFramesWithOpticalMidpoints } from '../../assets/workbench/src/lib/opticalFlowInterpolate'

@@ -4,6 +4,7 @@
  * - 可选对光流高斯平滑、位移限幅，抑制异常向量。
  */
 import { loadOpenCv } from './pixellise/opencv'
+declare const __FRAMERONIN_LOCAL_NODE__: boolean
 
 export type OpticalFlowQuality = 'fast' | 'balanced' | 'high'
 
@@ -215,12 +216,32 @@ export async function expandFramesWithOpticalMidpoints(
   frames: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[],
   options: Partial<OpticalFlowInterpolateOptions> = {},
   onProgress?: (done: number, total: number) => void,
+  signal?: AbortSignal,
 ): Promise<HTMLCanvasElement[]> {
   if (frames.length < 2) {
     throw new Error('At least 2 frames are required')
   }
   const { w, h } = assertSameSize(frames)
   const opt: OpticalFlowInterpolateOptions = { ...DEFAULT_OPTIONS, ...options }
+  if (typeof __FRAMERONIN_LOCAL_NODE__ === 'undefined' || !__FRAMERONIN_LOCAL_NODE__) {
+    const { runManagedTask } = await import('../localProject/managedTasks')
+    const inputs: Blob[] = []
+    for (const frame of frames) {
+      signal?.throwIfAborted()
+      const canvas = drawToCanvas(frame, w, h)
+      inputs.push(await new Promise<Blob>((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Frame encoding failed')), 'image/png')))
+    }
+    const result = await runManagedTask('sequence.opticalFlow', inputs, opt, { signal,
+      onProgress: value => onProgress?.(Math.round(value * (frames.length - 1)), frames.length - 1) })
+    const canvases: HTMLCanvasElement[] = []
+    for (const { version, blob } of result.outputs) {
+      if (version.metadata.kind !== 'image') continue
+      signal?.throwIfAborted()
+      const bitmap = await createImageBitmap(blob)
+      canvases.push(drawToCanvas(bitmap, w, h)); bitmap.close()
+    }
+    return canvases
+  }
   const out: HTMLCanvasElement[] = []
   const pairs = frames.length - 1
   for (let i = 0; i < frames.length; i++) {

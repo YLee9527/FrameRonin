@@ -47,6 +47,10 @@ REGISTRY = {
                                           'spacing': integer(0, 0, 512)}, 'png_index', 'bounded_frames'),
     'sequence.gif': operation(['image+'], {'duration': integer(100, 10, 60000), 'loop': integer(0, 0, 65535)},
                               'gif', 'global_palette'),
+    'sequence.opticalFlow': operation(['image+'], {'alpha': number(0.5, 0, 1),
+        'nearestNeighbor': {'type':'boolean','default':False}, 'bidirectional': {'type':'boolean','default':True},
+        'quality': choice('balanced',['fast','balanced','high']), 'smoothFlow': {'type':'boolean','default':True},
+        'maxMotionRelative': number(0.35,0.05,0.95)}, 'png_sequence_report', 'full_frame_pair', overhead=384),
     'image.slice': operation(['image'], {'columns': integer(4, 1, 128), 'rows': integer(4, 1, 128)},
                              'png_zip_index', 'stream'),
     'image.perfectPixel': operation(['image'], {'sampleMethod': choice('center', ['center', 'median', 'majority']),
@@ -140,6 +144,10 @@ def preview(project, payload):
         if bool(values['gridCols']) != bool(values['gridRows']):
             raise RoninError('GRID_DIMENSIONS', 'Provide both manual grid dimensions, or neither.')
         estimate += min(2048**2, max(pixels)) * 64
+    if name == 'sequence.opticalFlow':
+        if not 2 <= len(versions) <= 500 or len({(v['metadata']['width'],v['metadata']['height']) for v in versions}) != 1:
+            raise RoninError('OPTICAL_FLOW_FRAMES', 'Select 2–500 frames with identical dimensions; output is limited to 999 frames.')
+        estimate += sum(pixels) * 4 + pixels[0] * (2 * len(versions) - 1) * 4 + max(pixels) * 64
     if name in ['workflow.strict', 'workflow.legacy']:
         graph = values['graph']
         if name == 'workflow.strict':

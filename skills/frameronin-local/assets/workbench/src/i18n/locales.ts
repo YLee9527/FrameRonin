@@ -324,7 +324,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProAdvancedPixel: '高级像素处理算法',
     roninProAdvancedPixelCardDesc: '高阶像素级算法与批处理；已含 OpenCV.js 光流补帧，更多能力将陆续加入。',
     roninProAdvancedPixelHint:
-      '下方为可扩展的像素算法入口。首个工具：光流补帧——在等尺寸序列帧之间插入中间帧（浏览器本地处理，首次运行需加载 OpenCV.wasm）。',
+      '在等尺寸序列帧之间插入中间帧。计算由本地后台任务完成；离开页面后可在「项目素材与任务」中查看结果或取消。',
     roninProAdvancedPixelEmpty: '功能开发中',
     roninProFlowModuleTitle: '光流补帧',
     roninProFlowModuleDesc:
@@ -358,7 +358,10 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProFlowResultTitle: '输出预览',
     roninProFlowDone: '完成：共 {out} 张（{src} 张原图）',
     roninProFlowFailed: '光流补帧失败',
-    roninProFlowOpenCvLoading: '正在加载 OpenCV.js（首次可能需数秒）…',
+    roninProFlowOpenCvLoading: '正在准备本地补帧任务…',
+    roninProFlowCancel: '取消任务',
+    roninProFlowCanceling: '正在确认取消…',
+    roninProFlowCanceled: '补帧任务已取消',
     roninProFlowFramesNeedTwo: '请至少选择 2 帧',
     roninProFlowFramesLoadFailed: '图片加载失败',
     roninProFlowZipOk: '已打包下载',
@@ -1484,7 +1487,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProAdvancedPixel: 'Advanced pixel algorithms',
     roninProAdvancedPixelCardDesc: 'Advanced pixel tools & batch entry; includes OpenCV.js optical-flow inbetweening.',
     roninProAdvancedPixelHint:
-      'Extensible pixel tools. First: optical-flow inbetweening — insert mid-frames between equal-size sequence images (local; first run downloads OpenCV.wasm).',
+      'Insert mid-frames between equal-size sequence images. Processing runs as a local background task. After leaving this page, use Project assets and tasks to inspect results or cancel.',
     roninProAdvancedPixelEmpty: 'Under construction',
     roninProFlowModuleTitle: 'Optical flow inbetweening',
     roninProFlowModuleDesc:
@@ -1518,7 +1521,10 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProFlowResultTitle: 'Output preview',
     roninProFlowDone: 'Done: {out} frames from {src} sources',
     roninProFlowFailed: 'Optical flow inbetweening failed',
-    roninProFlowOpenCvLoading: 'Loading OpenCV.js (first time may take a few seconds)…',
+    roninProFlowOpenCvLoading: 'Preparing the local inbetweening task…',
+    roninProFlowCancel: 'Cancel task',
+    roninProFlowCanceling: 'Confirming cancellation…',
+    roninProFlowCanceled: 'Inbetweening task canceled',
     roninProFlowFramesNeedTwo: 'Select at least 2 frames',
     roninProFlowFramesLoadFailed: 'Image load failed',
     roninProFlowZipOk: 'ZIP downloaded',
@@ -2641,7 +2647,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProAdvancedPixel: '高度ピクセル処理アルゴリズム',
     roninProAdvancedPixelCardDesc: 'ピクセル単位の高度処理・バッチ。OpenCV.js 光流補間を含み、その他は順次追加予定。',
     roninProAdvancedPixelHint:
-      '拡張可能なピクセルツール群。第1弾：光流補間——同一サイズの連番画像の間に中間フレームを挿入（ローカル処理、初回は OpenCV.wasm の読み込みあり）。',
+      '同じサイズの連番画像の間に中間フレームを挿入します。計算はローカルのバックグラウンドタスクで実行されます。ページを離れた後も「プロジェクト素材とタスク」で結果を確認・キャンセルできます。',
     roninProAdvancedPixelEmpty: '準備中',
     roninProFlowModuleTitle: '光流補間',
     roninProFlowModuleDesc:
@@ -2675,7 +2681,10 @@ export const locales: Record<Lang, Record<string, string>> = {
     roninProFlowResultTitle: '出力プレビュー',
     roninProFlowDone: '完了：{out} 枚（元 {src} 枚）',
     roninProFlowFailed: '光流補間に失敗しました',
-    roninProFlowOpenCvLoading: 'OpenCV.js を読み込み中（初回は数秒かかることがあります）…',
+    roninProFlowOpenCvLoading: 'ローカル補間タスクを準備中…',
+    roninProFlowCancel: 'タスクをキャンセル',
+    roninProFlowCanceling: 'キャンセルを確認中…',
+    roninProFlowCanceled: '補間タスクをキャンセルしました',
     roninProFlowFramesNeedTwo: '2 枚以上選んでください',
     roninProFlowFramesLoadFailed: '画像の読み込みに失敗しました',
     roninProFlowZipOk: 'ZIP をダウンロードしました',

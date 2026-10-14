@@ -41,7 +41,7 @@ export default function ImageGenPanel() {
     document.addEventListener('click', clicked, true)
     return () => { window.removeEventListener('frameronin:imagegen', requested); document.removeEventListener('click', clicked, true) }
   }, [])
-  return <Modal open={template !== null} title={text.title} onCancel={() => setTemplate(null)} footer={null} destroyOnHidden>
+  return <Modal zIndex={2400} open={template !== null} title={text.title} onCancel={() => setTemplate(null)} footer={null} destroyOnHidden>
     <Space orientation="vertical" style={{ width: '100%' }}>
       <Typography.Text>{[...GEM_PIXEL_POTPOURRI, ...GEM_PIXEL_POTPOURRI_HUB_SLOTS].find(item => item?.url === `#imagegen/${template}`)?.labelKey
         ? t([...GEM_PIXEL_POTPOURRI, ...GEM_PIXEL_POTPOURRI_HUB_SLOTS].find(item => item?.url === `#imagegen/${template}`)!.labelKey)

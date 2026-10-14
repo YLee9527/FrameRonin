@@ -23,8 +23,13 @@ async function waitUntilMatUsable(cv: CvModule, timeoutMs: number): Promise<void
 }
 
 async function resolveImportedCv(): Promise<CvModule> {
-  const opencvStar = await import('@techstark/opencv-js')
-  const cvModuleRaw = (opencvStar as { default?: unknown }).default ?? opencvStar
+  const { getOpenCvRuntime } = await import('./opencvRuntime')
+  const cvModuleRaw = getOpenCvRuntime()
+  // Emscripten's old self-returning thenable can otherwise loop during Promise
+  // assimilation, before the Mat-ready checks below have a chance to run.
+  if (!(cvModuleRaw instanceof Promise) && typeof (cvModuleRaw as CvModule).then === 'function') {
+    delete (cvModuleRaw as CvModule).then
+  }
 
   let cv: CvModule
 

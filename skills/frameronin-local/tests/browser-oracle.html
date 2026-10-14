@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8">
+  <title>FrameRonin browser oracle</title>
+  <style>body{font:18px system-ui;max-width:900px;margin:48px auto}button,input,a{margin:12px;padding:12px}#status{white-space:pre-wrap}</style>
+  <h1>Original browser algorithm acceptance</h1>
+  <label>Fixed frame sequence <input id="frames" type="file" accept="image/png" multiple></label>
+  <p><button id="flow">Run optical flow oracle</button><button id="presets">Run all 13 preset oracles</button></p>
+  <p id="status" role="status">Ready. This separate test page never submits project tasks.</p>
+  <a id="download" hidden>Download oracle result</a>
+  <script type="module" src="./browser-oracle.ts"></script>
+</html>

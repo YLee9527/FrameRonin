@@ -5,7 +5,8 @@ import sys
 import tempfile
 import time
 import unittest
-from unittest.mock import patch
+import psutil
+from unittest.mock import patch, Mock
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -138,6 +139,58 @@ class ProjectTests(unittest.TestCase):
         self.assertIsNone(queued['pid'])
         self.assertEqual(cancel(self.project, first['id'])['state'], 'canceled')
         self.assertEqual(wait(self.project, second['id'], 10)['state'], 'succeeded')
+
+    def test_cancel_stops_nested_media_processes_and_records_confirmation(self):
+        source = self.root / 'flow.png'
+        Image.new('RGBA', (512, 512), (40, 80, 120, 255)).save(source)
+        version = self.project.import_file(source)
+        submitted = submit(self.project, {'operation':'sequence.opticalFlow',
+            'inputs':[version['id']] * 16, 'parameters':{'quality':'high'}})
+        family = []
+        deadline = time.monotonic() + 10
+        while time.monotonic() < deadline:
+            record = task(self.project, submitted['id'])
+            if record['pid']:
+                try:
+                    parent = psutil.Process(record['pid'])
+                    family = [parent] + parent.children(recursive=True)
+                    if any('run.mjs' in ' '.join(child.cmdline()) for child in family): break
+                except psutil.NoSuchProcess:
+                    pass
+            time.sleep(0.02)
+        self.assertGreater(len(family), 1, record)
+        result = cancel(self.project, submitted['id'])
+        self.assertTrue(result['processStopConfirmed'])
+        self.assertLess(result['cancelElapsedSeconds'], 5)
+        self.assertEqual(result['results'], [])
+        for child in family:
+            self.assertFalse(child.is_running() and child.status() != psutil.STATUS_ZOMBIE)
+        receipt = json.loads((self.project.root / f'tasks/{submitted["id"]}/cancellation.json').read_text())
+        self.assertEqual(receipt['scope'], 'local_owned_processes')
+        self.assertGreaterEqual(receipt['ownedProcessCount'], 2)
+        with self.assertRaises(Cancelled):
+            self.project.import_file(source, task_id=submitted['id'], generation=0)
+
+    def test_cancel_denial_is_recorded_and_never_reported_as_confirmed(self):
+        task_id = identifier()
+        with self.project.connection() as db:
+            db.execute('INSERT INTO tasks(id,state,payload,created_at,updated_at) VALUES(?,?,?,?,?)',
+                       (task_id, 'running', '{}', 'now', 'now'))
+        process = Mock(pid=999999)
+        process.children.return_value = []
+        with patch('frameronin_engine.tasks._owned_process', return_value=process), \
+             patch('frameronin_engine.tasks.os.getpgid', return_value=process.pid), \
+             patch('frameronin_engine.tasks.os.killpg', side_effect=PermissionError('denied')):
+            with self.assertRaises(RoninError) as caught:
+                cancel(self.project, task_id)
+        self.assertEqual(caught.exception.code, 'CANCEL_STOP_UNCONFIRMED')
+        record = task(self.project, task_id)
+        self.assertEqual(record['state'], 'canceled')
+        self.assertEqual(record['results'], [])
+        self.assertEqual(record['error']['code'], 'CANCEL_STOP_UNCONFIRMED')
+        with self.assertRaises(RoninError): cancel(self.project, task_id)
+        receipt = json.loads((self.project.root / f'tasks/{task_id}/cancellation.json').read_text())
+        self.assertFalse(receipt['processStopConfirmed'])
 
     def test_cancel_during_output_checksum_rejects_publication(self):
         task_id = identifier()

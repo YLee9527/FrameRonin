@@ -7,7 +7,50 @@
       1024
     ],
     "decodedLayers": 2,
-    "kritaNativeAcceptance": "pending: Mac locked"
+    "kritaNativeAcceptance": {
+      "expectedSize": [
+        1894,
+        1024
+      ],
+      "mismatchingPixels": 10528,
+      "maxChannelError": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "kritaExportSha256": "cb402812e2a02536206763a1f9c2e37aa8d0e951e521a87823b46b7d80eccd47",
+      "nativeLayersAndTransparencyChecked": true,
+      "criterion": "exact decoded RGBA",
+      "passesExactCriterion": false
+    },
+    "nativeIndependentSample": {
+      "sample": "psd-krita-rounding-02",
+      "criterion": {
+        "sample": "psd-krita-rounding-02",
+        "fixedBeforeExecution": true,
+        "widthHeight": "equal to independently exported workbench PNG",
+        "layers": 2,
+        "alphaMaxError": 0,
+        "rgbMaxError": 1,
+        "reason": "8-bit integer normal compositing of translucent foreground over opaque or transparent background can differ by one quantization step between applications; prior exact comparison remains recorded as failed"
+      },
+      "dimensions": [
+        118,
+        64
+      ],
+      "maxChannelError": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "nativeLayers": 2,
+      "passed": true,
+      "workbenchPngSha256": "5dfbc8d532aff55a85c7c7da5a352909a3e9adc76c8a1d3b6b56b0ea51b74a39",
+      "kritaPngSha256": "cc75c83dc7588762de323e8c96b4d6213425a08cbd86954bd3cdb049786e755e",
+      "psdSha256": "977913e8f2dc0188768a6e7e25557e39a390a21c3737271c5c3723731ae05429"
+    }
   },
   "godot": {
     "version": "4.7.2",

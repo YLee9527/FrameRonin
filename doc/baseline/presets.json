@@ -22,7 +22,14 @@
     "edges": 12,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        1280,
+        640
+      ]
+    ]
   },
   {
     "id": "RPGMakerVX",
@@ -38,7 +45,14 @@
     "edges": 3,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        96,
+        128
+      ]
+    ]
   },
   {
     "id": "RPGMakerXP",
@@ -56,7 +70,14 @@
     "edges": 5,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        128,
+        192
+      ]
+    ]
   },
   {
     "id": "rpgmakerV3X",
@@ -79,7 +100,14 @@
     "edges": 10,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        576,
+        384
+      ]
+    ]
   },
   {
     "id": "rpgmakerv1.1x",
@@ -96,7 +124,14 @@
     "edges": 4,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        144,
+        192
+      ]
+    ]
   },
   {
     "id": "八方向",
@@ -112,7 +147,14 @@
     "edges": 3,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        192,
+        190
+      ]
+    ]
   },
   {
     "id": "吞食天地",
@@ -152,7 +194,22 @@
     "edges": 25,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        96,
+        96
+      ],
+      [
+        48,
+        32
+      ],
+      [
+        128,
+        16
+      ]
+    ]
   },
   {
     "id": "小苏剑士",
@@ -179,7 +236,14 @@
     "edges": 14,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        576,
+        384
+      ]
+    ]
   },
   {
     "id": "弓兵",
@@ -209,7 +273,14 @@
     "edges": 17,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        1024,
+        640
+      ]
+    ]
   },
   {
     "id": "普通V2&2.2",
@@ -224,7 +295,14 @@
     "edges": 2,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        160,
+        160
+      ]
+    ]
   },
   {
     "id": "狗",
@@ -240,7 +318,14 @@
     "edges": 3,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        252,
+        256
+      ]
+    ]
   },
   {
     "id": "鸟怪",
@@ -256,7 +341,14 @@
     "edges": 3,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        252,
+        255
+      ]
+    ]
   },
   {
     "id": "128土豆",
@@ -276,6 +368,13 @@
     "edges": 7,
     "sample": "fixed-rgba-grid-1024",
     "expectedOutput": "PNG; source graph operations and layout preserved",
-    "acceptance": "pending actual pixel comparison"
+    "acceptance": "strict decoded RGBA comparison passed on fixed sample; editor interaction tracked separately",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "fixedSampleOutputDimensions": [
+      [
+        1278,
+        299
+      ]
+    ]
   }
 ]

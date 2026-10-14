@@ -20,7 +20,7 @@
 | sequence.duration | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | sequence.merge | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | sequence.dedupe | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
-| sequence.optical-flow | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
+| sequence.optical-flow | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 后台与 RoninPro 工作台固定样本通过；GIF 入口交互待验收 |
 | sequence.png-zip | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | image.crop | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
 | image.resize | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
@@ -70,7 +70,7 @@
 | workflow.edge-edit | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
 | workflow.import-legacy | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
 | workflow.export | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
-| workflow.13-presets | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
+| workflow.13-presets | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 13 预设全部输出严格像素对照通过；编辑器交互待验收 |
 | workflow.execute | 蓝图 | reference/frontend/src/components/RoninProCustomWorkflow.tsx | images/JSON → PNG/JSON | 待逐项验收 |
 | rseprite.draw | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
 | rseprite.erase | Rseprite | reference/frontend/src/components/RoninProRseprite.tsx | sprite frames → editable document; original implementation has no export | 待逐项验收 |
@@ -86,9 +86,9 @@
 | map.adjacency | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
 | map.feather | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
 | map.seam-preview | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
-| map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
-| map.godot-scene | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
-| map.godot-pack | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 待逐项验收 |
+| map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 固定两层样本原生 Krita 验收通过；保留首次严格比较失败 |
+| map.godot-scene | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 固定可信无脚本工程导入运行通过 |
+| map.godot-pack | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 工作台 ZIP 下载、解包及可信工程运行通过 |
 | game.topdown | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |
 | game.arcade | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |
 | game.controls | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |

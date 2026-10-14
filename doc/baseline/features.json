@@ -242,8 +242,8 @@
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
     "sample": "fixed-sequence-optical-flow",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "evidence": "doc/testing/evidence/skill-optical-flow.json",
+    "status": "后台与 RoninPro 工作台固定样本通过；GIF 入口交互待验收",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
@@ -892,8 +892,8 @@
     "dependencies": "Canvas/DAG",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomWorkflow.tsx",
     "sample": "fixed-workflow-13-presets",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "evidence": "doc/testing/evidence/skill-preset-oracles.json",
+    "status": "13 预设全部输出严格像素对照通过；编辑器交互待验收",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
@@ -1100,8 +1100,8 @@
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
     "sample": "fixed-map-psd",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "evidence": "doc/testing/evidence/skill-interop.json",
+    "status": "固定两层样本原生 Krita 验收通过；保留首次严格比较失败",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
@@ -1113,8 +1113,8 @@
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
     "sample": "fixed-map-godot-scene",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "evidence": "doc/testing/evidence/skill-interop.json",
+    "status": "固定可信无脚本工程导入运行通过",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
@@ -1126,8 +1126,8 @@
     "dependencies": "Canvas/JSZip/PSD",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
     "sample": "fixed-map-godot-pack",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "evidence": "doc/testing/evidence/skill-interop.json",
+    "status": "工作台 ZIP 下载、解包及可信工程运行通过",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {

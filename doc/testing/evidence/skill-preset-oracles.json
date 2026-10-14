@@ -1,0 +1,308 @@
+{
+  "criterion": "strict decoded RGBA equality; no retrospective tolerance",
+  "passed": true,
+  "rows": [
+    {
+      "preset": "Dfinal",
+      "task": "c7e4b52a-2a35-41ce-896e-5277aeb20023",
+      "outputs": [
+        {
+          "dimensions": [
+            1280,
+            640
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "RPGMakerVX",
+      "task": "18233f6c-cfb3-4948-935b-bfc4eec29075",
+      "outputs": [
+        {
+          "dimensions": [
+            96,
+            128
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "RPGMakerXP",
+      "task": "440507d1-2c57-4eef-bb53-90cd91a9c464",
+      "outputs": [
+        {
+          "dimensions": [
+            128,
+            192
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "rpgmakerV3X",
+      "task": "ac2a9414-af78-4183-b686-9777aec35d8b",
+      "outputs": [
+        {
+          "dimensions": [
+            576,
+            384
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "rpgmakerv1.1x",
+      "task": "a6a413fc-abda-46ba-a0c2-54bead608610",
+      "outputs": [
+        {
+          "dimensions": [
+            144,
+            192
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "八方向",
+      "task": "d4ba66cb-d5d1-4fe5-aa00-2c912dc91df9",
+      "outputs": [
+        {
+          "dimensions": [
+            192,
+            190
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "吞食天地",
+      "task": "45e758a7-cf0e-47de-b8bb-14eb42a0ae76",
+      "outputs": [
+        {
+          "dimensions": [
+            96,
+            96
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        },
+        {
+          "dimensions": [
+            48,
+            32
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        },
+        {
+          "dimensions": [
+            128,
+            16
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "小苏剑士",
+      "task": "e90d5ac7-642b-4ee4-a511-3f82d2a45dd2",
+      "outputs": [
+        {
+          "dimensions": [
+            576,
+            384
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "弓兵",
+      "task": "149a5fe6-6fe9-4d1b-ae9b-ace61990adc9",
+      "outputs": [
+        {
+          "dimensions": [
+            1024,
+            640
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "普通V2&2.2",
+      "task": "73f95560-aa29-41e9-8994-5bbccce32342",
+      "outputs": [
+        {
+          "dimensions": [
+            160,
+            160
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "狗",
+      "task": "f2d99d99-c9cd-45f8-a2d4-c5c73a0c95fb",
+      "outputs": [
+        {
+          "dimensions": [
+            252,
+            256
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "鸟怪",
+      "task": "6afe012d-e77e-427b-9c3a-773834c2f8e2",
+      "outputs": [
+        {
+          "dimensions": [
+            252,
+            255
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "preset": "128土豆",
+      "task": "43d22e9b-dadd-4097-967f-338c1fdd8b79",
+      "outputs": [
+        {
+          "dimensions": [
+            1278,
+            299
+          ],
+          "equal": true,
+          "maxChannelDifference": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "fixtureSha256": "14183331fa3552d1fbf10fe2dde10555a0932bddca132baa7e4c8465fdc1dd17"
+}

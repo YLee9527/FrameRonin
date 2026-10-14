@@ -10,6 +10,8 @@ export function installDom(publicDirectory, budget) {
   globalThis.window = globalThis
   globalThis.self = globalThis
   globalThis.ImageData = ImageData
+  globalThis.HTMLCanvasElement = createCanvas(1, 1).constructor
+  globalThis.ImageBitmap = NativeImage
   globalThis.FileReader = class {
     result = null
     error = null

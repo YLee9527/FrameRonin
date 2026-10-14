@@ -16,7 +16,7 @@ def run(preview, directory, progress):
     parameters = preview['parameters']
     paths = [Path(v['absolutePath']) for v in preview['versions']]
     output = directory / 'result.png'
-    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy']:
+    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow']:
         from .workflows import ROOT
         node = shutil.which('node')
         compiled = ROOT / '.runtime/js/algorithms.mjs'
@@ -30,17 +30,39 @@ def run(preview, directory, progress):
             shutil.copy2(path, directory / relative)
             selected.append(relative)
         values = dict(parameters)
-        request = {'operation': 'workflow' if name.startswith('workflow.') else 'perfectPixel',
+        request = {'operation': 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
                    'inputs': selected, 'parameters': values, 'budgetBytes': preview['budgetBytes']}
         if name.startswith('workflow.'):
             request['graph'] = values.pop('graph')
             request['compatibility'] = name == 'workflow.legacy'
-        else:
+        elif name == 'image.perfectPixel':
             cols, rows = values.pop('gridCols'), values.pop('gridRows')
             values['gridSize'] = {'cols': cols, 'rows': rows} if cols else None
         request_path = directory / 'request.json'
         request_path.write_text(json.dumps(request))
-        subprocess.run([node, str(ROOT / 'scripts/js-runtime/run.mjs'), str(request_path)], check=True)
+        process = subprocess.Popen([node, str(ROOT / 'scripts/js-runtime/run.mjs'), str(request_path)],
+                                   stdout=subprocess.PIPE, text=True)
+        try:
+            for line in process.stdout:
+                if len(line) > 1024**2:
+                    raise RoninError('WORKER_EVENT_INVALID', 'A runtime event exceeded its size limit.')
+                event = json.loads(line)
+                if 'progress' in event:
+                    if type(event['progress']) not in [int, float] or not 0 <= event['progress'] <= 1:
+                        raise RoninError('WORKER_EVENT_INVALID', 'Invalid runtime progress.')
+                    progress(event['progress'])
+            if process.wait() != 0:
+                raise subprocess.CalledProcessError(process.returncode, process.args)
+        finally:
+            if process.stdout:
+                process.stdout.close()
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=1)
         report_path = directory / 'output/report.json'
         report = json.loads(report_path.read_text())
         return [directory / file for file in report['files']] + [report_path]

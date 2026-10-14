@@ -55,8 +55,21 @@ def _owned_process(record):
         if str(ENTRY) not in arguments or record['id'] not in arguments or 'worker' not in arguments:
             return None
         return process
-    except (psutil.NoSuchProcess, psutil.AccessDenied):
+    except psutil.NoSuchProcess:
         return None
+    except psutil.AccessDenied as error:
+        raise RoninError('PROCESS_IDENTITY_UNVERIFIED', 'The owned worker identity could not be verified.') from error
+
+
+def _cancel_problem(project, task_id, code, message):
+    error = RoninError(code, message, {'taskId': task_id})
+    with project.writer(), project.connection() as db:
+        db.execute('UPDATE tasks SET error=?,updated_at=? WHERE id=? AND state=?',
+                   (json.dumps(error.record()), now(), task_id, 'canceled'))
+    evidence = project.safe(f'tasks/{task_id}/cancellation.json')
+    evidence.parent.mkdir(exist_ok=True)
+    evidence.write_text(json.dumps({'processStopConfirmed': False, 'scope': 'local_owned_processes', 'error': error.record()}))
+    return error
 
 
 def cancel(project, task_id):
@@ -66,6 +79,9 @@ def cancel(project, task_id):
         if not row:
             raise RoninError('TASK_MISSING', 'The task does not exist.')
         if row['state'] in FINAL:
+            previous_error = json.loads(row['error']) if row['error'] else {}
+            if row['state'] == 'canceled' and previous_error.get('code', '').startswith('CANCEL_'):
+                raise RoninError(previous_error['code'], previous_error['message'], previous_error.get('details'))
             return task(project, task_id)
         record = dict(row)
         # Invalidate all completion callbacks before delivering any process signal.
@@ -73,25 +89,48 @@ def cancel(project, task_id):
                    ('canceled', now(), task_id))
         db.execute('UPDATE ai_attempts SET state=?,updated_at=? WHERE id=? AND state IN (?,?,?)',
                    ('cancel_requested', now(), task_id, 'requested', 'running', 'unknown'))
-    process = _owned_process(record)
+    try:
+        process = _owned_process(record)
+    except RoninError as error:
+        raise _cancel_problem(project, task_id, 'CANCEL_IDENTITY_UNVERIFIED', str(error)) from error
     if process:
+        # Track process identities before signaling. On macOS killpg(pgid, 0)
+        # can report EPERM after the leader exits; it is not a liveness probe.
+        try:
+            family = [process] + process.children(recursive=True)
+            if os.getpgid(process.pid) != process.pid:
+                raise _cancel_problem(project, task_id, 'CANCEL_PROCESS_GROUP', 'The worker no longer owns its expected process group.')
+        except (psutil.NoSuchProcess, ProcessLookupError):
+            family = []
+        except (psutil.AccessDenied, PermissionError) as error:
+            raise _cancel_problem(project, task_id, 'CANCEL_STOP_UNCONFIRMED', 'The task was invalidated, but its owned process family could not be inspected.') from error
         try:
             os.killpg(process.pid, signal.SIGTERM)
         except ProcessLookupError:
             pass
-        deadline = requested + 4.5
-        while time.monotonic() < deadline:
+        except PermissionError as error:
+            raise _cancel_problem(project, task_id, 'CANCEL_STOP_UNCONFIRMED', 'The task result was invalidated, but stopping its process group was denied.') from error
+        _, alive = psutil.wait_procs(family, timeout=max(0, requested + 4.5 - time.monotonic()))
+        for child in alive:
             try:
-                os.killpg(process.pid, 0)
-            except ProcessLookupError:
-                break
-            time.sleep(0.05)
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
+                # psutil checks the creation identity before kill, protecting
+                # against a PID reused after the captured process exits.
+                child.kill()
+            except psutil.NoSuchProcess:
+                pass
+            except psutil.AccessDenied as error:
+                raise _cancel_problem(project, task_id, 'CANCEL_STOP_UNCONFIRMED', 'The task was invalidated, but stopping an owned child process was denied.') from error
+        _, alive = psutil.wait_procs(alive, timeout=max(0, requested + 4.9 - time.monotonic()))
+        if alive:
+            raise _cancel_problem(project, task_id, 'CANCEL_STOP_UNCONFIRMED', 'The task result was invalidated; one or more owned processes have not stopped.')
     result = task(project, task_id)
     result['cancelElapsedSeconds'] = time.monotonic() - requested
+    result['processStopConfirmed'] = True
+    evidence = project.safe(f'tasks/{task_id}/cancellation.json')
+    evidence.parent.mkdir(exist_ok=True)
+    evidence.write_text(json.dumps({'generation': result['generation'], 'cancelElapsedSeconds': result['cancelElapsedSeconds'],
+                                    'processStopConfirmed': True, 'scope': 'local_owned_processes',
+                                    'aiState': result.get('aiState'), 'ownedProcessCount': len(family) if process else 0}))
     return result
 
 

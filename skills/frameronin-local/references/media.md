@@ -15,3 +15,7 @@
 大量帧优先 PNG ZIP 流式输出，核对帧顺序与索引时长。GIF 全局调色板会占用额外内存；在启动前预算不足时换 PNG ZIP，需说明原因。成熟抠图使用 rembg/U2Net，首次模型准备必须完成后再验收。
 
 交互式像素还原、双背景、透明边缘、网格、光流和散图工具由 [工作台](workbench.md) 承载，沿用原算法。对最终文件比较解码像素、透明度、尺寸、帧数、时长及索引；编码文件字节不同并不一定代表像素不同。
+
+`sequence.opticalFlow` 直接复用原 OpenCV.js 双向 Farneback、平滑、位移限制与融合算法，在受控 Node 进程执行。参数为 alpha、nearestNeighbor、bidirectional、quality（fast/balanced/high）、smoothFlow、maxMotionRelative；2–500 张同尺寸帧输出 2N−1 PNG 帧和报告。每帧对完整处理，不独立分块。16×512 固定样本的 31 帧通过浏览器与后台严格 RGBA 对照。工作台补帧页支持取消；离开页面后任务继续，在项目面板读取正式结果。
+
+本地取消返回 processStopConfirmed 和 cancelElapsedSeconds，并保存任务 cancellation.json；此确认只涵盖本地受控进程。身份或停止权限无法核验时，结果先失效，再报告 CANCEL_* 错误，不伪造停止成功。AI 服务端状态仍需核对宿主调用。

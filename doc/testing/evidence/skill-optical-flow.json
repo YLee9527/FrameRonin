@@ -1,0 +1,485 @@
+{
+  "operation": "sequence.opticalFlow",
+  "inputFrames": 16,
+  "outputFrames": 31,
+  "dimensions": [
+    512,
+    512
+  ],
+  "allOriginalFramesExactAndOrdered": true,
+  "allCornerPixelsTransparent": true,
+  "seconds": 4.72,
+  "task": "8792fea0-b656-4760-90fe-3aaae92e770f",
+  "metrics": {
+    "peakControlledProcessBytes": 426344448,
+    "budgetBytes": 2147483648,
+    "estimatedBytes": 472907776,
+    "processingMode": "full_frame_pair"
+  },
+  "report": {
+    "inputFrames": 16,
+    "outputFrames": 31,
+    "method": "original-opencv-farneback",
+    "processingDimensions": {
+      "width": 512,
+      "height": 512
+    },
+    "files": [
+      "output/result-0000.png",
+      "output/result-0001.png",
+      "output/result-0002.png",
+      "output/result-0003.png",
+      "output/result-0004.png",
+      "output/result-0005.png",
+      "output/result-0006.png",
+      "output/result-0007.png",
+      "output/result-0008.png",
+      "output/result-0009.png",
+      "output/result-0010.png",
+      "output/result-0011.png",
+      "output/result-0012.png",
+      "output/result-0013.png",
+      "output/result-0014.png",
+      "output/result-0015.png",
+      "output/result-0016.png",
+      "output/result-0017.png",
+      "output/result-0018.png",
+      "output/result-0019.png",
+      "output/result-0020.png",
+      "output/result-0021.png",
+      "output/result-0022.png",
+      "output/result-0023.png",
+      "output/result-0024.png",
+      "output/result-0025.png",
+      "output/result-0026.png",
+      "output/result-0027.png",
+      "output/result-0028.png",
+      "output/result-0029.png",
+      "output/result-0030.png"
+    ]
+  },
+  "sha256": [
+    "9781f31aa5d646ead151dc8795b6d29c4b265b6c7fe35510103e58e25873f46c",
+    "c1535621da7bc134675c58089ba5b3bf6ee20f9c923c215f16a6810427710cfe",
+    "68cb8808e7580262091795e526c3f0d8d8c3d590a9ed523d62c049349ff01991",
+    "f8a74682e881a00c57129a78a565f6254768aecb72a280e85d9b00abdb98fab8",
+    "3937937f109ea914c236627906b00741efe33ebcec7daa6ff9e2966677f8af72",
+    "1ae93c07812740c47e88160c56031ba6316cf353200950e134d4942147ef121c",
+    "3b00cd47be928497beec0260f4503446be3c6ea2ab5c8ef736132c02e5e2d0ab",
+    "eb3c6ddf735eb2684973a90df670616561b2ac553137bac4166f124cf9618f41",
+    "99dff72801d852420ea1bc0f9ab1eab56b1c47927bf01a5afe608b8b1e0d4a3a",
+    "026cb110ff8fc681312225429a65ebca88277f243c1f84f2af3def309e55142b",
+    "efd7af73e15d5e5de62d7d190a9ba5d3b9b874466f6c5dfb7647b83b5d35b59e",
+    "2f013dd872fe52d1ca63763155ccbb7bf3065123ebb3ee74803141a15cf537e7",
+    "d97e586f7bfd3897c816369e60cd6862fe01be22e800df67d7b2bb685e486000",
+    "1d9b3751ac82065cbb19ba8decc6747633b0eaece27d06340722b8a5f45b13f2",
+    "ddfaed3370cd7787d6b6a0ec74f2a9b3e83ca9bed65d1904bcb8eae747b57a0a",
+    "50bf233dd12056c934f96865b2d19d528bd5ad115e754df26627efe9284d5a6e",
+    "55781dce4816afa1c88f3e6e79a2c8f5e1deef47a64286083bc6ff1e82a885f5",
+    "9bee72b3b42c2c79f73fb3f61173a8240ce9cd3701a048d99ac5194d9b60612c",
+    "31544d00fcd60dbab12704caa912db66193c9419ff2badef3a6265bac9c0c84e",
+    "88f21d7c2769aff7aeb99a2af6f63b663c3499e5144e80ae4257bed1002d5e7b",
+    "3decb25386e3eb999eb60a95878502445fdb1ee0aa21f6d71026eff9db808223",
+    "87acd18283f9bd55de84382e7df1867323f5eaad6044474d5be715ad1502e88f",
+    "36398cc16ab5c5456331aeb8b4a9f7479df5b4aa035cec5fc9d6eeeebdf5b571",
+    "1b5ec902014a64172bdeb5f540914db4a74f029e0ff72835eeb9bbe34795e22b",
+    "e897c8ffc4c4907a7827d9455e7b6123eb00849e4e7ee76e0c11067b6203b473",
+    "060c3a53982a42fcc8293a1fd53af7bc28b9dde148f3b7637e585167551fe325",
+    "f9f42f536b490c2cfe73ca71c02131d41ef73de916abb9e3aff30588c653d0b2",
+    "adbdde208fc4794f656853401f12bab32cad95631e1215c319275be095aaed8b",
+    "8b5a066993f84c330549c96043202cd4a7de939b2f2ab8d1661f1b911c863790",
+    "64de659dc209c4290eba39cc82e55fce32e756438aa0368c61d6824a51f9c0a6",
+    "4aa5877ee1a99a1f21f3919ec9a65a847599490fe610650a217b66ca7599d531"
+  ],
+  "browserComparison": {
+    "criterion": "strict decoded RGBA equality; no tolerance",
+    "passed": true,
+    "rows": [
+      {
+        "frame": 1,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 2,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 3,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 4,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 5,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 6,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 7,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 8,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 9,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 10,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 11,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 12,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 13,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 14,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 15,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 16,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 17,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 18,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 19,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 20,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 21,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 22,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 23,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 24,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 25,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 26,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 27,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 28,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 29,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 30,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      },
+      {
+        "frame": 31,
+        "equal": true,
+        "maxChannelDifference": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0
+      }
+    ],
+    "browserLoaderFix": "Hide Emscripten thenable from dynamic-import namespace; processing function unchanged"
+  },
+  "workbenchAcceptance": {
+    "task": "1eca44ef-43e3-4065-9f0f-ba0188335ac8",
+    "state": "succeeded",
+    "downloadFrameCount": 31,
+    "allDownloadedPixelsEqualToRegisteredVersions": true,
+    "inputFiles": 16,
+    "outputFiles": 31,
+    "screenshot": "skill-optical-flow-ui.png"
+  },
+  "backgroundTask": {
+    "id": "2d7c453c-b2f3-4c09-9b36-245776656c70",
+    "stateAfterLeavingTool": "running",
+    "progressAfterLeavingTool": 0.42000000000000004,
+    "finalState": "succeeded",
+    "results": 32,
+    "generation": 0
+  },
+  "cancellation": {
+    "id": "12519837-6152-4a6b-81b7-51ed15eafa09",
+    "feedbackMilliseconds": 450,
+    "finalState": "canceled",
+    "generation": 1,
+    "results": [],
+    "workerNoLongerExists": true,
+    "stopWithinFiveSeconds": "not timed in this UI trial; follow-up timed trial required"
+  },
+  "timedCancellation": {
+    "id": "6aa01b7c-26c8-455d-895b-a9a169c8f158",
+    "feedbackMilliseconds": 299,
+    "finalState": "canceled",
+    "results": [],
+    "generation": 1,
+    "workerAndNodeStopped": true,
+    "receipt": {
+      "generation": 1,
+      "cancelElapsedSeconds": 0.047513333032839,
+      "processStopConfirmed": true,
+      "scope": "local_owned_processes",
+      "aiState": null,
+      "ownedProcessCount": 2
+    },
+    "screenshot": "skill-optical-flow-cancel-timed.png"
+  }
+}

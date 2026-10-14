@@ -56,6 +56,14 @@ if (request.operation === 'workflow') {
   output.getContext('2d').putImageData(result, 0, 0)
   outputs.push(new Blob([await output.encode('png')]))
   report = { processingDimensions: { width, height }, originalDimensions: { width: bitmap.width, height: bitmap.height } }
+} else if (request.operation === 'opticalFlow') {
+  const frames = []
+  for (const blob of blobs) frames.push(await dom.loadImage(Buffer.from(await blob.arrayBuffer())))
+  const expanded = await algorithms.expandFramesWithOpticalMidpoints(frames, request.parameters,
+    (done, total) => process.stdout.write(JSON.stringify({ progress: done / total * 0.9 }) + '\n'))
+  for (const canvas of expanded) outputs.push(new Blob([await canvas.encode('png')]))
+  report = { inputFrames: frames.length, outputFrames: expanded.length, method: 'original-opencv-farneback',
+    processingDimensions: { width: frames[0].width, height: frames[0].height } }
 } else throw new Error('OPERATION_UNKNOWN')
 const outputDirectory = path.join(directory, 'output')
 await fs.mkdir(outputDirectory, { recursive: true })
