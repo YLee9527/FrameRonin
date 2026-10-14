@@ -663,5 +663,6 @@
     "macOS 14 and VoiceOver acceptance",
     "complete image-format and map editing race acceptance",
     "other editors, full AI quality catalog and portable distribution"
-  ]
+  ],
+  "codeCommit": "ac8ee25"
 }

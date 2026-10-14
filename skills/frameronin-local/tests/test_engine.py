@@ -77,6 +77,66 @@ class ProjectTests(unittest.TestCase):
             self.assertEqual(manifest['canvas'],{'width':16,'height':12})
         self.assertTrue(self.project.verify()['valid'])
 
+    def test_browser_gif_runtime_preserves_frames_delays_and_strict_policies(self):
+        second = self.root / 'second.png'
+        Image.new('RGBA', (8, 8), (20, 220, 40, 255)).save(second)
+        other = self.project.import_file(second)
+        payload = {'operation':'sequence.gif','inputs':[self.version['id'],other['id']],
+                   'parameters':{'renderer':'browser','duration':120,'sizePolicy':'first'}}
+        self.assertEqual(preview(self.project,payload)['processingMode'],'per_frame_browser_palette')
+        for change in [{'sizePolicy':'reject'}, {'loop':1}, {'frontendBytes':2*1024**3}]:
+            invalid=json.loads(json.dumps(payload));invalid['parameters'].update(change)
+            with self.assertRaises(RoninError):preview(self.project,invalid)
+        encoded=wait(self.project,submit(self.project,payload)['id'],15)
+        self.assertEqual(encoded['state'],'succeeded',encoded)
+        gif=next(self.project.version(v) for v in encoded['results'] if self.project.version(v)['metadata']['extension']=='.gif')
+        self.assertEqual(gif['metadata']['frames'],2)
+        self.assertEqual(gif['metadata']['durationsMs'],[120,120])
+        self.assertEqual((gif['metadata']['width'],gif['metadata']['height']),(16,12))
+        split=wait(self.project,submit(self.project,{'operation':'gif.split','inputs':[gif['id']],
+                   'parameters':{'renderer':'browser'}})['id'],15)
+        self.assertEqual(split['state'],'succeeded',split)
+        images=[self.project.version(v) for v in split['results'] if self.project.version(v)['metadata']['kind']=='image']
+        self.assertEqual(len(images),2)
+        archive=next(self.project.version(v) for v in split['results'] if self.project.version(v)['metadata']['extension']=='.zip')
+        with zipfile.ZipFile(archive['absolutePath']) as zipped:
+            self.assertEqual(zipped.namelist(),['frame_000.png','frame_001.png'])
+            self.assertEqual(zipped.read('frame_000.png'),Path(images[0]['absolutePath']).read_bytes())
+        static=self.root/'static.gif';Image.new('RGB',(4,4),'red').save(static)
+        single=self.project.import_file(static)
+        self.assertEqual(single['metadata']['kind'],'image')
+        self.assertEqual(preview(self.project,{'operation':'gif.split','inputs':[single['id']],'parameters':{}})['operation'],'gif.split')
+        single_split=wait(self.project,submit(self.project,{'operation':'gif.split','inputs':[single['id']],
+            'parameters':{'renderer':'browser'}})['id'],15)
+        self.assertEqual(single_split['state'],'succeeded',single_split)
+        self.assertEqual(sum(self.project.version(v)['metadata']['kind']=='image' for v in single_split['results']),1)
+        with self.assertRaises(RoninError):preview(self.project,{'operation':'gif.split','inputs':[self.version['id']],'parameters':{}})
+        disguised=self.root/'renamed.gif';disguised.write_bytes(self.source.read_bytes());renamed=self.project.import_file(disguised)
+        with self.assertRaises(RoninError):preview(self.project,{'operation':'gif.split','inputs':[renamed['id']],'parameters':{}})
+        self.assertTrue(self.project.verify()['valid'])
+
+    def test_browser_gif_matches_original_oracle_at_resized_transparent_edges(self):
+        fixtures=Path(__file__).resolve().parents[1]/'assets/fixtures/gif'
+        inputs=[self.project.import_file(fixtures/f'frame-{i:03d}.png')['id'] for i in range(3)]
+        result=wait(self.project,submit(self.project,{'operation':'sequence.gif','inputs':inputs,
+            'parameters':{'renderer':'browser','sizePolicy':'first','duration':120}})['id'],15)
+        self.assertEqual(result['state'],'succeeded',result)
+        gif=next(self.project.version(v) for v in result['results'] if self.project.version(v)['metadata']['extension']=='.gif')
+        self.assertEqual(Path(gif['absolutePath']).read_bytes(),(fixtures/'original-browser-encoded.gif').read_bytes())
+        source=self.project.import_file(fixtures/'disposal.gif')
+        split=wait(self.project,submit(self.project,{'operation':'gif.split','inputs':[source['id']],
+            'parameters':{'renderer':'browser'}})['id'],15)
+        self.assertEqual(split['state'],'succeeded',split)
+        images=[self.project.version(v) for v in split['results'] if self.project.version(v)['metadata']['kind']=='image']
+        self.assertEqual(len(images),4)
+        for index,image in enumerate(images):
+            with Image.open(image['absolutePath']) as actual,Image.open(fixtures/f'original-decoded-{index:03d}.png') as original:
+                self.assertEqual(actual.convert('RGBA').tobytes(),original.convert('RGBA').tobytes())
+        report=next(self.project.version(v) for v in split['results'] if self.project.version(v)['metadata']['extension']=='.json')
+        frames=json.loads(Path(report['absolutePath']).read_text())['frames']
+        self.assertEqual([frame['durationMs'] for frame in frames],[70,120,230,310])
+        self.assertEqual([frame['disposalType'] for frame in frames],[1,2,3,1])
+
     def test_copy_reopen_tamper_and_checkout(self):
         original = self.source.read_bytes()
         second = self.project.import_file(self.source, self.version['asset_id'])

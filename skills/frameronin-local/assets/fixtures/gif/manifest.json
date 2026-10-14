@@ -1,0 +1,47 @@
+{
+  "id": "gif-browser-compatibility",
+  "encodeInputs": [
+    "frame-000.png",
+    "frame-001.png",
+    "frame-002.png"
+  ],
+  "decodeInput": "disposal.gif",
+  "encodeDelayMs": 120,
+  "disposalTypes": [
+    1,
+    2,
+    3,
+    1
+  ],
+  "decodeDelaysMs": [
+    70,
+    120,
+    230,
+    310
+  ],
+  "alphaSamples": [
+    0,
+    127,
+    128,
+    129,
+    255
+  ],
+  "criteria": {
+    "encode": "identical decoded RGBA, dimensions, frame count, durations and frame order against original browser; byte equality recorded separately",
+    "decode": "strict decoded RGBA, frame order and original gifuct delay/disposal report"
+  },
+  "sha256": {
+    "disposal.gif": "59e5a1f76355a56ec9244714f131b354537f7b9e3cb1eb81ca8e5164b6219131",
+    "frame-002.png": "1dea826375b08884eac13eed2961529126b87413b30c6e290e5d7219bab76576",
+    "frame-000.png": "3833aede98675d8ba9078f5bb339fd57f424e6ce57c0ee50a1c6ba43bbe2d8b1",
+    "frame-001.png": "ac3a6e86dc6bf83abe5c1cbc6b9581ca5c6538fa661e3e0d09f03550ba6381f5"
+  },
+  "goldenOutputSha256": {
+    "original-decoded-001.png": "378f8692ab5b30a4e86608d31b44f29a019cafffeff9cc30f24f7270c6ec2f62",
+    "original-decoded-000.png": "01962a0354bb362c83bbc2dd916fdd0c31de0df5654323ad29f383ef1e1cfc37",
+    "original-decoded-002.png": "7fb29eb6eceeec2d4032ba5463727d6e0d1a036eb96afe89d3dc4dec36f8ba9c",
+    "original-decoded-003.png": "22c555d703de1d80dc7ede718227ce31e61b70fa28fff580855f3aa4fd4c097e",
+    "original-browser-encoded.gif": "2656c226bc76db7ef9666112edc1ce71e9688cadacd0afab9c9e2dfb1c16a327"
+  },
+  "goldenSource": "independent original browser function, controlled fixtures; captured after criteria freeze"
+}

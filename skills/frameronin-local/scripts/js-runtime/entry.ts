@@ -16,3 +16,4 @@ export { validateStoredMap } from '../../assets/workbench/src/localProject/mapDo
 export { createMapHistory, mapHistoryReducer, mapImages } from '../../assets/workbench/src/localProject/mapHistory'
 export { validateMapZipBudget } from '../../assets/workbench/src/lib/mapArchiveFormat'
 export { expansionTilesFrom, isOutwardExpansionTile } from '../../assets/workbench/src/lib/mapLayout'
+export { decodeBrowserGif, encodeBrowserGif } from '../../assets/workbench/src/lib/gifSequence'

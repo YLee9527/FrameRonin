@@ -14,14 +14,14 @@
 | video.detect | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
 | video.remove | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
 | video.mp4 | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
-| sequence.gif-split | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
-| sequence.gif-compose | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
+| sequence.gif-split | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原浏览器四种处置帧严格像素对照、工作台正式 PNG/ZIP 与下载通过；完整格式及大帧预览待验收 |
+| sequence.gif-compose | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原逐帧调色板、混合尺寸三帧 GIF 字节对照、工作台下载/取消/离开后运行通过 |
 | sequence.sort | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
-| sequence.duration | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
+| sequence.duration | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | GIF 全局 120ms 通过实际键盘设置及全部帧时长核对；序列文档时长与撤销待完成 |
 | sequence.merge | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | sequence.dedupe | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | sequence.optical-flow | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 后台与 RoninPro 工作台固定样本通过；GIF 入口交互待验收 |
-| sequence.png-zip | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
+| sequence.png-zip | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | GIF 拆帧 ZIP 实际下载及四帧像素/顺序通过；其他序列 ZIP 入口待验收 |
 | image.crop | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
 | image.resize | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
 | image.stroke | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |

@@ -1,66 +1,20 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Button, InputNumber, message, Radio, Slider, Space, Tabs, Tooltip, Typography, Upload } from 'antd'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Alert, Button, InputNumber, message, Radio, Slider, Space, Tabs, Tooltip, Typography, Upload } from 'antd'
 import { CaretLeftOutlined, CaretRightOutlined, DeleteOutlined, DownloadOutlined, DragOutlined, FileImageOutlined, LayoutOutlined, PictureOutlined, MergeCellsOutlined, PlusOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
-import { parseGIF, decompressFrames } from 'gifuct-js'
-// @ts-expect-error gifenc has no types
-import { GIFEncoder, quantize, applyPalette } from 'gifenc'
-import JSZip from 'jszip'
 import { useLanguage } from '../i18n/context'
 import CropPreview from './CropPreview'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
 import { superSplitByTransparent } from '../lib/superSplitTransparent'
+import { cacheManagedInput, importManagedInputs, runManagedTask, type ManagedVersion } from '../localProject/managedTasks'
+import { localJson } from '../localProject/api'
 
 const { Dragger } = Upload
 const { Text } = Typography
 
 const GIF_ACCEPT = '.gif'
 const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
-
-function compositeFrame(
-  prevBuf: Uint8ClampedArray,
-  frame: { patch: Uint8ClampedArray; dims: { top: number; left: number; width: number; height: number }; disposalType?: number },
-  width: number,
-  height: number
-): Uint8ClampedArray {
-  const buf = new Uint8ClampedArray(prevBuf)
-  const { patch, dims, disposalType = 1 } = frame
-  const { top, left, width: pw, height: ph } = dims
-
-  if (disposalType === 2) {
-    for (let i = 0; i < buf.length; i += 4) {
-      buf[i] = 0
-      buf[i + 1] = 0
-      buf[i + 2] = 0
-      buf[i + 3] = 0
-    }
-  }
-
-  for (let py = 0; py < ph; py++) {
-    for (let px = 0; px < pw; px++) {
-      const idx = (py * pw + px) * 4
-      const a = patch[idx + 3]
-      const outY = top + py
-      const outX = left + px
-      if (outY >= 0 && outY < height && outX >= 0 && outX < width) {
-        const outIdx = (outY * width + outX) * 4
-        if (a === 0) {
-          buf[outIdx] = 0
-          buf[outIdx + 1] = 0
-          buf[outIdx + 2] = 0
-          buf[outIdx + 3] = 0
-        } else {
-          buf[outIdx] = patch[idx]
-          buf[outIdx + 1] = patch[idx + 1]
-          buf[outIdx + 2] = patch[idx + 2]
-          buf[outIdx + 3] = a
-        }
-      }
-    }
-  }
-  return buf
-}
 
 function loadImageElement(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -83,7 +37,7 @@ function createTransparentPngBlob(width: number, height: number): Promise<Blob> 
 }
 
 export default function GifFrameConverter() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [activeTab, setActiveTab] = useState<'gif2frames' | 'frames2gif' | 'images2single' | 'simpleStitch'>('images2single')
   const [gifFile, setGifFile] = useState<File | null>(null)
   const [gifPreviewUrl, setGifPreviewUrl] = useState<string | null>(null)
@@ -135,6 +89,35 @@ export default function GifFrameConverter() {
   const [stitchDirection, setStitchDirection] = useState<'vertical' | 'horizontal' | 'overlay'>('vertical')
   const [stitchResultUrl, setStitchResultUrl] = useState<string | null>(null)
 
+  const execution = useRef<AbortController | null>(null)
+  const mounted = useRef(true)
+  const [taskProgress, setTaskProgress] = useState(0)
+  const [canceling, setCanceling] = useState(false)
+  const [taskError, setTaskError] = useState('')
+  const latestInputs = useRef({ gifFile, frameFiles, frameDelay })
+  latestInputs.current = { gifFile, frameFiles, frameDelay }
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
+  useEffect(() => () => { if (gifUrl) URL.revokeObjectURL(gifUrl) }, [gifUrl])
+  useEffect(() => () => { if (framesZipUrl) URL.revokeObjectURL(framesZipUrl) }, [framesZipUrl])
+  const taskText = lang === 'zh' ? { cancel: '取消加工', canceling: '正在核对取消', stale: '输入已改变，结果保留在项目素材中', canceled: '加工已取消' }
+    : lang === 'ja' ? { cancel: '処理を取消', canceling: '取消を確認中', stale: '入力が変更されました。結果はプロジェクトに保存されています', canceled: '処理を取り消しました' }
+      : { cancel: 'Cancel processing', canceling: 'Confirming cancellation', stale: 'Inputs changed; the result remains in Project assets', canceled: 'Processing canceled' }
+  const retainedFiles = [gifFile, splitFile, ...frameFiles, ...combineFiles, ...stitchFiles, ...extractedFrameFiles].filter((file): file is File => !!file)
+  const prepareGifTask = async (signal: AbortSignal) => {
+    const files = [...new Set(retainedFiles)]
+    const { project, inputs, memoryBudgetBytes } = await importManagedInputs(files, signal)
+    let frontendBytes = 0
+    for (const id of new Set(inputs)) {
+      const version = await localJson<ManagedVersion>(`/api/versions/${id}`, { signal })
+      frontendBytes += version.metadata.bytes * 2 + (version.metadata.width ?? 0) * (version.metadata.height ?? 0) * 16
+    }
+    if (frontendBytes > memoryBudgetBytes / 4) throw new Error('GIF_FRONTEND_RESOURCE_LIMIT')
+    return { project, frontendBytes }
+  }
+
   const revokeExtractedPreviews = () => {
     setExtractedFrameUrls((urls) => {
       urls.forEach(URL.revokeObjectURL)
@@ -151,7 +134,7 @@ export default function GifFrameConverter() {
     setGifPreviewUrl(null)
   }, [gifFile])
 
-  useEffect(() => () => revokeExtractedPreviews(), [])
+  useEffect(() => () => extractedFrameUrls.forEach(URL.revokeObjectURL), [extractedFrameUrls])
 
   useEffect(() => {
     const urls = frameFiles.map((f) => URL.createObjectURL(f))
@@ -383,142 +366,61 @@ export default function GifFrameConverter() {
   }
 
   const runGifToFrames = async () => {
-    if (!gifFile) return
-    setLoading(true)
-    revokeExtractedPreviews()
-    setExtractedFrameFiles([])
-    setFramesZipUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
+    if (!gifFile || execution.current) return
+    const selected = gifFile
+    const controller = new AbortController(); execution.current = controller
+    setLoading(true); setCanceling(false); setTaskProgress(0); setTaskError('')
     try {
-      const buf = await gifFile.arrayBuffer()
-      const gif = parseGIF(buf)
-      const frames = decompressFrames(gif, true)
-      const w = gif.lsd.width
-      const h = gif.lsd.height
-
-      let prevBuf = new Uint8ClampedArray(w * h * 4)
-      prevBuf.fill(0)
-
-      const zip = new JSZip()
-      const previewUrls: string[] = []
-      const frameFiles: File[] = []
-      const maxPreview = 24
-      const baseName = gifFile.name.replace(/\.gif$/i, '') || 'frames'
-      for (let i = 0; i < frames.length; i++) {
-        const f = frames[i] as { patch: Uint8ClampedArray; dims: { top: number; left: number; width: number; height: number }; disposalType?: number }
-        prevBuf = compositeFrame(prevBuf, f, w, h) as typeof prevBuf
-        const canvas = document.createElement('canvas')
-        canvas.width = w
-        canvas.height = h
-        const ctx = canvas.getContext('2d')!
-        const imgData = ctx.createImageData(w, h)
-        imgData.data.set(prevBuf)
-        ctx.putImageData(imgData, 0, 0)
-        const blob = await new Promise<Blob>((resolve, reject) => {
-          canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('canvas'))), 'image/png')
-        })
-        const file = new File([blob], `${baseName}_frame_${String(i).padStart(3, '0')}.png`, { type: 'image/png' })
-        zip.file(`frame_${String(i).padStart(3, '0')}.png`, blob)
-        frameFiles.push(file)
-        if (previewUrls.length < maxPreview) {
-          previewUrls.push(URL.createObjectURL(blob))
-        }
-      }
-
-      setExtractedFrameUrls(previewUrls)
-      setExtractedFrameFiles(frameFiles)
-      const zipBlob = await zip.generateAsync({ type: 'blob' })
-      setFramesZipUrl(URL.createObjectURL(zipBlob))
-      message.success(t('gifExtractSuccess', { n: frames.length }))
-    } catch (e) {
-      message.error(t('gifExtractFailed') + ': ' + String(e))
+      const { project, frontendBytes } = await prepareGifTask(controller.signal)
+      const { outputs } = await runManagedTask('gif.split', [selected], { renderer: 'browser', frontendBytes }, {
+        signal: controller.signal, onProgress: value => { if (mounted.current) setTaskProgress(value) },
+        outputFilter: version => version.metadata.kind === 'image' || version.metadata.extension === '.zip',
+      })
+      if (!mounted.current) return
+      if (latestInputs.current.gifFile !== selected) throw new Error(taskText.stale)
+      const archive = outputs.find(output => output.version.metadata.extension === '.zip')
+      const base = selected.name.replace(/\.gif$/i, '') || 'frames'
+      const files = outputs.filter(output => output.version.metadata.kind === 'image').map((output, index) => {
+        const file = new File([output.blob], `${base}_frame_${String(index).padStart(3, '0')}.png`, { type: 'image/png' })
+        cacheManagedInput(file, project.id, output.version.id)
+        return file
+      })
+      if (!archive || !files.length) throw new Error('GIF_RESULT_INCOMPLETE')
+      setExtractedFrameUrls(files.slice(0, 24).map(file => URL.createObjectURL(file)))
+      setExtractedFrameFiles(files)
+      setFramesZipUrl(URL.createObjectURL(archive.blob))
+      message.success(t('gifExtractSuccess', { n: files.length }))
+    } catch (error) {
+      if (mounted.current) setTaskError(controller.signal.aborted && error instanceof DOMException && error.name === 'AbortError'
+        ? taskText.canceled : `${t('gifExtractFailed')}: ${String(error)}`)
     } finally {
-      setLoading(false)
+      if (execution.current === controller) execution.current = null
+      if (mounted.current) { setLoading(false); setCanceling(false) }
     }
   }
 
   const runFramesToGif = async () => {
-    if (frameFiles.length === 0) return
-    setLoading(true)
-    setGifUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
+    if (!frameFiles.length || execution.current) return
+    const selected = frameFiles, delay = frameDelay
+    const controller = new AbortController(); execution.current = controller
+    setLoading(true); setCanceling(false); setTaskProgress(0); setTaskError('')
     try {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')!
-      const imgs: ImageData[] = []
-      let w = 0
-      let h = 0
-      for (const f of frameFiles) {
-        const blob = await f.arrayBuffer()
-        const url = URL.createObjectURL(new Blob([blob]))
-        const img = await new Promise<HTMLImageElement>((res, rej) => {
-          const i = new Image()
-          i.onload = () => res(i)
-          i.onerror = () => rej(new Error('load'))
-          i.src = url
-        })
-        URL.revokeObjectURL(url)
-        if (imgs.length === 0) {
-          w = img.width
-          h = img.height
-        }
-        canvas.width = w
-        canvas.height = h
-        ctx.clearRect(0, 0, w, h)
-        ctx.drawImage(img, 0, 0, w, h)
-        imgs.push(ctx.getImageData(0, 0, w, h))
-      }
-
-      const gif = GIFEncoder()
-      for (let i = 0; i < imgs.length; i++) {
-        const { data, width, height } = imgs[i]
-        const palette = quantize(data, 255, {
-          format: 'rgba4444',
-          oneBitAlpha: 128,
-          clearAlpha: true,
-          clearAlphaThreshold: 128,
-        })
-        const index = applyPalette(data, palette, 'rgba4444')
-        const transIdx = palette.findIndex((c: number[]) => c[3] === 0)
-        let finalPalette: number[][]
-        let finalIndex: Uint8Array
-        let transparentIndex: number
-        if (transIdx >= 0) {
-          finalPalette = [...palette]
-          finalIndex = index
-          transparentIndex = transIdx
-        } else {
-          finalPalette = [[0, 0, 0, 0], ...palette]
-          finalIndex = new Uint8Array(index.length)
-          for (let j = 0; j < data.length; j += 4) {
-            if (data[j + 3] < 128) {
-              finalIndex[j / 4] = 0
-            } else {
-              finalIndex[j / 4] = index[j / 4]! + 1
-            }
-          }
-          transparentIndex = 0
-        }
-        gif.writeFrame(finalIndex, width, height, {
-          palette: finalPalette,
-          delay: frameDelay,
-          transparent: true,
-          transparentIndex,
-        })
-      }
-      gif.finish()
-      const bytes = gif.bytes()
-      const blob = new Blob([bytes], { type: 'image/gif' })
-      setGifUrl(URL.createObjectURL(blob))
+      const { frontendBytes } = await prepareGifTask(controller.signal)
+      const { outputs } = await runManagedTask('sequence.gif', selected, {
+        duration: delay, renderer: 'browser', sizePolicy: 'first', frontendBytes,
+      }, { signal: controller.signal, onProgress: value => { if (mounted.current) setTaskProgress(value) },
+        outputFilter: version => version.metadata.extension === '.gif' })
+      if (!mounted.current) return
+      if (latestInputs.current.frameFiles !== selected || latestInputs.current.frameDelay !== delay) throw new Error(taskText.stale)
+      if (!outputs[0]) throw new Error('GIF_RESULT_INCOMPLETE')
+      setGifUrl(URL.createObjectURL(outputs[0].blob))
       message.success(t('gifEncodeSuccess'))
-    } catch (e) {
-      message.error(t('gifEncodeFailed') + ': ' + String(e))
+    } catch (error) {
+      if (mounted.current) setTaskError(controller.signal.aborted && error instanceof DOMException && error.name === 'AbortError'
+        ? taskText.canceled : `${t('gifEncodeFailed')}: ${String(error)}`)
     } finally {
-      setLoading(false)
+      if (execution.current === controller) execution.current = null
+      if (mounted.current) { setLoading(false); setCanceling(false) }
     }
   }
 
@@ -634,6 +536,10 @@ export default function GifFrameConverter() {
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%', paddingTop: 8 }}>
+      {execution.current && <Button disabled={canceling} onClick={() => { setCanceling(true); execution.current?.abort() }}>
+        {canceling ? taskText.canceling : taskText.cancel} · {Math.round(taskProgress * 100)}%
+      </Button>}
+      {taskError && <Alert type="error" title={taskError} />}
       <Tabs
         activeKey={activeTab}
         onChange={(k) => setActiveTab(k as 'gif2frames' | 'frames2gif' | 'images2single' | 'simpleStitch')}

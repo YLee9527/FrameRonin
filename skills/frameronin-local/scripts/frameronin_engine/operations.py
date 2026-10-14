@@ -41,11 +41,14 @@ REGISTRY = {
         'sheet_png_zip_index', 'bounded_frames', overhead=768),
     'video.watermark': operation(['video'], {}, 'mp4', 'global_temporal', overhead=256),
     'audio.compress': operation(['audio+'], {'bitrate': integer(128, 32, 320)}, 'mp3_zip', 'stream', overhead=128),
-    'gif.split': operation(['animation'], {}, 'png_zip_index', 'stream'),
+    'gif.split': operation(['animation|image'], {'renderer': choice('pillow',['pillow','browser']),
+        'frontendBytes': integer(0,0,2*1024**3)}, 'png_zip_index', 'bounded_frames', overhead=256),
     'sequence.zip': operation(['image+'], {'duration': integer(100, 10, 60000)}, 'png_zip_index', 'stream'),
     'sequence.sheet': operation(['image+'], {'columns': integer(4, 1, 128), 'padding': integer(0, 0, 512),
                                           'spacing': integer(0, 0, 512)}, 'png_index', 'bounded_frames'),
-    'sequence.gif': operation(['image+'], {'duration': integer(100, 10, 60000), 'loop': integer(0, 0, 65535)},
+    'sequence.gif': operation(['image+'], {'duration': integer(100, 10, 60000), 'loop': integer(0, 0, 65535),
+        'renderer': choice('pillow',['pillow','browser']), 'sizePolicy': choice('reject',['reject','first']),
+        'frontendBytes': integer(0,0,2*1024**3)},
                               'gif', 'global_palette'),
     'sequence.opticalFlow': operation(['image+'], {'alpha': number(0.5, 0, 1),
         'nearestNeighbor': {'type':'boolean','default':False}, 'bidirectional': {'type':'boolean','default':True},
@@ -114,7 +117,7 @@ def preview(project, payload):
             if not db.execute('SELECT id FROM assets WHERE id=?', (payload['assetId'],)).fetchone():
                 raise RoninError('OUTPUT_ASSET_MISSING', 'Select an existing output asset, or omit assetId to create one.')
     expected = spec['inputs'][0].rstrip('+')
-    if any(item['metadata']['kind'] != expected for item in versions):
+    if any(item['metadata']['kind'] not in expected.split('|') for item in versions):
         raise RoninError('INPUT_KIND', 'A selected asset has an incompatible media kind.')
     pixels = [v['metadata'].get('width', 0) * v['metadata'].get('height', 0) for v in versions]
     estimate = spec['runtimeOverheadMiB'] * 1024**2 + max(pixels, default=0) * 4 * 4
@@ -140,10 +143,26 @@ def preview(project, payload):
         h = max(v['metadata']['height'] for v in versions) + 2 * values['padding'] + values['spacing']
         estimate += values['columns'] * w * math.ceil(len(versions) / values['columns']) * h * 8
     if name == 'sequence.gif':
-        if len({(v['metadata']['width'], v['metadata']['height']) for v in versions}) != 1:
+        if values['sizePolicy'] == 'reject' and len({(v['metadata']['width'], v['metadata']['height']) for v in versions}) != 1:
             raise RoninError('FRAME_SIZE_MISMATCH', 'GIF frames must have identical dimensions.')
+        if values['renderer'] == 'pillow' and values['sizePolicy'] != 'reject':
+            raise RoninError('GIF_SIZE_POLICY', 'Only the original browser renderer supports first-frame resizing.')
+        if values['renderer'] == 'browser' and values['loop'] != 0:
+            raise RoninError('GIF_LOOP_POLICY', 'The original browser renderer supports the existing infinite-loop behavior.')
         # RGBA frames, a global RGB palette surface, indexed frames, quantizer and encoder buffers.
-        estimate += sum(pixels) * 20
+        estimate += values['frontendBytes'] + (sum(pixels) * 20 if values['renderer'] == 'pillow' else
+            len(versions) * pixels[0] * 8 + max(pixels) * 32)
+    if name == 'gif.split':
+        from PIL import Image
+        metadata = versions[0]['metadata']
+        if metadata['extension'] != '.gif' or not 1 <= metadata['frames'] <= 1000:
+            raise RoninError('GIF_INPUT_LIMIT', 'Select a GIF with one to one thousand frames.')
+        with Image.open(versions[0]['absolutePath']) as image:
+            if image.format != 'GIF':
+                raise RoninError('GIF_INPUT_FORMAT', 'The selected file is not a GIF container.')
+        estimate += values['frontendBytes'] + pixels[0] * metadata['frames'] * (48 if values['renderer'] == 'browser' else 4)
+    if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser':
+        estimate += sum(version['metadata']['bytes'] for version in versions) * 4
     if name == 'image.perfectPixel':
         if bool(values['gridCols']) != bool(values['gridRows']):
             raise RoninError('GRID_DIMENSIONS', 'Provide both manual grid dimensions, or neither.')
@@ -181,6 +200,8 @@ def preview(project, payload):
     if estimate > budget:
         raise RoninError('RESOURCE_LIMIT', 'The operation exceeds the memory budget; adjust its parameters.',
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
+    processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
+        if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
-            'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': spec['processingMode'],
+            'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,
             'output': spec['output'], 'assetId': payload.get('assetId')}

@@ -21,3 +21,7 @@
 本地取消返回 processStopConfirmed 和 cancelElapsedSeconds，并保存任务 cancellation.json；此确认只涵盖本地受控进程。身份或停止权限无法核验时，结果先失效，再报告 CANCEL_* 错误，不伪造停止成功。AI 服务端状态仍需核对宿主调用。
 
 `audio.compress` 接收按顺序选定的音频版本及 bitrate（32–320 kbps），产生各 MP3、ZIP 和对应报告。同名文件以序号区分，核对声道、时长、码率与采样率。当前本地 FFmpeg/libmp3lame 保留支持的输入采样率；旧浏览器 Lame.js 使用 AudioContext 的设备采样率，编码字节及延迟不要求完全一致。不要把该差异称为严格像素式复刻。
+
+GIF 工作台使用原浏览器兼容模式：`gif.split` 的 `renderer=browser` 复用 gifuct 和原透明块/处置逻辑，返回每张 PNG、按顺序 ZIP 与含时长的报告。支持 1–1000 帧，PNG 不会被当作 GIF 接受。默认 `renderer=pillow` 使用 Pillow 合成，二者处置语义分开记录。
+
+`sequence.gif` 的 `renderer=browser` 保留 gifenc 逐帧调色板及原透明度阈值，`sizePolicy=first` 按第一帧尺寸缩放其他输入，与原界面一致；默认 `sizePolicy=reject` 拒绝尺寸混用。兼容模式仅支持原来的无限循环 `loop=0`，不会静默忽略其他值。Pillow 默认仍使用同尺寸输入与全局调色板。工作台先核对保留素材预算，通过统一任务取消、版本登记和迟到结果检查；离开工具页后在项目面板查结果。超出预览预算的正式结果继续保留。

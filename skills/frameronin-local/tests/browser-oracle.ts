@@ -5,6 +5,8 @@ import { computeWorkflowRunStrategy, runDagExecution, runWorkflowOnBlob } from '
 import { importLegacyWorkflow } from '../assets/workbench/src/lib/strictWorkflow'
 import JSZip from '../assets/workbench/node_modules/jszip'
 import { compressWavToMp3 } from '../assets/workbench/src/lib/audioMp3'
+import { compositeFrame as originalComposite, originalEncode } from '../.runtime/oracle/original-gif'
+import { parseGIF, decompressFrames } from '../assets/workbench/node_modules/gifuct-js'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -105,7 +107,33 @@ async function runMap(){
   zip.file('template-left.png',await makeRelativeTemplate([{image:{image:images[0]},offsetX:Math.round(.85*width),offsetY:0,drawWidth:width,drawHeight:height}],width,height))
   await publish(zip,'browser-map-oracles.zip');status.textContent='Original map oracle complete: 3 blends, 3 worker previews, PSD and overlap template'
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap]] as const) {
+async function runGif(){
+  const selected=[...document.querySelector<HTMLInputElement>('#gif-frames')!.files??[]]
+  const input=document.querySelector<HTMLInputElement>('#gif-input')!.files?.[0]
+  if(!input||!selected.length||selected.length>8)throw new Error('Use the fixed GIF and 1-8 PNG fixtures')
+  const zip=new JSZip(),images:ImageData[]=[]
+  let width=0,height=0
+  for(const file of selected){
+    const image=await createImageBitmap(file);width ||= image.width;height ||= image.height
+    const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height
+    const context=canvas.getContext('2d')!;context.drawImage(image,0,0,width,height);image.close()
+    images.push(context.getImageData(0,0,width,height))
+    zip.file(`prepared/${String(images.length-1).padStart(3,'0')}.png`,await png(canvas))
+  }
+  zip.file('encoded.gif',originalEncode(images,120))
+  const gif=parseGIF(await input.arrayBuffer()),frames=decompressFrames(gif,true)
+  let previous=new Uint8ClampedArray(gif.lsd.width*gif.lsd.height*4)
+  for(const [index,frame]of frames.entries()){
+    previous=originalComposite(previous,frame,gif.lsd.width,gif.lsd.height) as typeof previous
+    const canvas=document.createElement('canvas');canvas.width=gif.lsd.width;canvas.height=gif.lsd.height
+    const context=canvas.getContext('2d')!,pixels=context.createImageData(canvas.width,canvas.height);pixels.data.set(previous);context.putImageData(pixels,0,0)
+    zip.file(`decoded/frame_${String(index).padStart(3,'0')}.png`,await png(canvas))
+  }
+  zip.file('report.json',JSON.stringify({encodedFrames:images.length,encodedDimensions:[width,height],delayMs:120,
+    decodedFrames:frames.length,decodedDimensions:[gif.lsd.width,gif.lsd.height],disposals:frames.map(frame=>frame.disposalType),delays:frames.map(frame=>frame.delay)}))
+  await publish(zip,'browser-gif-oracle.zip');status.textContent=`Original GIF oracle complete: ${images.length} encoded, ${frames.length} decoded frames`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

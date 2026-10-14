@@ -16,7 +16,8 @@ def run(preview, directory, progress):
     parameters = preview['parameters']
     paths = [Path(v['absolutePath']) for v in preview['versions']]
     output = directory / 'result.png'
-    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow', 'map.export', 'map.template']:
+    browser_gif = name in ['gif.split', 'sequence.gif'] and parameters['renderer'] == 'browser'
+    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow', 'map.export', 'map.template'] or browser_gif:
         from .workflows import ROOT
         node = shutil.which('node')
         compiled = ROOT / '.runtime/js/algorithms.mjs'
@@ -30,7 +31,7 @@ def run(preview, directory, progress):
             shutil.copy2(path, directory / relative)
             selected.append(relative)
         values = dict(parameters)
-        request = {'operation': 'map' if name.startswith('map.') else 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
+        request = {'operation': name if browser_gif else 'map' if name.startswith('map.') else 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
                    'inputs': selected, 'parameters': values, 'budgetBytes': preview['budgetBytes']}
         if name.startswith('workflow.'):
             request['graph'] = values.pop('graph')

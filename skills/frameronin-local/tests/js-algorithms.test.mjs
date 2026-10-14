@@ -9,6 +9,20 @@ const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dom = installDom(path.join(skill, 'assets/workbench/public'), 2 * 1024 ** 3)
 const algorithms = await import(pathToFileURL(path.join(skill, '.runtime/js/algorithms.mjs')).href)
 
+test('original GIF encoder retains transparent threshold, frame order and finite resource limits', async () => {
+  const first=new dom.ImageData(new Uint8ClampedArray([255,0,0,255,0,0,255,127]),2,1)
+  const second=new dom.ImageData(new Uint8ClampedArray([0,255,0,255,0,0,255,128]),2,1)
+  const third=new dom.ImageData(new Uint8ClampedArray([0,0,255,255,0,0,255,129]),2,1)
+  const gif=await algorithms.encodeBrowserGif([first,second,third],120)
+  const bytes=await gif.arrayBuffer(),decoded=algorithms.decodeBrowserGif(bytes,2*1024**3)
+  assert.equal(decoded.frames.length,3);assert.equal(decoded.width,2);assert.equal(decoded.height,1)
+  assert.deepEqual(decoded.frames.map(f=>f.delay),[120,120,120])
+  assert.deepEqual([...decoded.frames[0].data.slice(0,4)],[255,0,0,255])
+  assert.equal(decoded.frames[0].data[7],0);assert.equal(decoded.frames[1].data[7],0);assert.equal(decoded.frames[2].data[7],255)
+  assert.deepEqual([...decoded.frames[1].data.slice(0,4)],[0,255,0,255])
+  assert.throws(()=>algorithms.decodeBrowserGif(bytes,128*1024**2),/RESOURCE_LIMIT/)
+})
+
 function graph() {
   return {version:7,nodes:[{id:'input',type:'workflowInputImage',params:{imageIndex:1}},
     {id:'resize',type:'resizeHard',params:{w:16,h:16}}],edges:[{id:'edge',source:'input',target:'resize'}]}

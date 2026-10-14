@@ -163,10 +163,10 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "fixed-sequence-gif-split",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "gif-browser-compatibility",
+    "evidence": "doc/testing/evidence/skill-managed-gif.json",
+    "status": "原浏览器四种处置帧严格像素对照、工作台正式 PNG/ZIP 与下载通过；完整格式及大帧预览待验收",
+    "limits": "browser compatibility renderer and independent Pillow mode; 1000-frame cap plus memory forecasts; first-frame resizing explicit; full combined actual memory and lazy preview pending"
   },
   {
     "id": "sequence.gif-compose",
@@ -176,10 +176,10 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "fixed-sequence-gif-compose",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "gif-browser-compatibility",
+    "evidence": "doc/testing/evidence/skill-managed-gif.json",
+    "status": "原逐帧调色板、混合尺寸三帧 GIF 字节对照、工作台下载/取消/离开后运行通过",
+    "limits": "browser compatibility renderer and independent Pillow mode; 1000-frame cap plus memory forecasts; first-frame resizing explicit; full combined actual memory and lazy preview pending"
   },
   {
     "id": "sequence.sort",
@@ -202,10 +202,10 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "fixed-sequence-duration",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "gif-browser-compatibility",
+    "evidence": "doc/testing/evidence/skill-managed-gif.json",
+    "status": "GIF 全局 120ms 通过实际键盘设置及全部帧时长核对；序列文档时长与撤销待完成",
+    "limits": "browser compatibility renderer and independent Pillow mode; 1000-frame cap plus memory forecasts; first-frame resizing explicit; full combined actual memory and lazy preview pending"
   },
   {
     "id": "sequence.merge",
@@ -254,10 +254,10 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "fixed-sequence-png-zip",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "gif-browser-compatibility",
+    "evidence": "doc/testing/evidence/skill-managed-gif.json",
+    "status": "GIF 拆帧 ZIP 实际下载及四帧像素/顺序通过；其他序列 ZIP 入口待验收",
+    "limits": "browser compatibility renderer and independent Pillow mode; 1000-frame cap plus memory forecasts; first-frame resizing explicit; full combined actual memory and lazy preview pending"
   },
   {
     "id": "image.crop",

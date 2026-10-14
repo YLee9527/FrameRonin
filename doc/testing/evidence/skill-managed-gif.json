@@ -1,0 +1,490 @@
+{
+  "date": "2026-10-14",
+  "baselineCommit": "ac8ee25",
+  "scope": "managed GIF decoder/encoder, not complete sequence editor",
+  "fixture": {
+    "id": "gif-browser-compatibility",
+    "encodeInputs": [
+      "frame-000.png",
+      "frame-001.png",
+      "frame-002.png"
+    ],
+    "decodeInput": "disposal.gif",
+    "encodeDelayMs": 120,
+    "disposalTypes": [
+      1,
+      2,
+      3,
+      1
+    ],
+    "decodeDelaysMs": [
+      70,
+      120,
+      230,
+      310
+    ],
+    "alphaSamples": [
+      0,
+      127,
+      128,
+      129,
+      255
+    ],
+    "criteria": {
+      "encode": "identical decoded RGBA, dimensions, frame count, durations and frame order against original browser; byte equality recorded separately",
+      "decode": "strict decoded RGBA, frame order and original gifuct delay/disposal report"
+    },
+    "sha256": {
+      "disposal.gif": "59e5a1f76355a56ec9244714f131b354537f7b9e3cb1eb81ca8e5164b6219131",
+      "frame-002.png": "1dea826375b08884eac13eed2961529126b87413b30c6e290e5d7219bab76576",
+      "frame-000.png": "3833aede98675d8ba9078f5bb339fd57f424e6ce57c0ee50a1c6ba43bbe2d8b1",
+      "frame-001.png": "ac3a6e86dc6bf83abe5c1cbc6b9581ca5c6538fa661e3e0d09f03550ba6381f5"
+    },
+    "goldenOutputSha256": {
+      "original-decoded-001.png": "378f8692ab5b30a4e86608d31b44f29a019cafffeff9cc30f24f7270c6ec2f62",
+      "original-decoded-000.png": "01962a0354bb362c83bbc2dd916fdd0c31de0df5654323ad29f383ef1e1cfc37",
+      "original-decoded-002.png": "7fb29eb6eceeec2d4032ba5463727d6e0d1a036eb96afe89d3dc4dec36f8ba9c",
+      "original-decoded-003.png": "22c555d703de1d80dc7ede718227ce31e61b70fa28fff580855f3aa4fd4c097e",
+      "original-browser-encoded.gif": "2656c226bc76db7ef9666112edc1ce71e9688cadacd0afab9c9e2dfb1c16a327"
+    },
+    "goldenSource": "independent original browser function, controlled fixtures; captured after criteria freeze"
+  },
+  "oracle": {
+    "encodeTaskId": "0ecccf0e-d0dc-4cea-a01a-240d82ee5527",
+    "encodeVersionId": "2faa7673-2d9a-4de7-b117-8346660bcff3",
+    "decodeTaskId": "3567a3c6-9a34-4761-8ac2-129a702a55be",
+    "decodeVersions": [
+      "dd1a56e0-4327-4a46-bfff-cedc4ecd1250",
+      "0506badb-05f2-4d85-94df-7c9b8f5f9511",
+      "840b25d6-76fb-40a7-9913-1bf4bf304388",
+      "534af4e1-3bd2-4d7b-8a23-20530100076d"
+    ],
+    "inputs": [
+      "cacb0460-3bb2-42fd-b36d-1c6876fa87b5",
+      "5c95435b-c19f-47e7-8b6b-c65c40c1f54f",
+      "6d1263c3-0268-4a92-b161-644a463038f1"
+    ],
+    "gifInput": "804e6d73-a1ad-4cdc-80db-9671a7192c9f",
+    "comparisons": [
+      {
+        "mode": "encode",
+        "frame": 0,
+        "sizeEqual": true,
+        "rgbaEqual": true,
+        "delayEqual": true
+      },
+      {
+        "mode": "encode",
+        "frame": 1,
+        "sizeEqual": true,
+        "rgbaEqual": true,
+        "delayEqual": true
+      },
+      {
+        "mode": "encode",
+        "frame": 2,
+        "sizeEqual": true,
+        "rgbaEqual": true,
+        "delayEqual": true
+      },
+      {
+        "mode": "decode",
+        "frame": 0,
+        "sizeEqual": true,
+        "rgbaEqual": true
+      },
+      {
+        "mode": "decode",
+        "frame": 1,
+        "sizeEqual": true,
+        "rgbaEqual": true
+      },
+      {
+        "mode": "decode",
+        "frame": 2,
+        "sizeEqual": true,
+        "rgbaEqual": true
+      },
+      {
+        "mode": "decode",
+        "frame": 3,
+        "sizeEqual": true,
+        "rgbaEqual": true
+      }
+    ],
+    "encodedByteEqual": true,
+    "originalReport": {
+      "encodedFrames": 3,
+      "encodedDimensions": [
+        32,
+        24
+      ],
+      "delayMs": 120,
+      "decodedFrames": 4,
+      "decodedDimensions": [
+        24,
+        16
+      ],
+      "disposals": [
+        1,
+        2,
+        3,
+        1
+      ],
+      "delays": [
+        70,
+        120,
+        230,
+        310
+      ]
+    },
+    "oracleSha256": "c13fbfae43cf44ca9674669a01edfb75cdfb63d5622fb647a53beca94f54f8f5",
+    "initialFailure": {
+      "encodeTaskId": "360cb346-8092-44d0-99f3-6023789e609c",
+      "encodeVersionId": "24ab06fc-e305-42c7-bcf9-f5afe111e86a",
+      "decodeTaskId": "3567a3c6-9a34-4761-8ac2-129a702a55be",
+      "decodeVersions": [
+        "dd1a56e0-4327-4a46-bfff-cedc4ecd1250",
+        "0506badb-05f2-4d85-94df-7c9b8f5f9511",
+        "840b25d6-76fb-40a7-9913-1bf4bf304388",
+        "534af4e1-3bd2-4d7b-8a23-20530100076d"
+      ],
+      "inputs": [
+        "cacb0460-3bb2-42fd-b36d-1c6876fa87b5",
+        "5c95435b-c19f-47e7-8b6b-c65c40c1f54f",
+        "6d1263c3-0268-4a92-b161-644a463038f1"
+      ],
+      "gifInput": "804e6d73-a1ad-4cdc-80db-9671a7192c9f",
+      "comparisons": [
+        {
+          "mode": "encode",
+          "frame": 0,
+          "sizeEqual": true,
+          "rgbaEqual": true,
+          "delayEqual": true
+        },
+        {
+          "mode": "encode",
+          "frame": 1,
+          "sizeEqual": true,
+          "rgbaEqual": true,
+          "delayEqual": true
+        },
+        {
+          "mode": "encode",
+          "frame": 2,
+          "sizeEqual": true,
+          "rgbaEqual": true,
+          "delayEqual": true
+        },
+        {
+          "mode": "decode",
+          "frame": 0,
+          "sizeEqual": true,
+          "rgbaEqual": true
+        },
+        {
+          "mode": "decode",
+          "frame": 1,
+          "sizeEqual": true,
+          "rgbaEqual": true
+        },
+        {
+          "mode": "decode",
+          "frame": 2,
+          "sizeEqual": true,
+          "rgbaEqual": true
+        },
+        {
+          "mode": "decode",
+          "frame": 3,
+          "sizeEqual": true,
+          "rgbaEqual": true
+        }
+      ],
+      "encodedByteEqual": false,
+      "originalReport": {
+        "encodedFrames": 3,
+        "encodedDimensions": [
+          32,
+          24
+        ],
+        "delayMs": 120,
+        "decodedFrames": 4,
+        "decodedDimensions": [
+          24,
+          16
+        ],
+        "disposals": [
+          1,
+          2,
+          3,
+          1
+        ],
+        "delays": [
+          70,
+          120,
+          230,
+          310
+        ]
+      },
+      "oracleSha256": "c13fbfae43cf44ca9674669a01edfb75cdfb63d5622fb647a53beca94f54f8f5"
+    }
+  },
+  "actualUI": {
+    "exports": [
+      {
+        "task": {
+          "id": "d27e335a-291d-401f-8c16-4387e5bbe066",
+          "state": "succeeded",
+          "payload": {
+            "operation": "sequence.gif",
+            "inputs": [
+              "14b2616f-2026-47d0-8fbf-af9f98b66e36",
+              "41a41a08-f77a-46d8-b926-c70fd8ddc79b",
+              "71d6fe65-ae03-4d97-a3ae-69cde53bbf76"
+            ],
+            "parameters": {
+              "duration": 120,
+              "renderer": "browser",
+              "sizePolicy": "first",
+              "frontendBytes": 60844
+            }
+          },
+          "results": [
+            "ba45b267-98b7-4beb-b1ec-08b02cbe2037",
+            "0df2d434-32d5-46ff-91d1-3c98d766e903"
+          ]
+        },
+        "download": "output.gif",
+        "versionId": "ba45b267-98b7-4beb-b1ec-08b02cbe2037",
+        "sha256": "2656c226bc76db7ef9666112edc1ce71e9688cadacd0afab9c9e2dfb1c16a327",
+        "downloadMatchesFormalVersion": true
+      },
+      {
+        "task": {
+          "id": "16667ae4-07be-4e24-9652-7d362a82aecf",
+          "state": "succeeded",
+          "payload": {
+            "operation": "gif.split",
+            "inputs": [
+              "18cd98b2-c91e-4e03-a871-15ad580153d3"
+            ],
+            "parameters": {
+              "renderer": "browser",
+              "frontendBytes": 6806
+            }
+          },
+          "results": [
+            "701a4664-14b2-416f-853c-7da1d69f109f",
+            "59d5af4b-28a5-4a01-b00d-7ab68a1c8e56",
+            "98554c9d-c618-4b08-8a5b-6abf4223e2a6",
+            "49ffe6f8-1cc5-4d37-abe8-327e75a2007b",
+            "9c7780f0-c551-4383-9a7f-2c7d8d22e7c7",
+            "7a36b010-88c8-46e3-810d-dd80e236b05c"
+          ]
+        },
+        "download": "disposal_frames.zip",
+        "versionId": "9c7780f0-c551-4383-9a7f-2c7d8d22e7c7",
+        "sha256": "8bf855763c8a3b01cf574964a727adce3d61cc9b2f6567422b0d7bd22d45f439",
+        "downloadMatchesFormalVersion": true
+      }
+    ],
+    "gifImageDecoded": {
+      "width": 32,
+      "height": 24,
+      "complete": true
+    },
+    "keyboardDelaySetTo120Ms": true,
+    "screenshots": [
+      "skill-gif-split.png",
+      "skill-gif-encode.png"
+    ]
+  },
+  "cancellation": {
+    "sample": {
+      "seed": 20261014,
+      "numpyVersion": "2.2.6",
+      "frames": 24,
+      "dimensions": [
+        512,
+        512
+      ],
+      "alpha": "top 8 rows transparent; remaining opaque",
+      "files": [
+        {
+          "file": "cancel-000.png",
+          "sha256": "7dc807328484615ba2c7eb1c217c2ec8a3dcba7b3ae7ef9991c9ba42fe9653e5"
+        },
+        {
+          "file": "cancel-001.png",
+          "sha256": "afc32fff9b85168be691b81c6737972ab8f78967f33c0823a81ce8502309feda"
+        },
+        {
+          "file": "cancel-002.png",
+          "sha256": "1f23508a7362ebd595bc74031d91be74c6173d21a1f5d2b1269e323d299aac39"
+        },
+        {
+          "file": "cancel-003.png",
+          "sha256": "1c75e888f5fde5a38bfa78e26f801399b65b1cf76b374e0c9aefd71380cc181c"
+        },
+        {
+          "file": "cancel-004.png",
+          "sha256": "9676477953b983c67ef1e23043466623b73422f518297319818f4505be400774"
+        },
+        {
+          "file": "cancel-005.png",
+          "sha256": "bb7bde70cb0fd5b6ee90eefa0f7687df295ba3026afbae27829c57bab267874e"
+        },
+        {
+          "file": "cancel-006.png",
+          "sha256": "e6509e74c3c6bceb62d13e8c246ff752a03bc8328dfd27fe19145c7ba37d55ca"
+        },
+        {
+          "file": "cancel-007.png",
+          "sha256": "dee56b3450c32dc898558050f8c545dc2312be4c555923a668fd6a6abddaafdc"
+        },
+        {
+          "file": "cancel-008.png",
+          "sha256": "71383cef1b2a180c957ca4c9c1e20b3fa6911d8561859aefad9e51e309e91385"
+        },
+        {
+          "file": "cancel-009.png",
+          "sha256": "352f84cad4ef8a2ea4e9326d41b6eae066f24490090e9fa011a398287b1d98bd"
+        },
+        {
+          "file": "cancel-010.png",
+          "sha256": "608f6fca521f2db0fdc8a7372ef8f25615a03b03004a03859d1dca592dd61f48"
+        },
+        {
+          "file": "cancel-011.png",
+          "sha256": "0294df637768de694fab7a19df3569463e783b4b3d4c3a2d931a1f6d1c6f0829"
+        },
+        {
+          "file": "cancel-012.png",
+          "sha256": "79bc71c0bab2302f714b4d064a1949ed68197b17abb3c5d60d7a46aa8e376a63"
+        },
+        {
+          "file": "cancel-013.png",
+          "sha256": "bc0aafd6b98d0fdaeb092f828cac0a0a0f93ae95e3c8266de7c4058b5039f26d"
+        },
+        {
+          "file": "cancel-014.png",
+          "sha256": "58748fe232267e0bbd153211dd80d01bc26cfa60a894b0a7ea2bd159b5305748"
+        },
+        {
+          "file": "cancel-015.png",
+          "sha256": "e015ae43d63d4db3d4aec27aa0456cf86ad828991bd175f384c1bea880a28770"
+        },
+        {
+          "file": "cancel-016.png",
+          "sha256": "3e31a243bd6a0f8f9cbb5a9fed2b74bc1279f253540597cea17702c12a256d6a"
+        },
+        {
+          "file": "cancel-017.png",
+          "sha256": "f3fcb48bf87c8caaf868404f73b47c6ef4c00615b9abe53848704e53289a76e5"
+        },
+        {
+          "file": "cancel-018.png",
+          "sha256": "ec47013b30f5475fca64445f8ca44b745114e0a2ea0a8258765d319de55cbee0"
+        },
+        {
+          "file": "cancel-019.png",
+          "sha256": "49694cd56542e243bf3941b07e78d485dbb6a323d48cdff67643adc33b87bf83"
+        },
+        {
+          "file": "cancel-020.png",
+          "sha256": "86efc2680b1aaef55d9d0a426fc1dc795d25056978960dd12de672a9375bd251"
+        },
+        {
+          "file": "cancel-021.png",
+          "sha256": "4ba82ee76bbcde3c8f4e04ecca1ce0fd883ca1f7a264e0954852436a9a56f3f5"
+        },
+        {
+          "file": "cancel-022.png",
+          "sha256": "3f2b7cbbae4b1c3b3d7be10856df00b0f4c43f14c171b451cbfac089656d2779"
+        },
+        {
+          "file": "cancel-023.png",
+          "sha256": "81b255f94184df19d0132a4b511e33483bd865d0a5eb13af0ecb48e6f2fe40ce"
+        }
+      ]
+    },
+    "evidence": {
+      "id": "bb0f7b57-514d-4e22-8b1c-304fd918afb7",
+      "state": "canceled",
+      "generation": 1,
+      "results": [],
+      "error": null,
+      "confirmation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.01757808303227648,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 2
+      },
+      "uiClickToObservedCanceledMilliseconds": 409
+    },
+    "lateReconciliation": {
+      "id": "bb0f7b57-514d-4e22-8b1c-304fd918afb7",
+      "state": "canceled",
+      "generation": 1,
+      "results": []
+    },
+    "screenshot": "skill-gif-cancel.png",
+    "initialTimingAttempt": "The first 24-frame task completed before external sampling; a second run waited for actual nonzero UI encoder progress before canceling"
+  },
+  "background": {
+    "leftToolAfterNonzeroEncoderProgress": true,
+    "returnedToHome": true,
+    "finalTask": {
+      "id": "5c5cdc07-06bf-48ee-a4d5-f0c1b95e4a92",
+      "state": "succeeded",
+      "results": [
+        "dc494a17-95e6-455a-ad7f-09db324e8e98",
+        "6bf9dbed-1d59-421b-8cb2-4fe5fcf2d0a2"
+      ]
+    },
+    "gifFrameCount": 24,
+    "usesVisibleAnimationCallbacks": false,
+    "metrics": {
+      "peakControlledProcessBytes": 310444032,
+      "budgetBytes": 2147483648,
+      "estimatedBytes": 341894266,
+      "processingMode": "per_frame_browser_palette"
+    }
+  },
+  "negativeChecks": [
+    "single-frame GIF accepted",
+    "PNG refused as GIF input",
+    "mixed dimensions rejected by default",
+    "first-frame resizing only allowed with browser renderer",
+    "unsupported browser loop refused",
+    "frontend and decoder memory limits",
+    "accepted cancellation blocks late versions",
+    "PNG renamed to .gif refused after actual container inspection"
+  ],
+  "correctedFailures": [
+    "optional progress callback previously skipped the frame counter increment; independent no-callback test caught and fixed it",
+    "initial test assumed alpha 128 opaque; pinned original encoder uses an inclusive 128 palette threshold, corrected against library source",
+    "direct native Image scaling produced premultiplied RGB at transparent edges; normalize to a natural-size canvas before scaling, original final GIF bytes now equal"
+  ],
+  "intermediateDifference": "Native and original resized canvas alpha differ by 1 at 48 pixels of the mixed-size fixture. Final GIF palette output and bytes match; this does not establish exact PNG resizing equivalence.",
+  "checks": {
+    "engineTests": 21,
+    "jsTests": 21,
+    "workbenchBuild": "passed",
+    "changedModuleESLint": "passed"
+  },
+  "remaining": [
+    "sequence document persistence and undo",
+    "other combine/split/stitch computations still on main thread",
+    "all format/resampling and palette quality samples",
+    "bounded lazy selection previews",
+    "combined browser/API/process measured memory",
+    "macOS 14 and native accessibility",
+    "full AI catalog and portable distribution"
+  ],
+  "scopeOfMeasuredMemory": "owned Python/Node process family only; does not prove full browser/API total"
+}

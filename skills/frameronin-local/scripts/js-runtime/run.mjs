@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { installDom } from './dom.mjs'
+import JSZip from '../../assets/workbench/node_modules/jszip/lib/index.js'
 
 const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const requestPath = await fs.realpath(process.argv[2])
@@ -65,6 +66,47 @@ if (request.operation === 'workflow') {
   for (const canvas of expanded) outputs.push(new Blob([await canvas.encode('png')]))
   report = { inputFrames: frames.length, outputFrames: expanded.length, method: 'original-opencv-farneback',
     processingDimensions: { width: frames[0].width, height: frames[0].height } }
+} else if (request.operation === 'gif.split') {
+  const {width,height,frames}=algorithms.decodeBrowserGif(await blobs[0].arrayBuffer(),request.budgetBytes)
+  const zip=new JSZip(),records=[]
+  for(const [index,frame]of frames.entries()){
+    const canvas=dom.createCanvas(width,height)
+    canvas.getContext('2d').putImageData(new dom.ImageData(frame.data,width,height),0,0)
+    const png=new Blob([await canvas.encode('png')])
+    canvas.width=1;canvas.height=1
+    outputs.push(png);extensions.push('png')
+    const name=`frame_${String(index).padStart(3,'0')}.png`
+    zip.file(name,await png.arrayBuffer())
+    records.push({file:name,durationMs:frame.delay,disposalType:frame.disposalType,width,height})
+    process.stdout.write(JSON.stringify({progress:(index+1)/frames.length*.9})+'\n')
+  }
+  outputs.push(new Blob([await zip.generateAsync({type:'nodebuffer',compression:'STORE'})]));extensions.push('zip')
+  report={method:'original-gifuct-browser-composite',frames:records}
+} else if (request.operation === 'sequence.gif') {
+  let width=0,height=0
+  async function* frames(){
+    for(const blob of blobs){
+      const image=await dom.loadImage(Buffer.from(await blob.arrayBuffer()))
+      width ||= image.width;height ||= image.height
+      const canvas=dom.createCanvas(width,height),context=canvas.getContext('2d')
+      if(image.width!==width||image.height!==height){
+        // Normalize decoded image alpha into a canvas before native resampling.
+        // Direct Image -> scaled Canvas produces premultiplied RGB at edges in
+        // this pinned native runtime; Canvas -> Canvas retains browser colors.
+        const source=dom.createCanvas(image.width,image.height)
+        source.getContext('2d').drawImage(image,0,0)
+        context.drawImage(source,0,0,width,height)
+        source.width=1;source.height=1
+      }else context.drawImage(image,0,0,width,height)
+      yield context.getImageData(0,0,width,height)
+      canvas.width=1;canvas.height=1
+    }
+  }
+  outputs.push(await algorithms.encodeBrowserGif(frames(),request.parameters.duration,
+    count=>process.stdout.write(JSON.stringify({progress:count/blobs.length*.9})+'\n')))
+  extensions.push('gif')
+  report={method:'original-gifenc-per-frame-palette',frames:blobs.length,width,height,durationMs:request.parameters.duration,
+    sizePolicy:request.parameters.sizePolicy}
 } else if (request.operation === 'map') {
   const images=[]
   for(const blob of blobs)images.push(await dom.loadImage(Buffer.from(await blob.arrayBuffer())))
