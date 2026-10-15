@@ -673,7 +673,8 @@
       "skill-map-krita-layer-hidden.png",
       "skill-map-krita-restored.png",
       "skill-map-krita-composite.png"
-    ]
+    ],
+    "acceptanceCommit": "7def18c"
   },
   "checks": {
     "pythonTests": 19,
