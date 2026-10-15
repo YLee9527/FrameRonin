@@ -11,6 +11,8 @@
   <p><label>GIF frame PNG samples <input id="gif-frames" type="file" accept="image/png" multiple></label><label>GIF disposal sample <input id="gif-input" type="file" accept="image/gif"></label><button id="gif-run">Run original GIF oracle</button></p>
   <p><label>Sequence PNG samples <input id="sequence" type="file" accept="image/png" multiple></label><label>Transparent regions <input id="regions" type="file" accept="image/png"></label><button id="sequence-run">Run original sequence oracle</button></p>
   <p><label>Pixel fixture <input id="pixel" type="file" accept="image/png"></label><button id="pixel-run">Run original pixel oracles</button></p>
+  <p><button id="ronin-run">Run original Ronin image tool oracles</button></p>
+  <p><button id="smooth-worker">Run smooth resize Worker comparison</button></p>
 <p id="status" role="status">Ready. This separate test page never submits project tasks.</p>
   <a id="download" hidden>Download oracle result</a>
   <script type="module" src="./browser-oracle.ts"></script>

@@ -14,6 +14,9 @@ import { getPerfectPixel as originalPerfect } from '../.runtime/oracle/original-
 import { computeMeshWithScaling as originalMesh } from '../.runtime/oracle/original-pixellise/mesh'
 import { processWithMesh as originalMeshProcess } from '../.runtime/oracle/original-pixellise/pixelate'
 import { loadOpenCv } from '../assets/workbench/src/lib/pixellise/opencv'
+import { originalScale } from '../.runtime/oracle/original-scale'
+import { originalUnify } from '../.runtime/oracle/original-unify'
+import {splitSpriteSheetGrid as originalSplitGrid,findDuplicateFrameIndexGroups as originalFindDuplicates} from '../.runtime/oracle/original-duplicate'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -181,7 +184,45 @@ async function runPixel(){
   }
   zip.file('fixture.json',JSON.stringify(fixture));await publish(zip,'browser-pixel-oracles.zip');status.textContent=`Original pixel oracle complete: ${fixture.cases.length} cases`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel]] as const) {
+async function runRonin(){
+  const fixture=await(await fetch('/ronin-fixtures/manifest.json')).json(),zip=new JSZip()
+  const load=(file:File)=>new Promise<HTMLImageElement>((resolve,reject)=>{
+    const image=new Image(),url=URL.createObjectURL(file);image.onload=()=>{URL.revokeObjectURL(url);resolve(image)};image.onerror=()=>reject(new Error('Image decode failed'));image.src=url
+  })
+  for(const entry of fixture.cases){
+    const inputs:File[]=[]
+    for(const path of entry.inputs){const response=await fetch(`/ronin-fixtures/${path}`);if(!response.ok)throw new Error(`Missing fixture: ${path}`);inputs.push(new File([await response.blob()],path.split('/').pop()))}
+    const p=entry.parameters
+    if(entry.operation==='image.customScale')zip.file(`${entry.id}/0.png`,await originalScale(inputs[0],p))
+    else{
+      const images=await Promise.all(inputs.map(load))
+      if(entry.operation==='sequence.unifySize')zip.file(`${entry.id}/0.png`,await originalUnify(images,p.columns,p.horizontal,p.vertical))
+      else{
+        const cells=originalSplitGrid(images[0],p.columns,p.rows)
+        zip.file(`${entry.id}/report.json`,JSON.stringify({groups:originalFindDuplicates(cells),indexBase:0,frameDimensions:cells.map(cell=>({width:cell.width,height:cell.height}))}))
+        for(const [index,cell]of cells.entries())zip.file(`${entry.id}/${index}.png`,await png(cell))
+      }
+    }
+    status.textContent=`Original Ronin tools: ${entry.id}`
+  }
+  zip.file('fixture.json',JSON.stringify(fixture));await publish(zip,'browser-ronin-oracles.zip');status.textContent=`Original Ronin tools complete: ${fixture.cases.length} cases`
+}
+async function runSmoothWorker(){
+  const fixture=await(await fetch('/ronin-fixtures/manifest.json')).json(),zip=new JSZip()
+  for(const entry of fixture.cases.filter((item:{parameters:{pixelated?:boolean}})=>item.parameters.pixelated===false)){
+    const file=await(await fetch(`/ronin-fixtures/${entry.inputs[0]}`)).blob()
+    const worker=new Worker(new URL('../assets/workbench/src/lib/smoothResize.worker.ts',import.meta.url),{type:'module'})
+    try{
+      const result=await new Promise<Blob>((resolve,reject)=>{
+        worker.onerror=event=>reject(new Error(event.message));worker.onmessage=event=>{if(event.data.phase)return;event.data.error?reject(new Error(event.data.error)):resolve(event.data.blob)}
+        worker.postMessage({id:entry.id,generation:0,file,parameters:entry.parameters})
+      })
+      zip.file(`${entry.id}/0.png`,result);status.textContent=`Worker smooth resize: ${entry.id}`
+    }finally{worker.terminate()}
+  }
+  await publish(zip,'browser-smooth-worker.zip');status.textContent='Worker smooth resize complete: 6 cases'
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

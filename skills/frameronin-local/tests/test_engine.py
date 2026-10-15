@@ -137,6 +137,70 @@ class ProjectTests(unittest.TestCase):
             metadata=json.loads(Path(report['absolutePath']).read_text())
             self.assertEqual(metadata['processingDimensions'],{'width':64,'height':48} if case['id']=='perfect-region' else {'width':128,'height':96})
 
+    def test_ronin_native_tools_match_original_presets_alignments_and_duplicate_frames(self):
+        import numpy as np
+        fixtures=Path(__file__).resolve().parents[1]/'assets/fixtures/ronin'
+        manifest=json.loads((fixtures/'manifest.json').read_text());imports={}
+        for case in manifest['cases']:
+            if case['parameters'].get('pixelated') is False:continue
+            inputs=[]
+            for name in case['inputs']:
+                if name not in imports:imports[name]=self.project.import_file(fixtures/name)
+                inputs.append(imports[name]['id'])
+            payload={'operation':case['operation'],'inputs':inputs,'parameters':case['parameters']}
+            result=wait(self.project,submit(self.project,payload)['id'],20)
+            self.assertEqual(result['state'],'succeeded',result)
+            versions=[self.project.version(v) for v in result['results']]
+            outputs=[v for v in versions if v['metadata']['kind']=='image']
+            for index,version in enumerate(outputs):
+                with Image.open(version['absolutePath']) as actual,Image.open(fixtures/'original'/case['id']/f'{index}.png') as expected:
+                    self.assertEqual(actual.size,expected.size)
+                    np.testing.assert_array_equal(np.array(actual.convert('RGBA')),np.array(expected.convert('RGBA')))
+            if case['operation']=='image.findDuplicates':
+                report=json.loads(Path(next(v for v in versions if v['metadata']['extension']=='.json')['absolutePath']).read_text())
+                expected=json.loads((fixtures/'original'/case['id']/'report.json').read_text())
+                self.assertEqual({key:report[key] for key in expected},expected)
+        for operation,parameters in [('image.customScale',{'pixelated':False}),('image.customScale',{'width':4097}),
+            ('image.customScale',{'mode':'unknown'}),('image.customScale',{'mode':'ffff','renderer':'browser-worker'}),
+            ('sequence.unifySize',{'horizontal':'middle'}),('image.findDuplicates',{'rows':65}),('image.findDuplicates',{'frontendBytes':2*1024**3})]:
+            with self.assertRaises(RoninError):preview(self.project,{'operation':operation,'inputs':[self.version['id']],'parameters':parameters})
+        self.assertTrue(self.project.verify()['valid'])
+
+    def test_browser_pixels_use_owned_queue_generation_and_late_results_cannot_publish(self):
+        from frameronin_engine.browser_tasks import ready,heartbeat,accept
+        payload={'operation':'image.customScale','inputs':[self.version['id']],
+            'parameters':{'width':37,'height':29,'pixelated':False,'renderer':'browser-worker'}}
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        first=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+        while not ready(self.project,first['id'])['ready']:
+            self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+        heartbeat(self.project,first['id'],0)
+        with self.assertRaises(RoninError):accept(self.project,first['id'],0,self.source)
+        source=self.root/'browser-output.png';Image.new('RGBA',(37,29),(200,30,60,128)).save(source)
+        accept(self.project,first['id'],0,source)
+        result=wait(self.project,first['id'],10);self.assertEqual(result['state'],'succeeded',result)
+        self.assertEqual(len(result['results']),2)
+        with self.assertRaises(Cancelled):accept(self.project,first['id'],0,source)
+        second=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+        while not ready(self.project,second['id'])['ready']:
+            self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+        accepted=cancel(self.project,second['id']);self.assertEqual(accepted['generation'],1)
+        with self.assertRaises(Cancelled):accept(self.project,second['id'],0,source)
+        with self.assertRaises(Cancelled):heartbeat(self.project,second['id'],0)
+        self.assertEqual(task(self.project,second['id'])['results'],[])
+        with self.assertRaises(RoninError):ready(self.project,'../../outside')
+        third=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+        while not ready(self.project,third['id'])['ready']:
+            self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+        import os
+        lease=self.project.safe(f"tasks/{third['id']}/output/browser-heartbeat")
+        os.utime(lease,(time.time()-30,time.time()-30))
+        disconnected=wait(self.project,third['id'],5)
+        self.assertEqual(disconnected['state'],'failed');self.assertEqual(disconnected['error']['code'],'BROWSER_WORKER_DISCONNECTED')
+        self.assertEqual(disconnected['results'],[])
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_browser_gif_runtime_preserves_frames_delays_and_strict_policies(self):
         second = self.root / 'second.png'
         Image.new('RGBA', (8, 8), (20, 220, 40, 255)).save(second)

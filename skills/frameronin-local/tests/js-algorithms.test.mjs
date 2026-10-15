@@ -9,6 +9,19 @@ const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dom = installDom(path.join(skill, 'assets/workbench/public'), 2 * 1024 ** 3)
 const algorithms = await import(pathToFileURL(path.join(skill, '.runtime/js/algorithms.mjs')).href)
 
+test('sprite grid exports are callable and preserve exact duplicate groups and uneven cell dimensions',async()=>{
+  assert.equal(typeof algorithms.splitSpriteSheetGrid,'function');assert.equal(typeof algorithms.findDuplicateFrameIndexGroups,'function')
+  for(const name of ['grid','uneven','tiny']){
+    const bitmap=await dom.loadImage(await fs.readFile(path.join(skill,`assets/fixtures/ronin/${name}.png`)))
+    const canvas=dom.createCanvas(bitmap.width,bitmap.height);canvas.getContext('2d').drawImage(bitmap,0,0)
+    const fixture=JSON.parse(await fs.readFile(path.join(skill,`assets/fixtures/ronin/original/duplicates-${name}/report.json`),'utf8'))
+    const cells=algorithms.splitSpriteSheetGrid({native:canvas,naturalWidth:bitmap.width,naturalHeight:bitmap.height},name==='tiny'?4:3,name==='tiny'?3:2)
+    assert.deepEqual(cells.map(cell=>({width:cell.width,height:cell.height})),fixture.frameDimensions)
+    assert.deepEqual(algorithms.findDuplicateFrameIndexGroups(cells),fixture.groups)
+  }
+  await assert.rejects(algorithms.customScaleImage(new Blob(),{mode:'resize',pixelated:false}),/BROWSER_RENDERER_REQUIRED/)
+})
+
 test('sequence undo groups cropped parameters and keeps all selected/result files across reorder and removal', () => {
   const first=new File(['first'],'first.png'),second=new File(['second'],'second.png'),result=new File(['known-result'],'combined.png')
   let state=algorithms.createSequenceHistory({...algorithms.initialSequenceDraft(),combineFiles:[first,second]})

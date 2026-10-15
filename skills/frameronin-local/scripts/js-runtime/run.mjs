@@ -89,6 +89,29 @@ if (request.operation === 'workflow') {
   }
   report={...report,method:'original-pixel-editor',operation:request.operation,parameters:request.parameters,
     processingDimensions:{width:input.width,height:input.height},originalDimensions:input.originalDimensions}
+} else if (['image.customScale','sequence.unifySize','image.findDuplicates'].includes(request.operation)) {
+  process.stdout.write(JSON.stringify({progress:.05})+'\n')
+  const images=[]
+  if(request.operation!=='image.customScale')for(const blob of blobs){
+    const image=await dom.loadImage(Buffer.from(await blob.arrayBuffer()))
+    const canvas=dom.createCanvas(image.width,image.height)
+    canvas.getContext('2d').drawImage(image,0,0)
+    images.push({native:canvas,naturalWidth:image.width,naturalHeight:image.height})
+  }
+  process.stdout.write(JSON.stringify({progress:.1})+'\n')
+  if(request.operation==='image.customScale')outputs.push(await algorithms.customScaleImage(blobs[0],request.parameters))
+  else if(request.operation==='sequence.unifySize')outputs.push(await algorithms.unifyImageSizes(images,request.parameters.columns,request.parameters.horizontal,request.parameters.vertical))
+  else{
+    const cells=algorithms.splitSpriteSheetGrid(images[0],request.parameters.columns,request.parameters.rows)
+    const groups=algorithms.findDuplicateFrameIndexGroups(cells)
+    process.stdout.write(JSON.stringify({progress:.4})+'\n')
+    for(const [index,cell]of cells.entries()){
+      outputs.push(new Blob([await cell.encode('png')]))
+      process.stdout.write(JSON.stringify({progress:.4+(index+1)/cells.length*.5})+'\n')
+    }
+    report={groups,indexBase:0,frameDimensions:cells.map(cell=>({width:cell.width,height:cell.height}))}
+  }
+  report={...report,method:'original-ronin-image-tools',operation:request.operation,parameters:request.parameters,outputFrames:outputs.length}
 } else if (request.operation === 'opticalFlow') {
   const frames = []
   for (const blob of blobs) frames.push(await dom.loadImage(Buffer.from(await blob.arrayBuffer())))

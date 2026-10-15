@@ -3,7 +3,7 @@ export { importLegacyWorkflow, validateStrictWorkflow } from '../../assets/workb
 export { getPerfectPixel, PERFECT_PIXEL_MAX_SIDE } from '../../assets/workbench/src/lib/perfectPixel/perfectPixel'
 export { doubleBackgroundMatteFromBlobs, postProcessDoubleBgMatteBlob, applyAlphaErosionToBlob } from '../../assets/workbench/src/lib/doubleBackgroundMatte'
 export { stitchImageBlobs } from '../../assets/workbench/src/lib/simpleStitchVertical'
-export { duplicateSpriteGridFrames } from '../../assets/workbench/src/lib/spriteGridDuplicate'
+export { splitSpriteSheetGrid, findDuplicateFrameIndexGroups } from '../../assets/workbench/src/lib/spriteGridDuplicate'
 export { createInitialState, rsepriteReducer } from '../../assets/workbench/src/components/Rseprite/useRsepriteState'
 export { validateStoredRseprite } from '../../assets/workbench/src/localProject/rsepriteDocument'
 export { interpolateMidFrameOpticalFlow, expandFramesWithOpticalMidpoints } from '../../assets/workbench/src/lib/opticalFlowInterpolate'
@@ -28,3 +28,4 @@ export { processWithMesh } from '../../assets/workbench/src/lib/pixellise/pixela
 export { maxSafeUpscaleForImage } from '../../assets/workbench/src/lib/pixellise/safeUpscale'
 export { initialPixelDraft, validateStoredPixel, serializePixelDocument, restorePixelDocument, pixelMetadata } from '../../assets/workbench/src/localProject/pixelDocument'
 export { createPixelHistory, pixelHistoryReducer } from '../../assets/workbench/src/localProject/pixelHistory'
+export { customScaleImage, unifyImageSizes } from '../../assets/workbench/src/lib/roninImageTools'

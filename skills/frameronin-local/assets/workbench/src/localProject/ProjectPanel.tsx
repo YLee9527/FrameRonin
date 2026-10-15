@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Alert, Button, Drawer, List, Space, Tag, Typography, Upload } from 'antd'
+import { Alert, Button, Drawer, List, Pagination, Space, Tag, Typography, Upload } from 'antd'
 import { FolderOpenOutlined, UploadOutlined } from '@ant-design/icons'
 import { useLanguage } from '../i18n/context'
 import { jsonPost, localJson } from './api'
 
 type Asset = { id: string; name: string; current_version: string; metadata?: { kind: string; width?: number; height?: number; thumbnailDataUrl?: string } }
 type Task = { id: string; state: string; progress: number; results: string[]; aiState?: string; error?: { message: string } }
+
+function ResultLinks({results}:{results:string[]}){
+  const {lang}=useLanguage(),[page,setPage]=useState(1)
+  const current=Math.min(page,Math.max(1,Math.ceil(results.length/12))),start=(current-1)*12
+  return <>
+    {results.slice(start,start+12).map((version,index)=><a key={version} href={`/api/versions/${version}/content`} target="_blank" rel="noreferrer">{lang==='zh'?'查看结果':lang==='ja'?'結果を表示':'View result'} {start+index+1}</a>)}
+    {results.length>12&&<Pagination size="small" current={current} pageSize={12} total={results.length} onChange={setPage} showSizeChanger={false}/>}
+  </>
+}
 
 export default function ProjectPanel() {
   const { lang } = useLanguage()
@@ -45,7 +54,7 @@ export default function ProjectPanel() {
           return false
         }}><Button icon={<UploadOutlined />}>{text.import}</Button></Upload>
         <Typography.Title level={5}>{text.versions}</Typography.Title>
-        <List dataSource={assets} renderItem={asset => <List.Item><Space>
+        <List dataSource={assets} pagination={{pageSize:24,showSizeChanger:false}} renderItem={asset => <List.Item><Space>
           {asset.metadata?.kind === 'image' && asset.metadata.thumbnailDataUrl && <img src={asset.metadata.thumbnailDataUrl} loading="lazy" width={48} height={48}
             style={{ objectFit: 'contain', imageRendering: 'pixelated' }} alt={asset.name} draggable onDragStart={event => {
               event.dataTransfer.setData('application/x-frameronin-stash-url', `/api/versions/${asset.current_version}/content`)
@@ -55,7 +64,7 @@ export default function ProjectPanel() {
           {asset.metadata?.width && <Typography.Text type="secondary">{asset.metadata.width}×{asset.metadata.height}</Typography.Text>}
         </Space></List.Item>} />
         <Typography.Title level={5}>{text.tasks}</Typography.Title>
-        <List dataSource={tasks} renderItem={task => <List.Item><Space orientation="vertical">
+        <List dataSource={tasks} pagination={{pageSize:10,showSizeChanger:false}} renderItem={task => <List.Item><Space orientation="vertical">
           <Space><Tag>{statusNames[task.state] ?? task.state}</Tag><Typography.Text>{Math.round(task.progress * 100)}%</Typography.Text>
             {['queued', 'running'].includes(task.state) && <Button size="small" loading={canceling.has(task.id)} disabled={canceling.has(task.id)} onClick={async () => {
               setCanceling(items => new Set([...items, task.id]))
@@ -68,7 +77,7 @@ export default function ProjectPanel() {
           {task.aiState && <Typography.Text type="secondary">{task.aiState === 'cancel_requested'
             ? (lang === 'zh' ? '结果已失效；请在 Codex 核对生成是否停止。' : lang === 'ja' ? '結果は無効です。Codex で生成の停止を確認してください。' : 'Result invalidated. Verify the original generation state in Codex.')
             : `ImageGen · ${task.aiState}`}</Typography.Text>}
-          {task.results.map((version, index) => <a key={version} href={`/api/versions/${version}/content`} target="_blank" rel="noreferrer">{lang === 'zh' ? '查看结果' : lang === 'ja' ? '結果を表示' : 'View result'} {index + 1}</a>)}
+          <ResultLinks results={task.results}/>
         </Space></List.Item>} />
       </Space>
     </Drawer>

@@ -29,8 +29,10 @@ def task(project, task_id):
     return result
 
 
-def submit(project, payload, precommit=None):
+def submit(project, payload, precommit=None, browser_client=False):
     details = preview(project, payload)
+    if details.get('requiresWorkbench') and not browser_client:
+        raise RoninError('WORKBENCH_REQUIRED','Execute smooth custom scaling from its workbench tool; CLI and generic proposal execution do not start a browser Worker.')
     task_id = identifier()
     directory = project.safe(f'tasks/{task_id}')
     directory.mkdir()

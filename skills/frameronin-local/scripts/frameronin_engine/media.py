@@ -14,12 +14,16 @@ def run(preview, directory, progress):
     directory.mkdir(exist_ok=True)
     name = preview['operation']
     parameters = preview['parameters']
+    if name=='image.customScale' and parameters['renderer']=='browser-worker':
+        from .browser_tasks import wait_for_result
+        return wait_for_result(preview,directory,progress)
     paths = [Path(v['absolutePath']) for v in preview['versions']]
     output = directory / 'result.png'
     browser_gif = name in ['gif.split', 'sequence.gif'] and parameters['renderer'] == 'browser'
     sequence_canvas = name in ['sequence.combine','sequence.stitch','image.sliceBrowser','image.superSlice','image.blank']
     pixel_canvas = name in ['image.pixelate','image.mergeNearby','image.palette16','image.pixellise']
-    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow', 'map.export', 'map.template'] or browser_gif or sequence_canvas or pixel_canvas:
+    ronin_tools = name in ['image.customScale','sequence.unifySize','image.findDuplicates']
+    if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow', 'map.export', 'map.template'] or browser_gif or sequence_canvas or pixel_canvas or ronin_tools:
         from .workflows import ROOT
         node = shutil.which('node')
         compiled = ROOT / '.runtime/js/algorithms.mjs'
@@ -33,7 +37,7 @@ def run(preview, directory, progress):
             shutil.copy2(path, directory / relative)
             selected.append(relative)
         values = dict(parameters)
-        request = {'operation': name if browser_gif or sequence_canvas or pixel_canvas else 'map' if name.startswith('map.') else 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
+        request = {'operation': name if browser_gif or sequence_canvas or pixel_canvas or ronin_tools else 'map' if name.startswith('map.') else 'workflow' if name.startswith('workflow.') else 'opticalFlow' if name == 'sequence.opticalFlow' else 'perfectPixel',
                    'inputs': selected, 'parameters': values, 'budgetBytes': preview['budgetBytes']}
         if name.startswith('workflow.'):
             request['graph'] = values.pop('graph')

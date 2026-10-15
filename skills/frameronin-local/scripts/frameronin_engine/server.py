@@ -85,7 +85,7 @@ def application(project, port):
 
     @app.post('/api/tasks')
     def create_task(payload: dict):
-        return submit(project, payload)
+        return submit(project, payload,browser_client=True)
 
     @app.post('/api/proposals')
     def create_proposal(payload: dict):
@@ -114,11 +114,52 @@ def application(project, port):
     async def cancel_task(task_id: str):
         return await asyncio.to_thread(cancel, project, task_id)
 
+    @app.get('/api/tasks/{task_id}/results')
+    def result_manifest(task_id:str):
+        record=task(project,task_id)
+        if record['state']!='succeeded':raise RoninError('TASK_NOT_COMPLETE','Only accepted task results can be previewed.')
+        versions=[project.version(version_id) for version_id in record['results']]
+        return [{key:version.get(key) for key in ['id','name','metadata']} for version in versions]
+
     @app.get('/api/tasks')
     def list_tasks():
         with project.connection() as db:
             ids = [row[0] for row in db.execute('SELECT id FROM tasks ORDER BY created_at DESC LIMIT 200')]
         return [task(project, value) for value in ids]
+
+    @app.get('/api/tasks/{task_id}/browser')
+    def browser_ready(task_id:str):
+        from .browser_tasks import ready
+        return ready(project,task_id)
+
+    @app.post('/api/tasks/{task_id}/browser/heartbeat')
+    def browser_heartbeat(task_id:str,payload:dict):
+        from .browser_tasks import heartbeat
+        if set(payload)!={'generation'}:raise RoninError('BROWSER_FIELDS_INVALID','Only the execution generation is accepted.')
+        return heartbeat(project,task_id,payload['generation'])
+
+    @app.post('/api/tasks/{task_id}/browser/failure')
+    def browser_failure(task_id:str,payload:dict):
+        from .browser_tasks import fail
+        if set(payload)!={'generation'}:raise RoninError('BROWSER_FIELDS_INVALID','Only the execution generation is accepted.')
+        return fail(project,task_id,payload['generation'])
+
+    @app.post('/api/tasks/{task_id}/browser/result')
+    async def browser_result(task_id:str,generation:int=Form(...),file:UploadFile=File(...)):
+        from .browser_tasks import location,accept
+        location(project,task_id,generation)
+        temporary=project.safe(f'tasks/{task_id}/output/browser-upload-{identifier()}.png')
+        written=0
+        try:
+            with temporary.open('xb') as output:
+                while block:=await file.read(1024*1024):
+                    written+=len(block)
+                    if written>min(memory_budget()//4,128*1024**2):raise RoninError('BROWSER_OUTPUT_LIMIT','The encoded Worker result exceeds its upload budget.')
+                    output.write(block)
+            return await asyncio.to_thread(accept,project,task_id,generation,temporary)
+        finally:
+            await file.close()
+            if temporary.exists():temporary.unlink()
 
     @app.post('/api/jobs')
     async def create_video_job(file: UploadFile = File(...), params: str = Form('{}')):

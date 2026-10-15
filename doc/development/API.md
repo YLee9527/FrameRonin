@@ -55,3 +55,11 @@ GIF 预估加入所有前端保留素材、解码帧、中间表面和编码缓�
 全部计算、输入解码、裁切和编码在受控 Node 任务内完成，正式 PNG 及 JSON 报告进入项目。报告含原尺寸、实际处理尺寸；Pixellise 另含请求/实际网格放大倍数。PerfectPixel 沿用最大边长 2048，Pixellise 沿用 4200 万检测像素上限和原放大倍数限制；额外预算不足直接拒绝，不再静默降低参数。全局网格、调色及误差扩散不独立分块。颜色数组、量化、抖动及完整输出上限分别估算；OpenCV 运行时保留 576 MiB 余量。预览尺寸与真实坐标分开，缩略图不改变任务输入或暂存内容。
 
 编辑包络增加 `kind=pixel`。更新已存在文档时改变类型返回 DOCUMENT_KIND_CHANGED；类型改变应使用新 ID。统一任务客户端额外返回本次核验的 project 身份，结果文件据此复用正式版本缓存；保存或重开不能靠重导入得到新版本。候选恢复只创建未激活的 File 引用，当前文档没有变化后才接受，不提前分配画布或改写当前素材映射。
+
+RoninPro 操作 `image.customScale`、`sequence.unifySize`、`image.findDuplicates` 的参数、范围以注册表为准。八个固定缩放预设沿用原始硬边缘缩放、左上角取色、三种抠图及右/下裁边；统一尺寸不缩放各输入；重复检测按真实单元尺寸分桶后逐像素核对，报告的 groups 使用 0-based 索引。后者支持原来的 64×64 单元，区别于其他序列入口的 1000 帧限制。
+
+平滑缩放的 `renderer=browser-worker` 是工作台专用模式，预览额外返回 requiresWorkbench=true 和 original_host_canvas_worker。CLI submit 与通用 proposal-execute 返回 WORKBENCH_REQUIRED，避免提交一个没有浏览器执行端的悬空任务；工作台同源 `/api/tasks` 可调度该模式。其他操作预览的 requiresWorkbench 为 false。注册表默认 native；平滑缩放未显式选择 Worker 时返回 BROWSER_RENDERER_REQUIRED，不能隐式切换滤波。
+
+Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态）、`/heartbeat` 与 `/failure`（POST，只接收 generation）、`/result`（POST multipart，generation 与 PNG）通信。仍由已有串行队列创建并持有受控后台进程；后者等待浏览器像素，核验结果后调用原统一完成事务。执行代次、当前 running 状态、PNG 真实格式、单帧及审阅尺寸均重验。上传不采用客户端路径或文件名；单次压缩内容最多 min(预算/4,128MiB)，完全写入及解码校验后才以不可覆盖的硬链接交付。取消先使完成代次失效，Worker 立即 terminate；本地进程停止确认仍只涵盖后台所属进程，不能据此推断浏览器或 AI 服务端状态。15 秒心跳丢失明确失败，不自动重试。
+
+`GET /api/tasks/{id}/results` 在 succeeded 后返回按结果顺序的 id、name、metadata，逐版本核验内容，省去逐个获取元数据的请求。客户端核对清单与任务完全一致，整批预算通过后最多并行读取 8 个内容，仍按原顺序返回；读取失败或取消会停止剩余下载。超出预算的任务成功结果保留在项目，前端不先下载部分结果。该接口不返回绝对路径。

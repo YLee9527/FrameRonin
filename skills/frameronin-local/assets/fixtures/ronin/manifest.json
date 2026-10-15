@@ -1,0 +1,645 @@
+{
+  "formatVersion": 1,
+  "cases": [
+    {
+      "id": "resize-true-false",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "width": 37,
+        "height": 29,
+        "mode": "resize",
+        "keepAspect": false,
+        "pixelated": true
+      }
+    },
+    {
+      "id": "resize-true-true",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "width": 37,
+        "height": 29,
+        "mode": "resize",
+        "keepAspect": true,
+        "pixelated": true
+      }
+    },
+    {
+      "id": "resize-false-false",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "width": 37,
+        "height": 29,
+        "mode": "resize",
+        "keepAspect": false,
+        "pixelated": false
+      }
+    },
+    {
+      "id": "resize-false-true",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "width": 37,
+        "height": 29,
+        "mode": "resize",
+        "keepAspect": true,
+        "pixelated": false
+      }
+    },
+    {
+      "id": "ffff-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "ffff",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "ffff-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "ffff",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "ffff-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "ffff",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fffb-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fffb",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fffb-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fffb",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fffb-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fffb",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fbfb-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fbfb",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fbfb-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fbfb",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fbfb-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fbfb",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fbff-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fbff",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fbff-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fbff",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "fbff-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "fbff",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "c0c0-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "c0c0",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "c0c0-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "c0c0",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "c0c0-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "c0c0",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "c0be-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "c0be",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "c0be-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "c0be",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "c0be-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "c0be",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "bebe-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "bebe",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "bebe-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "bebe",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "bebe-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "bebe",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "bec0-contiguous",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "bec0",
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "bec0-chromaKey",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "bec0",
+        "matteAlgorithm": "chromaKey",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "bec0-chromaKeyAdaptive",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "mode": "bec0",
+        "matteAlgorithm": "chromaKeyAdaptive",
+        "nonContiguousTolerance": 5
+      }
+    },
+    {
+      "id": "unify-left-top",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "left",
+        "vertical": "top"
+      }
+    },
+    {
+      "id": "unify-left-center",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "left",
+        "vertical": "center"
+      }
+    },
+    {
+      "id": "unify-left-bottom",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "left",
+        "vertical": "bottom"
+      }
+    },
+    {
+      "id": "unify-center-top",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "center",
+        "vertical": "top"
+      }
+    },
+    {
+      "id": "unify-center-center",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "center",
+        "vertical": "center"
+      }
+    },
+    {
+      "id": "unify-center-bottom",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "center",
+        "vertical": "bottom"
+      }
+    },
+    {
+      "id": "unify-right-top",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "right",
+        "vertical": "top"
+      }
+    },
+    {
+      "id": "unify-right-center",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "right",
+        "vertical": "center"
+      }
+    },
+    {
+      "id": "unify-right-bottom",
+      "operation": "sequence.unifySize",
+      "inputs": [
+        "../sequence/frame-000.png",
+        "../sequence/frame-001.png",
+        "../sequence/frame-002.png"
+      ],
+      "parameters": {
+        "columns": 2,
+        "horizontal": "right",
+        "vertical": "bottom"
+      }
+    },
+    {
+      "id": "duplicates-grid",
+      "operation": "image.findDuplicates",
+      "inputs": [
+        "grid.png"
+      ],
+      "parameters": {
+        "columns": 3,
+        "rows": 2
+      }
+    },
+    {
+      "id": "duplicates-uneven",
+      "operation": "image.findDuplicates",
+      "inputs": [
+        "uneven.png"
+      ],
+      "parameters": {
+        "columns": 3,
+        "rows": 2
+      }
+    },
+    {
+      "id": "duplicates-tiny",
+      "operation": "image.findDuplicates",
+      "inputs": [
+        "tiny.png"
+      ],
+      "parameters": {
+        "columns": 4,
+        "rows": 3
+      }
+    },
+    {
+      "id": "smooth-portrait",
+      "operation": "image.customScale",
+      "inputs": [
+        "portrait.png"
+      ],
+      "parameters": {
+        "width": 37,
+        "height": 29,
+        "mode": "resize",
+        "keepAspect": true,
+        "pixelated": false
+      }
+    },
+    {
+      "id": "smooth-upscale",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "width": 111,
+        "height": 83,
+        "mode": "resize",
+        "keepAspect": true,
+        "pixelated": false
+      }
+    },
+    {
+      "id": "smooth-downscale",
+      "operation": "image.customScale",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "width": 17,
+        "height": 13,
+        "mode": "resize",
+        "keepAspect": true,
+        "pixelated": false
+      }
+    },
+    {
+      "id": "smooth-one-pixel",
+      "operation": "image.customScale",
+      "inputs": [
+        "portrait.png"
+      ],
+      "parameters": {
+        "width": 1,
+        "height": 1,
+        "mode": "resize",
+        "keepAspect": true,
+        "pixelated": false
+      }
+    }
+  ],
+  "criteria": {
+    "nearestAndGrid": "exact decoded RGBA, dimensions and frame/group order",
+    "smooth": "alpha <= 1 and continuous premultiplied RGB <= 1 per channel",
+    "matte": "alpha <= 1 and continuous premultiplied RGB <= 1 per channel"
+  },
+  "sourceCommit": "4472253dbf848289a3631bef4bf4d101f2929490",
+  "sha256": {
+    "grid.png": "8b920b8fb5102abdb63861fc25e17c871e190af70654c992323f17b8bb290064",
+    "original/bebe-chromaKey/0.png": "61ef5d17e3d8afd22c0af3c21f1580bd274fa6831fe398fea36f6b9bb778090c",
+    "original/bebe-chromaKeyAdaptive/0.png": "61ef5d17e3d8afd22c0af3c21f1580bd274fa6831fe398fea36f6b9bb778090c",
+    "original/bebe-contiguous/0.png": "db45f92d5ea29f3b3fe5a3b3f6cb98273445dc4cc7b918fc26ad40d70b4962d6",
+    "original/bec0-chromaKey/0.png": "c915ca07b2694c53f8c77326bd5c36f870b59acbd4b8c9cb20f824f97e1852af",
+    "original/bec0-chromaKeyAdaptive/0.png": "c915ca07b2694c53f8c77326bd5c36f870b59acbd4b8c9cb20f824f97e1852af",
+    "original/bec0-contiguous/0.png": "94fc9d46347f263790569738da0826e221e954e0d183385cbf959c5331f2e417",
+    "original/c0be-chromaKey/0.png": "872a92136fa377d6e0390855a7d04acc4d825a1a5858dfe3a33f793fbf9c58ce",
+    "original/c0be-chromaKeyAdaptive/0.png": "872a92136fa377d6e0390855a7d04acc4d825a1a5858dfe3a33f793fbf9c58ce",
+    "original/c0be-contiguous/0.png": "5f8a5c56723b263b665359b57d5027b69319a8a6ed169611f2feb541a7cb7818",
+    "original/c0c0-chromaKey/0.png": "e5639bdd9cd68e23e64f3439437126b7f40da6c93e37d45348507c16f86762ea",
+    "original/c0c0-chromaKeyAdaptive/0.png": "e5639bdd9cd68e23e64f3439437126b7f40da6c93e37d45348507c16f86762ea",
+    "original/c0c0-contiguous/0.png": "6dfdb390f3d672869d4ef02e9acf3304b97fd974374bcc09588c5ceed8838399",
+    "original/duplicates-grid/0.png": "2c425b08981480dc695ea71050300b9457dae34bb6994a268c726b28b0ced45b",
+    "original/duplicates-grid/1.png": "35481af2d93beaedb37e9015f8020598c4f385bf6a3f1fe2f641727a857c9cde",
+    "original/duplicates-grid/2.png": "2c425b08981480dc695ea71050300b9457dae34bb6994a268c726b28b0ced45b",
+    "original/duplicates-grid/3.png": "167316afc6e0ae669d6f6307676bba31e9e4e6d3bb401fe710515444dac46740",
+    "original/duplicates-grid/4.png": "35481af2d93beaedb37e9015f8020598c4f385bf6a3f1fe2f641727a857c9cde",
+    "original/duplicates-grid/5.png": "167316afc6e0ae669d6f6307676bba31e9e4e6d3bb401fe710515444dac46740",
+    "original/duplicates-grid/report.json": "80353f69562cd96bb4cc115fb7f062e90c2a78e2ff5343f26322818b2c57acdf",
+    "original/duplicates-tiny/0.png": "adc5413403ee067dd71eee67f9be6a78be834b05372737f7307fad4caea0cb01",
+    "original/duplicates-tiny/1.png": "adc5413403ee067dd71eee67f9be6a78be834b05372737f7307fad4caea0cb01",
+    "original/duplicates-tiny/10.png": "8059d98804c941bff5bf2cb8ea82b60a20e8f7c6354210ded6046837cd437cd1",
+    "original/duplicates-tiny/11.png": "8059d98804c941bff5bf2cb8ea82b60a20e8f7c6354210ded6046837cd437cd1",
+    "original/duplicates-tiny/2.png": "50f16ab75e2185e44cd4e5388e4c0d052700e446ceca3109aa9f60fe0067f6b5",
+    "original/duplicates-tiny/3.png": "50f16ab75e2185e44cd4e5388e4c0d052700e446ceca3109aa9f60fe0067f6b5",
+    "original/duplicates-tiny/4.png": "adc5413403ee067dd71eee67f9be6a78be834b05372737f7307fad4caea0cb01",
+    "original/duplicates-tiny/5.png": "adc5413403ee067dd71eee67f9be6a78be834b05372737f7307fad4caea0cb01",
+    "original/duplicates-tiny/6.png": "50f16ab75e2185e44cd4e5388e4c0d052700e446ceca3109aa9f60fe0067f6b5",
+    "original/duplicates-tiny/7.png": "50f16ab75e2185e44cd4e5388e4c0d052700e446ceca3109aa9f60fe0067f6b5",
+    "original/duplicates-tiny/8.png": "435d75639aed558810263b953387148a882c34a95264f55a4b8935463326d82a",
+    "original/duplicates-tiny/9.png": "435d75639aed558810263b953387148a882c34a95264f55a4b8935463326d82a",
+    "original/duplicates-tiny/report.json": "a049456c22afcf04e604642935eea22d05f8f39606d573b91c3bdcc7cd1f0e9e",
+    "original/duplicates-uneven/0.png": "6f90242d8f36bbeb915e85ced5bceb360e40306fd0483dd7d4f578fae6fffe57",
+    "original/duplicates-uneven/1.png": "6f90242d8f36bbeb915e85ced5bceb360e40306fd0483dd7d4f578fae6fffe57",
+    "original/duplicates-uneven/2.png": "c889f5a6031610e795f009f7358f875ef0153bae16622e235d756b2652dcfe5e",
+    "original/duplicates-uneven/3.png": "0ed0dd452ad1c59c98bcfe45a5e5842717fbd8d63f4773b0375b9d3506f67767",
+    "original/duplicates-uneven/4.png": "0ed0dd452ad1c59c98bcfe45a5e5842717fbd8d63f4773b0375b9d3506f67767",
+    "original/duplicates-uneven/5.png": "6a32d1afb470c90dac644535ca73404e11c85707078a62db12d33e88c1f08761",
+    "original/duplicates-uneven/report.json": "428d2e5c681f02dae4b0d777b995dade27643c6b948fedb13e1a7ad51caf8f15",
+    "original/fbfb-chromaKey/0.png": "076a9404ce6d8929b52fe3ed4f2d571fc2bd8b78763bc8942d56e41ccdbf62e4",
+    "original/fbfb-chromaKeyAdaptive/0.png": "076a9404ce6d8929b52fe3ed4f2d571fc2bd8b78763bc8942d56e41ccdbf62e4",
+    "original/fbfb-contiguous/0.png": "08011a50fb3efdc189cb961e3cdb9f57299d4eb2b68174f263ad18f4baf9ea4e",
+    "original/fbff-chromaKey/0.png": "2b2f75ee5b1cd5d2b0ae21463383c7862919641fc57687aa2932ca4cee6ac1a4",
+    "original/fbff-chromaKeyAdaptive/0.png": "2b2f75ee5b1cd5d2b0ae21463383c7862919641fc57687aa2932ca4cee6ac1a4",
+    "original/fbff-contiguous/0.png": "401a14a7c37448e36997d4349a0599943031904713c87cc3e1d6c28db953be2f",
+    "original/fffb-chromaKey/0.png": "91271dbf1f7b0222e92463b711d5894d65047589b6637ecf6f20e2f4a9728c9c",
+    "original/fffb-chromaKeyAdaptive/0.png": "91271dbf1f7b0222e92463b711d5894d65047589b6637ecf6f20e2f4a9728c9c",
+    "original/fffb-contiguous/0.png": "a2808866f13ed1880c6a6f782c931d03496e932b2089a4a44a5595884315d2d9",
+    "original/ffff-chromaKey/0.png": "497d51500273311f23fcae51bd6bf40c4ca6ed6d0b10ee608907bc0380923881",
+    "original/ffff-chromaKeyAdaptive/0.png": "497d51500273311f23fcae51bd6bf40c4ca6ed6d0b10ee608907bc0380923881",
+    "original/ffff-contiguous/0.png": "9cb2e78a651b65d2a867762a41fb29a5c3f2b337d4dadd612bcbc0c69ed1b2e5",
+    "original/resize-false-false/0.png": "d7352cbb5509189f07b63dcb41bc01365006fb4a46e484a15c889f1dfdb41fbf",
+    "original/resize-false-true/0.png": "395cfe2d37a7eaff3e4d5084985712ab49df8bf9a8ff530cb4e9e5bff129a834",
+    "original/resize-true-false/0.png": "299b7899671bc169c4e7e736cc9e28d7bef9094611913fe7e4f50ef157e92748",
+    "original/resize-true-true/0.png": "321cbcfaeb86ae01546e40e8253e044d2fab5d8ed77d1aba3ef10bf1446e8308",
+    "original/smooth-downscale/0.png": "c27b3d68e469b409f5b93fc9919e49d71ac1e41277d4e4baa2cb98207d93dfc9",
+    "original/smooth-one-pixel/0.png": "09de0033cad3d1963032d8a8641218cd70a211eaa543a6038a71b4909c7376d4",
+    "original/smooth-portrait/0.png": "0bc8b8608490d48dbc33508ef4e509dd607b651e684526bdd277e40161eebea3",
+    "original/smooth-upscale/0.png": "de14eb020fdfb8ab73a46df7e533631ee02ae8294bed2f55ecdc25e5ebbbfb10",
+    "original/unify-center-bottom/0.png": "e3936fa01fae6c974b914d0d19023f0a1ffddc1d047728e26ebfa0ae8640fd02",
+    "original/unify-center-center/0.png": "4b22deda9e4b0cc5efeea8065509efbc68bf97a724a468f8f56217b095043425",
+    "original/unify-center-top/0.png": "c554a71e575c9e3ffa07165979e9f26759212288ca561690af17f48fbd0a0826",
+    "original/unify-left-bottom/0.png": "32e0f6366fd2a0ca78b85066865307b2f0498a1c4f422629a38a564da60d2647",
+    "original/unify-left-center/0.png": "09a726a6d006e01cb8105791da681bf7b4ac3e6b0dc545a7324141fd50bc610d",
+    "original/unify-left-top/0.png": "3d8701472933a7082a397e56c0b98a27020e69566157dd5e9922b0e73ec124eb",
+    "original/unify-right-bottom/0.png": "0efc139706e4c2cd165e7ee56756139362ffcbc9a5489e3f0626d2e3855c51c5",
+    "original/unify-right-center/0.png": "fbd60a6261fa30ca486a4a2d20d1430a14770139b493ba4821b28dfb942efa3d",
+    "original/unify-right-top/0.png": "63c4a76e523745a6a2d834e00fa80279e349e3d65430b7c6c53a6c20040d1008",
+    "portrait.png": "c0808d64a80197d536fcdad33486e869f0bdc46797f0dcded1b232e96e0d3a9a",
+    "source.png": "08aad05ca8cfebd993bb4ee940207161fbf55fafebdf3cf93364bb6fe3fc27d1",
+    "tiny.png": "00bfaf182ac88ba80587a31a8be7b8741fd317367ff7456bdd1f6cffd84143a1",
+    "uneven.png": "066f59375c5b6209d0d0b105613da160e22810d6b9e0d96d352779aecfb62bc1"
+  }
+}

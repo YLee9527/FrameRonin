@@ -14,6 +14,7 @@ function fixture(overrides = {}) {
     if (url === '/api/assets') return response({ id: 'input' })
     if (url === '/api/tasks') return response({ id: 'task', state: 'queued' })
     if (url === '/api/tasks/task') return response({ id: 'task', state: 'succeeded', progress: 1, results: ['output'] })
+    if (url === '/api/tasks/task/results') return response([{id:'output',metadata:{kind:'audio',bytes:3}}])
     if (url === '/api/versions/output') return response({ id: 'output', metadata: { kind: 'audio', bytes: 3 } })
     if (url === '/api/versions/output/content') return new Response(new Uint8Array([1, 2, 3]))
     throw new Error(`Unexpected request: ${url}`)
@@ -42,8 +43,8 @@ test('accepted cancellation prevents late result downloads', async () => {
   } finally { globalThis.fetch = nativeFetch }
 })
 test('large decoded previews remain registered without being downloaded into frontend memory', async () => {
-  const requests = fixture({ '/api/versions/output': () => response({ id: 'output',
-    metadata: { kind: 'image', bytes: 3, width: 8192, height: 8192 } }) })
+  const requests = fixture({ '/api/tasks/task/results': () => response([{ id: 'output',
+    metadata: { kind: 'image', bytes: 3, width: 8192, height: 8192 } }]) })
   try {
     await assert.rejects(runManagedTask('image.flip', [new Blob(['input'])], {}), /succeeded.*preview budget/)
     assert(!requests.some(value => value.url.endsWith('/content')))
@@ -64,4 +65,28 @@ test('concurrent document save and processing share one selected input import', 
     const [a,b] = await Promise.all([importManagedInputs([selected]),importManagedInputs([selected])])
     assert.equal(imports,1);assert.deepEqual(a.inputs,['shared-input']);assert.deepEqual(a.inputs,b.inputs)
   } finally { globalThis.fetch = nativeFetch }
+})
+test('result manifests are all preflighted, fetched with a bounded pool, and retain output order',async()=>{
+  const outputs=Array.from({length:31},(_,index)=>String(index));let active=0,peak=0
+  fixture({
+    '/api/tasks/task':()=>response({id:'task',state:'succeeded',progress:1,results:outputs}),
+    '/api/tasks/task/results':()=>response(outputs.map(id=>({id,metadata:{kind:'image',bytes:2,width:1,height:1}}))),
+    ...Object.fromEntries(outputs.map(id=>[`/api/versions/${id}/content`,async()=>{
+      active++;peak=Math.max(active,peak);await new Promise(resolve=>setTimeout(resolve,Number(id)%3+2));active--;return new Response(id)
+    }]))
+  })
+  try{
+    const result=await runManagedTask('image.findDuplicates',[new Blob(['input'])],{})
+    assert(peak>1&&peak<=8);assert.deepEqual(result.outputs.map(output=>output.version.id),outputs)
+    assert.deepEqual(await Promise.all(result.outputs.map(output=>output.blob.text())),outputs)
+  }finally{globalThis.fetch=nativeFetch}
+  const requests=fixture({
+    '/api/tasks/task':()=>response({id:'task',state:'succeeded',progress:1,results:['output','large']}),
+    '/api/tasks/task/results':()=>response([{id:'output',metadata:{kind:'image',bytes:1,width:1,height:1}},
+      {id:'large',metadata:{kind:'image',bytes:1,width:8192,height:8192}}])
+  })
+  try{
+    await assert.rejects(runManagedTask('image.findDuplicates',[new Blob(['input'])],{}),/preview budget/)
+    assert(!requests.some(request=>request.url.endsWith('/content')))
+  }finally{globalThis.fetch=nativeFetch}
 })

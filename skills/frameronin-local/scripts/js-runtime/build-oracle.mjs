@@ -38,6 +38,25 @@ await fs.writeFile(path.join(output,'original-pixel.ts'),pixelFunctions+'\nexpor
 await fs.cp(path.join(root,'reference/frontend/src/lib/pixellise'),path.join(output,'original-pixellise'),{recursive:true})
 await fs.cp(path.join(root,'reference/frontend/src/lib/perfectPixel'),path.join(output,'original-perfectPixel'),{recursive:true})
 await fs.copyFile(path.join(skill,'assets/fixtures/pixel/manifest.json'),path.join(output,'pixel-fixture.json'))
+await fs.cp(path.join(skill,'assets/fixtures/ronin'),path.join(output,'ronin-fixtures'),{recursive:true})
+await fs.cp(path.join(skill,'assets/fixtures/sequence'),path.join(output,'sequence'),{recursive:true})
+for(const name of ['utils.ts','utilsResizeCanvasLegacy.ts'])await fs.copyFile(path.join(root,'reference/frontend/src/components/ParamsStep',name),path.join(output,name))
+await fs.copyFile(path.join(root,'reference/frontend/src/lib/spriteGridDuplicate.ts'),path.join(output,'original-duplicate.ts'))
+const originalScale=await fs.readFile(path.join(root,'reference/frontend/src/components/RoninProCustomScale.tsx'),'utf8')
+const scaleBody=originalScale.slice(originalScale.indexOf('  const runMatteStep'),originalScale.indexOf('  return (\n    <Space'))
+await fs.writeFile(path.join(output,'original-scale.ts'),`import {applyChromaKeyAdaptiveRegion,applyChromaKeyContiguousFromTopLeft,applyChromaKeyHybridTolerance,cropImageBlob,getTopLeftPixelColor,resizeImageToBlob} from './utils';
+export async function originalScale(file:File,p:any){
+const {width:targetW=256,height:targetH=256,keepAspect=true,pixelated=true,matteAlgorithm='contiguous',nonContiguousTolerance=5}=p;
+let output:string|null=null;const setResultUrl=(value:any)=>{if(typeof value==='function')output=value(output);else output=value};
+const t=(key:string)=>key,message={success:()=>{},error:(message:string)=>{throw new Error(message)}};
+const setLoading=()=>{},setFfffLoading=()=>{},setFffbLoading=()=>{},setFbfbLoading=()=>{},setC0c0Loading=()=>{},setC0beLoading=()=>{},setBebeLoading=()=>{},setFbffLoading=()=>{},setBec0Loading=()=>{};
+${scaleBody}
+const modes={resize:runScale,ffff:runFfff,fffb:runFffb,fbfb:runFbfb,fbff:runFbff,c0c0:runC0c0,c0be:runC0be,bebe:runBebe,bec0:runBec0};
+await modes[p.mode as keyof typeof modes]();if(!output)throw new Error('No original result');const blob=await(await fetch(output)).blob();URL.revokeObjectURL(output);return blob;}`)
+const originalUnify=await fs.readFile(path.join(root,'reference/frontend/src/components/RoninProUnifySize.tsx'),'utf8')
+const offsetFunction=originalUnify.slice(originalUnify.indexOf('function cellInnerOffset'),originalUnify.indexOf('export default'))
+const unifyStart=originalUnify.indexOf('      const maxW',originalUnify.indexOf('  const runUnify'))
+await fs.writeFile(path.join(output,'original-unify.ts'),`${offsetFunction}\nexport async function originalUnify(imgs:HTMLImageElement[],cols:number,padH:string,padV:string){\n${originalUnify.slice(unifyStart,originalUnify.indexOf('      setResultUrl(URL.createObjectURL(blob))',unifyStart))}\nreturn blob;}`)
 const workbench = path.join(skill, 'assets/workbench')
 const config = path.join(skill, '.runtime/oracle-vite.config.mjs')
 // Keep the original browser's Rollup CommonJS handling. An esbuild-only browser

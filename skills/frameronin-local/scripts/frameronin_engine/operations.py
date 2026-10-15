@@ -67,6 +67,17 @@ REGISTRY = {
     'image.superSlice': operation(['image'], {'frontendBytes': integer(0,0,2*1024**3)},
         'png_sequence_report', 'transparent_global_rows_columns', overhead=256),
     'image.blank': operation(['image'], {'frontendBytes': integer(0,0,2*1024**3)}, 'png_report', overhead=256),
+    'image.customScale': operation(['image'],{'width':integer(256,1,4096),'height':integer(256,1,4096),
+        'keepAspect':{'type':'boolean','default':True},'pixelated':{'type':'boolean','default':True},
+        'mode':choice('resize',['resize','ffff','fffb','fbfb','fbff','c0c0','c0be','bebe','bec0']),
+        'renderer':choice('native',['native','browser-worker']),
+        'matteAlgorithm':choice('contiguous',['contiguous','chromaKey','chromaKeyAdaptive']),
+        'nonContiguousTolerance':number(5,0,100),'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_resize_and_matte_presets',overhead=256),
+    'sequence.unifySize': operation(['image+'],{'columns':integer(4,1,64),
+        'horizontal':choice('center',['left','center','right']),'vertical':choice('bottom',['top','center','bottom']),
+        'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_integer_alignment',overhead=256),
+    'image.findDuplicates': operation(['image'],{'columns':integer(8,1,64),'rows':integer(4,1,64),
+        'frontendBytes':integer(0,0,2*1024**3)},'png_sequence_report','dimension_and_exact_rgba_groups',overhead=256),
     'sequence.combine': operation(['image+'], {'columns': integer(4,1,128),
         'cropTop': number(0,-8192,8192),'cropBottom': number(0,-8192,8192),
         'cropLeft': number(0,-8192,8192),'cropRight': number(0,-8192,8192),
@@ -145,6 +156,26 @@ def preview(project, payload):
         raise RoninError('INPUT_KIND', 'A selected asset has an incompatible media kind.')
     pixels = [v['metadata'].get('width', 0) * v['metadata'].get('height', 0) for v in versions]
     estimate = spec['runtimeOverheadMiB'] * 1024**2 + max(pixels, default=0) * 4 * 4
+    if name in ['image.customScale','sequence.unifySize','image.findDuplicates']:
+        if name=='image.customScale':
+            if values['mode']=='resize' and not values['pixelated'] and values['renderer']!='browser-worker':
+                raise RoninError('BROWSER_RENDERER_REQUIRED','Smooth scaling uses the original Canvas filter in the workbench Worker. Open Custom scale; no native filter is substituted.')
+            if values['renderer']=='browser-worker' and (values['mode']!='resize' or values['pixelated']):
+                raise RoninError('BROWSER_OPERATION_UNSUPPORTED','The browser Worker is limited to smooth custom scaling.')
+            side=256 if values['mode'] in ['ffff','fffb','fbfb','fbff'] else 190 if values['mode']=='bebe' else 192
+            width,height=(values['width'],values['height']) if values['mode']=='resize' else (side,side)
+            output_pixels=width*height;surfaces=64
+        elif name=='sequence.unifySize':
+            width=values['columns']*max(v['metadata']['width'] for v in versions)
+            height=math.ceil(len(versions)/values['columns'])*max(v['metadata']['height'] for v in versions)
+            output_pixels=width*height;surfaces=16
+        else:
+            width,height=versions[0]['metadata']['width'],versions[0]['metadata']['height']
+            output_pixels=max(width,values['columns'])*max(height,values['rows']);surfaces=48
+            estimate+=values['columns']*values['rows']*96*1024
+        if max(width,height)>30000:
+            raise RoninError('RONIN_DIMENSION_LIMIT','The operation supports at most 30000 pixels per side.')
+        estimate+=sum(pixels)*32+output_pixels*surfaces+values['frontendBytes']+sum(v['metadata']['bytes'] for v in versions)*4
     if name == 'image.resize':
         estimate += values['width'] * values['height'] * 4 * 2
     if name == 'image.crop':
@@ -260,6 +291,8 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
+    requires_workbench=name=='image.customScale' and values['renderer']=='browser-worker'
+    if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,
-            'output': spec['output'], 'assetId': payload.get('assetId')}
+            'output': spec['output'], 'assetId': payload.get('assetId'),'requiresWorkbench':requires_workbench}

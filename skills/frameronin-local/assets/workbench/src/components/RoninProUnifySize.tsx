@@ -1,190 +1,54 @@
-import { useEffect, useState } from 'react'
-import { Button, InputNumber, message, Select, Space, Typography, Upload } from 'antd'
+import { useMemo, useState } from 'react'
+import { Button, InputNumber, message, Pagination, Select, Space, Typography, Upload } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
-import type { UploadFile, UploadProps } from 'antd'
+import type { UploadFile } from 'antd'
 import { useLanguage } from '../i18n/context'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
+import ManagedImageToolStatus from './ManagedImageToolStatus'
+import { useManagedImageTool, useImageToolUrls } from '../localProject/useManagedImageTool'
 
 const { Dragger } = Upload
 const { Text } = Typography
-
 const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
-
 type UnifyPadH = 'left' | 'center' | 'right'
 type UnifyPadV = 'top' | 'center' | 'bottom'
 
-function cellInnerOffset(max: number, img: number, align: 'start' | 'center' | 'end'): number {
-  if (align === 'start') return 0
-  if (align === 'center') return Math.floor((max - img) / 2)
-  return max - img
-}
-
 export default function RoninProUnifySize() {
-  const { t } = useLanguage()
-  const [files, setFiles] = useState<File[]>([])
-  const [previewUrls, setPreviewUrls] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
-  const [resultUrl, setResultUrl] = useState<string | null>(null)
-  const [cols, setCols] = useState(4)
-  /** 水平：透明补在另一侧（靠左=右扩，靠右=左扩，居中=两侧） */
-  const [padH, setPadH] = useState<UnifyPadH>('center')
-  /** 垂直：靠下=默认往上扩透明，靠上=往下扩，居中=上下各半 */
-  const [padV, setPadV] = useState<UnifyPadV>('bottom')
-  const [dims, setDims] = useState<{ maxW: number; maxH: number } | null>(null)
-
-  useEffect(() => {
-    const urls = files.map((f) => URL.createObjectURL(f))
-    setPreviewUrls(urls)
-    return () => urls.forEach(URL.revokeObjectURL)
-  }, [files])
-
-  useEffect(() => {
-    if (files.length === 0) {
-      setDims(null)
-      return
-    }
-    let cancelled = false
-    const load = async () => {
-      const imgs: HTMLImageElement[] = []
-      for (const f of files) {
-        const url = URL.createObjectURL(f)
-        const img = await new Promise<HTMLImageElement>((res, rej) => {
-          const i = new Image()
-          i.onload = () => res(i)
-          i.onerror = () => rej(new Error('load'))
-          i.src = url
-        })
-        URL.revokeObjectURL(url)
-        imgs.push(img)
-      }
-      if (cancelled) return
-      const maxW = Math.max(...imgs.map((i) => i.naturalWidth))
-      const maxH = Math.max(...imgs.map((i) => i.naturalHeight))
-      setDims({ maxW, maxH })
-    }
-    void load()
-    return () => { cancelled = true }
-  }, [files])
-
-  useEffect(
-    () => () =>
-      setResultUrl((old) => {
-        if (old) URL.revokeObjectURL(old)
-        return null
-      }),
-    []
-  )
-
-  const runUnify = async () => {
-    if (files.length === 0) return
-    setLoading(true)
-    setResultUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    try {
-      const imgs: HTMLImageElement[] = []
-      for (const f of files) {
-        const url = URL.createObjectURL(f)
-        const img = await new Promise<HTMLImageElement>((res, rej) => {
-          const i = new Image()
-          i.onload = () => res(i)
-          i.onerror = () => rej(new Error('load'))
-          i.src = url
-        })
-        URL.revokeObjectURL(url)
-        imgs.push(img)
-      }
-
-      const maxW = Math.max(...imgs.map((i) => i.naturalWidth))
-      const maxH = Math.max(...imgs.map((i) => i.naturalHeight))
-      const c = Math.max(1, Math.min(64, cols))
-      const rows = Math.ceil(imgs.length / c)
-      const outW = c * maxW
-      const outH = rows * maxH
-
-      const canvas = document.createElement('canvas')
-      canvas.width = outW
-      canvas.height = outH
-      const ctx = canvas.getContext('2d')!
-      ctx.imageSmoothingEnabled = false
-      ctx.clearRect(0, 0, outW, outH)
-
-      const hAlign: 'start' | 'center' | 'end' =
-        padH === 'left' ? 'start' : padH === 'right' ? 'end' : 'center'
-      const vAlign: 'start' | 'center' | 'end' =
-        padV === 'top' ? 'start' : padV === 'bottom' ? 'end' : 'center'
-
-      for (let i = 0; i < imgs.length; i++) {
-        const img = imgs[i]!
-        const row = Math.floor(i / c)
-        const col = i % c
-        const dx = col * maxW + cellInnerOffset(maxW, img.naturalWidth, hAlign)
-        const dy = row * maxH + cellInnerOffset(maxH, img.naturalHeight, vAlign)
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          img.naturalWidth,
-          img.naturalHeight,
-          dx,
-          dy,
-          img.naturalWidth,
-          img.naturalHeight
-        )
-      }
-
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('blob'))), 'image/png', 0.95)
-      })
-      setResultUrl(URL.createObjectURL(blob))
-      message.success(t('roninProUnifySizeSuccess'))
-    } catch (e) {
-      message.error(t('roninProUnifySizeFailed') + ': ' + String(e))
-    } finally {
-      setLoading(false)
-    }
+  const { t,lang } = useLanguage()
+  const [files,setFiles]=useState<File[]>([]),[page,setPage]=useState(1)
+  const [cols,setCols]=useState(4),[padH,setPadH]=useState<UnifyPadH>('center'),[padV,setPadV]=useState<UnifyPadV>('bottom')
+  const tool=useManagedImageTool(files,{columns:cols,horizontal:padH,vertical:padV})
+  const previews=useImageToolUrls(files,tool.versions)
+  const resultFiles=useMemo(()=>tool.results.map(result=>result.file),[tool.results])
+  const result=useImageToolUrls(resultFiles,tool.results.map(result=>result.version))[0]
+  const resultUrl=result?.preview,loading=!!tool.busy
+  const widths=tool.versions.map(version=>version?.metadata.width??0),heights=tool.versions.map(version=>version?.metadata.height??0)
+  const dims=tool.ready?{maxW:Math.max(...widths),maxH:Math.max(...heights)}:null
+  const currentPage=Math.min(page,Math.max(1,Math.ceil(files.length/24))),offset=(currentPage-1)*24
+  const appendFiles=(incoming:File[])=>{
+    if(files.length+incoming.length>1000){message.error(lang==='zh'?'每次最多处理 1000 张图片':lang==='ja'?'一度に処理できる画像は最大 1000 枚です':'Select at most 1000 images');return}
+    setFiles(previous=>[...previous,...incoming])
   }
-
-  /** 用 onChange 的 fileList 顺序同步，避免多文件拖拽时 beforeUpload 逐文件追加导致顺序颠倒 */
-  const handleUploadChange: UploadProps['onChange'] = ({ fileList }) => {
-    const next: File[] = []
-    for (const item of fileList) {
-      const o = item.originFileObj
-      if (o instanceof File) next.push(o)
-    }
-    setFiles(next)
-  }
-
-  const downloadResult = () => {
-    if (!resultUrl) return
-    const a = document.createElement('a')
-    a.href = resultUrl
-    a.download = `unify_${files.length}_images.png`
-    a.click()
-    message.success(t('downloadStarted'))
+  const runUnify=async()=>{if(await tool.run('sequence.unifySize'))message.success(t('roninProUnifySizeSuccess'))}
+  const downloadResult=()=>{
+    if(!result?.raw)return
+    const anchor=document.createElement('a');anchor.href=result.raw;anchor.download=`unify_${files.length}_images.png`;anchor.click()
   }
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Text type="secondary">{t('roninProUnifySizeHint')}</Text>
+      <ManagedImageToolStatus tool={tool}/>
+      {files.length>24&&<Pagination current={currentPage} pageSize={24} total={files.length} onChange={setPage} showSizeChanger={false}/>}
 
-      <StashDropZone onStashDrop={(f) => setFiles((prev) => [...prev, f])}>
+      <StashDropZone onStashDrop={(file)=>appendFiles([file])}>
         <Dragger
           accept={IMAGE_ACCEPT.join(',')}
           multiple
-          fileList={files.map(
-            (f, i) =>
-              ({
-                uid: `${f.name}-${f.size}-${f.lastModified}-${i}`,
-                name: f.name,
-                status: 'done',
-                originFileObj: f as UploadFile['originFileObj'],
-              }) as UploadFile,
-          )}
-          beforeUpload={() => false}
-          onChange={handleUploadChange}
+          fileList={files.slice(offset,offset+24).map((file,index)=>({uid:String(offset+index),name:file.name,status:'done'} as UploadFile))}
+          beforeUpload={(file,batch)=>{if(file===batch[0])appendFiles(batch);return false}}
+          onRemove={item=>setFiles(previous=>previous.filter((_,index)=>index!==Number(item.uid)))}
         >
           <p className="ant-upload-text">{t('roninProUnifySizeUploadHint')}</p>
         </Dragger>
@@ -235,7 +99,7 @@ export default function RoninProUnifySize() {
               {t('roninProUnifySizePadExplain')}
             </Text>
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
-            <Button type="primary" loading={loading} onClick={runUnify}>
+            <Button type="primary" loading={loading} disabled={!tool.ready||loading} onClick={runUnify}>
               {t('roninProUnifySizeRun')}
             </Button>
             {resultUrl && (
@@ -271,10 +135,11 @@ export default function RoninProUnifySize() {
                 border: '1px solid #9a8b78',
               }}
             >
-              {previewUrls.map((url, i) => (
+              {previews.slice(offset,offset+24).map((preview,localIndex) => { const i=offset+localIndex;return (
                 <div key={i} style={{ position: 'relative', display: 'inline-block' }}>
-                  <StashableImage
-                    src={url}
+                  {preview.preview&&<StashableImage
+                    src={preview.preview}
+                    stashSrc={preview.raw}
                     alt={`${i + 1}`}
                     style={{
                       width: 48,
@@ -283,7 +148,7 @@ export default function RoninProUnifySize() {
                       imageRendering: 'pixelated',
                       border: '1px solid rgba(0,0,0,0.2)',
                     }}
-                  />
+                  />}
                   <span
                     style={{
                       position: 'absolute',
@@ -298,7 +163,7 @@ export default function RoninProUnifySize() {
                     {i + 1}
                   </span>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
 
@@ -316,6 +181,7 @@ export default function RoninProUnifySize() {
               >
                 <StashableImage
                   src={resultUrl}
+                  stashSrc={result?.raw}
                   alt={t('roninProUnifySizeResult')}
                   style={{ maxWidth: 400, maxHeight: 300, display: 'block', imageRendering: 'pixelated' }}
                 />

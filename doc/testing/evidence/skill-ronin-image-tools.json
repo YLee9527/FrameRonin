@@ -1,0 +1,2339 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "7def18c",
+  "scope": "Controlled RoninPro custom scaling, unify size, exact duplicate detection, host Canvas worker and paged result access; S2/S3/S4 remain incomplete",
+  "fixture": {
+    "id": "ronin-original-image-tools-44",
+    "sourceCommit": "4472253dbf848289a3631bef4bf4d101f2929490",
+    "manifest": "skills/frameronin-local/assets/fixtures/ronin/manifest.json",
+    "sha256": "4beaa5f836c8a7910cc53fc9a53eeca7adb5f57395547b53d1f8629cf36129aa",
+    "nativeCases": 38,
+    "browserWorkerCases": 6
+  },
+  "nativeOracle": [
+    {
+      "id": "resize-true-false",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            37,
+            29
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "resize-true-true",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            37,
+            29
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "ffff-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            256,
+            256
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "ffff-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            256,
+            256
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "ffff-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            256,
+            256
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fffb-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            256,
+            252
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fffb-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            256,
+            252
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fffb-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            256,
+            252
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fbfb-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            252,
+            252
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fbfb-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            252,
+            252
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fbfb-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            252,
+            252
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fbff-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            252,
+            256
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fbff-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            252,
+            256
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "fbff-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            252,
+            256
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "c0c0-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            192,
+            192
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "c0c0-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            192,
+            192
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "c0c0-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            192,
+            192
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "c0be-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            192,
+            190
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "c0be-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            192,
+            190
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "c0be-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            192,
+            190
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "bebe-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            190,
+            190
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "bebe-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            190,
+            190
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "bebe-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            190,
+            190
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "bec0-contiguous",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            190,
+            192
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "bec0-chromaKey",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            190,
+            192
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "bec0-chromaKeyAdaptive",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            190,
+            192
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-left-top",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-left-center",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-left-bottom",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-center-top",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-center-center",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-center-bottom",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-right-top",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-right-center",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "unify-right-bottom",
+      "frames": 1,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            26,
+            18
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "duplicates-grid",
+      "frames": 6,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            8,
+            6
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 1,
+          "dimensions": [
+            8,
+            6
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "dimensions": [
+            8,
+            6
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "dimensions": [
+            8,
+            6
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "dimensions": [
+            8,
+            6
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "dimensions": [
+            8,
+            6
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "groups": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "groupsMatch": true
+    },
+    {
+      "id": "duplicates-uneven",
+      "frames": 6,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            4,
+            4
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 1,
+          "dimensions": [
+            4,
+            4
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "dimensions": [
+            5,
+            4
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "dimensions": [
+            4,
+            5
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "dimensions": [
+            4,
+            5
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "dimensions": [
+            5,
+            5
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "groups": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "groupsMatch": true
+    },
+    {
+      "id": "duplicates-tiny",
+      "frames": 12,
+      "comparisons": [
+        {
+          "index": 0,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 1,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 7,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 8,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 9,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 10,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        },
+        {
+          "index": 11,
+          "dimensions": [
+            1,
+            1
+          ],
+          "exactRgba": true,
+          "maxAlpha": 0.0,
+          "maxPremultipliedRgb": 0.0,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "groups": [
+        [
+          0,
+          1,
+          4,
+          5
+        ],
+        [
+          2,
+          3,
+          6,
+          7
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          10,
+          11
+        ]
+      ],
+      "groupsMatch": true
+    }
+  ],
+  "hostCanvasWorkerOracle": [
+    {
+      "id": "resize-false-false",
+      "exactRgba": true,
+      "dimensions": [
+        37,
+        29
+      ]
+    },
+    {
+      "id": "resize-false-true",
+      "exactRgba": true,
+      "dimensions": [
+        37,
+        29
+      ]
+    },
+    {
+      "id": "smooth-portrait",
+      "exactRgba": true,
+      "dimensions": [
+        37,
+        29
+      ]
+    },
+    {
+      "id": "smooth-upscale",
+      "exactRgba": true,
+      "dimensions": [
+        111,
+        83
+      ]
+    },
+    {
+      "id": "smooth-downscale",
+      "exactRgba": true,
+      "dimensions": [
+        17,
+        13
+      ]
+    },
+    {
+      "id": "smooth-one-pixel",
+      "exactRgba": true,
+      "dimensions": [
+        1,
+        1
+      ]
+    }
+  ],
+  "uiDownloads": [
+    {
+      "id": "resize-false-true",
+      "exactRgba": true,
+      "dimensions": [
+        37,
+        29
+      ]
+    },
+    {
+      "id": "smooth-downscale",
+      "exactRgba": true,
+      "dimensions": [
+        17,
+        13
+      ]
+    },
+    {
+      "id": "unify-right-center",
+      "exactRgba": true,
+      "dimensions": [
+        26,
+        18
+      ]
+    },
+    {
+      "id": "unify-batch-32",
+      "exactRgba": true,
+      "dimensions": [
+        64,
+        96
+      ]
+    },
+    {
+      "id": "c0be-chromaKeyAdaptive",
+      "exactRgba": true,
+      "dimensions": [
+        192,
+        190
+      ]
+    }
+  ],
+  "maximumGrid": {
+    "taskId": "702d3fec-fd92-4f36-8920-0e9b5b473b36",
+    "results": 4097,
+    "imageFrames": 4096,
+    "decodedPixelOrderMatches": true,
+    "groups": 4,
+    "groupSizes": [
+      1024,
+      1024,
+      1024,
+      1024
+    ],
+    "cells": [
+      1,
+      1
+    ],
+    "uiLastPage": 171,
+    "visibleLastFrameRange": [
+      4081,
+      4096
+    ],
+    "visibleImageCountLastPage": 65,
+    "previewPageSize": 24,
+    "groupMembersPerPage": 12,
+    "metrics": {
+      "peakControlledProcessBytes": 181862400,
+      "budgetBytes": 2147483648,
+      "estimatedBytes": 771949502,
+      "processingMode": "dimension_and_exact_rgba_groups"
+    },
+    "clientNote": "4096 UI oracle ran before the bounded-fetch optimization; final client concurrency/order tested with 31 outputs and its manifest endpoint verified on all 4097 real results."
+  },
+  "cancel": {
+    "id": "d1c6d32e-4f4e-48c6-b1fa-a280a3030a9d",
+    "state": "canceled",
+    "generation": 1,
+    "payload": {
+      "operation": "image.customScale",
+      "inputs": [
+        "6c793634-208e-411c-8fcf-0402291b1302"
+      ],
+      "parameters": {
+        "width": 4096,
+        "height": 4096,
+        "keepAspect": true,
+        "pixelated": false,
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5,
+        "mode": "resize",
+        "renderer": "browser-worker",
+        "frontendBytes": 132478796
+      }
+    },
+    "results": [],
+    "error": null,
+    "cancellation": {
+      "generation": 1,
+      "cancelElapsedSeconds": 0.0288774169748649,
+      "processStopConfirmed": true,
+      "scope": "local_owned_processes",
+      "aiState": null,
+      "ownedProcessCount": 1
+    },
+    "workerPhaseObservedBeforeCancel": true,
+    "uiRoundTripMs": 358,
+    "workerStop": "explicit terminate on abort; generation checked again at publication",
+    "lateResultNegative": "real same-origin API returned TASK_CANCELED; no accepted versions"
+  },
+  "stale": {
+    "id": "647c37c1-2797-4100-94cb-d7b74e6ca256",
+    "state": "succeeded",
+    "generation": 0,
+    "payload": {
+      "operation": "image.customScale",
+      "inputs": [
+        "6c793634-208e-411c-8fcf-0402291b1302"
+      ],
+      "parameters": {
+        "width": 4096,
+        "height": 4096,
+        "keepAspect": true,
+        "pixelated": false,
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5,
+        "mode": "resize",
+        "renderer": "browser-worker",
+        "frontendBytes": 132478796
+      }
+    },
+    "results": [
+      "ebf43820-90e7-4f34-a0c9-194fbb092dc9",
+      "df0b9f87-ce87-422d-8cab-d1ea04fa95bb"
+    ],
+    "error": null,
+    "metrics": {
+      "peakControlledProcessBytes": 185516032,
+      "budgetBytes": 2147483648,
+      "estimatedBytes": 1734120552,
+      "processingMode": "original_host_canvas_worker"
+    },
+    "changedAtWorkerPhase": 20,
+    "originalRequestedWidth": 4096,
+    "currentUiWidth": 4095,
+    "currentUiHeight": 4096,
+    "previousCanvasDimensions": [
+      192,
+      190
+    ],
+    "lateResultAcceptedByView": false,
+    "warningToastCaptured": false
+  },
+  "pageNavigation": {
+    "id": "7e4381ea-b6c5-4b41-addf-42ade9c9efb4",
+    "state": "succeeded",
+    "generation": 0,
+    "payload": {
+      "operation": "image.customScale",
+      "inputs": [
+        "6c793634-208e-411c-8fcf-0402291b1302"
+      ],
+      "parameters": {
+        "width": 4095,
+        "height": 4096,
+        "keepAspect": true,
+        "pixelated": false,
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5,
+        "mode": "resize",
+        "renderer": "browser-worker",
+        "frontendBytes": 132478796
+      }
+    },
+    "results": [
+      "6b020b66-9299-4fe9-b59d-18510bf4802b",
+      "a78003a1-7a64-4dd6-bc98-87aaff8d8aeb"
+    ],
+    "error": null,
+    "metrics": {
+      "peakControlledProcessBytes": 185417728,
+      "budgetBytes": 2147483648,
+      "estimatedBytes": 1733858408,
+      "processingMode": "original_host_canvas_worker"
+    },
+    "leftAtWorkerPhase": 20,
+    "continuedAfterComponentUnmount": true,
+    "frontendResultDownloadSkipped": true
+  },
+  "pagedInput": {
+    "initial": 30,
+    "removeGlobalIndex": 27,
+    "append": [
+      30,
+      31,
+      32
+    ],
+    "finalCount": 32,
+    "outputDimensions": [
+      64,
+      96
+    ],
+    "allDecodedPixelsAndOrderMatch": true,
+    "pageSize": 24,
+    "selectedPage": 2,
+    "harnessCorrection": "three initially mistyped fixture paths produced explicit decode errors; removed them, selected existing padded filenames and only then executed the accepted 32-image sample"
+  },
+  "negativeApi": [
+    {
+      "case": "wrong-dimensions",
+      "httpStatus": 400,
+      "error": "BROWSER_OUTPUT_INVALID"
+    },
+    {
+      "case": "invalid-png",
+      "httpStatus": 400,
+      "error": "BROWSER_OUTPUT_INVALID"
+    },
+    {
+      "case": "wrong-generation",
+      "httpStatus": 400,
+      "error": "TASK_CANCELED"
+    },
+    {
+      "case": "boolean-generation",
+      "httpStatus": 400,
+      "error": "BROWSER_GENERATION_INVALID"
+    },
+    {
+      "case": "late-result-after-cancel",
+      "httpStatus": 400,
+      "error": "TASK_CANCELED",
+      "task": {
+        "id": "83b2c01d-88a9-4f98-8598-d5a523cb6c1b",
+        "state": "canceled",
+        "generation": 1,
+        "results": [],
+        "error": null
+      }
+    },
+    {
+      "case": "lost-browser-lease",
+      "task": {
+        "id": "d21e3cac-67e5-4758-99f5-3ae8d4bfd3a0",
+        "state": "failed",
+        "generation": 0,
+        "results": [],
+        "error": {
+          "code": "BROWSER_WORKER_DISCONNECTED",
+          "message": "The workbench stopped responding. Reconcile this task before starting another attempt.",
+          "details": {}
+        }
+      }
+    }
+  ],
+  "correctedFailures": {
+    "initialNativeFilter": {
+      "allPassed": false,
+      "cases": [
+        {
+          "id": "resize-true-false",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                37,
+                29
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "resize-true-true",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                37,
+                29
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "resize-false-false",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                37,
+                29
+              ],
+              "exactRgba": false,
+              "maxAlpha": 1.0,
+              "maxPremultipliedRgb": 18.8078431372549,
+              "passed": false
+            }
+          ],
+          "passed": false
+        },
+        {
+          "id": "resize-false-true",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                37,
+                29
+              ],
+              "exactRgba": false,
+              "maxAlpha": 128.0,
+              "maxPremultipliedRgb": 94.87058823529412,
+              "passed": false
+            }
+          ],
+          "passed": false
+        },
+        {
+          "id": "ffff-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                256,
+                256
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "ffff-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                256,
+                256
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "ffff-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                256,
+                256
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fffb-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                256,
+                252
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fffb-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                256,
+                252
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fffb-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                256,
+                252
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fbfb-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                252,
+                252
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fbfb-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                252,
+                252
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fbfb-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                252,
+                252
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fbff-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                252,
+                256
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fbff-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                252,
+                256
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "fbff-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                252,
+                256
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "c0c0-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                192,
+                192
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "c0c0-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                192,
+                192
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "c0c0-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                192,
+                192
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "c0be-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                192,
+                190
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "c0be-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                192,
+                190
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "c0be-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                192,
+                190
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "bebe-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                190,
+                190
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "bebe-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                190,
+                190
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "bebe-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                190,
+                190
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "bec0-contiguous",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                190,
+                192
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "bec0-chromaKey",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                190,
+                192
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "bec0-chromaKeyAdaptive",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                190,
+                192
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-left-top",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-left-center",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-left-bottom",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-center-top",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-center-center",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-center-bottom",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-right-top",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-right-center",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "unify-right-bottom",
+          "frames": 1,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                26,
+                18
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "duplicates-grid",
+          "frames": 6,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                8,
+                6
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 1,
+              "dimensions": [
+                8,
+                6
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 2,
+              "dimensions": [
+                8,
+                6
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 3,
+              "dimensions": [
+                8,
+                6
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 4,
+              "dimensions": [
+                8,
+                6
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 5,
+              "dimensions": [
+                8,
+                6
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true,
+          "groups": [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "groupsMatch": true
+        },
+        {
+          "id": "duplicates-uneven",
+          "frames": 6,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                4,
+                4
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 1,
+              "dimensions": [
+                4,
+                4
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 2,
+              "dimensions": [
+                5,
+                4
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 3,
+              "dimensions": [
+                4,
+                5
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 4,
+              "dimensions": [
+                4,
+                5
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 5,
+              "dimensions": [
+                5,
+                5
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true,
+          "groups": [
+            [
+              0,
+              1
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          "groupsMatch": true
+        },
+        {
+          "id": "duplicates-tiny",
+          "frames": 12,
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 1,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 2,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 3,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 4,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 5,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 6,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 7,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 8,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 9,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 10,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            },
+            {
+              "index": 11,
+              "dimensions": [
+                1,
+                1
+              ],
+              "exactRgba": true,
+              "maxAlpha": 0.0,
+              "maxPremultipliedRgb": 0.0,
+              "passed": true
+            }
+          ],
+          "passed": true,
+          "groups": [
+            [
+              0,
+              1,
+              4,
+              5
+            ],
+            [
+              2,
+              3,
+              6,
+              7
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              10,
+              11
+            ]
+          ],
+          "groupsMatch": true
+        }
+      ]
+    },
+    "decision": "Native smooth resize and explicit bilinear experiments did not reproduce the host filter; they were removed. The original Canvas algorithm runs in a disposable Worker, and six fixed samples match exactly. Native and CLI paths refuse smooth mode instead of substituting a filter.",
+    "missingExport": "Removed nonexistent duplicateSpriteGridFrames re-export; actual grid splitter and exact comparator are exercised by regression tests."
+  },
+  "checks": {
+    "pythonSuite": 27,
+    "jsSuite": 28,
+    "browserBridgeFocusedAfterLeaseAndCliGuard": "passed",
+    "workbenchBuild": "passed",
+    "focusedESLint": "passed",
+    "projectVerify": {
+      "valid": true,
+      "database": "ok",
+      "versionsChecked": 4553,
+      "invalidVersions": [],
+      "fullVerificationSha256": "b4607c753228ac8f55302e4442b1c1d77c70da928fdd0e7bf934323a72ec7caa"
+    },
+    "skillStructure": "passed",
+    "doctorReady": true
+  },
+  "limits": [
+    "Browser process and API combined actual memory peak is not yet accepted; backend-only RSS is labeled separately.",
+    "Smooth resize requires the workbench; CLI/generic proposal execution rejects it, browser closure expires its lease.",
+    "Tool document persistence and unified undo, shared fine editor migration, input preparation cancellation and remaining media/AI/distribution scope remain pending.",
+    "macOS 14 and VoiceOver not accepted.",
+    "Fixed corpus uses PNG; JPEG/WebP, arbitrary partial alpha and all sampling modes still require broader format acceptance."
+  ],
+  "screenshots": [
+    "skill-ronin-scale.png",
+    "skill-ronin-smooth.png",
+    "skill-ronin-unify.png",
+    "skill-ronin-duplicates.png",
+    "skill-ronin-grid-4096.png",
+    "skill-ronin-unify-pagination.png",
+    "skill-ronin-worker-canceled.png",
+    "skill-ronin-stale-result.png",
+    "skill-ronin-project-pages.png"
+  ],
+  "projectPanel": {
+    "assetsPerPage": 24,
+    "tasksPerPage": 10,
+    "resultsPerPage": 12,
+    "verifiedResultPage": 342,
+    "visibleResultRange": [
+      4093,
+      4097
+    ],
+    "lastVersionId": "cfa5892e-90c3-43ec-907c-03d7c3ca8d87",
+    "backgroundTaskResultVersionVisible": "6b020b66-9299-4fe9-b59d-18510bf4802b"
+  }
+}

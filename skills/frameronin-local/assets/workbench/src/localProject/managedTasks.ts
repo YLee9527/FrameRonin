@@ -1,4 +1,5 @@
 import { jsonPost, localFetch, localJson } from './api'
+import { browserCanvasTask } from './browserCanvasTask'
 
 export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; frames?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
 type Version = ManagedVersion
@@ -55,8 +56,11 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
   const created = await localJson<{ id: string; state: string }>('/api/tasks', jsonPost({ operation, inputs, parameters }))
   let record: Task = { id: created.id, state: created.state, progress: 0, results: [] }
   options.onTask?.(record.id)
+  const browserController=new AbortController()
+  let browserRun:Promise<void>|null=null,browserError:unknown
   const cancellation: { request: Promise<Task | null> | null; error?: unknown } = { request: null }
   const abort = () => {
+    browserController.abort()
     cancellation.request ??= localJson<Task>(`/api/tasks/${record.id}/cancel`, jsonPost({})).catch(error => {
       cancellation.error = error
       return null
@@ -67,6 +71,10 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     if (signal?.aborted) abort()
     while (['queued', 'running'].includes(record.state)) {
       signal?.throwIfAborted()
+      if(operation==='image.customScale'&&(parameters as {renderer?:string}).renderer==='browser-worker'&&record.state==='running'&&!browserRun){
+        browserRun=browserCanvasTask(record.id,files[0],parameters,browserController.signal,()=>options.onProgress?.(.2)).catch(error=>{browserError=error})
+      }
+      if(browserError)throw browserError
       options.onProgress?.(record.progress)
       await new Promise(resolve => window.setTimeout(resolve, 200))
       record = await localJson<Task>(`/api/tasks/${record.id}`, { signal })
@@ -74,24 +82,42 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     signal?.throwIfAborted()
     if (record.state === 'canceled') throw new DOMException('Task canceled', 'AbortError')
     if (record.state !== 'succeeded') throw new Error(`${record.error?.code ?? 'TASK_FAILED'}: ${record.error?.message ?? 'Processing did not complete'}`)
-    const outputs: { version: Version; blob: Blob }[] = []
+    const manifest=await localJson<Version[]>(`/api/tasks/${record.id}/results`,{signal})
+    if(manifest.length!==record.results.length||manifest.some((version,index)=>version.id!==record.results[index]))throw new Error('TASK_RESULTS_CHANGED')
+    const versions=manifest.filter(version=>!options.outputFilter||options.outputFilter(version))
+    const outputs: { version: Version; blob: Blob }[] = new Array(versions.length)
     let retainedBytes = 0
-    for (const id of record.results) {
-      signal?.throwIfAborted()
-      const version = await localJson<Version>(`/api/versions/${id}`, { signal })
-      if (options.outputFilter && !options.outputFilter(version)) continue
+    for (const version of versions) {
+      if(!Number.isSafeInteger(version.metadata.bytes)||version.metadata.bytes<0
+        ||version.metadata.kind==='image'&&(!Number.isSafeInteger(version.metadata.width)||!Number.isSafeInteger(version.metadata.height)||(version.metadata.width??0)<1||(version.metadata.height??0)<1))throw new Error('TASK_RESULT_METADATA_INVALID')
       const decodedBytes = version.metadata.kind === 'image'
         ? (version.metadata.width ?? 0) * (version.metadata.height ?? 0) * 4 : 0
       retainedBytes += version.metadata.bytes * 2 + decodedBytes * 4
       // Leave room for decoding and frontend copies. Larger results remain in
       // the project and can be downloaded through its result links.
-      if (!Number.isFinite(memoryBudgetBytes) || retainedBytes > memoryBudgetBytes / 4) {
+      if (!Number.isSafeInteger(retainedBytes)||retainedBytes<0||!Number.isFinite(memoryBudgetBytes) || retainedBytes > memoryBudgetBytes / 4) {
         throw new Error(`Task ${record.id} succeeded, but its results exceed the preview budget. Download them from Project assets and tasks.`)
       }
-      const response = await localFetch(`/api/versions/${id}/content`, { signal })
-      if (!response.ok) throw new Error('The registered result could not be read')
-      outputs.push({ version, blob: await response.blob() })
     }
+    // Preflight the entire result set before fetching any content. A bounded
+    // pool avoids thousands of serialized loopback round trips for grid cells.
+    let next=0,downloaded=0
+    const downloads=new AbortController(),abortDownloads=()=>downloads.abort()
+    signal?.addEventListener('abort',abortDownloads,{once:true})
+    try{await Promise.all(Array.from({length:Math.min(8,versions.length)},async()=>{
+      while(next<versions.length){
+        signal?.throwIfAborted()
+        downloads.signal.throwIfAborted()
+        const index=next++,version=versions[index]
+        const response=await localFetch(`/api/versions/${version.id}/content`,{signal:downloads.signal})
+        if(!response.ok)throw new Error('The registered result could not be read')
+        outputs[index]={version,blob:await response.blob()}
+        downloaded++
+        if(versions.length>24&&downloaded%8===0)options.onProgress?.(.9+downloaded/versions.length*.1)
+        signal?.throwIfAborted()
+      }
+    }))}catch(error){downloads.abort();throw error}
+    finally{signal?.removeEventListener('abort',abortDownloads)}
     options.onProgress?.(1)
     return { project, taskId: record.id, outputs }
   } catch (error) {
@@ -101,5 +127,5 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
       if (confirmed?.state !== 'canceled') throw new Error(`Task ${record.id} completed before cancellation. Inspect its recorded result.`)
     }
     throw error
-  } finally { signal?.removeEventListener('abort', abort) }
+  } finally { browserController.abort();signal?.removeEventListener('abort', abort) }
 }

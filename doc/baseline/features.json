@@ -657,10 +657,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomScale.tsx",
-    "sample": "fixed-image-resize-hard",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "ronin-original-image-tools-44",
+    "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
+    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
+    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling"
   },
   {
     "id": "自定义缩放.image.resize",
@@ -670,10 +670,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomScale.tsx",
-    "sample": "fixed-image-resize",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "ronin-original-image-tools-44",
+    "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
+    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
+    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling"
   },
   {
     "id": "audio.wav-to-mp3",
@@ -719,26 +719,28 @@
     "originalEntry": "统一尺寸",
     "implementation": "reference/frontend/src/components/RoninProUnifySize.tsx",
     "inputs": "frames",
-    "outputs": "PNG ZIP",
-    "dependencies": "Canvas/JSZip",
+    "outputs": "PNG",
+    "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProUnifySize.tsx",
-    "sample": "fixed-sequence-unify-size",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "ronin-original-image-tools-44",
+    "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
+    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
+    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling",
+    "baselineCorrection": "Original component exports one composite PNG; prior PNG ZIP inventory was incorrect."
   },
   {
     "id": "sequence.duplicate-grid",
-    "originalEntry": "帧复制",
+    "originalEntry": "切分后寻找重复帧",
     "implementation": "reference/frontend/src/components/RoninProDuplicateFrames.tsx",
     "inputs": "sprite sheet",
-    "outputs": "PNG",
+    "outputs": "PNG cells + zero-based duplicate groups",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProDuplicateFrames.tsx",
-    "sample": "fixed-sequence-duplicate-grid",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "ronin-original-image-tools-44",
+    "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
+    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
+    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling",
+    "baselineCorrection": "Stable historical ID retained. Original component splits and finds exact equal-sized RGBA cells; frame copying is in Rseprite and blueprint row/column nodes."
   },
   {
     "id": "image.preprocess",
@@ -1101,7 +1103,7 @@
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
     "sample": "map-persistence-and-export-64",
     "evidence": "doc/testing/evidence/skill-map-document.json",
-    "status": "后台 PSD 严格合成对照与取消通过；新导出器 Krita 复验待完成，旧独立样本原生通过；2026-10-15 正式 PSD 的 Krita 两层/透明度与独立合成复验通过，见 skill-map-document.json",
+    "status": "后台 PSD 对照与取消、正式结果的 Krita 两层/透明度及独立合成验收通过",
     "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {

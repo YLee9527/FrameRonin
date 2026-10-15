@@ -29,3 +29,9 @@ GIF 工作台使用原浏览器兼容模式：`gif.split` 的 `renderer=browser`
 `video.watermark` 使用原完整时序检测与 OpenCV 修复，最小尺寸 120×60；不把全局采样改为独立分块。采样和前端文件超过预算时拒绝。工作台支持取消、后台继续、MP4 预览及下载，原音轨以流复制保留。固定合成样本的输出与原实现相同，但小字仍可留下亮色残影；算法一致性不能代替真实素材质量检查。未检测到水印时明确失败，不登记伪成功输出。
 
 像素工具使用 `image.pixelate`、`image.mergeNearby`、`image.palette16`、`image.perfectPixel` 和 `image.pixellise`。先查注册表范围；需要局部处理时提供完整 regionX/Y/Width/Height 矩形。PerfectPixel 最大边长 2048、Pixellise 原全局网格和放大上限保留；其他预算限制明确拒绝，不擅自改成分块或额外缩小。结果附处理尺寸及参数报告，工作台也显示实际尺寸。14 组固定对照通过，不代表任意半透明或所有格式都已验证。
+
+RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、最近邻硬边缘，以及 FFFF/FFFB/FBFB/FBFF/C0C0/C0BE/BEBE/BEC0 八个固定缩放、三种抠图、裁边组合；`sequence.unifySize` 保留最大宽高的透明补边和水平/垂直九种整数对齐；`image.findDuplicates` 按 1–64 行列切分，保留余数分配和同尺寸精确 RGBA 分组，输出顺序 PNG 与从 0 开始的分组报告。后者原入口不是帧复制；帧复制在 Rseprite 和蓝图行列复制操作中。
+
+普通缩放的 `pixelated=false` 必须在工作台执行：原浏览器滤波由专用 Canvas Worker 承载，使用 `renderer=browser-worker`。预览返回 `requiresWorkbench=true`；CLI 和通用提案执行明确拒绝直接提交，不用近似的原生滤波代替。Skill 应打开自定义缩放工具设置参数并执行。八个固定预设始终采用原硬边缘参数。Worker 不可用或连接丢失会失败，不能自动重做。离开工具页后当前 Worker 和队列继续；关闭整个浏览器会失去心跳并失败，不能承诺关闭浏览器后继续。
+
+这三项的加工结果进入正式素材版本，当前工具草稿的正式保存与统一撤销仍在后续编辑器检查点完成。所有参数与输入改变都使当前视图不再接受旧任务结果；原件仍保留，已成功结果在项目中可查。
