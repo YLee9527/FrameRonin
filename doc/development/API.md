@@ -53,3 +53,5 @@ GIF 预估加入所有前端保留素材、解码帧、中间表面和编码缓�
 像素操作：`image.pixelate(pixelSize=1..128)`、`image.mergeNearby(strength=0..100)`、`image.palette16(method=rgb|lab,dither)`、`image.pixellise(upscale=1..7,numColors=4..256,scaleResult=1..5,transparentBackground)`。四者及 `image.perfectPixel` 共用可选 `regionX/Y/Width/Height` 与 `frontendBytes`；四个区域字段默认 0 表示整图，指定时必须为图内非空整数矩形，不能只提供位置或一条边。
 
 全部计算、输入解码、裁切和编码在受控 Node 任务内完成，正式 PNG 及 JSON 报告进入项目。报告含原尺寸、实际处理尺寸；Pixellise 另含请求/实际网格放大倍数。PerfectPixel 沿用最大边长 2048，Pixellise 沿用 4200 万检测像素上限和原放大倍数限制；额外预算不足直接拒绝，不再静默降低参数。全局网格、调色及误差扩散不独立分块。颜色数组、量化、抖动及完整输出上限分别估算；OpenCV 运行时保留 576 MiB 余量。预览尺寸与真实坐标分开，缩略图不改变任务输入或暂存内容。
+
+编辑包络增加 `kind=pixel`。更新已存在文档时改变类型返回 DOCUMENT_KIND_CHANGED；类型改变应使用新 ID。统一任务客户端额外返回本次核验的 project 身份，结果文件据此复用正式版本缓存；保存或重开不能靠重导入得到新版本。候选恢复只创建未激活的 File 引用，当前文档没有变化后才接受，不提前分配画布或改写当前素材映射。

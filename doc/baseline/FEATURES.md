@@ -35,11 +35,11 @@
 | image.grid | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
 | image.palette | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
 | image.alpha | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| image.perfect-pixel | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 后台及工作台正式输出、64×48 框选、8192→2048 预缩放尺寸通过；文档/统一撤销及更多采样待验收 |
-| image.pixelate | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 原像素块 1/4/8 三组对照通过（8px 最大通道差 1），工作台输出与原样本严格相同；编辑文档待完成 |
-| image.merge-colors | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 原 Lab 合色三种强度严格 RGBA 相同，工作台 40 强度正式下载通过；编辑文档及更多格式待完成 |
-| image.palette16 | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | RGB/Lab × 抖动开关四组严格像素相同，真实工作台下载/取消/参数变化保护通过；大图超预算拒绝 |
-| image.pixellise | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 原全局网格两组严格 RGBA 相同，真实工作台下载及离开后后台成功；联合内存及更多输入待验收 |
+| image.perfect-pixel | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 后台/工作台固定样本、真实选区与 8192→2048 尺寸通过；像素文档保存/重开/撤销/冲突/迟到读取通过，更多采样待验收 |
+| image.pixelate | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 1/4/8 像素块原对照及工作台下载通过，像素文档参数重开/统一撤销通过；更多格式待验收 |
+| image.merge-colors | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 三种强度严格原像素对照与工作台下载通过；文档合色 60 重开、统一撤销与保存冲突通过 |
+| image.palette16 | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | RGB/Lab × 抖动四组原对照、工作台下载/取消/保护通过；文档 RGB/关闭抖动重开及撤销通过，大图超预算拒绝 |
+| image.pixellise | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 原全局网格两组、工作台下载/后台继续通过；网格参数及结果正式文档/统一撤销通过，联合内存与更多输入待验收 |
 | image.expand | 扩展收缩 | reference/frontend/src/components/ImageExpandShrink.tsx | image → PNG | 待逐项验收 |
 | image.shrink | 扩展收缩 | reference/frontend/src/components/ImageExpandShrink.tsx | image → PNG | 待逐项验收 |
 | image.rembg | AI抠图 | reference/frontend/src/components/ImageMatte.tsx | image → transparent PNG | 待逐项验收 |

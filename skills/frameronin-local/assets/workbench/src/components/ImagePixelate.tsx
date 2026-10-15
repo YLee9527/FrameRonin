@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { Alert, Button, Checkbox, InputNumber, message, Radio, Slider, Space, Tabs, Typography, Upload } from 'antd'
 import { BorderOutlined, DownloadOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
@@ -6,7 +6,11 @@ import { useLanguage } from '../i18n/context'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
 import { maxSafeUpscaleForImage } from '../lib/pixellise/safeUpscale'
-import { importManagedInputs, runManagedTask, type ManagedVersion } from '../localProject/managedTasks'
+import { cacheManagedInput, importManagedInputs, runManagedTask, type ManagedVersion } from '../localProject/managedTasks'
+
+import DocumentSaveBar from '../localProject/DocumentSaveBar'
+import { initialPixelDraft, pixelFiles, pixelMetadata, serializePixelDocument, restorePixelDocument, type PixelDraft, type NaturalRect } from '../localProject/pixelDocument'
+import { createPixelHistory, pixelHistoryReducer } from '../localProject/pixelHistory'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -15,8 +19,6 @@ const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
 const IMAGE_MAX_MB = 20
 /** 高级像素化框选：原图像素最小边长 */
 const PREVIEW_SELECTION_MIN_SIDE = 24
-
-type NaturalRect = { x: number; y: number; w: number; h: number }
 
 function clientToNaturalPoint(img: HTMLImageElement, clientX: number, clientY: number, dimensions:{w:number;h:number}|null): { nx: number; ny: number } {
   const r = img.getBoundingClientRect()
@@ -59,30 +61,37 @@ export default function ImagePixelate() {
   const computation = useRef<AbortController | null>(null)
   const mounted=useRef(true)
   useEffect(()=>{mounted.current=true;return()=>{mounted.current=false}},[])
-  const [activeTab, setActiveTab] = useState<
-    'pixelate' | 'mergeNearby' | 'color16' | 'advanced' | 'perfectPixel'
-  >('perfectPixel')
-  const [color16Method, setColor16Method] = useState<'rgb' | 'lab'>('lab')
-  const [color16Dither, setColor16Dither] = useState(true)
-  const [file, setFile] = useState<File | null>(null)
+  const [history,dispatchHistory]=useReducer(pixelHistoryReducer,undefined,()=>createPixelHistory(initialPixelDraft()))
+  const updatePixel=useCallback((update:(value:PixelDraft)=>PixelDraft)=>dispatchHistory({type:'change',update}),[])
+  const setter=useCallback(<K extends keyof PixelDraft,>(key:K)=>(value:PixelDraft[K]|((old:PixelDraft[K])=>PixelDraft[K]))=>{
+    updatePixel(current=>({...current,[key]:typeof value==='function'?(value as (old:PixelDraft[K])=>PixelDraft[K])(current[key]):value}))
+  },[updatePixel])
+  const {activeTab,file,resultFile:resultBlob,processingSize,pixelSize,mergeNearbyStrength,color16Method,color16Dither,
+    advUpscale,advColors,advScaleResult,advTransparent,ppSample,ppMinSize,ppPeakWidth,ppRefine,ppFixSquare,ppManualGrid,ppGridCols,ppGridRows,previewSelection}=history.present
+  const setActiveTab=(activeTab:PixelDraft['activeTab'])=>dispatchHistory({type:'view',activeTab})
+  const setFile=(file:File|null)=>updatePixel(current=>({...current,file,resultFile:null,processingSize:null,previewSelection:null}))
+  const setColor16Method=useMemo(()=>setter('color16Method'),[setter])
+  const setColor16Dither=useMemo(()=>setter('color16Dither'),[setter])
+  const setPixelSize=useMemo(()=>setter('pixelSize'),[setter])
+  const setMergeNearbyStrength=useMemo(()=>setter('mergeNearbyStrength'),[setter])
+  const setAdvColors=useMemo(()=>setter('advColors'),[setter])
+  const setAdvScaleResult=useMemo(()=>setter('advScaleResult'),[setter])
+  const setAdvTransparent=useMemo(()=>setter('advTransparent'),[setter])
+  const setPpSample=useMemo(()=>setter('ppSample'),[setter])
+  const setPpMinSize=useMemo(()=>setter('ppMinSize'),[setter])
+  const setPpPeakWidth=useMemo(()=>setter('ppPeakWidth'),[setter])
+  const setPpRefine=useMemo(()=>setter('ppRefine'),[setter])
+  const setPpFixSquare=useMemo(()=>setter('ppFixSquare'),[setter])
+  const setPpManualGrid=useMemo(()=>setter('ppManualGrid'),[setter])
+  const setPpGridCols=useMemo(()=>setter('ppGridCols'),[setter])
+  const setPpGridRows=useMemo(()=>setter('ppGridRows'),[setter])
+  const setPreviewSelection=useMemo(()=>setter('previewSelection'),[setter])
+  const setResultBlob=useMemo(()=>setter('resultFile'),[setter])
+  const setAdvUpscale=useMemo(()=>setter('advUpscale'),[setter])
+  const resultVersion=resultBlob?pixelMetadata.get(resultBlob):undefined
   const [originalUrl, setOriginalUrl] = useState<string | null>(null)
-  const [pixelSize, setPixelSize] = useState(8)
-  const [mergeNearbyStrength, setMergeNearbyStrength] = useState(40)
-  const [advUpscale, setAdvUpscale] = useState(3)
   const [advUpscaleCeiling, setAdvUpscaleCeiling] = useState(7)
-  const [advColors, setAdvColors] = useState(64)
-  const [advScaleResult, setAdvScaleResult] = useState(1)
-  const [advTransparent, setAdvTransparent] = useState(false)
-  const [ppSample, setPpSample] = useState<'center' | 'median' | 'majority'>('center')
-  const [ppMinSize, setPpMinSize] = useState(4)
-  const [ppPeakWidth, setPpPeakWidth] = useState(6)
-  const [ppRefine, setPpRefine] = useState(0.25)
-  const [ppFixSquare, setPpFixSquare] = useState(true)
-  const [ppManualGrid, setPpManualGrid] = useState(false)
-  const [ppGridCols, setPpGridCols] = useState(32)
-  const [ppGridRows, setPpGridRows] = useState(32)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
-  const [resultBlob, setResultBlob] = useState<Blob | null>(null)
   const [loading, setLoading] = useState(false)
   const [taskProgress,setTaskProgress]=useState(0)
   const [canceling,setCanceling]=useState(false)
@@ -90,10 +99,7 @@ export default function ImagePixelate() {
   const [previewBudget,setPreviewBudget]=useState<number|null>(null)
   const [originalStashUrl,setOriginalStashUrl]=useState<string|null>(null)
   const [inputVersion,setInputVersion]=useState<ManagedVersion|null>(null)
-  const [resultVersion,setResultVersion]=useState<ManagedVersion|null>(null)
-  const [processingSize,setProcessingSize]=useState<{width:number;height:number}|null>(null)
   const [naturalWH, setNaturalWH] = useState<{ w: number; h: number } | null>(null)
-  const [previewSelection, setPreviewSelection] = useState<NaturalRect | null>(null)
   const [previewSelectActive, setPreviewSelectActive] = useState(false)
   const [draftSelection, setDraftSelection] = useState<NaturalRect | null>(null)
   const previewImgRef = useRef<HTMLImageElement>(null)
@@ -103,14 +109,14 @@ export default function ImagePixelate() {
 
   useEffect(()=>{
     let canceled=false
-    setOriginalUrl(null);setNaturalWH(null);setInputVersion(null);setOriginalStashUrl(null);setResultVersion(null)
+    setOriginalUrl(null);setNaturalWH(null);setInputVersion(null);setOriginalStashUrl(null)
     if(!file)return
     const url=URL.createObjectURL(file)
     importManagedInputs([file]).then(({versions,memoryBudgetBytes})=>{
       if(canceled)return
       const version=versions[0],meta=version.metadata
       if(meta.kind!=='image'||!meta.width||!meta.height)throw new Error('Select a decodable static image')
-      setInputVersion(version);setNaturalWH({w:meta.width,h:meta.height});setPreviewBudget(memoryBudgetBytes)
+      pixelMetadata.set(file,version);setInputVersion(version);setNaturalWH({w:meta.width,h:meta.height});setPreviewBudget(memoryBudgetBytes)
       setOriginalStashUrl(url)
       const full=meta.width*meta.height*16+file.size*2<=memoryBudgetBytes/8
       if(!full&&!meta.thumbnailDataUrl?.startsWith('data:image/png;base64,'))throw new Error('Image thumbnail unavailable')
@@ -128,7 +134,6 @@ export default function ImagePixelate() {
   )
 
   useEffect(() => {
-    setPreviewSelection(null)
     setPreviewSelectActive(false)
     setDraftSelection(null)
     selectDragRef.current = null
@@ -143,8 +148,23 @@ export default function ImagePixelate() {
     const h = previewSelection?.h ?? naturalWH.h
     const maxU = maxSafeUpscaleForImage(w, h)
     setAdvUpscaleCeiling(maxU)
-    setAdvUpscale((prev) => Math.min(prev, maxU))
+    dispatchHistory({type:'normalize',update:current=>({...current,advUpscale:Math.min(current.advUpscale,maxU)})})
   }, [naturalWH, previewSelection])
+
+  useEffect(()=>{
+    const url=resultBlob?URL.createObjectURL(resultBlob):null
+    setResultUrl(url)
+    return()=>{if(url)URL.revokeObjectURL(url)}
+  },[resultBlob])
+  useEffect(()=>{
+    const end=()=>dispatchHistory({type:'end'})
+    const key=(event:KeyboardEvent)=>{
+      if(event.isComposing||!(event.metaKey||event.ctrlKey)||event.altKey||(event.target as HTMLElement).closest('input,textarea,select,[contenteditable="true"]'))return
+      if(event.code==='KeyZ'||event.code==='KeyY'){event.preventDefault();dispatchHistory({type:event.code==='KeyY'||event.shiftKey?'redo':'undo'})}
+    }
+    window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end);window.addEventListener('keydown',key)
+    return()=>{window.removeEventListener('pointerup',end);window.removeEventListener('pointercancel',end);window.removeEventListener('keydown',key)}
+  },[])
 
   const updateDraftFromPointer = (clientX: number, clientY: number) => {
     const img = previewImgRef.current
@@ -181,8 +201,8 @@ export default function ImagePixelate() {
 
   const signature=JSON.stringify([pixelSize,mergeNearbyStrength,color16Method,color16Dither,advUpscale,advColors,advScaleResult,advTransparent,
     ppSample,ppMinSize,ppPeakWidth,ppRefine,ppFixSquare,ppManualGrid,ppGridCols,ppGridRows,previewSelection])
-  const latest=useRef({file,signature})
-  useLayoutEffect(()=>{latest.current={file,signature}},[file,signature])
+  const latest=useRef({file,signature,resultBlob})
+  useLayoutEffect(()=>{latest.current={file,signature,resultBlob}},[file,signature,resultBlob])
   const taskText=lang==='zh'?{cancel:'取消加工',canceling:'正在核对取消',canceled:'加工已取消',stale:'输入或参数已改变，结果保留在项目素材中',size:'实际处理尺寸',thumbnail:'为控制内存，此处显示缩略图；选区使用原图坐标，加工及拖入暂存保留原文件。'}
     :lang==='ja'?{cancel:'処理を取消',canceling:'取消を確認中',canceled:'処理を取り消しました',stale:'入力または設定が変わりました。結果はプロジェクトに保存されています',size:'実際の処理サイズ',thumbnail:'メモリ使用量を抑えるためサムネイルを表示しています。選択範囲は元画像の座標で、処理と一時保管には元画像を使います。'}
       :{cancel:'Cancel processing',canceling:'Confirming cancellation',canceled:'Processing canceled',stale:'Inputs or settings changed; results remain in Project assets',size:'Actual processing dimensions',thumbnail:'A thumbnail limits memory use. Selection uses original coordinates; processing and stash retain the original file.'}
@@ -192,16 +212,16 @@ export default function ImagePixelate() {
     const selected=file,before=latest.current,controller=new AbortController()
     computation.current=controller;setLoading(true);setTaskError('');setTaskProgress(0);setCanceling(false)
     try{
-      let frontendBytes=96*1024**2+file.size*2+(resultBlob?.size??0)*2
+      let frontendBytes=96*1024**2+[...pixelFiles([history.present,...history.past,...history.future,...(history.checkpoint?[history.checkpoint]:[])])].reduce((total,file)=>total+file.size*2,0)
       if(originalUrl===originalStashUrl)frontendBytes+=(inputVersion.metadata.width??0)*(inputVersion.metadata.height??0)*16
       else frontendBytes+=128*128*16
       frontendBytes+=(resultVersion?.metadata.width??0)*(resultVersion?.metadata.height??0)*16
-      const {outputs}=await runManagedTask(operation,[selected],{...parameters,frontendBytes},{signal:controller.signal,
+      const {project,outputs}=await runManagedTask(operation,[selected],{...parameters,frontendBytes},{signal:controller.signal,
         onProgress:value=>{if(mounted.current)setTaskProgress(Math.round(value*100))},
         outputFilter:version=>mounted.current&&(version.metadata.kind==='image'||version.metadata.extension==='.json')})
       controller.signal.throwIfAborted()
       if(!mounted.current)return
-      if(latest.current.file!==before.file||latest.current.signature!==before.signature)throw new Error(taskText.stale)
+      if(latest.current.file!==before.file||latest.current.signature!==before.signature||latest.current.resultBlob!==before.resultBlob)throw new Error(taskText.stale)
       const result=outputs.find(output=>output.version.metadata.kind==='image')
       if(!result)throw new Error('The registered pixel result is incomplete')
       const outputWidth=result.version.metadata.width,outputHeight=result.version.metadata.height
@@ -210,14 +230,14 @@ export default function ImagePixelate() {
       const report=reportOutput?JSON.parse(await reportOutput.blob.text()):{}
       controller.signal.throwIfAborted()
       if(!mounted.current)return
-      if(latest.current.file!==before.file||latest.current.signature!==before.signature)throw new Error(taskText.stale)
+      if(latest.current.file!==before.file||latest.current.signature!==before.signature||latest.current.resultBlob!==before.resultBlob)throw new Error(taskText.stale)
       const dimensions=report.processingDimensions
-      setProcessingSize(dimensions&&Number.isInteger(dimensions.width)&&Number.isInteger(dimensions.height)?dimensions:null)
-      setResultBlob(result.blob);setResultVersion(result.version)
-      const nextUrl=URL.createObjectURL(result.blob)
-      setResultUrl(old=>{if(old)URL.revokeObjectURL(old);return nextUrl})
-      if(operation==='image.pixellise'&&report.upscaleCapped&&Number.isInteger(report.upscaleUsed)&&report.upscaleUsed>=1&&report.upscaleUsed<=7){
-        setAdvUpscale(report.upscaleUsed)
+      const processed=new File([result.blob],selected.name.replace(/\.[^.]+$/,'').slice(0,200)+'_'+operation.replace('image.','')+'.png',{type:'image/png'})
+      cacheManagedInput(processed,project.id,result.version.id);pixelMetadata.set(processed,result.version)
+      const capped=operation==='image.pixellise'&&report.upscaleCapped&&Number.isInteger(report.upscaleUsed)&&report.upscaleUsed>=1&&report.upscaleUsed<=7
+      updatePixel(current=>({...current,resultFile:processed,processingSize:dimensions&&Number.isInteger(dimensions.width)&&Number.isInteger(dimensions.height)?dimensions:null,
+        ...(capped?{advUpscale:report.upscaleUsed}:{})}))
+      if(capped){
         message.success(t('pixelateAdvancedSuccessWithCap',{from:report.upscaleRequested,to:report.upscaleUsed}))
       }else if(operation==='image.perfectPixel')message.success(t('pixelatePerfectPixelSuccess',{w:outputWidth,h:outputHeight}))
       else message.success(success)
@@ -241,6 +261,13 @@ export default function ImagePixelate() {
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
+      <DocumentSaveBar kind="pixel" snapshot={history.present} serialize={serializePixelDocument}
+        restore={value=>restorePixelDocument(value,[...pixelFiles([history.present,...history.past,...history.future])])}
+        applySnapshot={draft=>dispatchHistory({type:'restore',draft})}/>
+      <Space>
+        <Button disabled={!history.past.length&&!history.checkpoint} onClick={()=>dispatchHistory({type:'undo'})}>{lang==='zh'?'撤销':lang==='ja'?'元に戻す':'Undo'}</Button>
+        <Button disabled={!history.future.length} onClick={()=>dispatchHistory({type:'redo'})}>{lang==='zh'?'重做':lang==='ja'?'やり直す':'Redo'}</Button>
+      </Space>
       <StashDropZone
         onStashDrop={(f) => {
           setFile(f)
@@ -411,7 +438,7 @@ export default function ImagePixelate() {
           </div>
         </>
       )}
-      <Tabs
+      <div onPointerDownCapture={()=>dispatchHistory({type:'begin'})}><Tabs
         activeKey={activeTab}
         onChange={(k) =>
           setActiveTab(k as 'pixelate' | 'mergeNearby' | 'color16' | 'advanced' | 'perfectPixel')
@@ -620,7 +647,7 @@ export default function ImagePixelate() {
                       onChange={setPpMinSize}
                       style={{ width: 200, marginRight: 16 }}
                     />
-                    <InputNumber min={2} max={32} value={ppMinSize} onChange={(v) => setPpMinSize(v ?? 4)} style={{ width: 90 }} />
+                    <InputNumber precision={0} min={2} max={32} value={ppMinSize} onChange={(v) => setPpMinSize(v ?? 4)} style={{ width: 90 }} />
                   </Space>
                 </div>
                 <div>
@@ -672,7 +699,7 @@ export default function ImagePixelate() {
             ),
           },
         ]}
-      />
+      /></div>
       <Space wrap>
         {activeTab === 'pixelate' && (
           <Button type="primary" loading={loading} onClick={runPixelate} disabled={!file||!inputVersion}>

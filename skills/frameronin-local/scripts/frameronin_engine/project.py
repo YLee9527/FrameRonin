@@ -402,13 +402,15 @@ class Project:
         checked_id(document_id)
         if type(expected_revision) is not int or expected_revision < 0:
             raise RoninError('DOCUMENT_REVISION_INVALID', 'Document revisions are non-negative integers.')
-        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'image', 'game', 'ai-request']:
+        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request']:
             raise RoninError('DOCUMENT_KIND_INVALID', 'Unknown editable document kind.')
         serialized = json.dumps(payload, ensure_ascii=False, allow_nan=False)
         if len(serialized.encode()) > 64 * 1024**2:
             raise RoninError('DOCUMENT_LIMIT', 'The document exceeds the 64 MiB limit.')
         with self.writer(), self.connection() as db:
             current = db.execute('SELECT * FROM documents WHERE id=?', (document_id,)).fetchone()
+            if current and current['kind'] != kind:
+                raise RoninError('DOCUMENT_KIND_CHANGED', 'Save a different document type with a new document ID.')
             revision = current['revision'] if current else 0
             if revision != expected_revision:
                 raise RoninError('DOCUMENT_REVISION_CHANGED', 'Reload the document before saving another revision.')

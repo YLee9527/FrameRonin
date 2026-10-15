@@ -62,6 +62,64 @@ test('sequence documents preserve shared formal references and reject unsafe fie
   }finally{globalThis.fetch=native}
 })
 
+test('pixel history groups parameter gestures and restores existing input and result files across undo',()=>{
+  const first=new File(['source'],'source.png'),result=new File(['processed'],'result.png'),second=new File(['another'],'another.png')
+  let state=algorithms.createPixelHistory({...algorithms.initialPixelDraft(),file:first,resultFile:result,processingSize:{width:128,height:96}})
+  state=algorithms.pixelHistoryReducer(state,{type:'begin'})
+  state=algorithms.pixelHistoryReducer(state,{type:'view',activeTab:'color16'})
+  state=algorithms.pixelHistoryReducer(state,{type:'end'});assert.equal(state.past.length,0)
+  state=algorithms.pixelHistoryReducer(state,{type:'begin'})
+  for(const ppGridCols of [16,24,48])state=algorithms.pixelHistoryReducer(state,{type:'change',update:v=>({...v,ppGridCols})})
+  state=algorithms.pixelHistoryReducer(state,{type:'end'});assert.equal(state.past.length,1)
+  state=algorithms.pixelHistoryReducer(state,{type:'change',update:v=>({...v,file:second,resultFile:null,processingSize:null})})
+  state=algorithms.pixelHistoryReducer(state,{type:'undo'})
+  assert.equal(state.present.file,first);assert.equal(state.present.resultFile,result);assert.equal(state.present.ppGridCols,48)
+  state=algorithms.pixelHistoryReducer(state,{type:'undo'});assert.equal(state.present.ppGridCols,32);assert.equal(state.present.activeTab,'color16')
+  state=algorithms.pixelHistoryReducer(state,{type:'redo'});assert.equal(state.present.resultFile,result)
+})
+test('pixel and sequence history budgets cover past, current and redo references together',()=>{
+  const results=Array.from({length:4},(_,i)=>{
+    const file=new File(['metadata-sized fixture'],`large-${i}.png`)
+    Object.defineProperty(file,'size',{value:60*1024**2});return file
+  })
+  for(const kind of ['pixel','sequence']){
+    const initial=kind==='pixel'?algorithms.initialPixelDraft:algorithms.initialSequenceDraft
+    const create=kind==='pixel'?algorithms.createPixelHistory:algorithms.createSequenceHistory
+    const reduce=kind==='pixel'?algorithms.pixelHistoryReducer:algorithms.sequenceHistoryReducer
+    const key=kind==='pixel'?'resultFile':'combinedFile'
+    let state=create({...initial(),[key]:results[0]})
+    for(const file of results.slice(1))state=reduce(state,{type:'change',update:v=>({...v,[key]:file})})
+    const size=()=>[...new Set([state.present,...state.past,...state.future].map(v=>v[key]))].reduce((sum,f)=>sum+f.size*2,0)
+    assert(size()<=256*1024**2);assert.equal(state.present[key],results[3])
+    state=reduce(state,{type:'undo'});assert.equal(state.present[key],results[2]);assert(size()<=256*1024**2)
+    state=reduce(state,{type:'redo'});assert.equal(state.present[key],results[3])
+  }
+})
+test('pixel documents roundtrip formal image versions and reject unsafe resources and out-of-bounds selections',async()=>{
+  const native=globalThis.fetch,files=new Map(),ids=['10000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000002'];let imports=0
+  globalThis.fetch=async(url,options={})=>{
+    if(url==='/api/project/context')return Response.json({project:{id:'pixel-project'},memoryBudgetBytes:2*1024**3})
+    if(url==='/api/assets'){const file=options.body.get('file'),id=ids[imports++];files.set(id,file);return Response.json({id,metadata:{kind:'image',bytes:file.size,width:128,height:96,extension:'.png'}})}
+    const id=String(url).split('/')[3]
+    if(String(url).endsWith('/content'))return new Response(files.get(id))
+    return Response.json({id,metadata:{kind:'image',bytes:files.get(id).size,width:128,height:96,extension:'.png'}})
+  }
+  try{
+    const draft={...algorithms.initialPixelDraft(),file:new File(['source'],'source.png',{type:'image/png'}),resultFile:new File(['result'],'result.png',{type:'image/png'}),previewSelection:{x:8,y:8,w:64,h:48},processingSize:{width:128,height:96}}
+    const stored=await algorithms.serializePixelDocument(draft),restored=await algorithms.restorePixelDocument(stored)
+    assert.equal(imports,2);assert.deepEqual(restored.previewSelection,draft.previewSelection)
+    assert.equal(await restored.resultFile.text(),'result')
+    const again=await algorithms.serializePixelDocument(restored);assert.deepEqual(again,stored);assert.equal(imports,2)
+    for(const change of [v=>v.command='execute',v=>v.file.name='../secret.png',v=>v.file.versionId='/private/file',v=>v.ppGridCols=1.5,v=>v.previewSelection.extra=true,v=>v.processingSize.width=0]){
+      const invalid=structuredClone(stored);change(invalid);assert.throws(()=>algorithms.validateStoredPixel(invalid))
+    }
+    const outside=structuredClone(stored);outside.previewSelection.x=100
+    await assert.rejects(algorithms.restorePixelDocument(outside),/REGION_OUTSIDE/)
+    const oversized=structuredClone(stored);oversized.processingSize.width=129
+    await assert.rejects(algorithms.restorePixelDocument(oversized),/PROCESSING_SIZE/)
+  }finally{globalThis.fetch=native}
+})
+
 test('original GIF encoder retains transparent threshold, frame order and finite resource limits', async () => {
   const first=new dom.ImageData(new Uint8ClampedArray([255,0,0,255,0,0,255,127]),2,1)
   const second=new dom.ImageData(new Uint8ClampedArray([0,255,0,255,0,0,255,128]),2,1)

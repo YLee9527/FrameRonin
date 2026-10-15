@@ -26,6 +26,7 @@ test('queued creation without progress still reports finite progress and returns
   try {
     const result = await runManagedTask('audio.compress', [new Blob(['input'])], {}, { onProgress: value => progress.push(value) })
     assert.deepEqual(progress, [0, 1])
+    assert.equal(result.project.id,'test-project')
     assert.equal(result.taskId, 'task'); assert.equal(result.outputs[0].blob.size, 3)
   } finally { globalThis.fetch = nativeFetch }
 })

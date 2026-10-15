@@ -280,6 +280,12 @@ class ProjectTests(unittest.TestCase):
         self.project.save_document(document, 'rseprite', {'frames': [1, 2]}, 1)
         with self.assertRaises(RoninError):
             self.project.save_document(document, 'rseprite', {}, 1)
+        with self.assertRaises(RoninError) as changed_kind:
+            self.project.save_document(document, 'pixel', {}, 2)
+        self.assertEqual(changed_kind.exception.code,'DOCUMENT_KIND_CHANGED')
+        pixel_id=identifier()
+        self.project.save_document(pixel_id,'pixel',{'formatVersion':1},0)
+        self.assertEqual(self.project.document(pixel_id)['kind'],'pixel')
         self.project.restore_document(document, 1, 2)
         self.assertEqual(self.project.document(document)['payload']['frames'], [1])
 

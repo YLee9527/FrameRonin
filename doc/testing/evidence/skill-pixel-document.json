@@ -1,0 +1,307 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "3106dbf",
+  "document": {
+    "id": "1c6b06ba-ef46-49c5-b189-6060ccc95824",
+    "kind": "pixel",
+    "revision": 1,
+    "payload": {
+      "activeTab": "perfectPixel",
+      "file": {
+        "versionId": "ddb4f803-6d7a-4f7b-8e59-eaccd7a7a2ea",
+        "name": "source.png",
+        "type": "image/png"
+      },
+      "resultFile": {
+        "versionId": "6a0718bd-ef25-4b8c-8b61-b6689d6868b6",
+        "name": "source_perfectPixel.png",
+        "type": "image/png"
+      },
+      "processingSize": {
+        "width": 128,
+        "height": 96
+      },
+      "pixelSize": 8,
+      "mergeNearbyStrength": 40,
+      "color16Method": "lab",
+      "color16Dither": true,
+      "advUpscale": 3,
+      "advColors": 64,
+      "advScaleResult": 1,
+      "advTransparent": false,
+      "ppSample": "center",
+      "ppMinSize": 4,
+      "ppPeakWidth": 6,
+      "ppRefine": 0,
+      "ppFixSquare": false,
+      "ppManualGrid": true,
+      "ppGridCols": 16,
+      "ppGridRows": 12,
+      "previewSelection": null,
+      "formatVersion": 1
+    },
+    "updated_at": "2026-10-15T01:17:16.823064+00:00"
+  },
+  "processingTask": "760e9d86-79ce-4690-acdd-5e0f4ae671dd",
+  "before": {
+    "versions": 390,
+    "tasks": 90
+  },
+  "saveReferencesReuseTaskVersions": true,
+  "initialRepair": "Backend editable-kind whitelist lacked pixel; added it and rejected changing an existing document kind.",
+  "afterReopen": {
+    "versions": 390,
+    "tasks": 90
+  },
+  "configurationDocument": {
+    "id": "1c6b06ba-ef46-49c5-b189-6060ccc95824",
+    "kind": "pixel",
+    "revision": 4,
+    "payload": {
+      "activeTab": "advanced",
+      "file": {
+        "versionId": "ddb4f803-6d7a-4f7b-8e59-eaccd7a7a2ea",
+        "name": "source.png",
+        "type": "image/png"
+      },
+      "resultFile": {
+        "versionId": "6a0718bd-ef25-4b8c-8b61-b6689d6868b6",
+        "name": "source_perfectPixel.png",
+        "type": "image/png"
+      },
+      "processingSize": {
+        "width": 128,
+        "height": 96
+      },
+      "pixelSize": 8,
+      "mergeNearbyStrength": 40,
+      "color16Method": "lab",
+      "color16Dither": true,
+      "advUpscale": 3,
+      "advColors": 32,
+      "advScaleResult": 2,
+      "advTransparent": true,
+      "ppSample": "center",
+      "ppMinSize": 4,
+      "ppPeakWidth": 6,
+      "ppRefine": 0,
+      "ppFixSquare": false,
+      "ppManualGrid": true,
+      "ppGridCols": 16,
+      "ppGridRows": 12,
+      "previewSelection": {
+        "x": 8,
+        "y": 8,
+        "w": 64,
+        "h": 48
+      },
+      "formatVersion": 1
+    },
+    "updated_at": "2026-10-15T01:19:55.905050+00:00"
+  },
+  "resultUndoRedo": {
+    "imagesBefore": [
+      [
+        128,
+        96
+      ],
+      [
+        16,
+        12
+      ]
+    ],
+    "undoImages": [
+      [
+        128,
+        96
+      ]
+    ],
+    "redoImages": [
+      [
+        128,
+        96
+      ],
+      [
+        16,
+        12
+      ]
+    ],
+    "taskCountUnchanged": true
+  },
+  "gesture": {
+    "colorsBefore": 32,
+    "afterGesture": 58,
+    "oneUndo": 32,
+    "redo": 58,
+    "saved": 32
+  },
+  "conflict": {
+    "loadedRevision": 4,
+    "externalRevision": 5,
+    "original": {
+      "id": "1c6b06ba-ef46-49c5-b189-6060ccc95824",
+      "kind": "pixel",
+      "revision": 5,
+      "payload": {
+        "activeTab": "advanced",
+        "file": {
+          "versionId": "ddb4f803-6d7a-4f7b-8e59-eaccd7a7a2ea",
+          "name": "source.png",
+          "type": "image/png"
+        },
+        "resultFile": {
+          "versionId": "6a0718bd-ef25-4b8c-8b61-b6689d6868b6",
+          "name": "source_perfectPixel.png",
+          "type": "image/png"
+        },
+        "processingSize": {
+          "width": 128,
+          "height": 96
+        },
+        "pixelSize": 8,
+        "mergeNearbyStrength": 40,
+        "color16Method": "lab",
+        "color16Dither": true,
+        "advUpscale": 3,
+        "advColors": 32,
+        "advScaleResult": 2,
+        "advTransparent": true,
+        "ppSample": "center",
+        "ppMinSize": 4,
+        "ppPeakWidth": 6,
+        "ppRefine": 0,
+        "ppFixSquare": false,
+        "ppManualGrid": true,
+        "ppGridCols": 16,
+        "ppGridRows": 12,
+        "previewSelection": {
+          "x": 8,
+          "y": 8,
+          "w": 64,
+          "h": 48
+        },
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T01:20:07.045587+00:00"
+    },
+    "copy": {
+      "id": "f8f9d270-9816-4140-aeeb-ba0f7850125f",
+      "kind": "pixel",
+      "revision": 3,
+      "payload": {
+        "activeTab": "mergeNearby",
+        "file": {
+          "versionId": "ddb4f803-6d7a-4f7b-8e59-eaccd7a7a2ea",
+          "name": "source.png",
+          "type": "image/png"
+        },
+        "resultFile": {
+          "versionId": "6a0718bd-ef25-4b8c-8b61-b6689d6868b6",
+          "name": "source_perfectPixel.png",
+          "type": "image/png"
+        },
+        "processingSize": {
+          "width": 128,
+          "height": 96
+        },
+        "pixelSize": 4,
+        "mergeNearbyStrength": 60,
+        "color16Method": "rgb",
+        "color16Dither": false,
+        "advUpscale": 3,
+        "advColors": 40,
+        "advScaleResult": 2,
+        "advTransparent": true,
+        "ppSample": "center",
+        "ppMinSize": 4,
+        "ppPeakWidth": 6,
+        "ppRefine": 0,
+        "ppFixSquare": false,
+        "ppManualGrid": true,
+        "ppGridCols": 16,
+        "ppGridRows": 12,
+        "previewSelection": {
+          "x": 8,
+          "y": 8,
+          "w": 64,
+          "h": 48
+        },
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T01:22:20.839768+00:00"
+    },
+    "navigationBlocked": true,
+    "editedColorsPreserved": 40,
+    "copyReopened": true
+  },
+  "loadRace": {
+    "savedDocument": "87c39067-2eff-411e-b11a-4b7c24f395d8",
+    "revision": 1,
+    "delayedSecondsPerVersionRequest": 1.5,
+    "preservedMinSize": 6,
+    "candidateNotApplied": true,
+    "visibleImages": 0,
+    "temporaryServiceStopped": true
+  },
+  "allModeParametersReopened": {
+    "pixelSize": 4,
+    "mergeStrength": 60,
+    "paletteMethod": "rgb",
+    "dither": false,
+    "advancedColors": 40,
+    "advancedScale": 2,
+    "advancedTransparent": true,
+    "ppGrid": [
+      16,
+      12
+    ],
+    "ppRefine": 0,
+    "ppFixSquare": false,
+    "region": {
+      "x": 8,
+      "y": 8,
+      "w": 64,
+      "h": 48
+    },
+    "tabSwitchCreatesUndo": false
+  },
+  "finalCounts": {
+    "versions": 390,
+    "tasks": 90
+  },
+  "checks": {
+    "engineTests": 25,
+    "jsTests": 26,
+    "workbenchBuild": "passed",
+    "changedModuleESLint": "passed",
+    "historyResourceBudget": "past/current/redo/gesture combined, metadata-sized file regression passed"
+  },
+  "screenshots": [
+    "skill-pixel-document-conflict.png",
+    "skill-pixel-document-load-race.png",
+    "skill-pixel-document-reopen.png",
+    "skill-pixel-document.png"
+  ],
+  "remaining": [
+    "broader formats and sampling coverage",
+    "whole-application memory and native acceptance",
+    "other editors and full AI catalog/distribution"
+  ],
+  "processingEvidence": "skill-managed-pixel.json",
+  "finalUiReopen": {
+    "documentId": "f8f9d270-9816-4140-aeeb-ba0f7850125f",
+    "revision": 3,
+    "activeTab": "mergeNearby",
+    "mergeStrength": 60,
+    "images": [
+      [
+        128,
+        96
+      ],
+      [
+        16,
+        12
+      ]
+    ]
+  }
+}

@@ -50,7 +50,7 @@ export function cacheManagedInput(file: Blob, project: string, version: string) 
 
 export async function runManagedTask(operation: string, files: Blob[], parameters: object, options: Options = {}) {
   const { signal } = options
-  const { inputs, memoryBudgetBytes } = await importManagedInputs(files, signal)
+  const { project, inputs, memoryBudgetBytes } = await importManagedInputs(files, signal)
   signal?.throwIfAborted()
   const created = await localJson<{ id: string; state: string }>('/api/tasks', jsonPost({ operation, inputs, parameters }))
   let record: Task = { id: created.id, state: created.state, progress: 0, results: [] }
@@ -93,7 +93,7 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
       outputs.push({ version, blob: await response.blob() })
     }
     options.onProgress?.(1)
-    return { taskId: record.id, outputs }
+    return { project, taskId: record.id, outputs }
   } catch (error) {
     if (signal?.aborted && cancellation.request) {
       const confirmed = await cancellation.request

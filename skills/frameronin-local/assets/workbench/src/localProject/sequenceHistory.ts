@@ -1,3 +1,4 @@
+import { limitFileHistory } from './fileHistory'
 import { sequenceFiles, type SequenceDraft } from './sequenceDocument'
 export type SequenceHistory={present:SequenceDraft;past:SequenceDraft[];future:SequenceDraft[];checkpoint?:SequenceDraft}
 export type SequenceAction={type:'change';update:(value:SequenceDraft)=>SequenceDraft}|{type:'view';activeTab:SequenceDraft['activeTab']}|{type:'restore';draft:SequenceDraft}|{type:'undo'}|{type:'redo'}|{type:'begin'}|{type:'end'}
@@ -10,6 +11,9 @@ function bounded(values:SequenceDraft[]){
 }
 export const createSequenceHistory=(present:SequenceDraft):SequenceHistory=>({present,past:[],future:[]})
 export function sequenceHistoryReducer(state:SequenceHistory,action:SequenceAction):SequenceHistory{
+  return limitFileHistory(reduceHistory(state,action),sequenceFiles)
+}
+function reduceHistory(state:SequenceHistory,action:SequenceAction):SequenceHistory{
   if(action.type==='restore')return createSequenceHistory(action.draft)
   if(action.type==='view')return state.present.activeTab===action.activeTab?state:{...state,present:{...state.present,activeTab:action.activeTab}}
   if(action.type==='begin')return state.checkpoint?state:{...state,checkpoint:state.present}
