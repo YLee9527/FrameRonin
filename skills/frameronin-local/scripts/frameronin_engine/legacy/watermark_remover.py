@@ -120,7 +120,8 @@ def remove_watermark(
     mask = _build_mask(mean_frame, (x, y, w, h), (height, width))
 
     # 逐帧修复
-    frames_dir = tempfile.mkdtemp(prefix="seedance_wm_")
+    # Keep interrupted frame sequences in the owning task/output directory.
+    frames_dir = tempfile.mkdtemp(prefix="seedance_wm_", dir=str(Path(output_path).parent))
     try:
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
         for i in range(total):

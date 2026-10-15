@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "933793d",
+  "fixture": {
+    "id": "watermark-fixed-corner-256",
+    "source": "source.mp4",
+    "expected": "original-clean.mp4",
+    "dimensions": [
+      256,
+      256
+    ],
+    "frames": 24,
+    "fps": 8,
+    "audio": "440Hz 44100Hz stereo AAC, preserved by stream copy",
+    "criteria": {
+      "decodedVideo": "strict decoded RGB equality to frozen original output",
+      "audio": "strict decoded PCM equality to source",
+      "quality": "synthetic fixed-corner text; visual inspection and residual contrast recorded separately"
+    },
+    "sha256": {
+      "source.mp4": "bbfb1e02193643b4a6aa175f0a01078bd8918bbe88230bab316b6dcf98d28b3d",
+      "original-clean.mp4": "4b3c99d1b5db557475f5ff2aa67832d31de94575244bc1d12eedeba53dd91fb9"
+    },
+    "originalImplementation": "reference/worker/watermark_remover.py",
+    "originalImplementationSha256": "ee075eb0f6086df27192fb9f9c9fafe26e57f437bcc62d88ff13edba7b280fe1",
+    "ffmpegVersion": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers"
+  },
+  "uiSuccess": {
+    "taskId": "e750cfa9-bd58-49aa-97d8-34306b52df06",
+    "versionId": "efc2dd05-02a4-4556-9295-d04bc8d80cb8",
+    "state": "succeeded",
+    "downloadSha256": "4b3c99d1b5db557475f5ff2aa67832d31de94575244bc1d12eedeba53dd91fb9",
+    "downloadEqualsFormalVersion": true,
+    "decodedVideoEqualsOriginal": true,
+    "decodedAudioEqualsSource": true
+  },
+  "visualObservation": "Synthetic small text is blurred but leaves two bright residual patches, also present in original implementation. Real Seedance removal quality is not accepted by this fixture.",
+  "checks": {
+    "engineTests": 24,
+    "jsTests": 23,
+    "workbenchBuild": "passed",
+    "changedModuleESLint": "passed"
+  },
+  "remaining": [
+    "real watermark quality across supported codecs and resolutions",
+    "whole-application memory peak",
+    "video extraction editor and other modules",
+    "full AI catalog and portable distribution"
+  ],
+  "uiCancellation": {
+    "taskId": "eca1ea96-c069-4df2-bf52-bd0e55d12a30",
+    "feedbackMs": 296,
+    "state": "canceled",
+    "results": [],
+    "generation": 1,
+    "cancelElapsedSeconds": 0.019465124991256744,
+    "processStopConfirmed": true,
+    "scope": "local_owned_processes",
+    "aiState": null,
+    "ownedProcessCount": 1,
+    "temporaryFrameDirectories": [
+      "tasks/eca1ea96-c069-4df2-bf52-bd0e55d12a30/output/seedance_wm_gp_6sgif"
+    ]
+  },
+  "leftPageDuringProgress": {
+    "taskId": "4e98a4a5-efda-4642-b8ec-85bd83443451",
+    "state": "succeeded",
+    "versionId": "274846c5-4d8a-4741-832a-c3afbd7e11da",
+    "durationSeconds": 90.673035,
+    "temporaryFramesRemoved": true
+  },
+  "uiPlayback": {
+    "readyState": 4,
+    "dimensions": [
+      256,
+      256
+    ],
+    "durationSeconds": 3,
+    "spaceKeyStartedPlayback": true,
+    "ended": true,
+    "finalCurrentTime": 3,
+    "error": null
+  },
+  "languages": [
+    "zh",
+    "en",
+    "ja"
+  ],
+  "screenshots": [
+    "skill-watermark-result.png",
+    "skill-watermark-cancel.png"
+  ],
+  "initialValidationFailure": "Test method inserted before preceding method ended; corrected indentation, then all 24 engine tests passed.",
+  "resourcePreflight": {
+    "estimatedBytes": 415342752,
+    "budgetBytes": 2147483648,
+    "processingMode": "global_temporal",
+    "sampleCopies": 3,
+    "float32Channels": 3,
+    "samplesUpperBound": 60,
+    "perPixelWorkspaceBytes": 64
+  },
+  "negativeTests": [
+    "frontend budget overflow",
+    "video smaller than original detector minimum",
+    "no corner detected fails with empty results"
+  ]
+}

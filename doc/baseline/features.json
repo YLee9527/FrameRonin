@@ -124,10 +124,10 @@
     "outputs": "clean MP4",
     "dependencies": "Python/OpenCV/FFmpeg",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/SeedanceWatermarkRemover.tsx",
-    "sample": "fixed-video-detect",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "watermark-fixed-corner-256",
+    "evidence": "doc/testing/evidence/skill-managed-watermark.json",
+    "status": "固定角标视频对照原检测/修复实现通过；小于 120×60 及资源超限预先拒绝，真实品牌水印质量待验收",
+    "limits": "原全局时序检测；最小 120×60；60 个完整采样帧进入内存估算，超预算拒绝；残影及真实素材质量独立验收"
   },
   {
     "id": "video.remove",
@@ -137,10 +137,10 @@
     "outputs": "clean MP4",
     "dependencies": "Python/OpenCV/FFmpeg",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/SeedanceWatermarkRemover.tsx",
-    "sample": "fixed-video-remove",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "watermark-fixed-corner-256",
+    "evidence": "doc/testing/evidence/skill-managed-watermark.json",
+    "status": "后台修复及工作台真实取消/离开后运行通过，固定输出视频与原实现严格相同；小字样本保留原残影，质量不记为通过",
+    "limits": "原全局时序检测；最小 120×60；60 个完整采样帧进入内存估算，超预算拒绝；残影及真实素材质量独立验收"
   },
   {
     "id": "video.mp4",
@@ -150,10 +150,10 @@
     "outputs": "clean MP4",
     "dependencies": "Python/OpenCV/FFmpeg",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/SeedanceWatermarkRemover.tsx",
-    "sample": "fixed-video-mp4",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "watermark-fixed-corner-256",
+    "evidence": "doc/testing/evidence/skill-managed-watermark.json",
+    "status": "正式 MP4 下载与版本字节一致，24 帧与原输出严格 RGB 相同，原 AAC 解码 PCM 相同，工作台完整播放通过",
+    "limits": "原全局时序检测；最小 120×60；60 个完整采样帧进入内存估算，超预算拒绝；残影及真实素材质量独立验收"
   },
   {
     "id": "sequence.gif-split",

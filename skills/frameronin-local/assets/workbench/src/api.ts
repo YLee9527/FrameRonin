@@ -57,7 +57,7 @@ export function getIndexUrl(jobId: string): string {
 
 export interface WatermarkJob {
   id: string
-  status: 'queued' | 'processing' | 'completed' | 'failed'
+  status: 'queued' | 'processing' | 'completed' | 'failed' | 'canceled'
   progress: number
   result?: { output?: string }
   error?: { code: string; message: string }

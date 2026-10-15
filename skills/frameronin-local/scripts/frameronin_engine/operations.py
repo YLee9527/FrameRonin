@@ -39,7 +39,7 @@ REGISTRY = {
         'layout': choice('fixed_columns', ['fixed_columns', 'auto_square']),
         'matteStrength': number(0.6, 0, 1), 'background': {'type': 'color', 'default': '#000000'}},
         'sheet_png_zip_index', 'bounded_frames', overhead=768),
-    'video.watermark': operation(['video'], {}, 'mp4', 'global_temporal', overhead=256),
+    'video.watermark': operation(['video'], {'frontendBytes': integer(0,0,2*1024**3)}, 'mp4', 'global_temporal', overhead=256),
     'audio.compress': operation(['audio+'], {'bitrate': integer(128, 32, 320)}, 'mp3_zip', 'stream', overhead=128),
     'gif.split': operation(['animation|image'], {'renderer': choice('pillow',['pillow','browser']),
         'frontendBytes': integer(0,0,2*1024**3)}, 'png_zip_index', 'bounded_frames', overhead=256),
@@ -148,7 +148,11 @@ def preview(project, payload):
         from .legacy.processor import get_video_info
         from pathlib import Path
         info = get_video_info(Path(versions[0]['absolutePath']))
-        estimate += info['width'] * info['height'] * 3 * 61 * 8
+        if info['width'] < 120 or info['height'] < 60:
+            raise RoninError('WATERMARK_DIMENSION_LIMIT','The original corner detector requires a video of at least 120 by 60 pixels.')
+        # float32 sample list + stacked copy + variance workspace coexist.
+        # Also retain mean/std/mask and inpainting/decoder surfaces.
+        estimate += info['width'] * info['height'] * (60*3*4*3+64) + values['frontendBytes']
     if name == 'sequence.sheet':
         w = max(v['metadata']['width'] for v in versions) + 2 * values['padding'] + values['spacing']
         h = max(v['metadata']['height'] for v in versions) + 2 * values['padding'] + values['spacing']

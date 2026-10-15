@@ -11,9 +11,9 @@
 | video.png | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
 | video.zip | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
 | video.index | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
-| video.detect | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
-| video.remove | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
-| video.mp4 | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
+| video.detect | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 固定角标视频对照原检测/修复实现通过；小于 120×60 及资源超限预先拒绝，真实品牌水印质量待验收 |
+| video.remove | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 后台修复及工作台真实取消/离开后运行通过，固定输出视频与原实现严格相同；小字样本保留原残影，质量不记为通过 |
+| video.mp4 | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 正式 MP4 下载与版本字节一致，24 帧与原输出严格 RGB 相同，原 AAC 解码 PCM 相同，工作台完整播放通过 |
 | sequence.gif-split | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原浏览器四种处置帧严格像素对照、工作台正式 PNG/ZIP 与下载通过；完整格式及大帧预览待验收 |
 | sequence.gif-compose | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原浏览器混合尺寸三帧 GIF 字节对照、实际 1000×256×256 GIF 全帧像素/时长/透明度、取消及输入变化保护通过 |
 | sequence.sort | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 3/4 帧及 1000 帧跨页键盘排序、焦点跟随、撤销恢复和正式文档保存通过；完整拖拽/删除组合待验收 |

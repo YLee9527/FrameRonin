@@ -1,0 +1,24 @@
+{
+  "id": "watermark-fixed-corner-256",
+  "source": "source.mp4",
+  "expected": "original-clean.mp4",
+  "dimensions": [
+    256,
+    256
+  ],
+  "frames": 24,
+  "fps": 8,
+  "audio": "440Hz 44100Hz stereo AAC, preserved by stream copy",
+  "criteria": {
+    "decodedVideo": "strict decoded RGB equality to frozen original output",
+    "audio": "strict decoded PCM equality to source",
+    "quality": "synthetic fixed-corner text; visual inspection and residual contrast recorded separately"
+  },
+  "sha256": {
+    "source.mp4": "bbfb1e02193643b4a6aa175f0a01078bd8918bbe88230bab316b6dcf98d28b3d",
+    "original-clean.mp4": "4b3c99d1b5db557475f5ff2aa67832d31de94575244bc1d12eedeba53dd91fb9"
+  },
+  "originalImplementation": "reference/worker/watermark_remover.py",
+  "originalImplementationSha256": "ee075eb0f6086df27192fb9f9c9fafe26e57f437bcc62d88ff13edba7b280fe1",
+  "ffmpegVersion": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers"
+}

@@ -77,6 +77,41 @@ class ProjectTests(unittest.TestCase):
             self.assertEqual(manifest['canvas'],{'width':16,'height':12})
         self.assertTrue(self.project.verify()['valid'])
 
+    def test_watermark_keeps_original_decoded_video_audio_and_resource_boundary(self):
+        fixtures = Path(__file__).resolve().parents[1] / 'assets/fixtures/watermark'
+        source = self.project.import_file(fixtures / 'source.mp4')
+        payload = {'operation':'video.watermark','inputs':[source['id']],'parameters':{}}
+        estimate=preview(self.project,payload)['estimatedBytes']
+        self.assertGreaterEqual(estimate,256*256*(60*3*4*3+64))
+        excess = {**payload,'parameters':{'frontendBytes':2*1024**3}}
+        with self.assertRaises(RoninError):
+            preview(self.project,excess)
+        with patch('frameronin_engine.legacy.processor.get_video_info',return_value={'width':64,'height':32}):
+            with self.assertRaises(RoninError) as rejected:
+                preview(self.project,payload)
+            self.assertEqual(rejected.exception.code,'WATERMARK_DIMENSION_LIMIT')
+        submitted = submit(self.project,payload)
+        result = wait(self.project,submitted['id'],20)
+        self.assertEqual(result['state'],'succeeded',result)
+        output = self.project.version(result['results'][0])
+        def decoded(path,stream):
+            options = ['-map','0:v:0','-f','rawvideo','-pix_fmt','rgb24'] if stream=='video' else ['-map','0:a:0','-f','s16le','-acodec','pcm_s16le']
+            return subprocess.check_output(['ffmpeg','-v','error','-i',str(path),*options,'pipe:1'])
+        self.assertEqual(decoded(output['absolutePath'],'video'),decoded(fixtures/'original-clean.mp4','video'))
+        self.assertEqual(decoded(output['absolutePath'],'audio'),decoded(fixtures/'source.mp4','audio'))
+        self.assertEqual(output['metadata']['width'],256)
+        self.assertEqual(output['metadata']['height'],256)
+        self.assertFalse(list(Path(output['absolutePath']).parent.glob('seedance_wm_*')))
+        blank=self.root/'no-corner.mp4'
+        subprocess.run(['ffmpeg','-v','error','-y','-f','lavfi','-i','color=c=0x1e4669:s=256x256:r=8:d=1',
+                        '-c:v','libx264','-pix_fmt','yuv420p',str(blank)],check=True)
+        blank_version=self.project.import_file(blank)
+        rejected=wait(self.project,submit(self.project,{**payload,'inputs':[blank_version['id']]})['id'],15)
+        self.assertEqual(rejected['state'],'failed')
+        self.assertEqual(rejected['error']['code'],'WATERMARK_NOT_DETECTED')
+        self.assertEqual(rejected['results'],[])
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_browser_gif_runtime_preserves_frames_delays_and_strict_policies(self):
         second = self.root / 'second.png'
         Image.new('RGBA', (8, 8), (20, 220, 40, 255)).save(second)
