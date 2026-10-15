@@ -7,6 +7,8 @@ import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
 import ManagedImageToolStatus from './ManagedImageToolStatus'
 import { useManagedImageTool, useImageToolUrls } from '../localProject/useManagedImageTool'
+import {useImageToolDocument} from '../localProject/useImageToolDocument'
+import {ImageToolDocumentSurface} from '../localProject/ImageToolDocumentSurface'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -16,9 +18,10 @@ type UnifyPadV = 'top' | 'center' | 'bottom'
 
 export default function RoninProUnifySize() {
   const { t,lang } = useLanguage()
-  const [files,setFiles]=useState<File[]>([]),[page,setPage]=useState(1)
-  const [cols,setCols]=useState(4),[padH,setPadH]=useState<UnifyPadH>('center'),[padV,setPadV]=useState<UnifyPadV>('bottom')
-  const tool=useManagedImageTool(files,{columns:cols,horizontal:padH,vertical:padV})
+  const model=useImageToolDocument('unifySize'),[page,setPage]=useState(1)
+  const {files,parameters}=model.draft,cols=parameters.columns,padH=parameters.horizontal,padV=parameters.vertical,setFiles=model.setFiles
+  const setCols=(value:number)=>model.setParameter('columns',value),setPadH=(value:UnifyPadH)=>model.setParameter('horizontal',value),setPadV=(value:UnifyPadV)=>model.setParameter('vertical',value)
+  const tool=useManagedImageTool(files,parameters,undefined,model)
   const previews=useImageToolUrls(files,tool.versions)
   const resultFiles=useMemo(()=>tool.results.map(result=>result.file),[tool.results])
   const result=useImageToolUrls(resultFiles,tool.results.map(result=>result.version))[0]
@@ -36,7 +39,7 @@ export default function RoninProUnifySize() {
     const anchor=document.createElement('a');anchor.href=result.raw;anchor.download=`unify_${files.length}_images.png`;anchor.click()
   }
 
-  return (
+  return <ImageToolDocumentSurface model={model}>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Text type="secondary">{t('roninProUnifySizeHint')}</Text>
       <ManagedImageToolStatus tool={tool}/>
@@ -191,5 +194,5 @@ export default function RoninProUnifySize() {
         </>
       )}
     </Space>
-  )
+  </ImageToolDocumentSurface>
 }

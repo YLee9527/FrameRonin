@@ -724,9 +724,10 @@
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProUnifySize.tsx",
     "sample": "ronin-original-image-tools-44",
     "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
-    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
+    "status": "原算法、受控任务、正式文档与统一撤销通过；联合内存及完整模块回归待完成",
     "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling",
-    "baselineCorrection": "Original component exports one composite PNG; prior PNG ZIP inventory was incorrect."
+    "baselineCorrection": "Original component exports one composite PNG; prior PNG ZIP inventory was incorrect.",
+    "documentEvidence": "doc/testing/evidence/skill-ronin-documents.json"
   },
   {
     "id": "sequence.duplicate-grid",
@@ -738,9 +739,10 @@
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProDuplicateFrames.tsx",
     "sample": "ronin-original-image-tools-44",
     "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
-    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
+    "status": "原算法、受控任务、正式文档与统一撤销通过；联合内存及完整模块回归待完成",
     "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling",
-    "baselineCorrection": "Stable historical ID retained. Original component splits and finds exact equal-sized RGBA cells; frame copying is in Rseprite and blueprint row/column nodes."
+    "baselineCorrection": "Stable historical ID retained. Original component splits and finds exact equal-sized RGBA cells; frame copying is in Rseprite and blueprint row/column nodes.",
+    "documentEvidence": "doc/testing/evidence/skill-ronin-documents.json"
   },
   {
     "id": "image.preprocess",

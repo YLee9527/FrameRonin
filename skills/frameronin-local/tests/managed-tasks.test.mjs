@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { runManagedTask, importManagedInputs } from '../.runtime/js/managed-tasks.mjs'
+import { runManagedTask, importManagedInputs,cacheManagedInput } from '../.runtime/js/managed-tasks.mjs'
 
 globalThis.window = globalThis
 const nativeFetch = globalThis.fetch
@@ -88,5 +88,15 @@ test('result manifests are all preflighted, fetched with a bounded pool, and ret
   try{
     await assert.rejects(runManagedTask('image.findDuplicates',[new Blob(['input'])],{}),/preview budget/)
     assert(!requests.some(request=>request.url.endsWith('/content')))
+  }finally{globalThis.fetch=nativeFetch}
+})
+test('large verified selections reuse one ordered metadata batch without uploading saved resources again',async()=>{
+  const files=Array.from({length:40},(_,index)=>new File([String(index)],`frame-${index}.png`)),ids=files.map((_,index)=>`00000000-0000-0000-0000-${String(index+1).padStart(12,'0')}`)
+  files.forEach((file,index)=>cacheManagedInput(file,'test-project',ids[index]))
+  const requests=fixture({'/api/versions/manifest':options=>response(JSON.parse(options.body).versions.map(id=>({id,metadata:{kind:'image',bytes:1,width:1,height:1}})))})
+  try{
+    const selected=await importManagedInputs([...files].reverse())
+    assert.deepEqual(selected.inputs,[...ids].reverse());assert.equal(requests.length,2)
+    assert.equal(requests[1].url,'/api/versions/manifest');assert(!requests.some(request=>request.url==='/api/assets'))
   }finally{globalThis.fetch=nativeFetch}
 })

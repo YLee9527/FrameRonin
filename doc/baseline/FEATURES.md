@@ -57,8 +57,8 @@
 | audio.wav-to-mp3 | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.batch | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.zip | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
-| sequence.unify-size | 统一尺寸 | reference/frontend/src/components/RoninProUnifySize.tsx | frames → PNG | 原算法对照与可取消任务通过；文档/撤销及完整交互待完成 |
-| sequence.duplicate-grid | 切分后寻找重复帧 | reference/frontend/src/components/RoninProDuplicateFrames.tsx | sprite sheet → PNG cells + duplicate groups | 原算法对照与可取消任务通过；文档/撤销及完整交互待完成 |
+| sequence.unify-size | 统一尺寸 | reference/frontend/src/components/RoninProUnifySize.tsx | frames → PNG | 原算法、受控任务、文档与统一撤销通过；联合内存及完整回归待完成 |
+| sequence.duplicate-grid | 切分后寻找重复帧 | reference/frontend/src/components/RoninProDuplicateFrames.tsx | sprite sheet → PNG cells + duplicate groups | 原算法、受控任务、文档与统一撤销通过；联合内存及完整回归待完成 |
 | image.preprocess | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.matte | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.alpha-repair | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |

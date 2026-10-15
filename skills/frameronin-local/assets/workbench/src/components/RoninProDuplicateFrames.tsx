@@ -7,6 +7,8 @@ import { useManagedImageTool, useImageToolUrls } from '../localProject/useManage
 import ManagedImageToolStatus from './ManagedImageToolStatus'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
+import {useImageToolDocument} from '../localProject/useImageToolDocument'
+import {ImageToolDocumentSurface} from '../localProject/ImageToolDocumentSurface'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -33,10 +35,12 @@ function DuplicateGroup({group,previews}:{group:number[];previews:Preview[]}){
 
 export default function RoninProDuplicateFrames(){
   const {t}=useLanguage()
-  const [spriteFile,setSpriteFile]=useState<File|null>(null),[columns,setColumns]=useState(8),[rows,setRows]=useState(4)
+  const model=useImageToolDocument('findDuplicates')
+  const {files,parameters}=model.draft,spriteFile=files[0]??null,columns=parameters.columns,rows=parameters.rows
+  const setSpriteFile=(file:File|null)=>model.setFiles(file?[file]:[])
+  const setColumns=(value:number)=>model.setParameter('columns',value),setRows=(value:number)=>model.setParameter('rows',value)
   const [framePage,setFramePage]=useState(1),[groupPage,setGroupPage]=useState(1)
-  const files=useMemo(()=>spriteFile?[spriteFile]:[],[spriteFile])
-  const tool=useManagedImageTool(files,{columns,rows}),source=useImageToolUrls(files,tool.versions)[0]
+  const tool=useManagedImageTool(files,parameters,undefined,model),source=useImageToolUrls(files,tool.versions)[0]
   const resultFiles=useMemo(()=>tool.results.map(result=>result.file),[tool.results])
   const previews=useImageToolUrls(resultFiles,tool.results.map(result=>result.version))
   const groups=(tool.report.groups??[]) as number[][]
@@ -50,7 +54,7 @@ export default function RoninProDuplicateFrames(){
     if(found.length)message.success(t('roninProDupFramesFound',{groups:found.length,frames:result.results.length}))
     else message.info(t('roninProDupFramesNoDup'))
   }
-  return <Space direction="vertical" size="large" style={{width:'100%'}}>
+  return <ImageToolDocumentSurface model={model}><Space direction="vertical" size="large" style={{width:'100%'}}>
     <Text type="secondary">{t('roninProDupFramesHint')}</Text>
     <ManagedImageToolStatus tool={tool}/>
     <StashDropZone onStashDrop={setSpriteFile}>
@@ -82,5 +86,5 @@ export default function RoninProDuplicateFrames(){
       {groups.slice((currentGroupPage-1)*6,currentGroupPage*6).map((group,index)=><DuplicateGroup key={`${tool.results[0]?.version.id}-${(currentGroupPage-1)*6+index}`} group={group} previews={previews}/>)}
       {groups.length>6&&<Pagination current={currentGroupPage} pageSize={6} total={groups.length} onChange={setGroupPage} showSizeChanger={false}/>}
     </>}
-  </Space>
+  </Space></ImageToolDocumentSurface>
 }

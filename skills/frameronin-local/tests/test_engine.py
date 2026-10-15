@@ -52,6 +52,24 @@ class ProjectTests(unittest.TestCase):
             time.sleep(.02)
         self.directory.cleanup()
 
+    def test_version_manifest_preserves_order_and_rejects_unscoped_ids(self):
+        from frameronin_engine.server import application
+        app = application(self.project, 8765)
+        manifest = next(route.endpoint for route in app.routes if route.path == '/api/versions/manifest')
+        other = self.project.import_file(self.source)
+        values = manifest({'versions': [other['id'], self.version['id']]})
+        self.assertEqual([value['id'] for value in values], [other['id'], self.version['id']])
+        self.assertTrue(all(set(value) == {'id', 'name', 'metadata'} for value in values))
+        for payload in [{}, {'versions': []}, {'versions': [self.version['id']]*2},
+                        {'versions': ['../source.png']}, {'versions': [identifier()]},
+                        {'versions': [self.version['id']], 'path': str(self.source)},
+                        {'versions': [1]}, {'versions': [identifier() for _ in range(8193)]}]:
+            with self.assertRaises(RoninError):
+                manifest(payload)
+        with patch('frameronin_engine.server.memory_budget', return_value=16):
+            with self.assertRaises(RoninError):
+                manifest({'versions': [self.version['id']]})
+
     def test_map_layout_permissions_resources_and_formal_outputs(self):
         feather = {'top':0,'right':0,'bottom':0,'left':0}
         layout = {'sourceName':'source.png','width':16,'height':12,'horizontalOverlapPercent':15,'verticalOverlapPercent':15,
@@ -76,6 +94,19 @@ class ProjectTests(unittest.TestCase):
             manifest=json.loads(zip.read('map_stitch_godot.json'))
             self.assertEqual(manifest['canvas'],{'width':16,'height':12})
         self.assertTrue(self.project.verify()['valid'])
+
+    def test_ronin_document_kinds_reopen_stable_refs_and_keep_revision_conflicts(self):
+        before=len(self.project.assets())
+        for kind,tool,parameters in [('ronin-scale','customScale',{'width':256,'height':256,'keepAspect':True,'pixelated':True,'matteAlgorithm':'contiguous','nonContiguousTolerance':5}),
+            ('ronin-unify','unifySize',{'columns':4,'horizontal':'center','vertical':'bottom'}),('ronin-duplicates','findDuplicates',{'columns':8,'rows':4})]:
+            document_id=identifier()
+            payload={'formatVersion':1,'tool':tool,'parameters':parameters,'files':[{'versionId':self.version['id'],'name':'source.png','type':'image/png'}],
+                'results':[],'reportFile':None,'editedFile':None,'taskId':None}
+            saved=self.project.save_document(document_id,kind,payload,0);self.assertEqual(saved['revision'],1)
+            reopened=Project(self.project.root).document(document_id);self.assertEqual(reopened['payload'],payload)
+            with self.assertRaises(RoninError):self.project.save_document(document_id,kind,payload,0)
+            with self.assertRaises(RoninError):self.project.save_document(document_id,'image',payload,1)
+        self.assertEqual(len(self.project.assets()),before)
 
     def test_watermark_keeps_original_decoded_video_audio_and_resource_boundary(self):
         fixtures = Path(__file__).resolve().parents[1] / 'assets/fixtures/watermark'

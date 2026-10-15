@@ -1,0 +1,376 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "5816a68",
+  "scope": [
+    "RoninPro unifySize document",
+    "RoninPro findDuplicates document"
+  ],
+  "initialRepair": "Dedicated ronin document kinds and ordered version metadata batch; shared FineEditor/customScale integration is still pending.",
+  "unify": {
+    "original": {
+      "id": "6a76cbc8-06c8-46ff-88e7-b6be05ae8aa4",
+      "kind": "ronin-unify",
+      "revision": 5,
+      "payload": {
+        "tool": "unifySize",
+        "parameters": {
+          "columns": 4,
+          "horizontal": "right",
+          "vertical": "center"
+        },
+        "files": [
+          {
+            "versionId": "0bf8be12-0e35-4eee-98ec-c86b0a06c009",
+            "name": "frame-000.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "cdca4dfa-7dc4-40e8-b062-5b7aae76901c",
+            "name": "frame-001.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "b8639968-08c6-4dcf-9720-0e96e9ec6191",
+            "name": "frame-002.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "83c2df4c-74a6-4313-b44c-2b4fcd3b2a71",
+            "name": "sequence-unifySize-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "216cc603-da63-4ff4-81aa-4fcc87bcd65a",
+          "name": "sequence-unifySize-report.json",
+          "type": "application/json"
+        },
+        "editedFile": null,
+        "taskId": "893956bd-5c4b-40ee-a5ad-6671675f37b2",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T08:19:45.061584+00:00"
+    },
+    "copy": {
+      "id": "28bc3bd5-9fb3-4d91-873a-49e116105843",
+      "kind": "ronin-unify",
+      "revision": 1,
+      "payload": {
+        "tool": "unifySize",
+        "parameters": {
+          "columns": 3,
+          "horizontal": "right",
+          "vertical": "center"
+        },
+        "files": [
+          {
+            "versionId": "0bf8be12-0e35-4eee-98ec-c86b0a06c009",
+            "name": "frame-000.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "cdca4dfa-7dc4-40e8-b062-5b7aae76901c",
+            "name": "frame-001.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "b8639968-08c6-4dcf-9720-0e96e9ec6191",
+            "name": "frame-002.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "83c2df4c-74a6-4313-b44c-2b4fcd3b2a71",
+            "name": "sequence-unifySize-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "216cc603-da63-4ff4-81aa-4fcc87bcd65a",
+          "name": "sequence-unifySize-report.json",
+          "type": "application/json"
+        },
+        "editedFile": null,
+        "taskId": "893956bd-5c4b-40ee-a5ad-6671675f37b2",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T08:19:57.833194+00:00"
+    },
+    "download": {
+      "sha256": "f8280da0954d0798867b5b0a0f10b994a2eb96e430e1c3bb980b58b9c5b38cd6",
+      "dimensions": [
+        26,
+        18
+      ],
+      "strictRgbaEqualToFormalVersion": true
+    },
+    "resultUndoRedo": true,
+    "sourceRemovalUndo": true,
+    "reopenClearsHistory": true,
+    "saveConflictBlocksNavigation": true,
+    "countsThroughSaveReopenConflictCopy": {
+      "versions": 4558,
+      "tasks": 105
+    }
+  },
+  "duplicates": {
+    "document": {
+      "id": "b8088b9f-ff07-456e-b616-b86910432766",
+      "kind": "ronin-duplicates",
+      "revision": 4,
+      "payload": {
+        "tool": "findDuplicates",
+        "parameters": {
+          "columns": 3,
+          "rows": 2
+        },
+        "files": [
+          {
+            "versionId": "bf661ea4-4dd2-4eae-824e-719f524d9b2b",
+            "name": "grid.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "8a4fa4ec-4f6e-4fe3-9bf9-354f90c6175c",
+            "name": "image-findDuplicates-0.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "6ac59f78-36cf-4530-9d77-8dbc0ae4dc4f",
+            "name": "image-findDuplicates-1.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "b7ded81b-259f-40bd-a87b-6e8d581b6b64",
+            "name": "image-findDuplicates-2.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "f7513cda-05b8-4de8-98a9-b4ea6463d5d3",
+            "name": "image-findDuplicates-3.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "2a12e442-e4f8-4339-a133-e47be548ed82",
+            "name": "image-findDuplicates-4.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "6554b3af-6eda-4174-a4ff-24f2bcc02487",
+            "name": "image-findDuplicates-5.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "6711eab5-a4a4-4c03-b92c-3231ddb65a27",
+          "name": "image-findDuplicates-report.json",
+          "type": "application/json"
+        },
+        "editedFile": null,
+        "taskId": "cd0a5e89-cbf5-4e9c-9e68-9afa5cfdae2b",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T11:39:57.513895+00:00"
+    },
+    "frames": 6,
+    "groupsOneBased": [
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        4,
+        6
+      ]
+    ],
+    "resultUndoRedo": true,
+    "reopenedSourcesParametersResultsAndGroups": true,
+    "reopenClearsHistory": true
+  },
+  "largeDocument": {
+    "id": "37c1e8b4-681b-4e51-9ba0-bb6857975ff3",
+    "revision": 2,
+    "task": "702d3fec-fd92-4f36-8920-0e9b5b473b36",
+    "source": [
+      {
+        "versionId": "af572952-5112-42ed-a731-ad874efaf30b",
+        "name": "tiny-grid.png",
+        "type": "image/png"
+      }
+    ],
+    "frames": 4096,
+    "report": {
+      "versionId": "cfa5892e-90c3-43ec-907c-03d7c3ca8d87",
+      "name": "image-findDuplicates-report.json",
+      "type": "application/json"
+    },
+    "orderedResultReferencesSha256": "922dc70db3dcf7a219491f2d8c50ce6e1745146f13b2058ee19981f86b13b9ec",
+    "createdFromExistingSuccessfulTask": true,
+    "openedInRealWorkbench": true,
+    "page": 171,
+    "visibleFrameNumbers": [
+      4081,
+      4096
+    ],
+    "savedWithoutReimportOrRerun": true
+  },
+  "loadRace": {
+    "versionReadDelaySeconds": 1.5,
+    "sourceDocument": "28bc3bd5-9fb3-4d91-873a-49e116105843",
+    "lateCandidateRejected": true,
+    "columnsRemain": 6,
+    "savedCopy": {
+      "id": "4ab11bab-2afa-4690-8aca-4ec16bfcb7d7",
+      "kind": "ronin-unify",
+      "revision": 1,
+      "payload": {
+        "tool": "unifySize",
+        "parameters": {
+          "columns": 6,
+          "horizontal": "right",
+          "vertical": "center"
+        },
+        "files": [
+          {
+            "versionId": "0bf8be12-0e35-4eee-98ec-c86b0a06c009",
+            "name": "frame-000.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "cdca4dfa-7dc4-40e8-b062-5b7aae76901c",
+            "name": "frame-001.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "b8639968-08c6-4dcf-9720-0e96e9ec6191",
+            "name": "frame-002.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "83c2df4c-74a6-4313-b44c-2b4fcd3b2a71",
+            "name": "sequence-unifySize-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "216cc603-da63-4ff4-81aa-4fcc87bcd65a",
+          "name": "sequence-unifySize-report.json",
+          "type": "application/json"
+        },
+        "editedFile": null,
+        "taskId": "893956bd-5c4b-40ee-a5ad-6671675f37b2",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T11:46:54.900532+00:00"
+    },
+    "temporaryServiceAndTabClosed": true
+  },
+  "finalCounts": {
+    "versions": 4566,
+    "tasks": 106
+  },
+  "sameAsCountsBeforeLargeDocumentAndRace": true,
+  "negativeManifestApi": {
+    "cases": [
+      {
+        "input": {},
+        "status": 400,
+        "code": "VERSION_MANIFEST_INVALID"
+      },
+      {
+        "input": {
+          "versions": []
+        },
+        "status": 400,
+        "code": "VERSION_MANIFEST_INVALID"
+      },
+      {
+        "input": {
+          "versions": [
+            "../outside.png"
+          ]
+        },
+        "status": 400,
+        "code": "ID_INVALID"
+      },
+      {
+        "input": {
+          "versions": [
+            "af572952-5112-42ed-a731-ad874efaf30b",
+            "af572952-5112-42ed-a731-ad874efaf30b"
+          ]
+        },
+        "status": 400,
+        "code": "VERSION_MANIFEST_INVALID"
+      },
+      {
+        "input": {
+          "versions": [
+            "af572952-5112-42ed-a731-ad874efaf30b"
+          ],
+          "path": "/outside"
+        },
+        "status": 400,
+        "code": "VERSION_MANIFEST_INVALID"
+      }
+    ],
+    "untrustedOrigin": 403
+  },
+  "validation": {
+    "pythonTests": 29,
+    "javascriptTests": 31,
+    "runtimeBuild": "passed",
+    "workbenchTypecheckBuild": "passed",
+    "changedModulesEslint": "passed",
+    "threeLanguagesSaveAndHistoryControls": "observed in live workbench",
+    "projectVerify": {
+      "valid": true,
+      "versions": 4566,
+      "rawEvidenceSha256": "3e9a1ac932659b85a8dce0ebd852849a7fd4b072613ce76e8655f3589749d5a7"
+    }
+  },
+  "screenshots": [
+    {
+      "file": "skill-ronin-unify-reopened.png",
+      "sha256": "32e3ccce79c999ac5e123d6f4c6c5257c75bfbfdbc9be3939f2c67317a46a5ef"
+    },
+    {
+      "file": "skill-ronin-unify-conflict.png",
+      "sha256": "acddc55fce68dd598f29b6bdc318205c6ef2dd88691cf0d06985c37bc57e8eba"
+    },
+    {
+      "file": "skill-ronin-unify-load-race.png",
+      "sha256": "dddd3591e7a503d716fca194cf82e267261e8bd8f50dc5daa913295dea992391"
+    },
+    {
+      "file": "skill-ronin-duplicates-saved.png",
+      "sha256": "4e37ecf245cc577d21c7a44fe5841b24709cbe406da97853f4cfd1f9c5a0d4d8"
+    },
+    {
+      "file": "skill-ronin-duplicates-reopened.png",
+      "sha256": "e1b828210e50e521c421f66c2c63f40dfb4b1b18a415df1783ef291811f814b9"
+    },
+    {
+      "file": "skill-ronin-duplicates-4096-reopened.png",
+      "sha256": "91dd192e568373d7bb740eb78016fe1349000fe9546a9511bdc7f3fb06dea3f4"
+    }
+  ],
+  "remaining": [
+    "customScale/FineEditor document integration",
+    "whole application process memory acceptance",
+    "remaining local media/editor/game modules",
+    "complete AI templates and portable distribution"
+  ],
+  "stageStatus": "S2/S3/S4 incomplete"
+}

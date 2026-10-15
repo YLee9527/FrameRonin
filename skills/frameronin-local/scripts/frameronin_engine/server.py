@@ -77,6 +77,19 @@ def application(project, port):
         version = project.version(version_id)
         return FileResponse(version['absolutePath'])
 
+    @app.post('/api/versions/manifest')
+    def version_manifest(payload:dict):
+        if set(payload)!={'versions'} or not isinstance(payload['versions'],list) or not 1<=len(payload['versions'])<=8192 or not all(isinstance(value,str) for value in payload['versions']) or len(set(payload['versions']))!=len(payload['versions']):
+            raise RoninError('VERSION_MANIFEST_INVALID','Select up to 8192 unique canonical version IDs.')
+        values=[];retained=0
+        for version_id in payload['versions']:
+            checked_id(version_id);version=project.version(version_id)
+            public={key:version.get(key) for key in ['id','name','metadata']}
+            retained+=len(json.dumps(public))*2
+            if retained>memory_budget()//16:raise RoninError('VERSION_MANIFEST_LIMIT','The metadata response exceeds its budget; select fewer resources.')
+            values.append(public)
+        return values
+
     @app.post('/api/tasks/preview')
     def task_preview(payload: dict):
         result = preview(project, payload)

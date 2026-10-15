@@ -29,3 +29,5 @@ export { maxSafeUpscaleForImage } from '../../assets/workbench/src/lib/pixellise
 export { initialPixelDraft, validateStoredPixel, serializePixelDocument, restorePixelDocument, pixelMetadata } from '../../assets/workbench/src/localProject/pixelDocument'
 export { createPixelHistory, pixelHistoryReducer } from '../../assets/workbench/src/localProject/pixelHistory'
 export { customScaleImage, unifyImageSizes } from '../../assets/workbench/src/lib/roninImageTools'
+export {initialImageToolDraft,validateStoredImageTool,serializeImageToolDocument,restoreImageToolDocument,imageToolMetadata,imageToolReport} from '../../assets/workbench/src/localProject/imageToolDocument'
+export {createImageToolHistory,imageToolHistoryReducer} from '../../assets/workbench/src/localProject/imageToolHistory'

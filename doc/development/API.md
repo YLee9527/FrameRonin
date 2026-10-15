@@ -63,3 +63,7 @@ RoninPro 操作 `image.customScale`、`sequence.unifySize`、`image.findDuplicat
 Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态）、`/heartbeat` 与 `/failure`（POST，只接收 generation）、`/result`（POST multipart，generation 与 PNG）通信。仍由已有串行队列创建并持有受控后台进程；后者等待浏览器像素，核验结果后调用原统一完成事务。执行代次、当前 running 状态、PNG 真实格式、单帧及审阅尺寸均重验。上传不采用客户端路径或文件名；单次压缩内容最多 min(预算/4,128MiB)，完全写入及解码校验后才以不可覆盖的硬链接交付。取消先使完成代次失效，Worker 立即 terminate；本地进程停止确认仍只涵盖后台所属进程，不能据此推断浏览器或 AI 服务端状态。15 秒心跳丢失明确失败，不自动重试。
 
 `GET /api/tasks/{id}/results` 在 succeeded 后返回按结果顺序的 id、name、metadata，逐版本核验内容，省去逐个获取元数据的请求。客户端核对清单与任务完全一致，整批预算通过后最多并行读取 8 个内容，仍按原顺序返回；读取失败或取消会停止剩余下载。超出预算的任务成功结果保留在项目，前端不先下载部分结果。该接口不返回绝对路径。
+
+`POST /api/versions/manifest` 接受且仅接受 `{versions: UUID[]}`，1–8192 个唯一正式版本 ID。按请求顺序核验内容并返回 id、name、metadata，不返回路径；未知字段、遍历、失效版本、重复 ID 和超预算响应均拒绝，同源写入校验仍适用。工作台对超过 24 个已验证引用使用该接口，避免 4096 帧文档保存时逐个串行请求；较小集合最多八个并行读取，均核对返回 ID 和顺序。
+
+统一尺寸与查重文档分别使用 ronin-unify、ronin-duplicates。恢复及保存核对正式输入/输出/报告与成功任务的绑定，不能将任意文件伪装为加工结果。参数修改、结果撤销或重做只保存文档修订，不重新提交任务。

@@ -8,6 +8,23 @@ type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; 
 const imported = new WeakMap<Blob, { project: string; version: string }>()
 const importing = new WeakMap<Blob, { project: string; promise: Promise<Version> }>()
 
+export async function loadManagedVersions(ids:string[],signal?:AbortSignal):Promise<ManagedVersion[]>{
+  if(ids.length>24){
+    const versions=await localJson<ManagedVersion[]>('/api/versions/manifest',{...jsonPost({versions:ids}),signal})
+    if(!Array.isArray(versions)||versions.length!==ids.length||versions.some((version,index)=>version.id!==ids[index]))throw new Error('VERSION_MANIFEST_CHANGED')
+    return versions
+  }
+  const values:ManagedVersion[]=new Array(ids.length);let next=0
+  await Promise.all(Array.from({length:Math.min(8,ids.length)},async()=>{
+    while(next<ids.length){
+      const index=next++,version=await localJson<ManagedVersion>(`/api/versions/${ids[index]}`,{signal})
+      if(version.id!==ids[index])throw new Error('VERSION_MANIFEST_CHANGED')
+      values[index]=version
+    }
+  }))
+  return values
+}
+
 export async function importManagedInputs(files: Blob[], signal?: AbortSignal, onImported?: (file: Blob, version: ManagedVersion) => void) {
   signal?.throwIfAborted()
   const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project/context')
@@ -16,11 +33,13 @@ export async function importManagedInputs(files: Blob[], signal?: AbortSignal, o
   }
   const inputs: string[] = []
   const versions: ManagedVersion[] = []
+  const knownIds=[...new Set(files.map(file=>imported.get(file)).filter(value=>value?.project===project.id).map(value=>value!.version))]
+  const knownVersions=knownIds.length>24?new Map((await loadManagedVersions(knownIds,signal)).map(version=>[version.id,version])):new Map<string,ManagedVersion>()
   for (const [index, file] of files.entries()) {
     signal?.throwIfAborted()
     const existing = imported.get(file)
     if (existing?.project === project.id) {
-      const version = await localJson<Version>(`/api/versions/${existing.version}`, { signal })
+      const version = knownVersions.get(existing.version)??await localJson<Version>(`/api/versions/${existing.version}`, { signal })
       inputs.push(existing.version)
       versions.push(version); onImported?.(file, version)
     } else {

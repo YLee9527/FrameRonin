@@ -9,6 +9,53 @@ const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dom = installDom(path.join(skill, 'assets/workbench/public'), 2 * 1024 ** 3)
 const algorithms = await import(pathToFileURL(path.join(skill, '.runtime/js/algorithms.mjs')).href)
 
+test('Ronin tool history keeps input order, complete processing results and gestures in one bounded undo stack',()=>{
+  const input=new File(['source'],'source.png'),output=new File(['result'],'result.png'),report=new File(['report'],'report.json')
+  let state=algorithms.createImageToolHistory({...algorithms.initialImageToolDraft('findDuplicates'),files:[input]})
+  state=algorithms.imageToolHistoryReducer(state,{type:'begin'})
+  for(const columns of [9,10,11])state=algorithms.imageToolHistoryReducer(state,{type:'change',update:draft=>({...draft,parameters:{...draft.parameters,columns}})})
+  state=algorithms.imageToolHistoryReducer(state,{type:'end'});assert.equal(state.past.length,1)
+  state=algorithms.imageToolHistoryReducer(state,{type:'change',update:draft=>({...draft,results:[output],reportFile:report,taskId:'known-task'})})
+  state=algorithms.imageToolHistoryReducer(state,{type:'undo'});assert.deepEqual(state.present.results,[]);assert.equal(state.present.parameters.columns,11)
+  state=algorithms.imageToolHistoryReducer(state,{type:'redo'});assert.equal(state.present.results[0],output);assert.equal(state.present.reportFile,report)
+  state=algorithms.imageToolHistoryReducer(state,{type:'undo'});state=algorithms.imageToolHistoryReducer(state,{type:'undo'});assert.equal(state.present.parameters.columns,8)
+})
+
+test('Ronin tool documents bind selected versions and ordered results to their successful task and validate report groups',async()=>{
+  const native=globalThis.fetch,project='ronin-tool-document-test',id=index=>`00000000-0000-0000-0000-${String(index).padStart(12,'0')}`
+  const source=new File(['source'],'source.png',{type:'image/png'}),first=new File(['one'],'first.png',{type:'image/png'}),second=new File(['two'],'second.png',{type:'image/png'})
+  const originalReport={operation:'image.findDuplicates',outputFrames:2,indexBase:0,groups:[[0,1]],frameDimensions:[{width:8,height:12},{width:8,height:12}]}
+  const report=new File([JSON.stringify(originalReport)],'report.json',{type:'application/json'})
+  const entries=new Map([[id(1),source],[id(2),first],[id(3),second],[id(4),report]]),names=new Map([...entries].map(([key,file])=>[file.name,key]))
+  let imports=0,contentReads=0,big=false,badKind=false,reportOverride=null
+  const version=key=>({id:key,metadata:{kind:key===id(4)?'document':badKind?'script_pending_review':'image',extension:key===id(4)?'.json':'.png',bytes:big&&key!==id(4)?100*1024**2:entries.get(key).size,width:key===id(1)?16:8,height:12}})
+  globalThis.fetch=async(url,options={})=>{
+    if(url==='/api/project/context')return Response.json({project:{id:project},memoryBudgetBytes:2*1024**3})
+    if(url==='/api/assets'){imports++;return Response.json(version(names.get(options.body.get('file').name)))}
+    if(url===`/api/tasks/${id(5)}`)return Response.json({state:'succeeded',results:[id(2),id(3),id(4)],payload:{operation:'image.findDuplicates',inputs:[id(1)]}})
+    const key=String(url).split('/')[3]
+    if(String(url).endsWith('/content')){contentReads++;return new Response(key===id(4)&&reportOverride?JSON.stringify(reportOverride):entries.get(key))}
+    return Response.json(version(key))
+  }
+  try{
+    const draft={...algorithms.initialImageToolDraft('findDuplicates'),files:[source],results:[first,second],reportFile:report,taskId:id(5)}
+    const stored=await algorithms.serializeImageToolDocument(draft);assert.equal(imports,4)
+    const restored=await algorithms.restoreImageToolDocument(stored)
+    assert.deepEqual((await algorithms.imageToolReport(restored)).groups,[[0,1]])
+    await algorithms.serializeImageToolDocument(restored);assert.equal(imports,4)
+    for(const change of [v=>v.command='run',v=>v.files[0].name='../private.png',v=>v.parameters.shell=true,v=>v.results=Array(4097).fill(v.results[0]),v=>v.taskId=null]){
+      const invalid=structuredClone(stored);change(invalid);assert.throws(()=>algorithms.validateStoredImageTool(invalid))
+    }
+    const swapped=structuredClone(stored);swapped.files[0].versionId=id(2)
+    await assert.rejects(algorithms.restoreImageToolDocument(swapped),/TASK_MISMATCH/)
+    reportOverride={...originalReport,groups:[[0,0]]}
+    await assert.rejects(algorithms.restoreImageToolDocument(stored),/REPORT_GROUP/);reportOverride=null
+    const before=contentReads;big=true
+    await assert.rejects(algorithms.restoreImageToolDocument(stored),/DOCUMENT_RESOURCE_LIMIT/);assert.equal(contentReads,before);big=false;badKind=true
+    await assert.rejects(algorithms.restoreImageToolDocument(stored),/RESOURCE_KIND/);assert.equal(contentReads,before)
+  }finally{globalThis.fetch=native}
+})
+
 test('sprite grid exports are callable and preserve exact duplicate groups and uneven cell dimensions',async()=>{
   assert.equal(typeof algorithms.splitSpriteSheetGrid,'function');assert.equal(typeof algorithms.findDuplicateFrameIndexGroups,'function')
   for(const name of ['grid','uneven','tiny']){
