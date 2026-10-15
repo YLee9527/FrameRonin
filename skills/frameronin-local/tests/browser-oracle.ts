@@ -7,6 +7,8 @@ import JSZip from '../assets/workbench/node_modules/jszip'
 import { compressWavToMp3 } from '../assets/workbench/src/lib/audioMp3'
 import { compositeFrame as originalComposite, originalEncode } from '../.runtime/oracle/original-gif'
 import { parseGIF, decompressFrames } from '../assets/workbench/node_modules/gifuct-js'
+import { combine as originalCombine, stitch as originalStitch, slice as originalSlice } from '../.runtime/oracle/original-sequence'
+import { superSplitByTransparent as originalSuperSplit } from '../.runtime/oracle/original-super'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -133,7 +135,22 @@ async function runGif(){
     decodedFrames:frames.length,decodedDimensions:[gif.lsd.width,gif.lsd.height],disposals:frames.map(frame=>frame.disposalType),delays:frames.map(frame=>frame.delay)}))
   await publish(zip,'browser-gif-oracle.zip');status.textContent=`Original GIF oracle complete: ${images.length} encoded, ${frames.length} decoded frames`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif]] as const) {
+async function runSequence(){
+  const selected=[...document.querySelector<HTMLInputElement>('#sequence')!.files??[]]
+  const regions=document.querySelector<HTMLInputElement>('#regions')!.files?.[0]
+  if(selected.length!==3||!regions)throw new Error('Use the three fixed sequence PNGs and transparent-regions sample')
+  const load=(file:File)=>new Promise<HTMLImageElement>((resolve,reject)=>{
+    const image=new Image(),url=URL.createObjectURL(file);image.onload=()=>{URL.revokeObjectURL(url);resolve(image)};image.onerror=()=>reject(new Error('Image decode failed'));image.src=url
+  })
+  const images=await Promise.all(selected.map(load)),zip=new JSZip()
+  zip.file('combine-default.png',await originalCombine(images,2,0,0,0,0))
+  zip.file('combine-crop-expand.png',await originalCombine(images,2,1,-2,-1,2))
+  for(const direction of ['vertical','horizontal','overlay'])zip.file(`stitch-${direction}.png`,await originalStitch(images,direction))
+  for(const [index,file]of(await originalSlice(images[0],2,3)).entries())zip.file(`slice/${index}.png`,file)
+  for(const [index,file]of(await originalSuperSplit(await load(regions),'regions')).entries())zip.file(`super/${index}.png`,file)
+  await publish(zip,'browser-sequence-oracle.zip');status.textContent='Original sequence oracle complete: 2 crop/expand grids, 3 stitch modes, floor slices and transparent-region frames'
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

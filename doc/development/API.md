@@ -30,7 +30,7 @@ AI 的本地任务状态与 aiState 分开返回。取消只保证本地结果�
 
 ## 工作台任务客户端
 
-GET /api/project 额外提供 memoryBudgetBytes；客户端缺少有效预算时拒绝导入或启动任务。创建 queued 任务的响应只提供 ID、状态和 preview；客户端从 0 开始进度，再读取完整任务事件。结果预览同时估算压缩数据、解码及前端副本，只使用任务预算的四分之一；超限保持正式结果，改由项目结果链接下载。
+GET /api/project/context 提供 memoryBudgetBytes；客户端缺少有效预算时拒绝导入或启动任务。创建 queued 任务的响应只提供 ID、状态和 preview；客户端从 0 开始进度，再读取完整任务事件。结果预览同时估算压缩数据、解码及前端副本，只使用任务预算的四分之一；超限保持正式结果，改由项目结果链接下载。
 
 audio.compress 输出各 MP3、ZIP 和 audio-report.json，文件名带输入序号，报告对应输入版本。音频素材 metadata 增加 sampleRate、channels；版本响应增加素材 name。输入支持的采样率随本地编码保留，区别于旧 AudioContext 的设备采样率。
 
@@ -41,3 +41,9 @@ audio.compress 输出各 MP3、ZIP 和 audio-report.json，文件名带输入序
 GIF 两种实现通过 `renderer=pillow|browser` 明确选择。`gif.split` 接受单帧或多帧 GIF（输入类型 animation|image、扩展名 .gif 且实际容器为 GIF），1–1000 帧；浏览器兼容模式输出逐帧 PNG、ZIP、含 durationMs/disposalType 的原算法报告。`sequence.gif` 增加 `sizePolicy=reject|first` 与 `frontendBytes`；first 仅允许 browser，输出第一帧尺寸，保留原默认平滑和逐帧调色板。browser 只允许 loop=0，其他循环值报错；Pillow 默认仍拒绝混合尺寸。
 
 GIF 预估加入所有前端保留素材、解码帧、中间表面和编码缓存。浏览器解码器再次核对 GIF 图块尺寸和总缓冲预算，拒绝超限后不开始解压。后台 GIF 与其他任务使用同一取消/完成接口；已取消的任务不下载或登记迟到成功结果。前端输入在执行中改变时，结果留在项目内，不能覆盖新选择。
+
+序列操作新增 `sequence.combine`（columns、cropTop/Bottom/Left/Right）、`sequence.stitch`（direction=vertical|horizontal|overlay）、`image.sliceBrowser`（rows/columns）、`image.superSlice`、`image.blank`，均接收正式输入与 frontendBytes。规则拆分沿用原浏览器向下取整单元、舍弃末端余数；区别于原 Pillow 网格操作。透明拆分按全图透明行列检测，最多 1000 区域，在统一尺寸输出前核对动态缓冲预算。
+
+`GET /api/project/context` 提供项目身份、操作注册表和预算，省去导入/重开时反复读取整个素材库。原 `/api/project` 继续用于素材面板。任务客户端输入导入额外返回版本元数据，可在导入过程中提供缩略图；调用方仍核对正式版本，不能使用任意路径。
+
+序列工作台按页展示最多一行或 24 张缩略图，原始文件仍用于任务、下载和暂存。预计完整动画解码超过预算的八分之一时明确显示静态缩略图；完整 GIF 不降采样。保存导入通知必须先于共享元数据缓存更新，避免首批缩略图漏刷新。1000 帧 256×256 RGBA 样本已实际导出并逐帧核对；该结果不替代整个应用进程族的内存峰值验收。

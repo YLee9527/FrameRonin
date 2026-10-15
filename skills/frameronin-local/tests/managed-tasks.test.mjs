@@ -10,7 +10,7 @@ function fixture(overrides = {}) {
   globalThis.fetch = async (url, init = {}) => {
     requests.push({ url, method: init.method ?? 'GET' })
     if (overrides[url]) return overrides[url](init)
-    if (url === '/api/project') return response({ project: { id: 'test-project' }, memoryBudgetBytes: 2 * 1024 ** 3 })
+    if (url === '/api/project/context') return response({ project: { id: 'test-project' }, memoryBudgetBytes: 2 * 1024 ** 3 })
     if (url === '/api/assets') return response({ id: 'input' })
     if (url === '/api/tasks') return response({ id: 'task', state: 'queued' })
     if (url === '/api/tasks/task') return response({ id: 'task', state: 'succeeded', progress: 1, results: ['output'] })
@@ -49,7 +49,7 @@ test('large decoded previews remain registered without being downloaded into fro
   } finally { globalThis.fetch = nativeFetch }
 })
 test('missing runtime budget rejects before imports or job creation', async () => {
-  const requests = fixture({ '/api/project': () => response({ project: { id: 'old-project' } }) })
+  const requests = fixture({ '/api/project/context': () => response({ project: { id: 'old-project' } }) })
   try {
     await assert.rejects(runManagedTask('image.flip', [new Blob(['input'])], {}), /valid preview budget/)
     assert.equal(requests.length, 1)

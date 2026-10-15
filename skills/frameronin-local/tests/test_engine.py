@@ -137,6 +137,42 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual([frame['durationMs'] for frame in frames],[70,120,230,310])
         self.assertEqual([frame['disposalType'] for frame in frames],[1,2,3,1])
 
+    def test_sequence_canvas_tasks_keep_original_floor_cells_blank_and_transparent_regions(self):
+        cases=[('image.sliceBrowser',{'columns':3,'rows':2},6,(5,6)),
+               ('image.superSlice',{},1,(1,1)),('image.blank',{},1,(16,12)),
+               ('sequence.combine',{'columns':2,'cropLeft':-.5},1,(33,12)),
+               ('sequence.stitch',{'direction':'horizontal'},1,(16,12))]
+        for operation,parameters,count,dimensions in cases:
+            result=wait(self.project,submit(self.project,{'operation':operation,'inputs':[self.version['id']],'parameters':parameters})['id'],15)
+            self.assertEqual(result['state'],'succeeded',result)
+            images=[self.project.version(v) for v in result['results'] if self.project.version(v)['metadata']['kind']=='image']
+            self.assertEqual(len(images),count)
+            for image in images:self.assertEqual((image['metadata']['width'],image['metadata']['height']),dimensions)
+            if operation=='image.blank':
+                with Image.open(images[0]['absolutePath']) as image:self.assertEqual(image.getchannel('A').getextrema(),(0,0))
+            if operation=='image.superSlice':
+                with Image.open(images[0]['absolutePath']) as image:self.assertEqual(image.getpixel((0,0)),(255,30,20,255))
+        for parameters in [{'columns':128,'rows':128},{'columns':17,'rows':1},{'rows':0}]:
+            with self.assertRaises(RoninError):preview(self.project,{'operation':'image.sliceBrowser','inputs':[self.version['id']],'parameters':parameters})
+        with self.assertRaises(RoninError):preview(self.project,{'operation':'sequence.combine','inputs':[self.version['id']],
+            'parameters':{'columns':128,'cropLeft':-8192,'cropRight':-8192}})
+        with self.assertRaises(RoninError):preview(self.project,{'operation':'image.superSlice','inputs':[self.version['id']],
+            'parameters':{'frontendBytes':2*1024**3}})
+
+    def test_half_pixel_stitching_retains_original_alpha_and_fixed_premultiplied_tolerance(self):
+        fixtures=Path(__file__).resolve().parents[1]/'assets/fixtures/sequence'
+        inputs=[self.project.import_file(fixtures/f'frame-{index:03d}.png')['id'] for index in range(3)]
+        for direction in ['vertical','horizontal','overlay']:
+            result=wait(self.project,submit(self.project,{'operation':'sequence.stitch','inputs':inputs,
+                'parameters':{'direction':direction}})['id'],15)
+            self.assertEqual(result['state'],'succeeded',result)
+            version=next(self.project.version(v) for v in result['results'] if self.project.version(v)['metadata']['kind']=='image')
+            with Image.open(version['absolutePath']) as actual,Image.open(fixtures/f'original-stitch-{direction}.png') as original:
+                self.assertEqual(actual.size,original.size)
+                for first,second in zip(actual.convert('RGBA').getdata(),original.convert('RGBA').getdata()):
+                    self.assertLessEqual(abs(first[3]-second[3]),1)
+                    for channel in range(3):self.assertLessEqual(abs(first[channel]*first[3]/255-second[channel]*second[3]/255),1)
+
     def test_copy_reopen_tamper_and_checkout(self):
         original = self.source.read_bytes()
         second = self.project.import_file(self.source, self.version['asset_id'])

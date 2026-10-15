@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 const PREVIEW_MAX = 480
 const HANDLE_SIZE = 12
@@ -10,6 +10,7 @@ type DragHandle = 'top' | 'bottom' | 'left' | 'right' | 'tl' | 'tr' | 'bl' | 'br
 
 interface CropPreviewProps {
   imageUrl: string
+  imageDimensions?: { w:number; h:number }
   cropTop: number
   cropBottom: number
   cropLeft: number
@@ -23,6 +24,7 @@ interface CropPreviewProps {
 
 export default function CropPreview({
   imageUrl,
+  imageDimensions,
   cropTop,
   cropBottom,
   cropLeft,
@@ -34,9 +36,9 @@ export default function CropPreview({
 }: CropPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const onImageSizeRef = useRef(onImageSize)
-  onImageSizeRef.current = onImageSize
   const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
+  useLayoutEffect(()=>{onImageSizeRef.current=onImageSize;onChangeRef.current=onChange},[onImageSize,onChange])
+  const logicalWidth=imageDimensions?.w,logicalHeight=imageDimensions?.h
   const [imgSize, setImgSize] = useState<{ w: number; h: number } | null>(null)
   const [drag, setDrag] = useState<{
     handle: DragHandle
@@ -54,7 +56,7 @@ export default function CropPreview({
     const img = new Image()
     img.onload = () => {
       if (cancelled) return
-      const size = { w: img.naturalWidth, h: img.naturalHeight }
+      const size = { w: logicalWidth ?? img.naturalWidth, h: logicalHeight ?? img.naturalHeight }
       setImgSize(size)
       onImageSizeRef.current?.(size.w, size.h)
     }
@@ -68,7 +70,7 @@ export default function CropPreview({
       img.onerror = null
       img.src = ''
     }
-  }, [imageUrl])
+  }, [imageUrl, logicalWidth, logicalHeight])
 
   const getDisplayRect = useCallback(() => {
     if (!imgSize) return null

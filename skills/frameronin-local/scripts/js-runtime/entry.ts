@@ -17,3 +17,7 @@ export { createMapHistory, mapHistoryReducer, mapImages } from '../../assets/wor
 export { validateMapZipBudget } from '../../assets/workbench/src/lib/mapArchiveFormat'
 export { expansionTilesFrom, isOutwardExpansionTile } from '../../assets/workbench/src/lib/mapLayout'
 export { decodeBrowserGif, encodeBrowserGif } from '../../assets/workbench/src/lib/gifSequence'
+export { combineSequenceImages, stitchSequenceImages, sliceSequenceImage } from '../../assets/workbench/src/lib/sequenceRender'
+export { superSplitByTransparent } from '../../assets/workbench/src/lib/superSplitTransparent'
+export { initialSequenceDraft, validateStoredSequence, serializeSequenceDocument, restoreSequenceDocument, sequenceFiles, sequenceMetadata } from '../../assets/workbench/src/localProject/sequenceDocument'
+export { createSequenceHistory, sequenceHistoryReducer } from '../../assets/workbench/src/localProject/sequenceHistory'

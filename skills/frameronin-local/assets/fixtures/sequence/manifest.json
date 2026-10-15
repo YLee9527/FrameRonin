@@ -1,0 +1,49 @@
+{
+  "id": "sequence-original-canvas",
+  "inputs": [
+    "frame-000.png",
+    "frame-001.png",
+    "frame-002.png"
+  ],
+  "regionInput": "transparent-regions.png",
+  "cases": {
+    "combine-default": {
+      "columns": 2,
+      "cropTop": 0,
+      "cropBottom": 0,
+      "cropLeft": 0,
+      "cropRight": 0
+    },
+    "combine-crop-expand": {
+      "columns": 2,
+      "cropTop": 1,
+      "cropBottom": -2,
+      "cropLeft": -1,
+      "cropRight": 2
+    },
+    "stitch": [
+      "vertical",
+      "horizontal",
+      "overlay"
+    ],
+    "slice": {
+      "rows": 2,
+      "columns": 3
+    }
+  },
+  "criteria": {
+    "integerSlicesAndSuperSplit": "strict decoded RGBA, dimensions, frame count and order",
+    "floatingCenterAndBlend": "identical dimensions and layout; alpha difference <=1 and premultiplied RGB difference <=1 per channel; raw RGBA equality recorded separately"
+  },
+  "sha256": {
+    "transparent-regions.png": "d2ea9ceab98b38bd73a6cbfb858455e64db74e82f1982a34bae56eb14d1d247c",
+    "frame-002.png": "45d69e4636f4c6d80e26d033ee7ca36892f4e2afb3de231002c0907b059947e8",
+    "frame-000.png": "07871552077fde709b02265e6b6e7f671d68d354729adf65ef7f21ca12fe157e",
+    "frame-001.png": "d91739fab6e789b5eb31adeaabbe60d21a1fa9a9769f579a4abcf0b8e6c40011"
+  },
+  "goldenOutputSha256": {
+    "original-stitch-overlay.png": "6e0b5193658ffc2c5795c5f7d58f3cb74b9ee226a9f464e4b5e0f8285f8d4408",
+    "original-stitch-horizontal.png": "c10c650a9d4b29590a1e870d2e883ac55eccd63dd76e743dbb3f7c03f2fdc739",
+    "original-stitch-vertical.png": "17fd7b83d21b22df114103299523c4f272eb911c1d4f6f9ea25b112e89695f99"
+  }
+}

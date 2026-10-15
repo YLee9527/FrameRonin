@@ -1,0 +1,1070 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "2aaa433",
+  "scope": "validated sequence-document and managed crop/combine/slice/stitch checkpoint; full S2/S3/S4 remain incomplete",
+  "oracle": {
+    "fixture": {
+      "id": "sequence-original-canvas",
+      "inputs": [
+        "frame-000.png",
+        "frame-001.png",
+        "frame-002.png"
+      ],
+      "regionInput": "transparent-regions.png",
+      "cases": {
+        "combine-default": {
+          "columns": 2,
+          "cropTop": 0,
+          "cropBottom": 0,
+          "cropLeft": 0,
+          "cropRight": 0
+        },
+        "combine-crop-expand": {
+          "columns": 2,
+          "cropTop": 1,
+          "cropBottom": -2,
+          "cropLeft": -1,
+          "cropRight": 2
+        },
+        "stitch": [
+          "vertical",
+          "horizontal",
+          "overlay"
+        ],
+        "slice": {
+          "rows": 2,
+          "columns": 3
+        }
+      },
+      "criteria": {
+        "integerSlicesAndSuperSplit": "strict decoded RGBA, dimensions, frame count and order",
+        "floatingCenterAndBlend": "identical dimensions and layout; alpha difference <=1 and premultiplied RGB difference <=1 per channel; raw RGBA equality recorded separately"
+      },
+      "sha256": {
+        "transparent-regions.png": "d2ea9ceab98b38bd73a6cbfb858455e64db74e82f1982a34bae56eb14d1d247c",
+        "frame-002.png": "45d69e4636f4c6d80e26d033ee7ca36892f4e2afb3de231002c0907b059947e8",
+        "frame-000.png": "07871552077fde709b02265e6b6e7f671d68d354729adf65ef7f21ca12fe157e",
+        "frame-001.png": "d91739fab6e789b5eb31adeaabbe60d21a1fa9a9769f579a4abcf0b8e6c40011"
+      },
+      "goldenOutputSha256": {
+        "original-stitch-overlay.png": "6e0b5193658ffc2c5795c5f7d58f3cb74b9ee226a9f464e4b5e0f8285f8d4408",
+        "original-stitch-horizontal.png": "c10c650a9d4b29590a1e870d2e883ac55eccd63dd76e743dbb3f7c03f2fdc739",
+        "original-stitch-vertical.png": "17fd7b83d21b22df114103299523c4f272eb911c1d4f6f9ea25b112e89695f99"
+      }
+    },
+    "inputs": [
+      "3fcad342-a6fc-4c06-8aac-a883b4b08846",
+      "05e8e638-da8e-487b-8a6c-abf4f9a75548",
+      "6b9670f6-d34d-4d82-b1dc-9828690fc6a7"
+    ],
+    "regionInput": "81fa4e4e-fa09-4ab4-9fa1-0dd6d45009ab",
+    "cases": [
+      {
+        "label": "combine-default",
+        "taskId": "a0133be2-fc68-4a4b-adb2-beb06f831f0e",
+        "versions": [
+          "215bea3c-bf07-45e2-826e-6bb65507e2b7"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              26,
+              18
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 1.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "combine-crop-expand",
+        "taskId": "00e64517-75e9-4327-bbdc-349247369f81",
+        "versions": [
+          "6afb7007-4dbd-472e-bf20-c38af800636f"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              24,
+              20
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 1.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "stitch-vertical",
+        "taskId": "d386d6b1-16f1-4ade-bcb2-33617ff0dc90",
+        "versions": [
+          "fc9f4d7d-a9de-4e37-9d6d-8f96f8da06c1"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              13,
+              20
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 1.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ],
+        "initialFailure": {
+          "label": "stitch-vertical",
+          "taskId": "9e3438d1-0cad-4d33-996a-22bf73128e37",
+          "versions": [
+            "19636f6f-d2e3-493a-b1b2-2c8df1ef8939"
+          ],
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                13,
+                20
+              ],
+              "strictRgbaEqual": false,
+              "maximumAlphaError": 0.0,
+              "maximumPremultipliedRgbError": 1.5058823529411995,
+              "passedFixedCriterion": false
+            }
+          ]
+        }
+      },
+      {
+        "label": "stitch-horizontal",
+        "taskId": "02900427-613e-4227-b887-5351b044b936",
+        "versions": [
+          "bb8d84eb-5929-4d62-a9f8-f81debf7c935"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              28,
+              9
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 1.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ],
+        "initialFailure": {
+          "label": "stitch-horizontal",
+          "taskId": "e9c11582-d45d-43c6-a22d-de13e08d4d84",
+          "versions": [
+            "b0283e14-515e-43ad-ab5a-2c46883738e7"
+          ],
+          "comparisons": [
+            {
+              "index": 0,
+              "dimensions": [
+                28,
+                9
+              ],
+              "strictRgbaEqual": false,
+              "maximumAlphaError": 0.0,
+              "maximumPremultipliedRgbError": 1.5058823529411995,
+              "passedFixedCriterion": false
+            }
+          ]
+        }
+      },
+      {
+        "label": "stitch-overlay",
+        "taskId": "a53ca100-c84b-49ad-a5d0-442d0352a202",
+        "versions": [
+          "20d8d41d-49d7-4a1f-adef-1075d361a655"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              13,
+              9
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "slice",
+        "taskId": "e04a7e28-bd43-4a05-8e56-7a2224bf4ea5",
+        "versions": [
+          "f4032881-8895-45ca-9790-8f7e09b6de89",
+          "5e2b1ec8-ad72-49f9-861e-cb07e35d280c",
+          "ea3f0aaa-7cf7-486f-9171-52049a990d69",
+          "36050877-ff4b-4153-b0d1-88ef2cb24a2b",
+          "e923da34-d82e-4f0c-b11a-749c511314e7",
+          "dafa08e8-35de-495d-ab0c-ede2c00ca9ff"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 1,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 2,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 3,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 4,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 5,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "super",
+        "taskId": "1b34e396-573f-4c91-a552-deae5dfa6a8b",
+        "versions": [
+          "86eafd4e-4181-4990-9795-39d99944bbe0",
+          "88840b40-0c4b-48ee-9953-c0bde4776a93",
+          "6c0a15a6-1d27-4992-b91b-f3af6301453d"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              6,
+              5
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 1,
+            "dimensions": [
+              6,
+              5
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 2,
+            "dimensions": [
+              6,
+              5
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      }
+    ],
+    "oracleSha256": "169ed39a0efdf6ac7476d1aa6b2b60d69170a70ab893def99c100d0a5f05790f"
+  },
+  "initialOracleFailure": {
+    "fixture": {
+      "id": "sequence-original-canvas",
+      "inputs": [
+        "frame-000.png",
+        "frame-001.png",
+        "frame-002.png"
+      ],
+      "regionInput": "transparent-regions.png",
+      "cases": {
+        "combine-default": {
+          "columns": 2,
+          "cropTop": 0,
+          "cropBottom": 0,
+          "cropLeft": 0,
+          "cropRight": 0
+        },
+        "combine-crop-expand": {
+          "columns": 2,
+          "cropTop": 1,
+          "cropBottom": -2,
+          "cropLeft": -1,
+          "cropRight": 2
+        },
+        "stitch": [
+          "vertical",
+          "horizontal",
+          "overlay"
+        ],
+        "slice": {
+          "rows": 2,
+          "columns": 3
+        }
+      },
+      "criteria": {
+        "integerSlicesAndSuperSplit": "strict decoded RGBA, dimensions, frame count and order",
+        "floatingCenterAndBlend": "identical dimensions and layout; alpha difference <=1 and premultiplied RGB difference <=1 per channel; raw RGBA equality recorded separately"
+      },
+      "sha256": {
+        "transparent-regions.png": "d2ea9ceab98b38bd73a6cbfb858455e64db74e82f1982a34bae56eb14d1d247c",
+        "frame-002.png": "45d69e4636f4c6d80e26d033ee7ca36892f4e2afb3de231002c0907b059947e8",
+        "frame-000.png": "07871552077fde709b02265e6b6e7f671d68d354729adf65ef7f21ca12fe157e",
+        "frame-001.png": "d91739fab6e789b5eb31adeaabbe60d21a1fa9a9769f579a4abcf0b8e6c40011"
+      }
+    },
+    "inputs": [
+      "3fcad342-a6fc-4c06-8aac-a883b4b08846",
+      "05e8e638-da8e-487b-8a6c-abf4f9a75548",
+      "6b9670f6-d34d-4d82-b1dc-9828690fc6a7"
+    ],
+    "regionInput": "81fa4e4e-fa09-4ab4-9fa1-0dd6d45009ab",
+    "cases": [
+      {
+        "label": "combine-default",
+        "taskId": "a0133be2-fc68-4a4b-adb2-beb06f831f0e",
+        "versions": [
+          "215bea3c-bf07-45e2-826e-6bb65507e2b7"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              26,
+              18
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 1.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "combine-crop-expand",
+        "taskId": "00e64517-75e9-4327-bbdc-349247369f81",
+        "versions": [
+          "6afb7007-4dbd-472e-bf20-c38af800636f"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              24,
+              20
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 1.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "stitch-vertical",
+        "taskId": "9e3438d1-0cad-4d33-996a-22bf73128e37",
+        "versions": [
+          "19636f6f-d2e3-493a-b1b2-2c8df1ef8939"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              13,
+              20
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 1.5058823529411995,
+            "passedFixedCriterion": false
+          }
+        ]
+      },
+      {
+        "label": "stitch-horizontal",
+        "taskId": "e9c11582-d45d-43c6-a22d-de13e08d4d84",
+        "versions": [
+          "b0283e14-515e-43ad-ab5a-2c46883738e7"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              28,
+              9
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 1.5058823529411995,
+            "passedFixedCriterion": false
+          }
+        ]
+      },
+      {
+        "label": "stitch-overlay",
+        "taskId": "a53ca100-c84b-49ad-a5d0-442d0352a202",
+        "versions": [
+          "20d8d41d-49d7-4a1f-adef-1075d361a655"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              13,
+              9
+            ],
+            "strictRgbaEqual": false,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 1.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "slice",
+        "taskId": "e04a7e28-bd43-4a05-8e56-7a2224bf4ea5",
+        "versions": [
+          "f4032881-8895-45ca-9790-8f7e09b6de89",
+          "5e2b1ec8-ad72-49f9-861e-cb07e35d280c",
+          "ea3f0aaa-7cf7-486f-9171-52049a990d69",
+          "36050877-ff4b-4153-b0d1-88ef2cb24a2b",
+          "e923da34-d82e-4f0c-b11a-749c511314e7",
+          "dafa08e8-35de-495d-ab0c-ede2c00ca9ff"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 1,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 2,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 3,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 4,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 5,
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      },
+      {
+        "label": "super",
+        "taskId": "1b34e396-573f-4c91-a552-deae5dfa6a8b",
+        "versions": [
+          "86eafd4e-4181-4990-9795-39d99944bbe0",
+          "88840b40-0c4b-48ee-9953-c0bde4776a93",
+          "6c0a15a6-1d27-4992-b91b-f3af6301453d"
+        ],
+        "comparisons": [
+          {
+            "index": 0,
+            "dimensions": [
+              6,
+              5
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 1,
+            "dimensions": [
+              6,
+              5
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          },
+          {
+            "index": 2,
+            "dimensions": [
+              6,
+              5
+            ],
+            "strictRgbaEqual": true,
+            "maximumAlphaError": 0.0,
+            "maximumPremultipliedRgbError": 0.0,
+            "passedFixedCriterion": true
+          }
+        ]
+      }
+    ],
+    "oracleSha256": "169ed39a0efdf6ac7476d1aa6b2b60d69170a70ab893def99c100d0a5f05790f"
+  },
+  "ui": {
+    "persistence": {
+      "beforeReopen": {
+        "id": "2fd4100a-4cbb-4947-bef2-7e2464247997",
+        "revision": 6,
+        "payload": {
+          "activeTab": "images2single",
+          "gifFile": null,
+          "frameFiles": [],
+          "frameDelay": 100,
+          "frameCols": 6,
+          "combineFiles": [
+            {
+              "versionId": "9dca1d2d-29bd-499c-8f7e-354d51ebe34f",
+              "name": "frame-000.png",
+              "type": "image/png"
+            },
+            {
+              "versionId": "12ee6f86-5d9a-4dd5-b21e-4f38cb4a4115",
+              "name": "frame-001.png",
+              "type": "image/png"
+            },
+            {
+              "versionId": "7adb80aa-db2a-4e73-87fd-8a52024bb175",
+              "name": "frame-002.png",
+              "type": "image/png"
+            },
+            {
+              "versionId": "0fdf5f43-5da0-4832-8f15-2c2ab4f60d82",
+              "name": "blank_004.png",
+              "type": "image/png"
+            }
+          ],
+          "combineCols": 2,
+          "imagesToSingleInputMode": "multi",
+          "splitFile": null,
+          "splitRows": 2,
+          "splitCols": 2,
+          "cropTop": 0,
+          "cropBottom": 0,
+          "cropLeft": 0,
+          "cropRight": 0,
+          "stitchFiles": [],
+          "stitchDirection": "vertical",
+          "extractedFrameFiles": [],
+          "framesZipFile": null,
+          "gifResultFile": null,
+          "combinedFile": {
+            "versionId": "2c663485-8649-4590-ba8b-c431353d3dda",
+            "name": "combined.png",
+            "type": "image/png"
+          },
+          "combinedParams": {
+            "cols": 2,
+            "rows": 2,
+            "outW": 26,
+            "outH": 18,
+            "cropTop": 0,
+            "cropBottom": 0,
+            "cropLeft": 0,
+            "cropRight": 0
+          },
+          "stitchedFile": null,
+          "formatVersion": 1
+        }
+      },
+      "versionCountBeforeReopen": 314,
+      "afterReopen": {
+        "revision": 7,
+        "payload": {
+          "activeTab": "images2single",
+          "gifFile": null,
+          "frameFiles": [],
+          "frameDelay": 100,
+          "frameCols": 6,
+          "combineFiles": [
+            {
+              "versionId": "9dca1d2d-29bd-499c-8f7e-354d51ebe34f",
+              "name": "frame-000.png",
+              "type": "image/png"
+            },
+            {
+              "versionId": "12ee6f86-5d9a-4dd5-b21e-4f38cb4a4115",
+              "name": "frame-001.png",
+              "type": "image/png"
+            },
+            {
+              "versionId": "7adb80aa-db2a-4e73-87fd-8a52024bb175",
+              "name": "frame-002.png",
+              "type": "image/png"
+            },
+            {
+              "versionId": "0fdf5f43-5da0-4832-8f15-2c2ab4f60d82",
+              "name": "blank_004.png",
+              "type": "image/png"
+            }
+          ],
+          "combineCols": 2,
+          "imagesToSingleInputMode": "multi",
+          "splitFile": null,
+          "splitRows": 2,
+          "splitCols": 2,
+          "cropTop": 0,
+          "cropBottom": 0,
+          "cropLeft": 0,
+          "cropRight": 0,
+          "stitchFiles": [],
+          "stitchDirection": "vertical",
+          "extractedFrameFiles": [],
+          "framesZipFile": null,
+          "gifResultFile": null,
+          "combinedFile": {
+            "versionId": "2c663485-8649-4590-ba8b-c431353d3dda",
+            "name": "combined.png",
+            "type": "image/png"
+          },
+          "combinedParams": {
+            "cols": 2,
+            "rows": 2,
+            "outW": 26,
+            "outH": 18,
+            "cropTop": 0,
+            "cropBottom": 0,
+            "cropLeft": 0,
+            "cropRight": 0
+          },
+          "stitchedFile": null,
+          "formatVersion": 1
+        }
+      },
+      "versionCountAfterReopenAndSave": 314,
+      "blankTaskCountAfterUndoRedo": 1,
+      "payloadUnchanged": true,
+      "noDuplicateVersions": true
+    },
+    "tasks": [
+      {
+        "id": "25758877-f138-44a9-8cd4-289d98d398cd",
+        "state": "succeeded",
+        "payload": {
+          "operation": "sequence.combine",
+          "inputs": [
+            "9dca1d2d-29bd-499c-8f7e-354d51ebe34f",
+            "12ee6f86-5d9a-4dd5-b21e-4f38cb4a4115",
+            "7adb80aa-db2a-4e73-87fd-8a52024bb175"
+          ],
+          "parameters": {
+            "columns": 2,
+            "cropTop": 0,
+            "cropBottom": 0,
+            "cropLeft": 0,
+            "cropRight": 0,
+            "frontendBytes": 3812
+          }
+        },
+        "results": [
+          "2c663485-8649-4590-ba8b-c431353d3dda",
+          "5be8e308-a8c2-440a-b336-f85cf70d3da1"
+        ]
+      },
+      {
+        "id": "b9f5cdee-e86e-40af-867e-f276c7701090",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.blank",
+          "inputs": [
+            "9dca1d2d-29bd-499c-8f7e-354d51ebe34f"
+          ],
+          "parameters": {
+            "frontendBytes": 19284
+          }
+        },
+        "results": [
+          "0fdf5f43-5da0-4832-8f15-2c2ab4f60d82",
+          "0201df1f-3001-4b5d-b7e8-f2748da13220"
+        ]
+      },
+      {
+        "id": "0d67f124-4f8e-4391-b8ca-ae86ada41e6d",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.superSlice",
+          "inputs": [
+            "5187cbbe-97e3-4c6a-b8b5-7a557c6d374a"
+          ],
+          "parameters": {
+            "frontendBytes": 25132
+          }
+        },
+        "results": [
+          "e665f0cc-f173-4dc2-b6c1-982a2678b7ee",
+          "3bf227e9-17cf-4296-acce-1a9763766d41",
+          "d9e43bcf-6760-4aa4-830a-03c9f5a884d6",
+          "1c2644e7-b920-4d53-a074-6c16093ed320"
+        ]
+      }
+    ],
+    "combineDownloadMatchesFormalVersion": true,
+    "blankOneUndoRedo": {
+      "counts": [
+        3,
+        4,
+        3,
+        4
+      ],
+      "newTaskCount": 1
+    },
+    "keyboardSort": {
+      "action": "End on first reorder handle",
+      "order": [
+        "frame-001.png",
+        "frame-002.png",
+        "blank_004.png",
+        "frame-000.png"
+      ],
+      "commandZRestoredOriginalOrder": true
+    },
+    "superSlice": {
+      "frames": 3,
+      "dimensions": [
+        6,
+        5
+      ],
+      "strictOraclePixels": true
+    },
+    "screenshots": [
+      "skill-sequence-1000-gif.png",
+      "skill-sequence-1000.png",
+      "skill-sequence-cancel.png",
+      "skill-sequence-conflict.png",
+      "skill-sequence-document.png",
+      "skill-sequence-first-import.png",
+      "skill-sequence-load-race.png",
+      "skill-sequence-reopen.png",
+      "skill-sequence-stale-result.png",
+      "skill-sequence-super-slice.png"
+    ],
+    "saveConflict": {
+      "documentId": "2fd4100a-4cbb-4947-bef2-7e2464247997",
+      "beforeRevision": 11,
+      "originalPayload": {
+        "activeTab": "images2single",
+        "gifFile": null,
+        "frameFiles": [],
+        "frameDelay": 100,
+        "frameCols": 6,
+        "combineFiles": [
+          {
+            "versionId": "e665f0cc-f173-4dc2-b6c1-982a2678b7ee",
+            "name": "transparent-regions_super_0.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "3bf227e9-17cf-4296-acce-1a9763766d41",
+            "name": "transparent-regions_super_1.png",
+            "type": "image/png"
+          },
+          {
+            "versionId": "d9e43bcf-6760-4aa4-830a-03c9f5a884d6",
+            "name": "transparent-regions_super_2.png",
+            "type": "image/png"
+          }
+        ],
+        "combineCols": 2,
+        "imagesToSingleInputMode": "multi",
+        "splitFile": {
+          "versionId": "5187cbbe-97e3-4c6a-b8b5-7a557c6d374a",
+          "name": "transparent-regions.png",
+          "type": "image/png"
+        },
+        "splitRows": 2,
+        "splitCols": 2,
+        "cropTop": 0,
+        "cropBottom": 0,
+        "cropLeft": 0,
+        "cropRight": 0,
+        "stitchFiles": [],
+        "stitchDirection": "vertical",
+        "extractedFrameFiles": [],
+        "framesZipFile": null,
+        "gifResultFile": null,
+        "combinedFile": null,
+        "combinedParams": null,
+        "stitchedFile": null,
+        "formatVersion": 1
+      },
+      "externalRevision": 12,
+      "copyId": "c4ec8342-fc4b-4780-9643-4818e305cbf6",
+      "copyRevision": 1,
+      "originalCropLeft": 0,
+      "copyCropLeft": 3,
+      "sameInputs": true,
+      "navigationBlockedObserved": true,
+      "copyReopenedCropLeft": 3
+    },
+    "loadRace": {
+      "candidateRejected": true,
+      "currentColumnsPreserved": 7,
+      "savedDocument": "52914959-8743-4f35-acaa-d328236092a2",
+      "revision": 1,
+      "sourceUnchanged": "c4ec8342-fc4b-4780-9643-4818e305cbf6",
+      "delaySecondsPerVersionRequest": 1.5
+    },
+    "thousandGif": {
+      "task": {
+        "id": "0ea445f3-37dd-45d9-9c18-8c4d0819a4fc",
+        "state": "succeeded",
+        "results": [
+          "f5e032d0-f74f-4b25-897b-a48b2c4a2451",
+          "bfe2a2d8-d74c-4bc1-af90-18229f4e5992"
+        ],
+        "created_at": "2026-10-15T00:27:31.272247+00:00",
+        "updated_at": "2026-10-15T00:27:35.531531+00:00"
+      },
+      "parameters": {
+        "duration": 100,
+        "renderer": "browser",
+        "sizePolicy": "first",
+        "frontendBytes": 263878034
+      },
+      "frames": 1000,
+      "dimensions": [
+        256,
+        256
+      ],
+      "durationMsEach": 100,
+      "allDecodedRgbaEqual": true,
+      "downloadSha256": "936af73611ed56e58f4b444490aabf2b3de2cb2266f145c90fab5505147ee3cb",
+      "preview": "static thumbnail; full GIF download"
+    },
+    "cancellation": {
+      "task": {
+        "id": "47d0ea6f-da53-40ed-aa7a-f635cb3750a0",
+        "state": "canceled",
+        "generation": 1,
+        "results": [],
+        "error": null
+      },
+      "uiFeedbackMs": 290,
+      "existingResultRetained": "e2c4cf62-2952-49dc-aedd-f42793737c99",
+      "cancellation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.010547165991738439,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 1
+      }
+    },
+    "sharedContextRegression": {
+      "contextKeys": [
+        "project",
+        "operations",
+        "memoryBudgetBytes"
+      ],
+      "mapReopen": {
+        "document": "43d56686",
+        "revision": 11,
+        "images": 2,
+        "overlapPercent": 15,
+        "rightTileFeatherPercent": 10
+      },
+      "workflowReopen": {
+        "document": "91e2c4a8-f5fe-4dce-adb6-6dad95f20c96",
+        "revision": 7,
+        "inputs": 1,
+        "nodes": 3
+      },
+      "audioUi": {
+        "taskId": "21c047dc-26b5-47d0-b8a1-c29ee20929df",
+        "state": "succeeded",
+        "results": [
+          "cadeb451-0a7a-4bd6-89e2-e455805035ae",
+          "ac26908f-a84a-4da0-a017-e31c32da0b76",
+          "f236b25a-b184-452b-abd4-bce455a78a72"
+        ],
+        "sampleRate": 44100,
+        "channels": 2
+      },
+      "firstImport": {
+        "document": "b04959ee",
+        "revision": 1,
+        "inputThumbnails": [
+          [
+            13,
+            9
+          ],
+          [
+            8,
+            6
+          ]
+        ],
+        "visibleWithoutReopen": true
+      }
+    },
+    "staleResult": {
+      "taskId": "ff8ec065-e2de-44c7-ab6c-0baaac74fb6e",
+      "state": "succeeded",
+      "taskDuration": 100,
+      "lateResultVersions": [
+        "6ae78284-b88c-4c5c-a9b7-bf99d2aaef76",
+        "0a8cc4ba-29dc-471e-ac50-520ef25e06fb"
+      ],
+      "previousDisplayedResultRetained": "e2c4cf62-2952-49dc-aedd-f42793737c99",
+      "editedDelayObserved": 101,
+      "durationUndoRedo": [
+        100,
+        101,
+        100
+      ],
+      "savedDelay": 100,
+      "savedRevision": 7,
+      "uiWarning": "Inputs changed; the result remains in Project assets"
+    },
+    "thousandFrameDocument": {
+      "id": "93b1eacf-e2a1-4121-b9a1-7814b0cac4a9",
+      "frames": 1000,
+      "beforeVersionCount": 1011,
+      "afterUndoSave": {
+        "revision": 3,
+        "frames": 1000,
+        "exactReferenceOrder": true,
+        "first": {
+          "versionId": "3d7839b1-9973-4d76-8047-1c65dea05899",
+          "name": "0000.png",
+          "type": "image/png"
+        },
+        "last": {
+          "versionId": "920429c3-d54c-411f-81b6-db9d25faf3ae",
+          "name": "0999.png",
+          "type": "image/png"
+        }
+      },
+      "dom": {
+        "initialPage": 1,
+        "initialPreviewCount": 24,
+        "lastPage": 42,
+        "lastPreviewCount": 16,
+        "previewDimensions": [
+          128,
+          128
+        ],
+        "firstMovedToLast": true,
+        "keyboardFocusMovedToFrame": 1000,
+        "originalOrderAfterCommandZ": true,
+        "fileListAlsoPaged": true
+      },
+      "afterVersionCount": 1011
+    }
+  },
+  "checks": {
+    "engineTests": 23,
+    "jsTests": 23,
+    "workbenchBuild": "passed",
+    "changedModuleESLint": "passed"
+  },
+  "remaining": [
+    "all new-operation UI cancellation and full format coverage",
+    "half-pixel adapter samples beyond the fixed fixture",
+    "combined actual application memory and native macOS acceptance",
+    "other editors, full AI catalog and portable distribution"
+  ]
+}

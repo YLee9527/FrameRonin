@@ -34,7 +34,7 @@ export async function serializeWorkflowDocument(snapshot: WorkflowSnapshot): Pro
 }
 export async function restoreWorkflowDocument(value: unknown): Promise<WorkflowSnapshot> {
   const document = validateStoredWorkflow(value)
-  const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project')
+  const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project/context')
   if (!Number.isFinite(memoryBudgetBytes) || memoryBudgetBytes <= 0) throw new Error('WORKFLOW_DOCUMENT_BUDGET')
   const files: WorkflowInputFile[] = []
   let bytes = 0

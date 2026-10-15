@@ -38,6 +38,12 @@ def application(project, port):
     def get_project():
         return {'project': project.manifest, 'assets': project.assets(), 'operations': REGISTRY, 'memoryBudgetBytes': memory_budget()}
 
+    @app.get('/api/project/context')
+    def project_context():
+        # Imports and document restores need identity and limits, not the full
+        # asset library and its thumbnails on every request.
+        return {'project': project.manifest, 'operations': REGISTRY, 'memoryBudgetBytes': memory_budget()}
+
     async def import_upload(file, asset_id=None):
         suffix = Path(file.filename or 'upload').suffix.lower()
         temporary = project.safe(f'.pending/upload-{identifier()}{suffix}')

@@ -56,6 +56,17 @@ REGISTRY = {
         'maxMotionRelative': number(0.35,0.05,0.95)}, 'png_sequence_report', 'full_frame_pair', overhead=384),
     'image.slice': operation(['image'], {'columns': integer(4, 1, 128), 'rows': integer(4, 1, 128)},
                              'png_zip_index', 'stream'),
+    'image.sliceBrowser': operation(['image'], {'columns': integer(2,1,128),'rows': integer(2,1,128),
+        'frontendBytes': integer(0,0,2*1024**3)}, 'png_sequence_report', 'floor_cells_discard_remainder', overhead=256),
+    'image.superSlice': operation(['image'], {'frontendBytes': integer(0,0,2*1024**3)},
+        'png_sequence_report', 'transparent_global_rows_columns', overhead=256),
+    'image.blank': operation(['image'], {'frontendBytes': integer(0,0,2*1024**3)}, 'png_report', overhead=256),
+    'sequence.combine': operation(['image+'], {'columns': integer(4,1,128),
+        'cropTop': number(0,-8192,8192),'cropBottom': number(0,-8192,8192),
+        'cropLeft': number(0,-8192,8192),'cropRight': number(0,-8192,8192),
+        'frontendBytes': integer(0,0,2*1024**3)}, 'png_report', 'original_crop_expand_center', overhead=256),
+    'sequence.stitch': operation(['image+'], {'direction': choice('vertical',['vertical','horizontal','overlay']),
+        'frontendBytes': integer(0,0,2*1024**3)}, 'png_report', 'original_center_compose', overhead=256),
     'image.perfectPixel': operation(['image'], {'sampleMethod': choice('center', ['center', 'median', 'majority']),
         'gridCols': integer(0, 0, 2048), 'gridRows': integer(0, 0, 2048), 'minSize': integer(4, 2, 32),
         'peakWidth': number(6, 3, 20), 'refineIntensity': number(0.25, 0, 1),
@@ -196,6 +207,21 @@ def preview(project, payload):
     if name in ['map.export', 'map.template']:
         from .maps import estimate as map_estimate
         estimate = map_estimate(values, versions, name == 'map.template')
+    if name in ['sequence.combine','sequence.stitch','image.sliceBrowser','image.superSlice','image.blank']:
+        dimensions=[(version['metadata']['width'],version['metadata']['height']) for version in versions]
+        if name == 'sequence.combine':
+            width=max(max(1,w-values['cropLeft']-values['cropRight']) for w,h in dimensions)*values['columns']
+            height=max(max(1,h-values['cropTop']-values['cropBottom']) for w,h in dimensions)*math.ceil(len(versions)/values['columns'])
+        elif name == 'sequence.stitch':
+            width=sum(w for w,h in dimensions) if values['direction']=='horizontal' else max(w for w,h in dimensions)
+            height=sum(h for w,h in dimensions) if values['direction']=='vertical' else max(h for w,h in dimensions)
+        else:
+            width,height=dimensions[0]
+        if name == 'image.sliceBrowser' and (values['rows']*values['columns']>1000 or width//values['columns']<1 or height//values['rows']<1):
+            raise RoninError('SLICE_LIMIT','Select a nonempty grid with at most one thousand cells.')
+        if width>30000 or height>30000:
+            raise RoninError('SEQUENCE_DIMENSION_LIMIT','The composed image must be at most 30000 pixels per side.')
+        estimate += values['frontendBytes'] + sum(pixels)*24 + width*height*16 + sum(v['metadata']['bytes'] for v in versions)*4
     budget = memory_budget()
     if estimate > budget:
         raise RoninError('RESOURCE_LIMIT', 'The operation exceeds the memory budget; adjust its parameters.',

@@ -15,10 +15,10 @@
 | video.remove | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
 | video.mp4 | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 待逐项验收 |
 | sequence.gif-split | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原浏览器四种处置帧严格像素对照、工作台正式 PNG/ZIP 与下载通过；完整格式及大帧预览待验收 |
-| sequence.gif-compose | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原逐帧调色板、混合尺寸三帧 GIF 字节对照、工作台下载/取消/离开后运行通过 |
-| sequence.sort | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
-| sequence.duration | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | GIF 全局 120ms 通过实际键盘设置及全部帧时长核对；序列文档时长与撤销待完成 |
-| sequence.merge | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
+| sequence.gif-compose | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 原浏览器混合尺寸三帧 GIF 字节对照、实际 1000×256×256 GIF 全帧像素/时长/透明度、取消及输入变化保护通过 |
+| sequence.sort | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 3/4 帧及 1000 帧跨页键盘排序、焦点跟随、撤销恢复和正式文档保存通过；完整拖拽/删除组合待验收 |
+| sequence.duration | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 1000 帧全局 100ms GIF 下载及全部时长通过；100→101→100ms 键盘撤销重做、迟到结果保护和保存通过 |
+| sequence.merge | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 规则/透明拆分、裁切扩边合成及三种拼接的 14 个原浏览器输出通过固定标准；工作台合成/超级拆分及下载通过，完整参数组合待验收 |
 | sequence.dedupe | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | sequence.optical-flow | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 后台与 RoninPro 工作台固定样本通过；GIF 入口交互待验收 |
 | sequence.png-zip | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | GIF 拆帧 ZIP 实际下载及四帧像素/顺序通过；其他序列 ZIP 入口待验收 |

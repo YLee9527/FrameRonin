@@ -1,362 +1,242 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Alert, Button, InputNumber, message, Radio, Slider, Space, Tabs, Tooltip, Typography, Upload } from 'antd'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react'
+import type { SetStateAction } from 'react'
+import { Alert, Button, Pagination, InputNumber, message, Radio, Slider, Space, Tabs, Tooltip, Typography, Upload } from 'antd'
 import { CaretLeftOutlined, CaretRightOutlined, DeleteOutlined, DownloadOutlined, DragOutlined, FileImageOutlined, LayoutOutlined, PictureOutlined, MergeCellsOutlined, PlusOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
 import { useLanguage } from '../i18n/context'
 import CropPreview from './CropPreview'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
-import { superSplitByTransparent } from '../lib/superSplitTransparent'
 import { cacheManagedInput, importManagedInputs, runManagedTask, type ManagedVersion } from '../localProject/managedTasks'
 import { localJson } from '../localProject/api'
+import DocumentSaveBar from '../localProject/DocumentSaveBar'
+import { initialSequenceDraft, restoreSequenceDocument, serializeSequenceDocument, sequenceFiles, sequenceMetadata, type SequenceDraft } from '../localProject/sequenceDocument'
+import { createSequenceHistory, sequenceHistoryReducer } from '../localProject/sequenceHistory'
 
 const { Dragger } = Upload
 const { Text } = Typography
 
 const GIF_ACCEPT = '.gif'
 const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
-
-function loadImageElement(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error('load'))
-    img.src = src
-  })
-}
-
-function createTransparentPngBlob(width: number, height: number): Promise<Blob> {
-  const canvas = document.createElement('canvas')
-  canvas.width = Math.max(1, Math.floor(width))
-  canvas.height = Math.max(1, Math.floor(height))
-  const ctx = canvas.getContext('2d')
-  ctx?.clearRect(0, 0, canvas.width, canvas.height)
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('canvas'))), 'image/png')
-  })
-}
+const PREVIEW_PLACEHOLDER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg=='
 
 export default function GifFrameConverter() {
   const { t, lang } = useLanguage()
-  const [activeTab, setActiveTab] = useState<'gif2frames' | 'frames2gif' | 'images2single' | 'simpleStitch'>('images2single')
-  const [gifFile, setGifFile] = useState<File | null>(null)
-  const [gifPreviewUrl, setGifPreviewUrl] = useState<string | null>(null)
-  const [frameFiles, setFrameFiles] = useState<File[]>([])
-  const [frameInputUrls, setFrameInputUrls] = useState<string[]>([])
-  const [frameDelay, setFrameDelay] = useState(100)
-  const [frameDragReorderIdx, setFrameDragReorderIdx] = useState<number | null>(null)
-  const [frameCols, setFrameCols] = useState(6)
+  const [history, dispatchHistory] = useReducer(sequenceHistoryReducer, undefined, () => createSequenceHistory(initialSequenceDraft()))
+  const { activeTab, gifFile, frameFiles, frameDelay, frameCols, combineFiles, combineCols, imagesToSingleInputMode,
+    splitFile, splitRows, splitCols, cropTop, cropBottom, cropLeft, cropRight, stitchFiles, stitchDirection,
+    extractedFrameFiles, framesZipFile, gifResultFile, combinedFile, combinedParams, stitchedFile } = history.present
+  const updateSequence = useCallback((update:(value:SequenceDraft)=>SequenceDraft) => dispatchHistory({type:'change',update}), [])
+  const setter = useCallback(<K extends keyof SequenceDraft,>(key:K) => (value:SetStateAction<SequenceDraft[K]>) => {
+    updateSequence(current => ({...current,[key]:typeof value==='function'?(value as (previous:SequenceDraft[K])=>SequenceDraft[K])(current[key]):value}))
+  }, [updateSequence])
+  const setActiveTab = (value:SequenceDraft['activeTab']) => dispatchHistory({type:'view',activeTab:value})
+  const setGifFile = useMemo(() => setter('gifFile'), [setter])
+  const setFrameFiles = useMemo(() => setter('frameFiles'), [setter])
+  const setFrameDelay = useMemo(() => setter('frameDelay'), [setter])
+  const setFrameCols = useMemo(() => setter('frameCols'), [setter])
+  const setCombineFiles = useMemo(() => setter('combineFiles'), [setter])
+  const setCombineCols = useMemo(() => setter('combineCols'), [setter])
+  const setImagesToSingleInputMode = useMemo(() => setter('imagesToSingleInputMode'), [setter])
+  const setSplitFile = useMemo(() => setter('splitFile'), [setter])
+  const setSplitRows = useMemo(() => setter('splitRows'), [setter])
+  const setSplitCols = useMemo(() => setter('splitCols'), [setter])
+  const setCropTop = useMemo(() => setter('cropTop'), [setter])
+  const setCropBottom = useMemo(() => setter('cropBottom'), [setter])
+  const setCropLeft = useMemo(() => setter('cropLeft'), [setter])
+  const setCropRight = useMemo(() => setter('cropRight'), [setter])
+  const setStitchFiles = useMemo(() => setter('stitchFiles'), [setter])
+  const setStitchDirection = useMemo(() => setter('stitchDirection'), [setter])
+  const setGifResultFile = useMemo(() => setter('gifResultFile'), [setter])
+  const setStitchedFile = useMemo(() => setter('stitchedFile'), [setter])
   const [loading, setLoading] = useState(false)
-  const [framesZipUrl, setFramesZipUrl] = useState<string | null>(null)
-  const [extractedFrameUrls, setExtractedFrameUrls] = useState<string[]>([])
-  const [extractedFrameFiles, setExtractedFrameFiles] = useState<File[]>([])
-  const [gifUrl, setGifUrl] = useState<string | null>(null)
-
-  const [combineFiles, setCombineFiles] = useState<File[]>([])
-  /** 与 combineFiles 同步派生，避免 effect+setState 导致一帧内仍指向旧 URL 时被 revoke 的卡顿与异常解码 */
-  const combineInputUrls = useMemo(
-    () => combineFiles.map((f) => URL.createObjectURL(f)),
-    [combineFiles],
-  )
-  const [dragReorderIdx, setDragReorderIdx] = useState<number | null>(null)
-  const [combineCols, setCombineCols] = useState(4)
-  const [imagesToSingleInputMode, setImagesToSingleInputMode] = useState<'multi' | 'split'>('split')
-  const [splitFile, setSplitFile] = useState<File | null>(null)
-  const [splitFileUrl, setSplitFileUrl] = useState<string | null>(null)
-  const [splitRows, setSplitRows] = useState(2)
-  const [splitCols, setSplitCols] = useState(2)
-  const [combinedUrl, setCombinedUrl] = useState<string | null>(null)
-  const [combinedParams, setCombinedParams] = useState<{
-    cols: number
-    rows: number
-    outW: number
-    outH: number
-    cropTop: number
-    cropBottom: number
-    cropLeft: number
-    cropRight: number
-  } | null>(null)
-  const [cropTop, setCropTop] = useState(0)
-  const [cropBottom, setCropBottom] = useState(0)
-  const [cropLeft, setCropLeft] = useState(0)
-  const [cropRight, setCropRight] = useState(0)
-  const [cropPreviewIndex, setCropPreviewIndex] = useState(0)
-  const [firstImageSize, setFirstImageSize] = useState<{ w: number; h: number } | null>(null)
   const [addingBlankFrame, setAddingBlankFrame] = useState(false)
-
-  const [stitchFiles, setStitchFiles] = useState<File[]>([])
-  const [stitchInputUrls, setStitchInputUrls] = useState<string[]>([])
-  const [stitchDirection, setStitchDirection] = useState<'vertical' | 'horizontal' | 'overlay'>('vertical')
-  const [stitchResultUrl, setStitchResultUrl] = useState<string | null>(null)
+  const [frameDragReorderIdx, setFrameDragReorderIdx] = useState<number|null>(null)
+  const [dragReorderIdx, setDragReorderIdx] = useState<number|null>(null)
+  const [cropPreviewIndex, setCropPreviewIndex] = useState(0)
+  const [framePage,setFramePage] = useState(1)
+  const [combinePage,setCombinePage] = useState(1)
+  const [stitchPage,setStitchPage] = useState(1)
+  const [metadataRevision,setMetadataRevision] = useState(0)
+  const [previewBudget,setPreviewBudget] = useState<number|null>(null)
+  const framePageSize=Math.max(frameCols,Math.floor(24/frameCols)*frameCols)
+  const combinePageSize=Math.max(combineCols,Math.floor(24/combineCols)*combineCols)
+  const framePageValue=Math.min(framePage,Math.max(1,Math.ceil(frameFiles.length/framePageSize)))
+  const combinePageValue=Math.min(combinePage,Math.max(1,Math.ceil(combineFiles.length/combinePageSize)))
+  const stitchPageValue=Math.min(stitchPage,Math.max(1,Math.ceil(stitchFiles.length/24)))
+  const fileUrls = useMemo(()=>[...new Set([gifFile,splitFile,...frameFiles,...combineFiles,...stitchFiles,...extractedFrameFiles,framesZipFile,gifResultFile,combinedFile,stitchedFile].filter((file):file is File=>!!file))]
+    .map(file=>({file,url:URL.createObjectURL(file)})),[gifFile,splitFile,frameFiles,combineFiles,stitchFiles,extractedFrameFiles,framesZipFile,gifResultFile,combinedFile,stitchedFile])
+  useEffect(()=>()=>fileUrls.forEach(item=>URL.revokeObjectURL(item.url)),[fileUrls])
+  const fileUrlIndex=useMemo(()=>new Map(fileUrls.map(item=>[item.file,item.url])),[fileUrls])
+  const urlFor=(file:File|null)=>file?fileUrlIndex.get(file)??null:null
+  const thumbnailFor=(file:File)=>{
+    const value=sequenceMetadata.get(file)?.metadata.thumbnailDataUrl
+    return value?.startsWith('data:image/png;base64,')?value:null
+  }
+  const frameStart=(framePageValue-1)*framePageSize,combineStart=(combinePageValue-1)*combinePageSize,stitchStart=(stitchPageValue-1)*24
+  const frameInputUrls=frameFiles.slice(frameStart,frameStart+framePageSize).map((file,index)=>({file,index:frameStart+index,url:thumbnailFor(file),stashUrl:urlFor(file)!}))
+  const combineInputUrls=combineFiles.slice(combineStart,combineStart+combinePageSize).map((file,index)=>({file,index:combineStart+index,url:thumbnailFor(file),stashUrl:urlFor(file)!}))
+  const stitchInputUrls=stitchFiles.slice(stitchStart,stitchStart+24).map((file,index)=>({file,index:stitchStart+index,url:thumbnailFor(file),stashUrl:urlFor(file)!}))
+  const extractedFrameUrls=extractedFrameFiles.slice(0,24).map(file=>thumbnailFor(file)).filter((url):url is string=>!!url)
+  const usesStaticPreview=(file:File|null)=>{
+    const version=file?sequenceMetadata.get(file):undefined
+    return !!file&&!!version&&!!previewBudget&&
+      (version.metadata.width??0)*(version.metadata.height??0)*(version.metadata.frames??1)*16+file.size*2>previewBudget/8
+  }
+  const previewFor=(file:File|null)=>{
+    if(!file)return null
+    const version=sequenceMetadata.get(file)
+    if(!version||!previewBudget)return null
+    return usesStaticPreview(file)?thumbnailFor(file):urlFor(file)
+  }
+  const gifPreviewUrl=previewFor(gifFile),gifUrl=previewFor(gifResultFile),framesZipUrl=urlFor(framesZipFile),combinedUrl=previewFor(combinedFile),stitchResultUrl=previewFor(stitchedFile)
+  const splitFileUrl=splitFile?thumbnailFor(splitFile):null
+  const cropFile=combineFiles[Math.min(cropPreviewIndex,combineFiles.length-1)]
+  const cropThumbnail=cropFile?thumbnailFor(cropFile):null
+  const cropMetadata=cropFile?sequenceMetadata.get(cropFile)?.metadata:undefined
+  const firstMetadata=combineFiles[0]?sequenceMetadata.get(combineFiles[0])?.metadata:undefined
+  const firstImageSize=firstMetadata?.width&&firstMetadata?.height?{w:firstMetadata.width,h:firstMetadata.height}:null
+  const currentDraft=useRef(history.present)
+  useLayoutEffect(()=>{currentDraft.current=history.present},[history.present])
+  const pendingFocus=useRef<{group:'frame'|'combine';index:number}|null>(null)
+  useLayoutEffect(()=>{
+    const target=pendingFocus.current
+    if(target){document.querySelector<HTMLElement>(`[data-sequence-handle="${target.group}:${target.index}"]`)?.focus();pendingFocus.current=null}
+  },[frameFiles,combineFiles,framePageValue,combinePageValue])
+  const moveFrame=(group:'frame'|'combine',from:number,to:number)=>{
+    const key=group==='frame'?'frameFiles':'combineFiles',files=currentDraft.current[key]
+    to=Math.max(0,Math.min(files.length-1,to));if(to===from)return
+    updateSequence(current=>{const next=[...current[key]],removed=next.splice(from,1)[0];next.splice(to,0,removed);return {...current,[key]:next}})
+    pendingFocus.current={group,index:to}
+    if(group==='frame')setFramePage(Math.floor(to/framePageSize)+1);else setCombinePage(Math.floor(to/combinePageSize)+1)
+  }
+  const reorderKey=(event:React.KeyboardEvent,group:'frame'|'combine',index:number)=>{
+    const files=group==='frame'?frameFiles:combineFiles,columns=group==='frame'?frameCols:combineCols
+    const target=event.key==='ArrowLeft'?index-1:event.key==='ArrowRight'?index+1:event.key==='ArrowUp'?index-columns:event.key==='ArrowDown'?index+columns:event.key==='Home'?0:event.key==='End'?files.length-1:null
+    if(target!==null&&!event.metaKey&&!event.ctrlKey&&!event.altKey){event.preventDefault();moveFrame(group,index,target)}
+  }
+  // Metadata changes update thumbnail views without changing the document or undo history.
+  void metadataRevision
+  useEffect(()=>setCropPreviewIndex(value=>Math.min(value,Math.max(0,combineFiles.length-1))),[combineFiles.length])
 
   const execution = useRef<AbortController | null>(null)
   const mounted = useRef(true)
   const [taskProgress, setTaskProgress] = useState(0)
   const [canceling, setCanceling] = useState(false)
   const [taskError, setTaskError] = useState('')
-  const latestInputs = useRef({ gifFile, frameFiles, frameDelay })
-  latestInputs.current = { gifFile, frameFiles, frameDelay }
+
   useEffect(() => {
     mounted.current = true
     return () => { mounted.current = false }
   }, [])
-  useEffect(() => () => { if (gifUrl) URL.revokeObjectURL(gifUrl) }, [gifUrl])
-  useEffect(() => () => { if (framesZipUrl) URL.revokeObjectURL(framesZipUrl) }, [framesZipUrl])
   const taskText = lang === 'zh' ? { cancel: '取消加工', canceling: '正在核对取消', stale: '输入已改变，结果保留在项目素材中', canceled: '加工已取消' }
     : lang === 'ja' ? { cancel: '処理を取消', canceling: '取消を確認中', stale: '入力が変更されました。結果はプロジェクトに保存されています', canceled: '処理を取り消しました' }
       : { cancel: 'Cancel processing', canceling: 'Confirming cancellation', stale: 'Inputs changed; the result remains in Project assets', canceled: 'Processing canceled' }
-  const retainedFiles = [gifFile, splitFile, ...frameFiles, ...combineFiles, ...stitchFiles, ...extractedFrameFiles].filter((file): file is File => !!file)
-  const prepareGifTask = async (signal: AbortSignal) => {
-    const files = [...new Set(retainedFiles)]
-    const { project, inputs, memoryBudgetBytes } = await importManagedInputs(files, signal)
-    let frontendBytes = 0
-    for (const id of new Set(inputs)) {
-      const version = await localJson<ManagedVersion>(`/api/versions/${id}`, { signal })
-      frontendBytes += version.metadata.bytes * 2 + (version.metadata.width ?? 0) * (version.metadata.height ?? 0) * 16
+  const staticPreviewText=lang==='zh'?'为控制内存，此处显示静态缩略图；下载保留完整尺寸和全部帧。'
+    :lang==='ja'?'メモリ使用量を抑えるため静止サムネイルを表示しています。ダウンロードは元のサイズと全フレームを保持します。'
+      :'A static thumbnail is shown to limit memory use. Downloads retain full dimensions and every frame.'
+  const rememberVersion = (file:File,version:ManagedVersion) => {
+    if(sequenceMetadata.get(file)?.id===version.id)return
+    sequenceMetadata.set(file,version)
+    if(mounted.current)setMetadataRevision(value=>value+1)
+  }
+  const prepareSequenceTask = async (signal: AbortSignal) => {
+    const { project, memoryBudgetBytes } = await importManagedInputs([...sequenceFiles([currentDraft.current])], signal,
+      (file,version)=>rememberVersion(file as File,version))
+    if(mounted.current)setPreviewBudget(memoryBudgetBytes)
+    const retained=sequenceFiles([history.present,...history.past,...history.future,...(history.checkpoint?[history.checkpoint]:[])])
+    let frontendBytes=[...retained].reduce((total,file)=>total+file.size*2,0)
+    // Visible thumbnails, crop preview and potentially animated result previews.
+    frontendBytes += [...retained].reduce((total,file)=>{const meta=sequenceMetadata.get(file)?.metadata;return total+Math.min(128,meta?.width??128)*Math.min(128,meta?.height??128)*16},0)
+    for(const file of [gifFile,gifResultFile,combinedFile,stitchedFile]){
+      if(!file)continue
+      const version=sequenceMetadata.get(file)
+      const estimate=(version?.metadata.width??0)*(version?.metadata.height??0)*(version?.metadata.frames??1)*16
+      if(estimate+file.size*2<=memoryBudgetBytes/8)frontendBytes+=estimate
     }
-    if (frontendBytes > memoryBudgetBytes / 4) throw new Error('GIF_FRONTEND_RESOURCE_LIMIT')
+    if(frontendBytes>memoryBudgetBytes/4)throw new Error('SEQUENCE_FRONTEND_RESOURCE_LIMIT')
     return { project, frontendBytes }
   }
-
-  const revokeExtractedPreviews = () => {
-    setExtractedFrameUrls((urls) => {
-      urls.forEach(URL.revokeObjectURL)
-      return []
-    })
+  const runSequenceTask = async (operation:string,files:File[],parameters:object,fields:(keyof SequenceDraft)[],
+    accept:(outputs:{file:File;version:ManagedVersion}[],before:SequenceDraft)=>void,success:string,
+    name:(index:number,version:ManagedVersion)=>string= index=>`frame_${String(index).padStart(3,'0')}.png`) => {
+    if(execution.current||!files.length)return
+    const before=currentDraft.current
+    const controller=new AbortController();execution.current=controller
+    setLoading(true);setCanceling(false);setTaskProgress(0);setTaskError('')
+    try{
+      const {project,frontendBytes}=await prepareSequenceTask(controller.signal)
+      const {outputs}=await runManagedTask(operation,files,{...parameters,frontendBytes},{signal:controller.signal,
+        onProgress:value=>{if(mounted.current)setTaskProgress(value)},
+        outputFilter:version=>version.metadata.kind==='image'||version.metadata.extension==='.gif'||version.metadata.extension==='.zip'})
+      if(!mounted.current)return
+      if(fields.some(field=>currentDraft.current[field]!==before[field]))throw new Error(taskText.stale)
+      const results=outputs.map((output,index)=>{
+        const type=output.version.metadata.extension==='.gif'?'image/gif':output.version.metadata.extension==='.zip'?'application/zip':'image/png'
+        const file=new File([output.blob],name(index,output.version),{type})
+        cacheManagedInput(file,project.id,output.version.id);rememberVersion(file,output.version)
+        return {file,version:output.version}
+      })
+      if(!results.length)throw new Error('SEQUENCE_RESULT_INCOMPLETE')
+      accept(results,before);message.success(success)
+    }catch(error){if(mounted.current)setTaskError(controller.signal.aborted&&error instanceof DOMException&&error.name==='AbortError'?taskText.canceled:String(error))}
+    finally{if(execution.current===controller)execution.current=null;if(mounted.current){setLoading(false);setCanceling(false);setAddingBlankFrame(false)}}
   }
 
-  useEffect(() => {
-    if (gifFile) {
-      const url = URL.createObjectURL(gifFile)
-      setGifPreviewUrl(url)
-      return () => URL.revokeObjectURL(url)
-    }
-    setGifPreviewUrl(null)
-  }, [gifFile])
-
-  useEffect(() => () => extractedFrameUrls.forEach(URL.revokeObjectURL), [extractedFrameUrls])
-
-  useEffect(() => {
-    const urls = frameFiles.map((f) => URL.createObjectURL(f))
-    setFrameInputUrls(urls)
-    return () => urls.forEach(URL.revokeObjectURL)
-  }, [frameFiles])
-
-  useEffect(() => {
-    return () => combineInputUrls.forEach(URL.revokeObjectURL)
-  }, [combineInputUrls])
-
-  useEffect(() => {
-    if (combineFiles.length === 0) {
-      setFirstImageSize(null)
-      setCropPreviewIndex(0)
-    } else {
-      setCropPreviewIndex((i) => Math.min(i, combineFiles.length - 1))
-    }
-  }, [combineFiles.length])
-
-  useEffect(() => {
-    if (splitFile) {
-      const url = URL.createObjectURL(splitFile)
-      setSplitFileUrl(url)
-      return () => URL.revokeObjectURL(url)
-    }
-    setSplitFileUrl(null)
-  }, [splitFile])
-
-  useEffect(() => {
-    const urls = stitchFiles.map((f) => URL.createObjectURL(f))
-    setStitchInputUrls(urls)
-    return () => urls.forEach(URL.revokeObjectURL)
-  }, [stitchFiles])
-
-  const runSplitSingleImage = async () => {
-    if (!splitFile) return
-    setLoading(true)
-    setCombinedUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    try {
-      const url = URL.createObjectURL(splitFile)
-      const img = await new Promise<HTMLImageElement>((res, rej) => {
-        const i = new Image()
-        i.onload = () => res(i)
-        i.onerror = () => rej(new Error('load'))
-        i.src = url
-      })
-      URL.revokeObjectURL(url)
-      const w = img.naturalWidth
-      const h = img.naturalHeight
-      const rows = Math.max(1, Math.floor(splitRows))
-      const cols = Math.max(1, Math.floor(splitCols))
-      const cellW = Math.floor(w / cols)
-      const cellH = Math.floor(h / rows)
-      if (cellW <= 0 || cellH <= 0) throw new Error('Split too small')
-      const canvas = document.createElement('canvas')
-      canvas.width = cellW
-      canvas.height = cellH
-      const ctx = canvas.getContext('2d')!
-      const baseName = splitFile.name.replace(/\.[^.]+$/, '')
-      const files: File[] = []
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          ctx.clearRect(0, 0, cellW, cellH)
-          ctx.drawImage(img, c * cellW, r * cellH, cellW, cellH, 0, 0, cellW, cellH)
-          const blob = await new Promise<Blob>((resolve, reject) => {
-            canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('canvas'))), 'image/png')
-          })
-          files.push(new File([blob], `${baseName}_${r}_${c}.png`, { type: 'image/png' }))
-        }
+  useEffect(()=>{
+    localJson<{memoryBudgetBytes:number}>('/api/project/context').then(value=>{
+      if(mounted.current&&Number.isFinite(value.memoryBudgetBytes)&&value.memoryBudgetBytes>0)setPreviewBudget(value.memoryBudgetBytes)
+    }).catch(error=>{if(mounted.current)setTaskError(String(error))})
+  },[])
+  useEffect(()=>{
+    const end=()=>dispatchHistory({type:'end'})
+    window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end)
+    return()=>{window.removeEventListener('pointerup',end);window.removeEventListener('pointercancel',end)}
+  },[])
+  useEffect(()=>{
+    const onKey=(event:KeyboardEvent)=>{
+      if(event.isComposing||!(event.metaKey||event.ctrlKey)||event.altKey)return
+      const target=event.target as HTMLElement
+      if(target.closest('input,textarea,select,[contenteditable="true"]'))return
+      if(event.code==='KeyZ'||event.code==='KeyY'){
+        event.preventDefault();dispatchHistory({type:event.code==='KeyY'||event.shiftKey?'redo':'undo'})
       }
-      setCombineFiles(files)
-      message.success(t('imagesToSingleSplitSuccess', { n: files.length }))
-    } catch (e) {
-      message.error(t('imagesToSingleSplitFailed') + ': ' + String(e))
-    } finally {
-      setLoading(false)
     }
-  }
+    window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey)
+  },[])
 
-  const runSuperSplitSingleImage = async () => {
-    if (!splitFile) return
-    setLoading(true)
-    setCombinedUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    try {
-      const url = URL.createObjectURL(splitFile)
-      const img = await new Promise<HTMLImageElement>((res, rej) => {
-        const i = new Image()
-        i.onload = () => res(i)
-        i.onerror = () => rej(new Error('load'))
-        i.src = url
-      })
-      URL.revokeObjectURL(url)
-      const baseName = splitFile.name.replace(/\.[^.]+$/, '')
-      const files = await superSplitByTransparent(img, baseName)
-      setCombineFiles(files)
-      setImagesToSingleInputMode('multi')
-      message.success(t('imagesToSingleSuperSplitSuccess', { n: files.length }))
-    } catch (e) {
-      message.error(t('imagesToSingleSuperSplitFailed') + ': ' + String(e))
-    } finally {
-      setLoading(false)
-    }
+  const runSplitSingleImage = () => {
+    if(!splitFile)return
+    const base=splitFile.name.replace(/\.[^.]+$/,'')
+    return runSequenceTask('image.sliceBrowser',[splitFile],{rows:splitRows,columns:splitCols},['splitFile','splitRows','splitCols'],outputs=>{
+      updateSequence(current=>({...current,combineFiles:outputs.map(output=>output.file),combinedFile:null,combinedParams:null}))
+    },t('imagesToSingleSplitSuccess',{n:splitRows*splitCols}),index=>`${base}_${Math.floor(index/splitCols)}_${index%splitCols}.png`)
   }
-
-  const runImagesToSingle = async () => {
-    if (combineFiles.length === 0) return
-    setLoading(true)
-    setCombinedUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    setCombinedParams(null)
-    try {
-      const imgs: HTMLImageElement[] = []
-      const top = cropTop
-      const bottom = cropBottom
-      const left = cropLeft
-      const right = cropRight
-      let maxW = 0
-      let maxH = 0
-      for (const f of combineFiles) {
-        const url = URL.createObjectURL(f)
-        const img = await new Promise<HTMLImageElement>((res, rej) => {
-          const i = new Image()
-          i.onload = () => res(i)
-          i.onerror = () => rej(new Error('load'))
-          i.src = url
-        })
-        URL.revokeObjectURL(url)
-        // 正数=裁切，负数=扩边（增加透明像素）
-        const sw = Math.max(1, img.naturalWidth - left - right)
-        const sh = Math.max(1, img.naturalHeight - top - bottom)
-        maxW = Math.max(maxW, sw)
-        maxH = Math.max(maxH, sh)
-        imgs.push(img)
-      }
-      const cols = Math.max(1, Math.floor(combineCols))
-      const rows = Math.ceil(imgs.length / cols)
-      const outW = cols * maxW
-      const outH = rows * maxH
-      const canvas = document.createElement('canvas')
-      canvas.width = outW
-      canvas.height = outH
-      const ctx = canvas.getContext('2d')!
-      // 不填充背景，保持透明
-      for (let i = 0; i < imgs.length; i++) {
-        const img = imgs[i]!
-        const sw = Math.max(1, img.naturalWidth - left - right)
-        const sh = Math.max(1, img.naturalHeight - top - bottom)
-        const r = Math.floor(i / cols)
-        const c = i % cols
-        const dx = c * maxW + (maxW - sw) / 2
-        const dy = r * maxH + (maxH - sh) / 2
-        // 正数=从边缘裁切，负数=扩边时源区从 (0,0) 开始，目标偏移
-        const sx = Math.max(0, left)
-        const sy = Math.max(0, top)
-        const srcW = Math.max(1, img.naturalWidth - Math.max(0, left) - Math.max(0, right))
-        const srcH = Math.max(1, img.naturalHeight - Math.max(0, top) - Math.max(0, bottom))
-        const offsetX = Math.max(0, -left)
-        const offsetY = Math.max(0, -top)
-        // 始终按 1:1 绘制，避免拉伸变形。sw/sh 为格子尺寸（含扩边），实际绘制用 srcW/srcH
-        ctx.drawImage(img, sx, sy, srcW, srcH, dx + offsetX, dy + offsetY, srcW, srcH)
-      }
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('canvas'))), 'image/png')
-      })
-      setCombinedUrl(URL.createObjectURL(blob))
-      setCombinedParams({
-        cols,
-        rows,
-        outW,
-        outH,
-        cropTop: top,
-        cropBottom: bottom,
-        cropLeft: left,
-        cropRight: right,
-      })
-      message.success(t('imagesToSingleSuccess'))
-    } catch (e) {
-      message.error(t('imagesToSingleFailed') + ': ' + String(e))
-    } finally {
-      setLoading(false)
-    }
+  const runSuperSplitSingleImage = () => {
+    if(!splitFile)return
+    const base=splitFile.name.replace(/\.[^.]+$/,'')
+    return runSequenceTask('image.superSlice',[splitFile],{},['splitFile'],outputs=>{
+      updateSequence(current=>({...current,combineFiles:outputs.map(output=>output.file),imagesToSingleInputMode:'multi',combinedFile:null,combinedParams:null}))
+    },t('imagesToSingleSuccess'),index=>`${base}_super_${index}.png`)
   }
-
-  const addBlankCombineFrame = async () => {
-    if (combineFiles.length === 0) return
+  const runImagesToSingle = () => runSequenceTask('sequence.combine',combineFiles,{columns:combineCols,cropTop,cropBottom,cropLeft,cropRight},
+    ['combineFiles','combineCols','cropTop','cropBottom','cropLeft','cropRight'],(outputs,before)=>{
+      const output=outputs[0],metadata=output.version.metadata
+      updateSequence(current=>({...current,combinedFile:output.file,combinedParams:{cols:before.combineCols,rows:Math.ceil(before.combineFiles.length/before.combineCols),
+        outW:metadata.width!,outH:metadata.height!,cropTop:before.cropTop,cropBottom:before.cropBottom,cropLeft:before.cropLeft,cropRight:before.cropRight}}))
+    },t('imagesToSingleSuccess'),()=> 'combined.png')
+  const addBlankCombineFrame = () => {
+    if(!combineFiles.length||execution.current)return
     setAddingBlankFrame(true)
-    try {
-      const refSize =
-        firstImageSize ??
-        (await (async () => {
-          const url = URL.createObjectURL(combineFiles[0]!)
-          try {
-            const img = await loadImageElement(url)
-            return { w: img.naturalWidth, h: img.naturalHeight }
-          } finally {
-            URL.revokeObjectURL(url)
-          }
-        })())
-      const blob = await createTransparentPngBlob(refSize.w, refSize.h)
-      const nextIndex = combineFiles.length + 1
-      const blankFile = new File([blob], `blank_${String(nextIndex).padStart(3, '0')}.png`, { type: 'image/png' })
-      setCombineFiles((prev) => [...prev, blankFile])
-    } catch (e) {
-      message.error(t('imagesToSingleAddBlankFailed') + ': ' + String(e))
-    } finally {
-      setAddingBlankFrame(false)
-    }
+    return runSequenceTask('image.blank',[combineFiles[0]],{},['combineFiles'],outputs=>{
+      updateSequence(current=>({...current,combineFiles:[...current.combineFiles,outputs[0].file]}))
+    },t('imagesToSingleSuccess'),()=>`blank_${String(combineFiles.length+1).padStart(3,'0')}.png`)
   }
 
   const downloadCombined = () => {
-    if (!combinedUrl) return
+    if (!combinedFile) return
     const a = document.createElement('a')
-    a.href = combinedUrl
+    a.href = urlFor(combinedFile)!
     const p = combinedParams
     const name = p
       ? `combined_${p.cols}x${p.rows}_${p.outW}x${p.outH}_T${p.cropTop}B${p.cropBottom}L${p.cropLeft}R${p.cropRight}.png`
@@ -365,64 +245,18 @@ export default function GifFrameConverter() {
     a.click()
   }
 
-  const runGifToFrames = async () => {
-    if (!gifFile || execution.current) return
-    const selected = gifFile
-    const controller = new AbortController(); execution.current = controller
-    setLoading(true); setCanceling(false); setTaskProgress(0); setTaskError('')
-    try {
-      const { project, frontendBytes } = await prepareGifTask(controller.signal)
-      const { outputs } = await runManagedTask('gif.split', [selected], { renderer: 'browser', frontendBytes }, {
-        signal: controller.signal, onProgress: value => { if (mounted.current) setTaskProgress(value) },
-        outputFilter: version => version.metadata.kind === 'image' || version.metadata.extension === '.zip',
-      })
-      if (!mounted.current) return
-      if (latestInputs.current.gifFile !== selected) throw new Error(taskText.stale)
-      const archive = outputs.find(output => output.version.metadata.extension === '.zip')
-      const base = selected.name.replace(/\.gif$/i, '') || 'frames'
-      const files = outputs.filter(output => output.version.metadata.kind === 'image').map((output, index) => {
-        const file = new File([output.blob], `${base}_frame_${String(index).padStart(3, '0')}.png`, { type: 'image/png' })
-        cacheManagedInput(file, project.id, output.version.id)
-        return file
-      })
-      if (!archive || !files.length) throw new Error('GIF_RESULT_INCOMPLETE')
-      setExtractedFrameUrls(files.slice(0, 24).map(file => URL.createObjectURL(file)))
-      setExtractedFrameFiles(files)
-      setFramesZipUrl(URL.createObjectURL(archive.blob))
-      message.success(t('gifExtractSuccess', { n: files.length }))
-    } catch (error) {
-      if (mounted.current) setTaskError(controller.signal.aborted && error instanceof DOMException && error.name === 'AbortError'
-        ? taskText.canceled : `${t('gifExtractFailed')}: ${String(error)}`)
-    } finally {
-      if (execution.current === controller) execution.current = null
-      if (mounted.current) { setLoading(false); setCanceling(false) }
-    }
+  const runGifToFrames = () => {
+    if(!gifFile)return
+    const base=gifFile.name.replace(/\.gif$/i,'')||'frames'
+    return runSequenceTask('gif.split',[gifFile],{renderer:'browser'},['gifFile'],outputs=>{
+      const archive=outputs.find(output=>output.version.metadata.extension==='.zip')
+      const frames=outputs.filter(output=>output.version.metadata.kind==='image').map(output=>output.file)
+      if(!archive||!frames.length)throw new Error('GIF_RESULT_INCOMPLETE')
+      updateSequence(current=>({...current,extractedFrameFiles:frames,framesZipFile:archive.file}))
+    },t('imagesToSingleSuccess'),(index,version)=>version.metadata.extension==='.zip'?`${base}_frames.zip`:`${base}_frame_${String(index).padStart(3,'0')}.png`)
   }
-
-  const runFramesToGif = async () => {
-    if (!frameFiles.length || execution.current) return
-    const selected = frameFiles, delay = frameDelay
-    const controller = new AbortController(); execution.current = controller
-    setLoading(true); setCanceling(false); setTaskProgress(0); setTaskError('')
-    try {
-      const { frontendBytes } = await prepareGifTask(controller.signal)
-      const { outputs } = await runManagedTask('sequence.gif', selected, {
-        duration: delay, renderer: 'browser', sizePolicy: 'first', frontendBytes,
-      }, { signal: controller.signal, onProgress: value => { if (mounted.current) setTaskProgress(value) },
-        outputFilter: version => version.metadata.extension === '.gif' })
-      if (!mounted.current) return
-      if (latestInputs.current.frameFiles !== selected || latestInputs.current.frameDelay !== delay) throw new Error(taskText.stale)
-      if (!outputs[0]) throw new Error('GIF_RESULT_INCOMPLETE')
-      setGifUrl(URL.createObjectURL(outputs[0].blob))
-      message.success(t('gifEncodeSuccess'))
-    } catch (error) {
-      if (mounted.current) setTaskError(controller.signal.aborted && error instanceof DOMException && error.name === 'AbortError'
-        ? taskText.canceled : `${t('gifEncodeFailed')}: ${String(error)}`)
-    } finally {
-      if (execution.current === controller) execution.current = null
-      if (mounted.current) { setLoading(false); setCanceling(false) }
-    }
-  }
+  const runFramesToGif = () => runSequenceTask('sequence.gif',frameFiles,{duration:frameDelay,renderer:'browser',sizePolicy:'first'},
+    ['frameFiles','frameDelay'],outputs=>setGifResultFile(outputs[0].file),t('gifEncodeSuccess'),()=> 'output.gif')
 
   const downloadZip = () => {
     if (!framesZipUrl) return
@@ -433,109 +267,41 @@ export default function GifFrameConverter() {
   }
 
   const importFramesToCombine = () => {
-    if (extractedFrameFiles.length === 0) return
-    setCombineFiles(extractedFrameFiles)
-    setImagesToSingleInputMode('multi')
-    setCombinedUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    setCropTop(0)
-    setCropBottom(0)
-    setCropLeft(0)
-    setCropRight(0)
-    setActiveTab('images2single')
-    message.success(t('gifFramesToCombineSuccess', { n: extractedFrameFiles.length }))
+    if(!extractedFrameFiles.length)return
+    updateSequence(current=>({...current,combineFiles:current.extractedFrameFiles,imagesToSingleInputMode:'multi',combinedFile:null,combinedParams:null,
+      cropTop:0,cropBottom:0,cropLeft:0,cropRight:0,activeTab:'images2single'}))
+    message.success(t('gifFramesToCombineSuccess',{n:extractedFrameFiles.length}))
   }
 
   const downloadGif = () => {
-    if (!gifUrl) return
+    if (!gifResultFile) return
     const a = document.createElement('a')
-    a.href = gifUrl
+    a.href = urlFor(gifResultFile)!
     a.download = 'output.gif'
     a.click()
   }
 
-  const runSimpleStitch = async () => {
-    if (stitchFiles.length === 0) return
-    setLoading(true)
-    setStitchResultUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    try {
-      const imgs: HTMLImageElement[] = []
-      for (const f of stitchFiles) {
-        const url = URL.createObjectURL(f)
-        const img = await new Promise<HTMLImageElement>((res, rej) => {
-          const i = new Image()
-          i.onload = () => res(i)
-          i.onerror = () => rej(new Error('load'))
-          i.src = url
-        })
-        URL.revokeObjectURL(url)
-        imgs.push(img)
-      }
-      const isVertical = stitchDirection === 'vertical'
-      const isOverlay = stitchDirection === 'overlay'
-      let outW: number
-      let outH: number
-      if (isOverlay) {
-        outW = Math.max(...imgs.map((i) => i.naturalWidth))
-        outH = Math.max(...imgs.map((i) => i.naturalHeight))
-      } else if (isVertical) {
-        outW = Math.max(...imgs.map((i) => i.naturalWidth))
-        outH = imgs.reduce((s, i) => s + i.naturalHeight, 0)
-      } else {
-        outW = imgs.reduce((s, i) => s + i.naturalWidth, 0)
-        outH = Math.max(...imgs.map((i) => i.naturalHeight))
-      }
-      const canvas = document.createElement('canvas')
-      canvas.width = outW
-      canvas.height = outH
-      const ctx = canvas.getContext('2d')!
-      let dx = 0
-      let dy = 0
-      for (let i = 0; i < imgs.length; i++) {
-        const img = imgs[i]!
-        const w = img.naturalWidth
-        const h = img.naturalHeight
-        if (isOverlay) {
-          dx = (outW - w) / 2
-          dy = (outH - h) / 2
-          ctx.drawImage(img, 0, 0, w, h, dx, dy, w, h)
-        } else if (isVertical) {
-          dx = (outW - w) / 2
-          ctx.drawImage(img, 0, 0, w, h, dx, dy, w, h)
-          dy += h
-        } else {
-          dy = (outH - h) / 2
-          ctx.drawImage(img, 0, 0, w, h, dx, dy, w, h)
-          dx += w
-        }
-      }
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('canvas'))), 'image/png')
-      })
-      setStitchResultUrl(URL.createObjectURL(blob))
-      message.success(t('simpleStitchSuccess'))
-    } catch (e) {
-      message.error(t('simpleStitchFailed') + ': ' + String(e))
-    } finally {
-      setLoading(false)
-    }
-  }
+  const runSimpleStitch = () => runSequenceTask('sequence.stitch',stitchFiles,{direction:stitchDirection},['stitchFiles','stitchDirection'],
+    outputs=>setStitchedFile(outputs[0].file),t('simpleStitchSuccess'),()=> 'stitched.png')
 
   const downloadStitch = () => {
-    if (!stitchResultUrl) return
+    if (!stitchedFile) return
     const a = document.createElement('a')
-    a.href = stitchResultUrl
+    a.href = urlFor(stitchedFile)!
     a.download = 'stitched.png'
     a.click()
   }
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%', paddingTop: 8 }}>
+      <DocumentSaveBar kind="sequence" snapshot={history.present}
+        serialize={draft=>serializeSequenceDocument(draft,rememberVersion)}
+        restore={value=>restoreSequenceDocument(value,[...sequenceFiles([history.present,...history.past,...history.future])])}
+        applySnapshot={draft=>dispatchHistory({type:'restore',draft})}/>
+      <Space>
+        <Button disabled={!history.past.length&&!history.checkpoint} onClick={()=>dispatchHistory({type:'undo'})}>{lang==='zh'?'撤销':lang==='ja'?'元に戻す':'Undo'}</Button>
+        <Button disabled={!history.future.length} onClick={()=>dispatchHistory({type:'redo'})}>{lang==='zh'?'重做':lang==='ja'?'やり直す':'Redo'}</Button>
+      </Space>
       {execution.current && <Button disabled={canceling} onClick={() => { setCanceling(true); execution.current?.abort() }}>
         {canceling ? taskText.canceling : taskText.cancel} · {Math.round(taskProgress * 100)}%
       </Button>}
@@ -555,28 +321,14 @@ export default function GifFrameConverter() {
               <>
                 <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>{t('gifToFramesHint')}</Text>
                 <StashDropZone
-                  onStashDrop={(f) => {
-                    setGifFile(f)
-                    revokeExtractedPreviews()
-                    setExtractedFrameFiles([])
-                    setFramesZipUrl((old) => {
-                      if (old) URL.revokeObjectURL(old)
-                      return null
-                    })
-                  }}
+                  onStashDrop={(f) => updateSequence(current=>({...current,gifFile:f,extractedFrameFiles:[],framesZipFile:null}))}
                 >
                   <Dragger
                     accept={GIF_ACCEPT}
                     maxCount={1}
                     fileList={gifFile ? [{ uid: '1', name: gifFile.name } as UploadFile] : []}
                     beforeUpload={(f) => {
-                      setGifFile(f)
-                      revokeExtractedPreviews()
-                      setExtractedFrameFiles([])
-                      setFramesZipUrl((old) => {
-                        if (old) URL.revokeObjectURL(old)
-                        return null
-                      })
+                      updateSequence(current=>({...current,gifFile:f,extractedFrameFiles:[],framesZipFile:null}))
                       return false
                     }}
                     onRemove={() => setGifFile(null)}
@@ -587,6 +339,7 @@ export default function GifFrameConverter() {
                 {gifFile && gifPreviewUrl && (
                   <>
                     <Text strong style={{ display: 'block', marginTop: 16, marginBottom: 8 }}>{t('imgOriginalPreview')}</Text>
+                    {usesStaticPreview(gifFile)&&<Text type="secondary" style={{display:'block',marginBottom:8}}>{staticPreviewText}</Text>}
                     <div
                       style={{
                         padding: 16,
@@ -636,7 +389,9 @@ export default function GifFrameConverter() {
                         {extractedFrameUrls.map((url, i) => (
                           <StashableImage
                             key={i}
-                            src={url}
+                            src={url??PREVIEW_PLACEHOLDER}
+                            stashSrc={urlFor(extractedFrameFiles[i])!}
+                            aria-busy={!url}
                             alt={`${t('frame')} ${i + 1}`}
                             style={{ maxWidth: 120, maxHeight: 120, imageRendering: 'pixelated', border: '1px solid rgba(0,0,0,0.1)' }}
                           />
@@ -659,12 +414,14 @@ export default function GifFrameConverter() {
               <>
                 <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>{t('framesToGifHint')}</Text>
                 <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>{t('gifFrameDelay')}:</Text>
-                <Slider min={20} max={500} value={frameDelay} onChange={setFrameDelay} style={{ maxWidth: 200, marginBottom: 16 }} />
+                <div onPointerDownCapture={()=>dispatchHistory({type:'begin'})}>
+                  <Slider min={20} max={500} value={frameDelay} onChange={setFrameDelay} style={{ maxWidth: 200, marginBottom: 16 }} />
+                </div>
                 <Text type="secondary" style={{ fontSize: 12 }}>{frameDelay} ms</Text>
                 {frameFiles.length > 0 && (
                   <Space wrap align="center" style={{ marginBottom: 12 }}>
                     <Text type="secondary">{t('gifFrameCols')}:</Text>
-                    <InputNumber min={1} max={16} value={frameCols} onChange={(v) => setFrameCols(v ?? 6)} style={{ width: 64 }} />
+                    <InputNumber min={1} max={16} precision={0} value={frameCols} onChange={(v) => setFrameCols(v ?? 6)} style={{ width: 64 }} />
                   </Space>
                 )}
                 <StashDropZone
@@ -673,9 +430,9 @@ export default function GifFrameConverter() {
                   <Dragger
                     accept={IMAGE_ACCEPT.join(',')}
                     multiple
-                    fileList={frameFiles.map((f, i) => ({ uid: String(i), name: f.name } as UploadFile))}
-                    beforeUpload={(f) => {
-                      setFrameFiles((prev) => [...prev, f])
+                    fileList={frameInputUrls.map(({file:f,index:i}) => ({ uid: String(i), name: f.name } as UploadFile))}
+                    beforeUpload={(f, selected) => {
+                      if(f===selected[0]) setFrameFiles(prev=>[...prev,...selected])
                       return false
                     }}
                     onRemove={(file) => {
@@ -689,6 +446,7 @@ export default function GifFrameConverter() {
                 </StashDropZone>
                 {frameInputUrls.length > 0 && (
                   <>
+                    <Pagination aria-label="frame preview page" current={framePageValue} total={frameFiles.length} pageSize={framePageSize} showSizeChanger={false} onChange={setFramePage} size="small" />
                     <Text strong style={{ display: 'block', marginTop: 16, marginBottom: 8 }}>{t('imgOriginalPreview')}</Text>
                     <Text type="secondary" style={{ display: 'block', marginBottom: 8, fontSize: 12 }}>{t('gifFrameReorderHint')}</Text>
                     <div
@@ -710,7 +468,7 @@ export default function GifFrameConverter() {
                           overflow: 'auto',
                         }}
                       >
-                        {frameInputUrls.map((url, i) => (
+                        {frameInputUrls.map(({url,index:i,stashUrl}) => (
                           <div
                             key={i}
                             style={{
@@ -741,12 +499,17 @@ export default function GifFrameConverter() {
                             onDragLeave={() => {}}
                           >
                             <StashableImage
-                              src={url}
+                              src={url??PREVIEW_PLACEHOLDER}
+                              stashSrc={stashUrl}
+                              aria-busy={!url}
                               alt={`${t('frame')} ${i + 1}`}
                               draggable={false}
                               style={{ maxWidth: 120, maxHeight: 120, width: '100%', objectFit: 'contain', imageRendering: 'pixelated', border: '1px solid rgba(0,0,0,0.1)', display: 'block' }}
                             />
                             <span
+                              role="button" tabIndex={0} data-sequence-handle={`frame:${i}`}
+                              aria-label={`${t('frame')} ${i+1} · ${lang==='zh'?'排序':lang==='ja'?'並べ替え':'Reorder'}`}
+                              onKeyDown={event=>reorderKey(event,'frame',i)}
                               draggable
                               onDragStart={(e) => {
                                 e.stopPropagation()
@@ -846,6 +609,7 @@ export default function GifFrameConverter() {
                 {gifUrl && (
                   <>
                     <Text strong style={{ display: 'block', marginTop: 24, marginBottom: 8 }}>{t('imgPreview')}</Text>
+                    {usesStaticPreview(gifResultFile)&&<Text type="secondary" style={{display:'block',marginBottom:8}}>{staticPreviewText}</Text>}
                     <div
                       style={{
                         padding: 16,
@@ -878,7 +642,7 @@ export default function GifFrameConverter() {
                 <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>{t('imagesToSingleHint')}</Text>
                 <Space wrap align="center" style={{ marginBottom: 12 }}>
                   <Text type="secondary">{t('imagesToSingleCols')}:</Text>
-                  <InputNumber min={1} max={64} value={combineCols} onChange={(v) => setCombineCols(v ?? 4)} style={{ width: 72 }} />
+                  <InputNumber min={1} max={64} precision={0} value={combineCols} onChange={(v) => setCombineCols(v ?? 4)} style={{ width: 72 }} />
                 </Space>
                 <Space wrap align="center" style={{ marginBottom: 12 }}>
                   <Text type="secondary">{t('imagesToSingleInputMode')}:</Text>
@@ -896,8 +660,8 @@ export default function GifFrameConverter() {
                   <div style={{ marginBottom: 16 }}>
                     <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>{t('imagesToSingleSplitHint')}</Text>
                     <Space wrap align="center" style={{ marginBottom: 8 }}>
-                      <InputNumber min={1} max={32} value={splitRows} onChange={(v) => setSplitRows(v ?? 2)} style={{ width: 64 }} addonBefore={t('imagesToSingleSplitRows')} />
-                      <InputNumber min={1} max={32} value={splitCols} onChange={(v) => setSplitCols(v ?? 2)} style={{ width: 64 }} addonBefore={t('imagesToSingleSplitCols')} />
+                      <InputNumber min={1} max={32} precision={0} value={splitRows} onChange={(v) => setSplitRows(v ?? 2)} style={{ width: 64 }} addonBefore={t('imagesToSingleSplitRows')} />
+                      <InputNumber min={1} max={32} precision={0} value={splitCols} onChange={(v) => setSplitCols(v ?? 2)} style={{ width: 64 }} addonBefore={t('imagesToSingleSplitCols')} />
                     </Space>
                     <StashDropZone onStashDrop={(f) => setSplitFile(f)}>
                       <Dragger
@@ -945,9 +709,9 @@ export default function GifFrameConverter() {
                     <Dragger
                       accept={IMAGE_ACCEPT.join(',')}
                       multiple
-                      fileList={combineFiles.map((f, i) => ({ uid: `c-${i}`, name: f.name } as UploadFile))}
-                      beforeUpload={(f) => {
-                        setCombineFiles((prev) => [...prev, f])
+                      fileList={combineInputUrls.map(({file:f,index:i}) => ({ uid: `c-${i}`, name: f.name } as UploadFile))}
+                      beforeUpload={(f, selected) => {
+                        if(f===selected[0]) setCombineFiles(prev=>[...prev,...selected])
                         return false
                       }}
                       onRemove={(file) => {
@@ -963,7 +727,7 @@ export default function GifFrameConverter() {
                   <div style={{ marginBottom: 16 }}>
                     <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>{t('imagesToSingleCropHint')}</Text>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'flex-start' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }} onPointerDownCapture={()=>dispatchHistory({type:'begin'})}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <Button
                             type="text"
@@ -972,23 +736,18 @@ export default function GifFrameConverter() {
                             disabled={combineFiles.length <= 1 || cropPreviewIndex <= 0}
                             onClick={() => setCropPreviewIndex((i) => Math.max(0, i - 1))}
                           />
-                          <CropPreview
+                          {cropThumbnail && <CropPreview
                             key={cropPreviewIndex}
-                            imageUrl={combineInputUrls[cropPreviewIndex]!}
+                            imageUrl={cropThumbnail}
+                            imageDimensions={cropMetadata?.width&&cropMetadata?.height?{w:cropMetadata.width,h:cropMetadata.height}:undefined}
                             cropTop={cropTop}
                             cropBottom={cropBottom}
                             cropLeft={cropLeft}
                             cropRight={cropRight}
-                            onChange={({ top, bottom, left, right }) => {
-                              setCropTop(top)
-                              setCropBottom(bottom)
-                              setCropLeft(left)
-                              setCropRight(right)
-                            }}
-                            onImageSize={cropPreviewIndex === 0 ? (w, h) => setFirstImageSize({ w, h }) : undefined}
+                            onChange={({ top, bottom, left, right }) => updateSequence(current=>({...current,cropTop:top,cropBottom:bottom,cropLeft:left,cropRight:right}))}
                             loadingText={t('cropPreviewLoading')}
                             allowNegative
-                          />
+                          />}
                           <Button
                             type="text"
                             size="small"
@@ -1027,6 +786,7 @@ export default function GifFrameConverter() {
                 )}
                 {combineInputUrls.length > 0 && (
                   <>
+                    <Pagination aria-label="combine preview page" current={combinePageValue} total={combineFiles.length} pageSize={combinePageSize} showSizeChanger={false} onChange={setCombinePage} size="small" />
                     <Text strong style={{ display: 'block', marginTop: 16, marginBottom: 8 }}>{t('imgOriginalPreview')}</Text>
                     <div
                       style={{
@@ -1047,7 +807,7 @@ export default function GifFrameConverter() {
                           overflow: 'auto',
                         }}
                       >
-                        {combineInputUrls.map((url, i) => (
+                        {combineInputUrls.map(({url,index:i,stashUrl}) => (
                           <div
                             key={i}
                             style={{
@@ -1078,12 +838,17 @@ export default function GifFrameConverter() {
                             onDragLeave={() => {}}
                           >
                             <StashableImage
-                              src={url}
+                              src={url??PREVIEW_PLACEHOLDER}
+                              stashSrc={stashUrl}
+                              aria-busy={!url}
                               alt={`${t('frame')} ${i + 1}`}
                               draggable={false}
                               style={{ maxWidth: 120, maxHeight: 120, width: '100%', objectFit: 'contain', imageRendering: 'pixelated', border: '1px solid rgba(0,0,0,0.1)', display: 'block' }}
                             />
                             <span
+                              role="button" tabIndex={0} data-sequence-handle={`combine:${i}`}
+                              aria-label={`${t('frame')} ${i+1} · ${lang==='zh'?'排序':lang==='ja'?'並べ替え':'Reorder'}`}
+                              onKeyDown={event=>reorderKey(event,'combine',i)}
                               draggable
                               onDragStart={(e) => {
                                 e.stopPropagation()
@@ -1256,9 +1021,9 @@ export default function GifFrameConverter() {
                   <Dragger
                     accept={IMAGE_ACCEPT.join(',')}
                     multiple
-                    fileList={stitchFiles.map((f, i) => ({ uid: `s-${i}`, name: f.name } as UploadFile))}
-                    beforeUpload={(f) => {
-                      setStitchFiles((prev) => [...prev, f])
+                    fileList={stitchInputUrls.map(({file:f,index:i}) => ({ uid: `s-${i}`, name: f.name } as UploadFile))}
+                    beforeUpload={(f, selected) => {
+                      if(f===selected[0]) setStitchFiles(prev=>[...prev,...selected])
                       return false
                     }}
                     onRemove={(file) => {
@@ -1271,6 +1036,7 @@ export default function GifFrameConverter() {
                 </StashDropZone>
                 {stitchInputUrls.length > 0 && (
                   <>
+                    <Pagination aria-label="stitch preview page" current={stitchPageValue} total={stitchFiles.length} pageSize={24} showSizeChanger={false} onChange={setStitchPage} size="small" />
                     <Text strong style={{ display: 'block', marginTop: 16, marginBottom: 8 }}>{t('imgOriginalPreview')}</Text>
                     <div
                       style={{
@@ -1282,10 +1048,12 @@ export default function GifFrameConverter() {
                       }}
                     >
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxHeight: 200, overflow: 'auto' }}>
-                        {stitchInputUrls.map((url, i) => (
+                        {stitchInputUrls.map(({url,index:i,stashUrl}) => (
                           <StashableImage
                             key={i}
-                            src={url}
+                            src={url??PREVIEW_PLACEHOLDER}
+                            stashSrc={stashUrl}
+                            aria-busy={!url}
                             alt={`${t('frame')} ${i + 1}`}
                             style={{ maxWidth: 80, maxHeight: 80, objectFit: 'contain', border: '1px solid rgba(0,0,0,0.1)' }}
                           />

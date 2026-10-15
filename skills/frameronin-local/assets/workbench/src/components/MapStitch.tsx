@@ -472,7 +472,7 @@ export default function MapStitch({ onBack }: Props) {
       if(!alive.current||currentDraft.current!==before)throw new Error('Map changed while processing; result remains in Project assets')
       const blob=outputs[0].blob
       const cleanFile = new File([blob], `${getBaseName(upload.file)}_no_watermark.png`, { type: 'image/png' })
-      const {project}=await localJson<{project:{id:string}}>('/api/project')
+      const {project}=await localJson<{project:{id:string}}>('/api/project/context')
       cacheManagedInput(cleanFile,project.id,outputs[0].version.id)
       const cleanImage = await loadImageFile(cleanFile,[],controller.signal)
       if(!alive.current||currentDraft.current!==before){URL.revokeObjectURL(cleanImage.url);throw new Error('Map changed while processing; result remains in Project assets')}
@@ -680,7 +680,7 @@ export default function MapStitch({ onBack }: Props) {
     const before=currentDraft.current
     try {
       const controller=new AbortController();exportExecution.current=controller;archiveExecution.current=controller;setExporting(true);setExportError('')
-      const {memoryBudgetBytes}=await localJson<{memoryBudgetBytes:number}>('/api/project')
+      const {memoryBudgetBytes}=await localJson<{memoryBudgetBytes:number}>('/api/project/context')
       const {state,images}=await runMapArchive<{state:SavedMapStitchState;images:Record<string,File>}>({action:'read',file,budgetBytes:memoryBudgetBytes},controller.signal)
       controller.signal.throwIfAborted()
       await applyEditState(state,images,before,controller.signal)

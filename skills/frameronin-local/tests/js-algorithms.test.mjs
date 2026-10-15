@@ -9,6 +9,59 @@ const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dom = installDom(path.join(skill, 'assets/workbench/public'), 2 * 1024 ** 3)
 const algorithms = await import(pathToFileURL(path.join(skill, '.runtime/js/algorithms.mjs')).href)
 
+test('sequence undo groups cropped parameters and keeps all selected/result files across reorder and removal', () => {
+  const first=new File(['first'],'first.png'),second=new File(['second'],'second.png'),result=new File(['known-result'],'combined.png')
+  let state=algorithms.createSequenceHistory({...algorithms.initialSequenceDraft(),combineFiles:[first,second]})
+  state=algorithms.sequenceHistoryReducer(state,{type:'begin'})
+  for(const cropLeft of [1,2,3])state=algorithms.sequenceHistoryReducer(state,{type:'change',update:value=>({...value,cropLeft})})
+  state=algorithms.sequenceHistoryReducer(state,{type:'end'})
+  assert.equal(state.past.length,1)
+  state=algorithms.sequenceHistoryReducer(state,{type:'change',update:value=>({...value,combineFiles:[second,first],combinedFile:result})})
+  state=algorithms.sequenceHistoryReducer(state,{type:'view',activeTab:'frames2gif'})
+  state=algorithms.sequenceHistoryReducer(state,{type:'undo'})
+  assert.deepEqual(state.present.combineFiles,[first,second]);assert.equal(state.present.combinedFile,null);assert.equal(state.present.activeTab,'frames2gif')
+  state=algorithms.sequenceHistoryReducer(state,{type:'redo'})
+  assert.equal(state.present.combinedFile,result);assert.deepEqual(state.present.combineFiles,[second,first])
+  state=algorithms.sequenceHistoryReducer(state,{type:'change',update:value=>({...value,combineFiles:[]})})
+  state=algorithms.sequenceHistoryReducer(state,{type:'undo'})
+  assert.deepEqual(state.present.combineFiles,[second,first])
+})
+test('sequence documents preserve shared formal references and reject unsafe fields, resources and excessive frames', async () => {
+  const first=new File(['first'],'first.png',{type:'image/png'}),second=new File(['second'],'second.png',{type:'image/png'})
+  const native=globalThis.fetch
+  const ids=['00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000002']
+  const contents=new Map();let imports=0
+  const metadata={kind:'image',bytes:5,width:16,height:12,extension:'.png'}
+  globalThis.fetch=async(url,options={})=>{
+    if(url==='/api/project/context')return Response.json({project:{id:'document-project'},memoryBudgetBytes:2*1024**3})
+    if(url==='/api/assets'){
+      const file=options.body.get('file'),id=ids[imports++];contents.set(id,file)
+      return Response.json({id,metadata:{...metadata,bytes:file.size}})
+    }
+    const id=String(url).split('/')[3]
+    if(String(url).endsWith('/content'))return new Response(contents.get(id))
+    return Response.json({id,metadata:{...metadata,bytes:contents.get(id).size}})
+  }
+  try{
+    const draft={...algorithms.initialSequenceDraft(),frameFiles:[first,second],combineFiles:[second],cropLeft:-2.5}
+    const notifications=[]
+    const stored=await algorithms.serializeSequenceDocument(draft,(file,version)=>{
+      notifications.push({file,previous:algorithms.sequenceMetadata.get(file),version})
+    })
+    assert.equal(notifications.length,2)
+    assert(notifications.every(item=>item.previous===undefined))
+    assert.equal(algorithms.sequenceMetadata.get(first).id,stored.frameFiles[0].versionId)
+    assert.equal(imports,2);assert.equal(stored.combineFiles[0].versionId,stored.frameFiles[1].versionId)
+    const restored=await algorithms.restoreSequenceDocument(stored)
+    assert.equal(restored.combineFiles[0],restored.frameFiles[1]);assert.equal(restored.cropLeft,-2.5)
+    await algorithms.serializeSequenceDocument(restored);assert.equal(imports,2)
+    for(const change of [v=>v.shell='run',v=>v.frameFiles[0].name='../private.png',v=>v.frameDelay=0,
+      v=>v.frameFiles[0].versionId='unselected-path',v=>v.frameFiles=Array(1001).fill(v.frameFiles[0])]){
+      const invalid=structuredClone(stored);change(invalid);assert.throws(()=>algorithms.validateStoredSequence(invalid))
+    }
+  }finally{globalThis.fetch=native}
+})
+
 test('original GIF encoder retains transparent threshold, frame order and finite resource limits', async () => {
   const first=new dom.ImageData(new Uint8ClampedArray([255,0,0,255,0,0,255,127]),2,1)
   const second=new dom.ImageData(new Uint8ClampedArray([0,255,0,255,0,0,255,128]),2,1)

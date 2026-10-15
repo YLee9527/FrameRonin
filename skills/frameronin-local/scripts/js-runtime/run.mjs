@@ -66,6 +66,25 @@ if (request.operation === 'workflow') {
   for (const canvas of expanded) outputs.push(new Blob([await canvas.encode('png')]))
   report = { inputFrames: frames.length, outputFrames: expanded.length, method: 'original-opencv-farneback',
     processingDimensions: { width: frames[0].width, height: frames[0].height } }
+} else if (['sequence.combine','sequence.stitch','image.sliceBrowser','image.superSlice','image.blank'].includes(request.operation)) {
+  const images=[]
+  for(const blob of blobs){
+    const image=await dom.loadImage(Buffer.from(await blob.arrayBuffer()))
+    const canvas=dom.createCanvas(image.width,image.height)
+    canvas.getContext('2d').drawImage(image,0,0)
+    images.push({native:canvas,naturalWidth:image.width,naturalHeight:image.height})
+  }
+  if(request.operation==='sequence.combine')outputs.push(await algorithms.combineSequenceImages(images,request.parameters))
+  else if(request.operation==='sequence.stitch')outputs.push(await algorithms.stitchSequenceImages(images,request.parameters.direction))
+  else if(request.operation==='image.sliceBrowser')outputs.push(...await algorithms.sliceSequenceImage(images[0],request.parameters.rows,request.parameters.columns))
+  else if(request.operation==='image.superSlice')outputs.push(...await algorithms.superSplitByTransparent(images[0],'frame',{
+    maxFrames:1000,budgetBytes:request.budgetBytes,retainedBytes:request.parameters.frontendBytes}))
+  else{
+    const canvas=dom.createCanvas(images[0].naturalWidth,images[0].naturalHeight)
+    outputs.push(new Blob([await canvas.encode('png')]))
+  }
+  report={method:'original-sequence-canvas',operation:request.operation,parameters:request.parameters,
+    inputDimensions:images.map(image=>({width:image.naturalWidth,height:image.naturalHeight})),outputFrames:outputs.length}
 } else if (request.operation === 'gif.split') {
   const {width,height,frames}=algorithms.decodeBrowserGif(await blobs[0].arrayBuffer(),request.budgetBytes)
   const zip=new JSZip(),records=[]

@@ -176,9 +176,9 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "gif-browser-compatibility",
-    "evidence": "doc/testing/evidence/skill-managed-gif.json",
-    "status": "原逐帧调色板、混合尺寸三帧 GIF 字节对照、工作台下载/取消/离开后运行通过",
+    "sample": "sequence-original-canvas; performance-1000-256-rgba",
+    "evidence": "doc/testing/evidence/skill-sequence-document.json",
+    "status": "原浏览器混合尺寸三帧 GIF 字节对照、实际 1000×256×256 GIF 全帧像素/时长/透明度、取消及输入变化保护通过",
     "limits": "browser compatibility renderer and independent Pillow mode; 1000-frame cap plus memory forecasts; first-frame resizing explicit; full combined actual memory and lazy preview pending"
   },
   {
@@ -189,9 +189,9 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "fixed-sequence-sort",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "sample": "sequence-original-canvas; performance-1000-256-rgba",
+    "evidence": "doc/testing/evidence/skill-sequence-document.json",
+    "status": "3/4 帧及 1000 帧跨页键盘排序、焦点跟随、撤销恢复和正式文档保存通过；完整拖拽/删除组合待验收",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {
@@ -202,9 +202,9 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "gif-browser-compatibility",
-    "evidence": "doc/testing/evidence/skill-managed-gif.json",
-    "status": "GIF 全局 120ms 通过实际键盘设置及全部帧时长核对；序列文档时长与撤销待完成",
+    "sample": "sequence-original-canvas; performance-1000-256-rgba",
+    "evidence": "doc/testing/evidence/skill-sequence-document.json",
+    "status": "1000 帧全局 100ms GIF 下载及全部时长通过；100→101→100ms 键盘撤销重做、迟到结果保护和保存通过",
     "limits": "browser compatibility renderer and independent Pillow mode; 1000-frame cap plus memory forecasts; first-frame resizing explicit; full combined actual memory and lazy preview pending"
   },
   {
@@ -215,9 +215,9 @@
     "outputs": "GIF/PNG ZIP/sheet",
     "dependencies": "Canvas/gifuct/gifenc/OpenCV",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/GifFrameConverter.tsx",
-    "sample": "fixed-sequence-merge",
-    "evidence": null,
-    "status": "awaiting module acceptance",
+    "sample": "sequence-original-canvas; performance-1000-256-rgba",
+    "evidence": "doc/testing/evidence/skill-sequence-document.json",
+    "status": "规则/透明拆分、裁切扩边合成及三种拼接的 14 个原浏览器输出通过固定标准；工作台合成/超级拆分及下载通过，完整参数组合待验收",
     "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
   },
   {

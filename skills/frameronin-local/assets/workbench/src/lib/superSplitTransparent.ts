@@ -66,7 +66,8 @@ function getRuns(arr: number[]): [number, number][] {
 /** 超级单图拆分：按透明行列切割，提取帧并统一尺寸。使用 getImageData/putImageData 保证像素级精确，避免 drawImage 插值导致模糊。 */
 export async function superSplitByTransparent(
   img: HTMLImageElement,
-  baseName: string
+  baseName: string,
+  limits: { maxFrames?: number; budgetBytes?: number; retainedBytes?: number } = {}
 ): Promise<File[]> {
   const w = img.naturalWidth
   const h = img.naturalHeight
@@ -91,17 +92,23 @@ export async function superSplitByTransparent(
     for (const [x0, x1] of colRegions) {
       const colWidth = x1 - x0 + 1
       if (colWidth <= 0) continue
+      if (frames.length >= (limits.maxFrames ?? 1000)) throw new Error('SUPER_SPLIT_FRAME_LIMIT')
       frames.push({ x: x0, y: y0, w: colWidth, h: rowHeight })
     }
   }
 
   if (frames.length === 0) throw new Error('未找到可拆分区域')
+  if (frames.length > (limits.maxFrames ?? 1000)) throw new Error('SUPER_SPLIT_FRAME_LIMIT')
 
   let maxW = 0
   let maxH = 0
   for (const f of frames) {
     maxW = Math.max(maxW, f.w)
     maxH = Math.max(maxH, f.h)
+  }
+
+  if (limits.budgetBytes !== undefined && (limits.retainedBytes ?? 0) + w * h * 32 + frames.length * maxW * maxH * 16 + 256 * 1024 ** 2 > limits.budgetBytes) {
+    throw new Error('SUPER_SPLIT_RESOURCE_LIMIT')
   }
 
   const outCanvas = document.createElement('canvas')

@@ -95,7 +95,7 @@ export async function serializeMapDocument(draft: MapDraft): Promise<StoredMap> 
 }
 export async function restoreMapDocument(value: unknown, retained: MapImage[] = []): Promise<MapDraft> {
   const document=validateStoredMap(value)
-  const {project,memoryBudgetBytes}=await localJson<{project:{id:string};memoryBudgetBytes:number}>('/api/project')
+  const {project,memoryBudgetBytes}=await localJson<{project:{id:string};memoryBudgetBytes:number}>('/api/project/context')
   const created: MapImage[]=[];let bytes=0
   const restore=async(input:StoredImage)=>{
     const version=await localJson<ManagedVersion>(`/api/versions/${input.versionId}`)

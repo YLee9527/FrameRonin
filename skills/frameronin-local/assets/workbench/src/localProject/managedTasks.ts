@@ -1,25 +1,27 @@
 import { jsonPost, localFetch, localJson } from './api'
 
-export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
+export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; frames?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
 type Version = ManagedVersion
 type Task = { id: string; state: string; progress: number; results: string[]; error?: { code: string; message: string } }
 type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void; outputFilter?: (version: Version) => boolean }
 const imported = new WeakMap<Blob, { project: string; version: string }>()
 const importing = new WeakMap<Blob, { project: string; promise: Promise<Version> }>()
 
-export async function importManagedInputs(files: Blob[], signal?: AbortSignal) {
+export async function importManagedInputs(files: Blob[], signal?: AbortSignal, onImported?: (file: Blob, version: ManagedVersion) => void) {
   signal?.throwIfAborted()
-  const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project')
+  const { project, memoryBudgetBytes } = await localJson<{ project: { id: string }; memoryBudgetBytes: number }>('/api/project/context')
   if (!Number.isFinite(memoryBudgetBytes) || memoryBudgetBytes <= 0) {
     throw new Error('The local project service does not provide a valid preview budget. Restart the matching skill runtime.')
   }
   const inputs: string[] = []
+  const versions: ManagedVersion[] = []
   for (const [index, file] of files.entries()) {
     signal?.throwIfAborted()
     const existing = imported.get(file)
     if (existing?.project === project.id) {
-      await localJson(`/api/versions/${existing.version}`)
+      const version = await localJson<Version>(`/api/versions/${existing.version}`, { signal })
       inputs.push(existing.version)
+      versions.push(version); onImported?.(file, version)
     } else {
       let pending = importing.get(file)
       if (pending?.project !== project.id) {
@@ -29,12 +31,15 @@ export async function importManagedInputs(files: Blob[], signal?: AbortSignal) {
           .then(version => { imported.set(file, { project: project.id, version: version.id }); return version })
         pending = { project: project.id, promise }; importing.set(file, pending)
       }
-      try { inputs.push((await pending.promise).id) }
+      try {
+        const version = await pending.promise
+        inputs.push(version.id); versions.push(version); onImported?.(file, version)
+      }
       finally { if (importing.get(file) === pending) importing.delete(file) }
     }
   }
   signal?.throwIfAborted()
-  return { project, memoryBudgetBytes, inputs }
+  return { project, memoryBudgetBytes, inputs, versions }
 }
 
 export function cacheManagedInput(file: Blob, project: string, version: string) {
