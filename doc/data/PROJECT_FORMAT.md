@@ -44,8 +44,10 @@ workflow 文档 payload 使用 formatVersion 1，graph 使用历史迁移后的 
 
 ## RoninPro 图像工具文档
 
-统一尺寸 `kind=ronin-unify` 和切分查重 `kind=ronin-duplicates` 使用 `formatVersion=1`，保存 tool、parameters、files、results、reportFile、taskId、editedFile。文件统一引用 `{versionId,name,type}`；当前两种工具的 editedFile 必须为 null。`ronin-scale` 为共享精细编辑器接入预留，尚未作为完整保存入口交付。
+统一尺寸 `kind=ronin-unify`、切分查重 `kind=ronin-duplicates` 和自定义缩放 `kind=ronin-scale` 使用 `formatVersion=1`，保存 tool、parameters、files、results、reportFile、taskId、editedFile。文件统一引用 `{versionId,name,type}`；前两种工具的 editedFile 必须为 null。缩放文档可另存与加工结果同尺寸的精细编辑 PNG，原件和加工版本继续保留。
 
 输入和结果必须属于正式项目。已有结果及末尾 JSON 报告的顺序、操作、输入版本必须与成功任务完全一致；报告额外核对帧数、格子尺寸、分组唯一性和索引范围。查重允许最多 4096 个结果，与其他序列的 1000 帧限制分开。重开先检查完整引用和读取预算，最多八个并行读取；候选内容通过后才替换当前文档，不生成任务或重复导入素材。
 
 输入替换/删除、参数手势和完整加工结果共享有界撤销栈；重做直接复用已有版本。当前、过去、重做和未结束手势共用 256 MiB 文件预算，最多 50 步。结果可保留在当前参数变化之前的版本，界面明确提示重新执行才应用新参数。保存修订冲突阻止导航，另存使用新 ID；读取期间的新编辑不会被迟到候选覆盖。
+
+缩放文档的画笔/橡皮完整笔画、连通擦除、选区移动及重置同样进入该文件历史。保存、重开、导航、输入替换、加工和撤销前先完成待保存画布；PNG 编码失败或取消时保留像素并阻止该保存。未编码笔画也显示为未保存；自动保存等待完整笔画结束。用户可以明确重试或放弃尚未保存的绘制，不能静默清除。另存只有在新文档写入成功后才切换当前 ID。

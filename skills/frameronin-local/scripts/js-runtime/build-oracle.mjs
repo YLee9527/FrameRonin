@@ -58,6 +58,15 @@ const offsetFunction=originalUnify.slice(originalUnify.indexOf('function cellInn
 const unifyStart=originalUnify.indexOf('      const maxW',originalUnify.indexOf('  const runUnify'))
 await fs.writeFile(path.join(output,'original-unify.ts'),`${offsetFunction}\nexport async function originalUnify(imgs:HTMLImageElement[],cols:number,padH:string,padV:string){\n${originalUnify.slice(unifyStart,originalUnify.indexOf('      setResultUrl(URL.createObjectURL(blob))',unifyStart))}\nreturn blob;}`)
 const workbench = path.join(skill, 'assets/workbench')
+const originalFine=await fs.readFile(path.join(root,'reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx'),'utf8')
+const blitter=originalFine.slice(originalFine.indexOf('function blitImageDataInto'),originalFine.indexOf('function pointInSelRect'))
+const fineCallbacks=originalFine.slice(originalFine.indexOf('  const commitSelectMove'),originalFine.indexOf('  const handlePointerDown'))
+await fs.writeFile(path.join(output,'original-fine-editor.ts'),`type SelRect={x:number;y:number;w:number;h:number};\n${blitter}\nexport function originalFineEditor(canvas:HTMLCanvasElement,action:string,p:any){
+const useCallback=(fn:any)=>fn,canvasRef={current:canvas},imgSize={w:canvas.width,h:canvas.height};
+const {tool=action,brushColor='#000000',brushSize=4,eraserSize=8,tolerance:superEraserTolerance=30}=p;
+const pushHistory=()=>{};let rect:any=p.rect??null;const setSelectionRect=(v:any)=>{rect=v};
+${fineCallbacks}\nif(action==='move')commitSelectMove(p.rect,p.dx,p.dy);else if(action==='erase')superEraserAt(p.x,p.y);else drawAt(p.x,p.y);return rect;}`)
+await fs.cp(path.join(skill,'assets/fixtures/fine-editor'),path.join(output,'fine-editor'),{recursive:true})
 const config = path.join(skill, '.runtime/oracle-vite.config.mjs')
 // Keep the original browser's Rollup CommonJS handling. An esbuild-only browser
 // bundle exposes Emscripten's self-returning `then` during dynamic import.

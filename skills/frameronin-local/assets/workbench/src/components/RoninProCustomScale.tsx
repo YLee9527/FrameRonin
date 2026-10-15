@@ -1,9 +1,12 @@
-import { useMemo, useRef, useState } from 'react'
+import { useCallback,useMemo, useRef,useState } from 'react'
 import { Button, Checkbox, InputNumber, message, Radio, Space, Typography, Upload } from 'antd'
 import { ExpandOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
 import { useLanguage } from '../i18n/context'
-import ImageFineEditor from './ImageResizeStroke/ImageFineEditor'
+import ImageFineEditor,{type ImageFineEditorHandle} from './ImageResizeStroke/ImageFineEditor'
+import {useImageToolDocument} from '../localProject/useImageToolDocument'
+import {ImageToolDocumentSurface} from '../localProject/ImageToolDocumentSurface'
+import type {ImageToolParameters} from '../localProject/imageToolDocument'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
 import ManagedImageToolStatus from './ManagedImageToolStatus'
@@ -16,27 +19,47 @@ const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
 
 export default function RoninProCustomScale() {
   const { t } = useLanguage()
-  const [file,setFile]=useState<File|null>(null)
-  const [targetW,setTargetW]=useState(256),[targetH,setTargetH]=useState(256)
-  const [keepAspect,setKeepAspect]=useState(true),[pixelated,setPixelated]=useState(true)
-  const [matteAlgorithm,setMatteAlgorithm]=useState<'contiguous'|'chromaKey'|'chromaKeyAdaptive'>('contiguous')
-  const [nonContiguousTolerance,setNonContiguousTolerance]=useState(5)
-  const selected=useMemo(()=>file?[file]:[],[file])
-  const initialized=useRef<File|null>(null)
-  const tool=useManagedImageTool(selected,{width:targetW,height:targetH,keepAspect,pixelated,matteAlgorithm,nonContiguousTolerance},(source,version)=>{
-    if(initialized.current!==source&&version.metadata.width&&version.metadata.height){
-      initialized.current=source
-      if(keepAspect){setTargetW(version.metadata.width);setTargetH(version.metadata.height)}
+  const model=useImageToolDocument('customScale'),{files:selected,parameters,editedFile}=model.draft,file=selected[0]??null
+  const {width:targetW,height:targetH,keepAspect,pixelated,matteAlgorithm,nonContiguousTolerance}=parameters
+  const setTargetW=(value:number)=>model.setParameter('width',value),setTargetH=(value:number)=>model.setParameter('height',value)
+  const setKeepAspect=(value:boolean)=>model.setParameter('keepAspect',value),setPixelated=(value:boolean)=>model.setParameter('pixelated',value)
+  const setMatteAlgorithm=(value:ImageToolParameters['customScale']['matteAlgorithm'])=>model.setParameter('matteAlgorithm',value)
+  const setNonContiguousTolerance=(value:number)=>model.setParameter('nonContiguousTolerance',value)
+  const editor=useRef<ImageFineEditorHandle>(null)
+  const [pendingEdits,setPendingEdits]=useState(false)
+  const flush=useCallback(async()=>{await editor.current?.flush()},[])
+  const hasPendingEdits=useCallback(()=>editor.current?.hasPendingEdits()??false,[])
+  const initialize=useRef<{file:File;parameters:ImageToolParameters['customScale']}|null>(null)
+  const setFile=async(next:File|null)=>{
+    try{
+      await flush()
+      initialize.current=next?{file:next,parameters:model.current().parameters}:null
+      model.setFiles(next?[next]:[]);return true
+    }catch(error){message.error(String(error));return false}
+  }
+  const tool=useManagedImageTool(selected,parameters,(source,version)=>{
+    const pending=initialize.current
+    if(pending?.file!==source)return
+    initialize.current=null
+    if(version.metadata.width&&version.metadata.height&&pending.parameters.keepAspect){
+      model.normalize(draft=>draft.files[0]===source&&draft.parameters===pending.parameters?{...draft,parameters:{...draft.parameters,width:Math.min(4096,version.metadata.width!),height:Math.min(4096,version.metadata.height!)}}:draft)
     }
-  })
+  },model)
   const previews=useImageToolUrls(selected,tool.versions)
   const original=tool.versions[0]?.metadata
   const originalSize=original?.width&&original?.height?{w:original.width,h:original.height}:null
   const previewUrl=previews[0]?.preview,sourceUrl=previews[0]?.raw
   const resultFiles=useMemo(()=>tool.results.map(result=>result.file),[tool.results])
-  const resultUrl=useImageToolUrls(resultFiles,tool.results.map(result=>result.version))[0]?.raw
+  const displayed=useMemo(()=>editedFile?[editedFile]:resultFiles,[editedFile,resultFiles])
+  const resultUrl=useImageToolUrls(displayed,editedFile?[]:tool.results.map(result=>result.version))[0]?.raw
+  const {change,retained}=model
+  const commitEdit=useCallback((next:File)=>change(draft=>({...draft,editedFile:next})),[change])
+  const retainedBytes=useCallback(()=>[...retained()].reduce((sum,file)=>sum+file.size*2,0),[retained])
   const runPreset=async(mode:ScalePreset)=>{
-    const renderer=mode==='resize'&&!pixelated?'browser-worker':'native'
+    const before=model.current()
+    try{await flush()}catch(error){message.error(String(error));return}
+    if(before.files!==model.current().files||before.parameters!==model.current().parameters){message.warning('Inputs or settings changed; run again.');return}
+    const renderer=mode==='resize'&&!model.current().parameters.pixelated?'browser-worker':'native'
     const side=mode.startsWith('f')?256:mode==='bebe'?190:192
     const preset=mode==='resize'?{}:{width:side,height:side,keepAspect:false,pixelated:true}
     if(await tool.run('image.customScale',{...preset,mode,renderer},mode))message.success(t('imgResizeSuccess'))
@@ -47,7 +70,7 @@ export default function RoninProCustomScale() {
   const runC0c0=()=>runPreset('c0c0'),runC0be=()=>runPreset('c0be'),runBebe=()=>runPreset('bebe'),runBec0=()=>runPreset('bec0')
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <ImageToolDocumentSurface model={model} beforeAction={flush} pendingEdits={pendingEdits} hasPendingEdits={hasPendingEdits}><Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Text type="secondary">{t('roninProCustomScaleHint')}</Text>
       <ManagedImageToolStatus tool={tool}/>
 
@@ -82,18 +105,15 @@ export default function RoninProCustomScale() {
 
       <StashDropZone
         onStashDrop={(f) => {
-          setFile(f)
+          void setFile(f)
         }}
       >
         <Dragger
           accept={IMAGE_ACCEPT.join(',')}
           maxCount={1}
           fileList={file ? [{ uid: '1', name: file.name } as UploadFile] : []}
-          beforeUpload={(f) => {
-            setFile(f)
-            return false
-          }}
-          onRemove={() => setFile(null)}
+          beforeUpload={async(f)=>{await setFile(f);return false}}
+          onRemove={()=>setFile(null)}
         >
           <p className="ant-upload-text">{t('spriteUploadHint')}</p>
         </Dragger>
@@ -195,9 +215,11 @@ export default function RoninProCustomScale() {
       {resultUrl && (
         <>
           <Text strong>{t('imgPreview')}</Text>
-          <ImageFineEditor imageUrl={resultUrl} />
+          <Text type="secondary">{tool.results[0]?.version.metadata.width} × {tool.results[0]?.version.metadata.height}</Text>
+          <ImageFineEditor ref={editor} imageUrl={resultUrl} disabled={!!tool.busy} onPixelDirtyChange={setPendingEdits}
+            binding={{file:displayed[0],onCommit:commitEdit,onReset:()=>model.change(draft=>({...draft,editedFile:null})),retainedBytes}}/>
         </>
       )}
-    </Space>
+    </Space></ImageToolDocumentSurface>
   )
 }

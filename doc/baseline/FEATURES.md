@@ -52,8 +52,8 @@
 | image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → PNG ZIP | 待逐项验收 |
 | image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP | 待逐项验收 |
 | image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP | 待逐项验收 |
-| image.resize-hard | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法对照与可取消任务通过；文档/撤销及完整交互待完成 |
-| 自定义缩放.image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法对照与可取消任务通过；文档/撤销及完整交互待完成 |
+| image.resize-hard | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控任务、绘制文档与撤销/取消通过；完整交互和联合内存待完成 |
+| 自定义缩放.image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控任务、绘制文档与撤销/取消通过；完整交互和联合内存待完成 |
 | audio.wav-to-mp3 | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.batch | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.zip | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |

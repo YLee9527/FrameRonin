@@ -1,0 +1,171 @@
+{
+  "formatVersion": 1,
+  "baselineCommit": "4472253",
+  "comparison": "exact decoded RGBA; exact clamped selection rectangle",
+  "cases": [
+    {
+      "id": "brush-1",
+      "action": "brush",
+      "parameters": {
+        "x": 4,
+        "y": 5,
+        "brushSize": 1,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "brush-4",
+      "action": "brush",
+      "parameters": {
+        "x": 4,
+        "y": 5,
+        "brushSize": 4,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "brush-5",
+      "action": "brush",
+      "parameters": {
+        "x": 4,
+        "y": 5,
+        "brushSize": 5,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "brush-32",
+      "action": "brush",
+      "parameters": {
+        "x": 0,
+        "y": 0,
+        "brushSize": 32,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "eraser-1",
+      "action": "eraser",
+      "parameters": {
+        "x": 4,
+        "y": 5,
+        "eraserSize": 1,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "eraser-8",
+      "action": "eraser",
+      "parameters": {
+        "x": 0,
+        "y": 0,
+        "eraserSize": 8,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "eraser-64",
+      "action": "eraser",
+      "parameters": {
+        "x": 0,
+        "y": 0,
+        "eraserSize": 64,
+        "brushColor": "#1856c0"
+      }
+    },
+    {
+      "id": "erase-connected-1",
+      "action": "erase",
+      "parameters": {
+        "x": 3,
+        "y": 5,
+        "tolerance": 1
+      }
+    },
+    {
+      "id": "erase-connected-30",
+      "action": "erase",
+      "parameters": {
+        "x": 3,
+        "y": 5,
+        "tolerance": 30
+      }
+    },
+    {
+      "id": "erase-connected-100",
+      "action": "erase",
+      "parameters": {
+        "x": 3,
+        "y": 5,
+        "tolerance": 100
+      }
+    },
+    {
+      "id": "erase-transparent",
+      "action": "erase",
+      "parameters": {
+        "x": 7,
+        "y": 5,
+        "tolerance": 100
+      }
+    },
+    {
+      "id": "move-overlap",
+      "action": "move",
+      "parameters": {
+        "rect": {
+          "x": 2,
+          "y": 2,
+          "w": 6,
+          "h": 5
+        },
+        "dx": 2,
+        "dy": 1
+      }
+    },
+    {
+      "id": "move-clamp-positive",
+      "action": "move",
+      "parameters": {
+        "rect": {
+          "x": 10,
+          "y": 7,
+          "w": 4,
+          "h": 4
+        },
+        "dx": 50,
+        "dy": 50
+      }
+    },
+    {
+      "id": "move-clamp-negative",
+      "action": "move",
+      "parameters": {
+        "rect": {
+          "x": 3,
+          "y": 2,
+          "w": 5,
+          "h": 3
+        },
+        "dx": -50,
+        "dy": -50
+      }
+    },
+    {
+      "id": "move-whole-image",
+      "action": "move",
+      "parameters": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 16,
+          "h": 12
+        },
+        "dx": 3,
+        "dy": 2
+      }
+    }
+  ],
+  "sourceSha256": "a88c1e18bf1e47944e6124675d04f9432aeb4f7ffcc2a8f150ed60cb6c84a540",
+  "originalAlgorithmSha256": "ed63fd2aa66a06206eb819700ff4679b77281cd49feaaca2b33235e3cac73a3c"
+}

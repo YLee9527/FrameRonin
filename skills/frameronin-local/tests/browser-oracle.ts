@@ -17,6 +17,9 @@ import { loadOpenCv } from '../assets/workbench/src/lib/pixellise/opencv'
 import { originalScale } from '../.runtime/oracle/original-scale'
 import { originalUnify } from '../.runtime/oracle/original-unify'
 import {splitSpriteSheetGrid as originalSplitGrid,findDuplicateFrameIndexGroups as originalFindDuplicates} from '../.runtime/oracle/original-duplicate'
+import {originalFineEditor} from '../.runtime/oracle/original-fine-editor'
+import {runFineEditorWorker} from '../assets/workbench/src/lib/fineEditorWorker'
+import {stampFineCircle} from '../assets/workbench/src/lib/fineEditorPixels'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -222,7 +225,33 @@ async function runSmoothWorker(){
   }
   await publish(zip,'browser-smooth-worker.zip');status.textContent='Worker smooth resize complete: 6 cases'
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker]] as const) {
+async function runFineEditor(){
+  const fixture=await(await fetch('/fine-editor/manifest.json')).json(),file=await(await fetch('/fine-editor/source.png')).blob(),zip=new JSZip(),checks=[]
+  for(const entry of fixture.cases){
+    const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height
+    const context=canvas.getContext('2d')!;context.drawImage(bitmap,0,0);bitmap.close()
+    const input=context.getImageData(0,0,canvas.width,canvas.height),raw=new Uint8ClampedArray(input.data)
+    const originalCanvas={width:canvas.width,height:canvas.height,getContext:()=>({
+      getImageData:context.getImageData.bind(context),
+      putImageData:(image:ImageData,x:number,y:number)=>{raw.set(image.data);context.putImageData(image,x,y)},
+    })} as unknown as HTMLCanvasElement
+    const originalRect=originalFineEditor(originalCanvas,entry.action,entry.parameters),expected=await png(canvas)
+    zip.file('raw-input.json',JSON.stringify([...input.data]));zip.file(`${entry.id}/raw-original.json`,JSON.stringify([...raw]))
+    const decoded=await runFineEditorWorker({action:'decode',file,budget:2*1024**3,retained:0},new AbortController().signal,0)
+    let request:any={action:entry.action,width:decoded.width,height:decoded.height,pixels:decoded.pixels,budget:2*1024**3,retained:0,...entry.parameters}
+    if(entry.action==='brush'||entry.action==='eraser'){
+      context.putImageData(new ImageData(decoded.pixels!,decoded.width,decoded.height),0,0)
+      const p=entry.parameters
+      stampFineCircle(context,decoded.width,decoded.height,p.x,p.y,entry.action==='brush'?p.brushSize:p.eraserSize,entry.action==='brush'?[24,86,192]:null)
+      request={...request,action:'encode',pixels:context.getImageData(0,0,decoded.width,decoded.height).data}
+    }
+    const actual=await runFineEditorWorker(request,new AbortController().signal,1)
+    zip.file(`${entry.id}/original.png`,expected);zip.file(`${entry.id}/actual.png`,actual.blob!)
+    checks.push({id:entry.id,originalRect,workerRect:actual.rect??null});status.textContent=`Fine editor: ${entry.id}`
+  }
+  zip.file('checks.json',JSON.stringify(checks));await publish(zip,'browser-fine-editor.zip');status.textContent=`Fine editor complete: ${fixture.cases.length} original/Worker comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

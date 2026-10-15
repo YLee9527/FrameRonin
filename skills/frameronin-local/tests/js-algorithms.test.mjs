@@ -9,6 +9,52 @@ const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dom = installDom(path.join(skill, 'assets/workbench/public'), 2 * 1024 ** 3)
 const algorithms = await import(pathToFileURL(path.join(skill, '.runtime/js/algorithms.mjs')).href)
 
+test('fine editor stamps, connected erasure and overlapping moves match frozen original raw RGBA',async()=>{
+  const directory=path.join(skill,'assets/fixtures/fine-editor'),fixture=JSON.parse(await fs.readFile(path.join(directory,'manifest.json'))),golden=JSON.parse(await fs.readFile(path.join(directory,'raw-golden.json')))
+  for(const entry of fixture.cases){
+    const pixels=new Uint8ClampedArray(golden.input),p=entry.parameters,{width,height}=golden
+    const context={
+      getImageData(x,y,w,h){const image=new ImageData(w,h);for(let row=0;row<h;row++)image.data.set(pixels.subarray(((y+row)*width+x)*4,((y+row)*width+x+w)*4),row*w*4);return image},
+      putImageData(image,x,y){for(let row=0;row<image.height;row++)pixels.set(image.data.subarray(row*image.width*4,(row+1)*image.width*4),((y+row)*width+x)*4)},
+    }
+    if(entry.action==='erase')algorithms.eraseConnected(pixels,width,height,p.x,p.y,p.tolerance)
+    else if(entry.action==='move')algorithms.movePixelSelection(pixels,width,height,p.rect,p.dx,p.dy)
+    else algorithms.stampFineCircle(context,width,height,p.x,p.y,entry.action==='brush'?p.brushSize:p.eraserSize,entry.action==='brush'?[24,86,192]:null)
+    assert.deepEqual([...pixels],golden.expected[entry.id],entry.id)
+  }
+})
+
+test('fine editor preflights PNG, JPEG and WebP headers and total pixel/history budget before decoding',async()=>{
+  const canvas=dom.createCanvas(17,11);canvas.getContext('2d').fillRect(0,0,17,11)
+  for(const format of ['png','jpeg','webp']){
+    const blob=new Blob([await canvas.encode(format)])
+    assert.deepEqual(await algorithms.fineEditorImageSize(blob),{width:17,height:11})
+  }
+  await assert.rejects(algorithms.fineEditorImageSize(new Blob(['not an image'])),/HEADER_INVALID/)
+  algorithms.checkFineEditorBudget(4096,4096,10,2*1024**3,256*1024**2)
+  for(const args of [[8192,8192,1,2*1024**3,0],[16,12,NaN,2*1024**3,0],[16,12,1,NaN,0],[16,12,1,2*1024**3,2*1024**3]])assert.throws(()=>algorithms.checkFineEditorBudget(...args),/RESOURCE_LIMIT/)
+})
+
+test('fine editor Worker ignores foreign generations and invalidates canceled or late callbacks before termination',async()=>{
+  const original=globalThis.Worker,created=[]
+  globalThis.Worker=class{
+    constructor(){created.push(this);this.terminated=0}
+    terminate(){this.terminated++}
+    postMessage(request){this.request=request}
+  }
+  try{
+    const request={action:'encode',width:1,height:1,pixels:new Uint8ClampedArray(4),budget:2*1024**3,retained:0},controller=new AbortController()
+    const promise=algorithms.runFineEditorWorker(request,controller.signal,4),worker=created[0]
+    worker.onmessage({data:{id:worker.request.id,generation:3,result:{blob:'foreign'}}})
+    assert.equal(worker.terminated,0)
+    controller.abort();await assert.rejects(promise,{name:'AbortError'});assert.equal(worker.terminated,1)
+    worker.onmessage({data:{id:worker.request.id,generation:4,result:{blob:'late'}}});assert.equal(worker.terminated,1)
+    const accepted=algorithms.runFineEditorWorker(request,new AbortController().signal,8),second=created[1]
+    second.onmessage({data:{id:second.request.id,generation:8,result:{width:1,height:1}}})
+    assert.deepEqual(await accepted,{width:1,height:1});assert.equal(second.terminated,1)
+  }finally{globalThis.Worker=original}
+})
+
 test('Ronin tool history keeps input order, complete processing results and gestures in one bounded undo stack',()=>{
   const input=new File(['source'],'source.png'),output=new File(['result'],'result.png'),report=new File(['report'],'report.json')
   let state=algorithms.createImageToolHistory({...algorithms.initialImageToolDraft('findDuplicates'),files:[input]})

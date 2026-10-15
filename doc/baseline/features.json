@@ -659,8 +659,9 @@
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomScale.tsx",
     "sample": "ronin-original-image-tools-44",
     "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
-    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
-    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling"
+    "status": "原算法、受控加工、绘制文档与撤销/取消通过；完整格式/交互及联合内存待完成",
+    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling",
+    "documentEvidence": "doc/testing/evidence/skill-fine-editor.json"
   },
   {
     "id": "自定义缩放.image.resize",
@@ -672,8 +673,9 @@
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomScale.tsx",
     "sample": "ronin-original-image-tools-44",
     "evidence": "doc/testing/evidence/skill-ronin-image-tools.json",
-    "status": "原算法对照与后台处理通过；文档保存、统一撤销及完整交互继续验收",
-    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling"
+    "status": "原算法、受控加工、绘制文档与撤销/取消通过；完整格式/交互及联合内存待完成",
+    "limits": "custom target 1..4096; eight fixed matte/crop presets; smooth Canvas requires workbench Worker; unify 1..1000 images and integer alignment; duplicate grid 1..64 per side; output side <=30000; preflight budget, no silent resampling",
+    "documentEvidence": "doc/testing/evidence/skill-fine-editor.json"
   },
   {
     "id": "audio.wav-to-mp3",

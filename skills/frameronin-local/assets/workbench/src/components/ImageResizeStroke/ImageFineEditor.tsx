@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { Button, ColorPicker, message, Slider, Space, Typography } from 'antd'
+import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState,type Ref } from 'react'
+import {flushSync} from 'react-dom'
+import { Alert,Button, ColorPicker, message, Slider, Space, Typography } from 'antd'
 import {
   AimOutlined,
   BorderOuterOutlined,
@@ -9,9 +10,14 @@ import {
   EyeOutlined,
   InboxOutlined,
   UndoOutlined,
+  RedoOutlined,
 } from '@ant-design/icons'
 import { useLanguage } from '../../i18n/context'
 import { useImageStash } from '../../stash/context'
+import {localJson} from '../../localProject/api'
+import {runFineEditorWorker} from '../../lib/fineEditorWorker'
+import {checkFineEditorBudget,stampFineCircle} from '../../lib/fineEditorPixels'
+import type {FineEditorRequest,FineEditorResult} from '../../lib/fineEditor.worker'
 
 const { Text } = Typography
 
@@ -19,43 +25,23 @@ type Tool = 'brush' | 'eraser' | 'superEraser' | 'selectMove' | 'eyedropper'
 
 type SelRect = { x: number; y: number; w: number; h: number }
 
-/** 将 chunk 以左上角 (atX,atY) 拷入 dest（全图 ImageData），越界跳过 */
-function blitImageDataInto(
-  dest: ImageData,
-  chunk: ImageData,
-  atX: number,
-  atY: number,
-  cw: number,
-  ch: number,
-) {
-  const sw = chunk.width
-  const sh = chunk.height
-  for (let j = 0; j < sh; j++) {
-    for (let i = 0; i < sw; i++) {
-      const dx = atX + i
-      const dy = atY + j
-      if (dx < 0 || dx >= cw || dy < 0 || dy >= ch) continue
-      const si = (j * sw + i) * 4
-      const di = (dy * cw + dx) * 4
-      dest.data[di] = chunk.data[si]!
-      dest.data[di + 1] = chunk.data[si + 1]!
-      dest.data[di + 2] = chunk.data[si + 2]!
-      dest.data[di + 3] = chunk.data[si + 3]!
-    }
-  }
-}
-
 function pointInSelRect(px: number, py: number, r: SelRect): boolean {
   return px >= r.x && px < r.x + r.w && py >= r.y && py < r.y + r.h
 }
 
+export type ImageFineEditorHandle={flush:()=>Promise<void>;hasPendingEdits:()=>boolean}
+type EditorBinding={file:File;onCommit:(file:File)=>void;onReset:()=>void;retainedBytes:()=>number}
 interface ImageFineEditorProps {
   imageUrl: string
   onExport?: (blob: Blob) => void
+  binding?:EditorBinding
+  disabled?:boolean
+  onPixelDirtyChange?:(dirty:boolean)=>void
+  ref?:Ref<ImageFineEditorHandle>
 }
 
-export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorProps) {
-  const { t } = useLanguage()
+export default function ImageFineEditor({ imageUrl, onExport,binding,disabled=false,ref,onPixelDirtyChange }: ImageFineEditorProps) {
+  const { t,lang } = useLanguage()
   const { addImage } = useImageStash()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -86,7 +72,22 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const saveDataRef = useRef<ImageData | null>(null)
   const historyRef = useRef<ImageData[]>([])
+  const redoRef=useRef<ImageData[]>([])
   const [historyLength, setHistoryLength] = useState(0)
+  const [redoLength,setRedoLength]=useState(0)
+  const [working,setWorking]=useState(false),[loading,setLoading]=useState(false),[editError,setEditError]=useState('')
+  const liveBinding=useRef(binding);liveBinding.current=binding
+  const dirtyListener=useRef(onPixelDirtyChange);dirtyListener.current=onPixelDirtyChange
+  const alive=useRef(true),generation=useRef(0),dirtyPixels=useRef(false),selfCommitted=useRef<File|null>(null)
+  const operation=useRef<{controller:AbortController;promise:Promise<unknown>}|null>(null)
+  const loadRequest=useRef<{controller:AbortController;promise:Promise<void>}|null>(null)
+  const finishGesture=useRef<()=>Promise<void>>(async()=>{})
+  const externalFile=binding?.file,source=externalFile??imageUrl
+  const sourceIdentity=useRef(source);sourceIdentity.current=source
+  const blocked=disabled||working||loading||loadError
+  const status=lang==='zh'?{working:'正在保存或加工画布',loading:'正在读取画布',cancel:'取消画布任务',retry:'重试画布保存',undo:'撤销',redo:'重做',pending:'画布尚有未保存修改；请重试保存。',discard:'放弃未保存绘制'}
+    :lang==='ja'?{working:'キャンバスを保存・処理中',loading:'キャンバスを読込中',cancel:'キャンバス処理を取消',retry:'保存を再試行',undo:'元に戻す',redo:'やり直す',pending:'未保存の描画があります。保存を再試行してください。',discard:'未保存の描画を破棄'}
+      :{working:'Saving or processing canvas',loading:'Loading canvas',cancel:'Cancel canvas task',retry:'Retry canvas save',undo:'Undo',redo:'Redo',pending:'The canvas has unsaved edits. Retry saving.',discard:'Discard unsaved painting'}
   const MAX_HISTORY = 30
   const zoomFactorRef = useRef(1)
   const fitScaleRef = useRef(1)
@@ -96,6 +97,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
   offsetRef.current = offset
 
   const displayScale = fitScale * zoomFactor
+  const markDirty=useCallback((value:boolean)=>{dirtyPixels.current=value;dirtyListener.current?.(value)},[])
 
   const eraserCursor = useCallback(() => {
     const d = Math.min(128, Math.max(2, Math.ceil(eraserSize * displayScale)))
@@ -115,35 +117,89 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") ${r} ${r}, cell`
   }, [brushSize, displayScale])
 
+  useLayoutEffect(()=>{
+    alive.current=true
+    const invalidate=()=>{alive.current=false;generation.current++;operation.current?.controller.abort()}
+    return invalidate
+  },[])
+  const retainedBytes=useCallback(()=>liveBinding.current?.retainedBytes()??[...historyRef.current,...redoRef.current,...(saveDataRef.current?[saveDataRef.current]:[])].reduce((sum,image)=>sum+image.data.byteLength,0),[])
+  const execute=useCallback(<T,>(work:(signal:AbortSignal,version:number)=>Promise<T>):Promise<T>=>{
+    if(operation.current)return Promise.reject(new Error('FINE_EDITOR_BUSY'))
+    const controller=new AbortController(),version=++generation.current
+    setWorking(true);setEditError('');dirtyListener.current?.(true)
+    const promise=(async()=>{
+      try{return await work(controller.signal,version)}
+      catch(error){if(alive.current)setEditError(String(error));throw error}
+      finally{if(operation.current?.controller===controller)operation.current=null;if(alive.current){setWorking(false);dirtyListener.current?.(dirtyPixels.current)}}
+    })()
+    operation.current={controller,promise};return promise
+  },[])
+  const pixelRequest=useCallback(async(action:'encode'|'erase'|'move',signal:AbortSignal,version:number,extra:object={}):Promise<FineEditorResult>=>{
+    const inputSource=sourceIdentity.current
+    const {memoryBudgetBytes:budget}=await localJson<{memoryBudgetBytes:number}>('/api/project/context',{signal})
+    signal.throwIfAborted()
+    const canvas=canvasRef.current,context=canvas?.getContext('2d')
+    if(!canvas||!context)throw new Error('FINE_EDITOR_CANVAS_UNAVAILABLE')
+    const width=canvas.width,height=canvas.height,retained=retainedBytes()
+    checkFineEditorBudget(width,height,0,budget,retained)
+    const pixels=context.getImageData(0,0,width,height).data
+    const result=await runFineEditorWorker({action,width,height,pixels,budget,retained,...extra} as FineEditorRequest,signal,version)
+    signal.throwIfAborted()
+    if(!alive.current||generation.current!==version||sourceIdentity.current!==inputSource)throw new DOMException('Canvas changed','AbortError')
+    return result
+  },[retainedBytes])
+  const acceptFile=useCallback((blob:Blob)=>{
+    const current=liveBinding.current
+    if(current){
+      const file=new File([blob],'fine-edited.png',{type:'image/png'})
+      selfCommitted.current=file
+      flushSync(()=>current.onCommit(file))
+    }
+    markDirty(false)
+  },[markDirty])
+  const flushPixels=useCallback(async()=>{
+    if(operation.current)await operation.current.promise
+    if(!dirtyPixels.current)return
+    await execute(async(signal,version)=>{
+      const result=await pixelRequest('encode',signal,version)
+      if(!result.blob)throw new Error('FINE_EDITOR_OUTPUT_INVALID')
+      acceptFile(result.blob)
+    })
+  },[execute,pixelRequest,acceptFile])
+  useImperativeHandle(ref,()=>({hasPendingEdits:()=>dirtyPixels.current||!!operation.current,flush:async()=>{
+    // A failed view decode cannot discard edits. Unedited formal references
+    // remain saveable, and users may replace an unreadable image.
+    if(loadRequest.current)await loadRequest.current.promise
+    await finishGesture.current();await flushPixels()
+  }}),[flushPixels])
+  useEffect(()=>{
+    const beforeUnload=(event:BeforeUnloadEvent)=>{if(dirtyPixels.current||operation.current){event.preventDefault();event.returnValue=''}}
+    window.addEventListener('beforeunload',beforeUnload);return()=>window.removeEventListener('beforeunload',beforeUnload)
+  },[])
+
   useEffect(() => {
-    if (!imageUrl) {
-      setImgSize(null)
-      setLoadError(false)
-      return
-    }
-    setImgSize(null)
-    setLoadError(false)
-    const img = new Image()
-    img.onload = () => {
-      const canvas = canvasRef.current
-      if (!canvas) return
-      const w = img.naturalWidth || img.width
-      const h = img.naturalHeight || img.height
-      setImgSize({ w, h })
-      canvas.width = w
-      canvas.height = h
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
-      ctx.clearRect(0, 0, w, h)
-      ctx.drawImage(img, 0, 0)
-      const id = ctx.getImageData(0, 0, w, h)
-      saveDataRef.current = id
-      historyRef.current = [new ImageData(new Uint8ClampedArray(id.data), id.width, id.height)]
-      setHistoryLength(1)
-    }
-    img.onerror = () => setLoadError(true)
-    img.src = imageUrl
-  }, [imageUrl, reloadKey])
+    if(externalFile&&selfCommitted.current===externalFile){selfCommitted.current=null;return}
+    const controller=new AbortController(),version=++generation.current
+    operation.current?.controller.abort();markDirty(false)
+    setLoading(true);setLoadError(false);setEditError('')
+    const promise=(async()=>{
+      const {memoryBudgetBytes:budget}=await localJson<{memoryBudgetBytes:number}>('/api/project/context',{signal:controller.signal})
+      const file=source instanceof Blob?source:await (await fetch(source,{signal:controller.signal})).blob()
+      const result=await runFineEditorWorker({action:'decode',file,budget,retained:retainedBytes()},controller.signal,version)
+      if(controller.signal.aborted||generation.current!==version||!alive.current)return
+      const canvas=canvasRef.current,context=canvas?.getContext('2d')
+      if(!canvas||!context||!result.pixels)throw new Error('FINE_EDITOR_CANVAS_UNAVAILABLE')
+      const id=new ImageData(result.pixels as Uint8ClampedArray<ArrayBuffer>,result.width,result.height)
+      canvas.width=result.width;canvas.height=result.height;context.putImageData(id,0,0)
+      saveDataRef.current=liveBinding.current?null:id
+      historyRef.current=[];redoRef.current=[];setHistoryLength(0);setRedoLength(0)
+      setSelectionRect(null);setMarqueeActive(null);setMoveDrag(null);setDrawing(false)
+      setImgSize({w:result.width,h:result.height})
+    })().catch(error=>{if(!controller.signal.aborted&&alive.current){setLoadError(true);setEditError(String(error))}})
+      .finally(()=>{if(loadRequest.current?.controller===controller)loadRequest.current=null;if(!controller.signal.aborted&&alive.current)setLoading(false)})
+    loadRequest.current={controller,promise}
+    return()=>controller.abort()
+  }, [source,externalFile,reloadKey,retainedBytes,markDirty])
 
   useEffect(() => {
     if (!containerRef.current || !imgSize) return
@@ -170,27 +226,31 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
   }, [imgSize])
 
   const pushHistory = useCallback(() => {
-    const canvas = canvasRef.current
-    const ctx = canvas?.getContext('2d')
-    if (!ctx || !imgSize) return
-    const id = ctx.getImageData(0, 0, imgSize.w, imgSize.h)
-    const clone = new ImageData(new Uint8ClampedArray(id.data), id.width, id.height)
-    const h = historyRef.current
-    h.push(clone)
-    if (h.length > MAX_HISTORY) h.shift()
-    setHistoryLength(h.length)
-  }, [imgSize])
-
-  const handleUndo = useCallback(() => {
-    const canvas = canvasRef.current
-    const ctx = canvas?.getContext('2d')
-    const h = historyRef.current
-    if (!ctx || !imgSize || h.length <= 1) return
-    const prev = h[h.length - 1]
-    if (prev) ctx.putImageData(prev, 0, 0)
-    h.pop()
-    setHistoryLength(h.length)
-  }, [imgSize])
+    if(liveBinding.current)return
+    const canvas=canvasRef.current,context=canvas?.getContext('2d')
+    if(!context||!canvas)return
+    const size=canvas.width*canvas.height*4
+    const limit=Math.min(MAX_HISTORY,Math.floor((256*1024**2-size*3)/size))
+    if(limit<1)throw new Error('FINE_EDITOR_HISTORY_RESOURCE_LIMIT')
+    historyRef.current.push(context.getImageData(0,0,canvas.width,canvas.height))
+    if(historyRef.current.length>limit)historyRef.current=historyRef.current.slice(-limit)
+    redoRef.current=[];setHistoryLength(historyRef.current.length);setRedoLength(0)
+  }, [])
+  const handleUndo=useCallback(()=>{
+    if(liveBinding.current||operation.current||dirtyPixels.current)return
+    const context=canvasRef.current?.getContext('2d'),previous=historyRef.current.pop()
+    if(!context||!previous)return
+    redoRef.current.push(context.getImageData(0,0,previous.width,previous.height));context.putImageData(previous,0,0)
+    setHistoryLength(historyRef.current.length);setRedoLength(redoRef.current.length);clearSelectUiRef.current()
+  },[])
+  const handleRedo=useCallback(()=>{
+    if(liveBinding.current||operation.current||dirtyPixels.current)return
+    const context=canvasRef.current?.getContext('2d'),next=redoRef.current.pop()
+    if(!context||!next)return
+    historyRef.current.push(context.getImageData(0,0,next.width,next.height));context.putImageData(next,0,0)
+    setHistoryLength(historyRef.current.length);setRedoLength(redoRef.current.length);clearSelectUiRef.current()
+  },[])
+  const clearSelectUiRef=useRef(()=>{})
 
   const screenToCanvas = useCallback(
     (clientX: number, clientY: number) => {
@@ -243,6 +303,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
   )
 
   const clearSelectUi = useCallback(() => {
+    selectionRectRef.current=null;marqueeRef.current=null;moveDragRef.current=null
     setSelectionRect(null)
     setMarqueeActive(null)
     setMoveDrag(null)
@@ -256,150 +317,54 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
     [clearSelectUi],
   )
 
-  const commitSelectMove = useCallback(
-    (sel: SelRect, dix: number, diy: number) => {
-      const canvas = canvasRef.current
-      const ctx = canvas?.getContext('2d')
-      if (!ctx || !imgSize) return
-      const { x: sx, y: sy, w: sw, h: sh } = sel
-      let nx = sx + dix
-      let ny = sy + diy
-      nx = Math.max(0, Math.min(nx, imgSize.w - sw))
-      ny = Math.max(0, Math.min(ny, imgSize.h - sh))
-      if (nx === sx && ny === sy) return
-      pushHistory()
-      const full = ctx.getImageData(0, 0, imgSize.w, imgSize.h)
-      const chunk = ctx.getImageData(sx, sy, sw, sh)
-      const hole = new ImageData(sw, sh)
-      blitImageDataInto(full, hole, sx, sy, imgSize.w, imgSize.h)
-      blitImageDataInto(full, chunk, nx, ny, imgSize.w, imgSize.h)
-      ctx.putImageData(full, 0, 0)
-      setSelectionRect({ x: nx, y: ny, w: sw, h: sh })
-    },
-    [imgSize, pushHistory],
-  )
+  clearSelectUiRef.current=clearSelectUi
+  const commitSelectMove=useCallback(async(sel:SelRect,dx:number,dy:number)=>{
+    if(operation.current||disabled||!imgSize)return
+    const x=Math.max(0,Math.min(sel.x+dx,imgSize.w-sel.w)),y=Math.max(0,Math.min(sel.y+dy,imgSize.h-sel.h))
+    if(x===sel.x&&y===sel.y)return
+    await execute(async(signal,version)=>{
+      const result=await pixelRequest('move',signal,version,{rect:sel,dx,dy})
+      if(!result.pixels||!result.blob||!result.rect)throw new Error('FINE_EDITOR_OUTPUT_INVALID')
+      pushHistory();canvasRef.current!.getContext('2d')!.putImageData(new ImageData(result.pixels as Uint8ClampedArray<ArrayBuffer>,result.width,result.height),0,0)
+      setSelectionRect(result.rect);acceptFile(result.blob)
+    })
+  },[disabled,imgSize,execute,pixelRequest,pushHistory,acceptFile])
+  const superEraserAt=useCallback(async(x:number,y:number)=>{
+    await execute(async(signal,version)=>{
+      const result=await pixelRequest('erase',signal,version,{x,y,tolerance:superEraserTolerance})
+      if(!result.pixels||!result.blob)throw new Error('FINE_EDITOR_OUTPUT_INVALID')
+      pushHistory();canvasRef.current!.getContext('2d')!.putImageData(new ImageData(result.pixels as Uint8ClampedArray<ArrayBuffer>,result.width,result.height),0,0)
+      acceptFile(result.blob)
+    })
+  },[execute,pixelRequest,pushHistory,acceptFile,superEraserTolerance])
 
-  const superEraserAt = useCallback(
-    (px: number, py: number) => {
-      const canvas = canvasRef.current
-      const ctx = canvas?.getContext('2d')
-      if (!ctx || !imgSize) return
-      const data = ctx.getImageData(0, 0, imgSize.w, imgSize.h)
-      const w = imgSize.w
-      const h = imgSize.h
-      const idx = (py * w + px) * 4
-      const r0 = data.data[idx]
-      const g0 = data.data[idx + 1]
-      const b0 = data.data[idx + 2]
-      const a0 = data.data[idx + 3]
-      if (a0 === 0) return
-      const tol = superEraserTolerance
-      const tol2 = tol * tol
-      const dist2 = (r1: number, g1: number, b1: number) =>
-        (r1 - r0) ** 2 + (g1 - g0) ** 2 + (b1 - b0) ** 2
-      const visited = new Uint8Array(w * h)
-      const stack: [number, number][] = [[px, py]]
-      visited[py * w + px] = 1
-      const dx = [0, 1, 0, -1]
-      const dy = [-1, 0, 1, 0]
-      while (stack.length > 0) {
-        const [x, y] = stack.pop()!
-        const i = (y * w + x) * 4
-        data.data[i + 3] = 0
-        for (let k = 0; k < 4; k++) {
-          const nx = x + dx[k]
-          const ny = y + dy[k]
-          if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue
-          const ni = ny * w + nx
-          if (visited[ni]) continue
-          const ai = (ni * 4) + 3
-          if (data.data[ai] === 0) continue
-          const ri = data.data[ni * 4]
-          const gi = data.data[ni * 4 + 1]
-          const bi = data.data[ni * 4 + 2]
-          if (dist2(ri, gi, bi) <= tol2) {
-            visited[ni] = 1
-            stack.push([nx, ny])
-          }
-        }
-      }
-      ctx.putImageData(data, 0, 0)
-    },
-    [imgSize, superEraserTolerance]
-  )
+  const drawAt=useCallback((px:number,py:number)=>{
+    const canvas=canvasRef.current,context=canvas?.getContext('2d')
+    if(!canvas||!context||!imgSize)return
+    const color=String(brushColor).match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
+    // ColorPicker emits six-digit hex; retain the original Canvas fallback.
+    let rgb=color?color.slice(1).map(value=>parseInt(value,16)):[0,0,0]
+    if(tool==='brush'&&!color){
+      const temporary=document.createElement('canvas');temporary.width=temporary.height=1
+      const ctx=temporary.getContext('2d')!
+      ctx.fillStyle=brushColor;ctx.fillRect(0,0,1,1);rgb=[...ctx.getImageData(0,0,1,1).data].slice(0,3)
+    }
+    stampFineCircle(context,imgSize.w,imgSize.h,px,py,tool==='brush'?brushSize:eraserSize,tool==='brush'?rgb:null)
+    context.globalCompositeOperation='source-over';markDirty(true)
+  },[tool,brushSize,eraserSize,imgSize,brushColor,markDirty])
 
-  const drawAt = useCallback(
-    (px: number, py: number) => {
-      const canvas = canvasRef.current
-      const ctx = canvas?.getContext('2d')
-      if (!ctx || !imgSize) return
-      if (tool === 'brush') {
-        let r = 0, g = 0, b = 0
-        const m = String(brushColor).match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-        if (m) {
-          r = parseInt(m[1], 16)
-          g = parseInt(m[2], 16)
-          b = parseInt(m[3], 16)
-        } else {
-          const tmp = document.createElement('canvas')
-          tmp.width = tmp.height = 1
-          const tctx = tmp.getContext('2d')
-          if (tctx) {
-            tctx.fillStyle = String(brushColor)
-            tctx.fillRect(0, 0, 1, 1)
-            const d = tctx.getImageData(0, 0, 1, 1).data
-            r = d[0]; g = d[1]; b = d[2]
-          }
-        }
-        const data = ctx.getImageData(0, 0, imgSize.w, imgSize.h)
-        const cx = px + 0.5
-        const cy = py + 0.5
-        const size = brushSize
-        const radius = size / 2
-        const r2 = radius * radius
-        const rad = Math.ceil(radius)
-        for (let iy = Math.max(0, py - rad); iy <= Math.min(imgSize.h - 1, py + rad); iy++) {
-          for (let ix = Math.max(0, px - rad); ix <= Math.min(imgSize.w - 1, px + rad); ix++) {
-            const dx = ix + 0.5 - cx
-            const dy = iy + 0.5 - cy
-            if (dx * dx + dy * dy <= r2) {
-              const i = (iy * imgSize.w + ix) * 4
-              data.data[i] = r
-              data.data[i + 1] = g
-              data.data[i + 2] = b
-              data.data[i + 3] = 255
-            }
-          }
-        }
-        ctx.putImageData(data, 0, 0)
-      } else {
-        const data = ctx.getImageData(0, 0, imgSize.w, imgSize.h)
-        const cx = px + 0.5
-        const cy = py + 0.5
-        const size = eraserSize
-        const r = size / 2
-        const r2 = r * r
-        const rad = Math.ceil(r)
-        for (let iy = Math.max(0, py - rad); iy <= Math.min(imgSize.h - 1, py + rad); iy++) {
-          for (let ix = Math.max(0, px - rad); ix <= Math.min(imgSize.w - 1, px + rad); ix++) {
-            const dx = ix + 0.5 - cx
-            const dy = iy + 0.5 - cy
-            if (dx * dx + dy * dy <= r2) {
-              const i = (iy * imgSize.w + ix) * 4
-              data.data[i + 3] = 0
-            }
-          }
-        }
-        ctx.putImageData(data, 0, 0)
-      }
-      ctx.globalCompositeOperation = 'source-over'
-    },
-    [tool, brushColor, brushSize, eraserSize, imgSize]
-  )
+  finishGesture.current=async()=>{
+    setDrawing(false);setPanning(false)
+    const move=moveDragRef.current,selection=selectionRectRef.current
+    moveDragRef.current=null;setMoveDrag(null)
+    if(move&&selection&&(move.dix||move.diy))await commitSelectMove(selection,move.dix,move.diy)
+    await flushPixels()
+  }
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
-      if (!imgSize) return
+      if (!imgSize||blocked||operation.current||loadRequest.current) return
+      containerRef.current?.focus({preventScroll:true})
       e.preventDefault()
       if (e.button === 2) {
         setPanning(true)
@@ -437,21 +402,19 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
             return
           }
           if (tool === 'superEraser') {
-            pushHistory()
-            superEraserAt(pt.x, pt.y)
+            void superEraserAt(pt.x,pt.y).catch(()=>{})
           } else {
-            pushHistory()
-            setDrawing(true)
-            drawAt(pt.x, pt.y)
+            try{pushHistory();setDrawing(true);drawAt(pt.x,pt.y)}catch(error){setEditError(String(error))}
           }
         }
       }
     },
-    [imgSize, tool, screenToCanvas, canvasPxFromClient, drawAt, superEraserAt, pushHistory, switchTool]
+    [imgSize, blocked,tool, screenToCanvas, canvasPxFromClient, drawAt, superEraserAt, pushHistory, switchTool]
   )
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
+      if(blocked||operation.current||loadRequest.current)return
       if (panning) {
         e.preventDefault()
         const dx = e.clientX - lastPanRef.current.x
@@ -470,11 +433,8 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
         e.preventDefault()
         setMoveDrag((m) => {
           if (!m) return null
-          return {
-            ...m,
-            dix: Math.round((e.clientX - m.scx) / displayScale),
-            diy: Math.round((e.clientY - m.scy) / displayScale),
-          }
+          const next={...m,dix:Math.round((e.clientX-m.scx)/displayScale),diy:Math.round((e.clientY-m.scy)/displayScale)}
+          moveDragRef.current=next;return next
         })
         return
       }
@@ -484,7 +444,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
         if (pt) drawAt(pt.x, pt.y)
       }
     },
-    [panning, drawing, imgSize, tool, marqueeActive, moveDrag, displayScale, screenToCanvas, drawAt, canvasPxFromClientClamped]
+    [blocked,panning, drawing, imgSize, tool, marqueeActive, moveDrag, displayScale, screenToCanvas, drawAt, canvasPxFromClientClamped]
   )
 
   const handlePointerUp = useCallback(
@@ -518,7 +478,8 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
         const md = moveDragRef.current
         const sel = selectionRectRef.current
         if (md && sel) {
-          if (md.dix !== 0 || md.diy !== 0) commitSelectMove(sel, md.dix, md.diy)
+          moveDragRef.current=null
+          if (md.dix !== 0 || md.diy !== 0) void commitSelectMove(sel,md.dix,md.diy).catch(()=>{})
           setMoveDrag(null)
           try {
             e.currentTarget.releasePointerCapture(e.pointerId)
@@ -526,23 +487,27 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
             /* ignore */
           }
         }
+        void flushPixels().catch(()=>{})
       }
     },
-    [commitSelectMove],
+    [commitSelectMove,flushPixels],
   )
 
   const handlePointerLeave = useCallback(() => {
+    // Match the original gesture cancellation: keep already drawn pixels, but
+    // discard an uncommitted marquee or selection drag.
+    moveDragRef.current=null;marqueeRef.current=null
+    void flushPixels().catch(()=>{})
     setDrawing(false)
     setPanning(false)
     setMarqueeActive(null)
     setMoveDrag(null)
-  }, [])
+  }, [flushPixels])
 
   useEffect(() => {
     if (!drawing && !panning) return
     const onUp = () => {
-      setDrawing(false)
-      setPanning(false)
+      void finishGesture.current().catch(()=>{})
     }
     window.addEventListener('pointerup', onUp)
     window.addEventListener('pointercancel', onUp)
@@ -555,6 +520,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
   useEffect(() => {
     if (!marqueeActive && !moveDrag) return
     const onCancel = () => {
+      marqueeRef.current=null;moveDragRef.current=null
       setMarqueeActive(null)
       setMoveDrag(null)
     }
@@ -598,7 +564,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
     }
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (!targetOk(e.target)) return
+      if (!containerRef.current?.contains(document.activeElement)||e.isComposing||!targetOk(e.target)) return
       if (e.ctrlKey || e.metaKey || e.altKey) return
       const c = e.code
       if (c !== 'KeyW' && c !== 'KeyA' && c !== 'KeyS' && c !== 'KeyD') return
@@ -632,21 +598,22 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
   useEffect(() => {
     if (!imgSize) return
     const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      if (liveBinding.current||e.isComposing||e.defaultPrevented||blocked)return
+      if ((e.ctrlKey || e.metaKey) && (e.code==='KeyZ'||e.code==='KeyY')) {
         const target = e.target as HTMLElement
         if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return
         e.preventDefault()
-        handleUndo()
+        if(e.shiftKey||e.code==='KeyY')handleRedo();else handleUndo()
       }
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [imgSize, handleUndo])
+  }, [imgSize, handleUndo,handleRedo,blocked])
 
   useEffect(() => {
     if (tool !== 'selectMove') return
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return
+      if (!containerRef.current?.contains(document.activeElement)||e.isComposing||e.key !== 'Escape') return
       const target = e.target as HTMLElement
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return
       e.preventDefault()
@@ -663,7 +630,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
       const target = e.target as HTMLElement
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)
         return
-      if (marqueeRef.current || moveDragRef.current) return
+      if (!containerRef.current?.contains(document.activeElement)||marqueeRef.current || moveDragRef.current) return
       const sel = selectionRectRef.current
       if (!sel) return
       const code = e.code
@@ -674,7 +641,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
         code !== 'ArrowRight'
       )
         return
-      if (e.ctrlKey || e.metaKey || e.altKey) return
+      if (e.isComposing||blocked||e.ctrlKey || e.metaKey || e.altKey) return
       const step = e.shiftKey ? 8 : 1
       let dx = 0
       let dy = 0
@@ -683,11 +650,11 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
       else if (code === 'ArrowUp') dy = -step
       else dy = step
       e.preventDefault()
-      commitSelectMove(sel, dx, dy)
+      void commitSelectMove(sel,dx,dy).catch(()=>{})
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [imgSize, tool, commitSelectMove])
+  }, [imgSize, tool, commitSelectMove,blocked])
 
   useEffect(() => {
     const el = containerRef.current
@@ -719,58 +686,45 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
     return () => el.removeEventListener('wheel', onWheel)
   }, [imgSize])
 
-  const handleReset = useCallback(() => {
-    zoomFactorRef.current = 1
-    setZoomFactor(1)
-    setReloadKey((k) => k + 1)
-  }, [])
-
-  const handleDownload = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    canvas.toBlob(
-      (blob) => {
-        if (blob) {
-          onExport?.(blob)
-          const a = document.createElement('a')
-          a.href = URL.createObjectURL(blob)
-          a.download = 'fine-edited.png'
-          a.click()
-          URL.revokeObjectURL(a.href)
-        }
-      },
-      'image/png',
-      0.95
-    )
-  }, [onExport])
-
-  const handleSendToStash = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    canvas.toBlob(
-      (blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob)
-          addImage(url, 'fine-edited.png')
-          message.success(t('imgFineEditorSendToStashSuccess'))
-        }
-      },
-      'image/png',
-      0.95
-    )
-  }, [addImage, t])
-
-  if (loadError) {
-    return (
-      <div style={{ padding: 48, textAlign: 'center', color: '#c41e3a' }}>
-        {t('imgFineEditorLoadError')}
-      </div>
-    )
-  }
+  const handleReset=useCallback(async()=>{
+    await finishGesture.current()
+    if(liveBinding.current){liveBinding.current.onReset();return}
+    const original=saveDataRef.current,context=canvasRef.current?.getContext('2d')
+    if(original&&context){pushHistory();context.putImageData(original,0,0);clearSelectUi();markDirty(false)}
+    zoomFactorRef.current=1;setZoomFactor(1)
+  },[pushHistory,clearSelectUi,markDirty])
+  const exportBlob=useCallback(async()=>{
+    await finishGesture.current()
+    if(liveBinding.current)return liveBinding.current.file
+    return await execute(async(signal,version)=>{
+      const result=await pixelRequest('encode',signal,version)
+      if(!result.blob)throw new Error('FINE_EDITOR_OUTPUT_INVALID')
+      return result.blob
+    })
+  },[execute,pixelRequest])
+  const handleDownload=useCallback(async()=>{
+    try{
+      const blob=await exportBlob();onExport?.(blob)
+      const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='fine-edited.png';link.click();URL.revokeObjectURL(link.href)
+    }catch(error){setEditError(String(error))}
+  },[exportBlob,onExport])
+  const handleSendToStash=useCallback(async()=>{
+    try{const blob=await exportBlob();addImage(URL.createObjectURL(blob),'fine-edited.png');message.success(t('imgFineEditorSendToStashSuccess'))}
+    catch(error){setEditError(String(error))}
+  },[exportBlob,addImage,t])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
+      {(working||loading)&&<Space><Text>{working?status.working:status.loading}</Text><Button onClick={()=>{
+        generation.current++
+        if(operation.current)operation.current.controller.abort()
+        else if(loadRequest.current){loadRequest.current.controller.abort();setLoading(false);setLoadError(true);setEditError('FINE_EDITOR_LOAD_CANCELED')}
+      }}>{status.cancel}</Button></Space>}
+      {editError&&<Alert type="error" title={editError} description={dirtyPixels.current?status.pending:undefined} action={<Space>
+        <Button onClick={()=>{if(loadError)setReloadKey(value=>value+1);else void finishGesture.current().catch(()=>{})}}>{status.retry}</Button>
+        {dirtyPixels.current&&<Button onClick={()=>{generation.current++;operation.current?.controller.abort();markDirty(false);setReloadKey(value=>value+1)}}>{status.discard}</Button>}
+      </Space>}/>}
+      <fieldset disabled={blocked} style={{border:0,padding:0,margin:0,pointerEvents:blocked?'none':undefined}}><div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
         <Space wrap>
           <Button
             type={tool === 'brush' ? 'primary' : 'default'}
@@ -855,10 +809,9 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
           )}
         </Space>
         <Space wrap>
-          <Button size="small" icon={<UndoOutlined />} onClick={handleUndo} disabled={historyLength <= 1}>
-            {t('imgFineEditorUndoStep')}
-          </Button>
-          <Button size="small" icon={<DeleteOutlined />} onClick={handleReset}>
+          {!binding&&<><Button size="small" icon={<UndoOutlined/>} onClick={handleUndo} disabled={historyLength===0}>{status.undo}</Button>
+          <Button size="small" icon={<RedoOutlined/>} onClick={handleRedo} disabled={redoLength===0}>{status.redo}</Button></>}
+          <Button size="small" icon={<DeleteOutlined />} onClick={()=>{void handleReset().catch(error=>setEditError(String(error)))}}>
             {t('imgFineEditorReset')}
           </Button>
           <Button type="primary" icon={<DownloadOutlined />} onClick={handleDownload}>
@@ -868,12 +821,13 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
             {t('imgFineEditorSendToStash')}
           </Button>
         </Space>
-      </div>
+      </div></fieldset>
       <Text type="secondary" style={{ fontSize: 12, lineHeight: 1.5 }}>
         {t('imgFineEditorViewControls')}
       </Text>
       <div
         ref={containerRef}
+        role="region" aria-label={t('imgFineProcess')} aria-busy={working||loading}
         style={{
           width: '100%',
           height: 480,
@@ -904,6 +858,7 @@ export default function ImageFineEditor({ imageUrl, onExport }: ImageFineEditorP
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerLeave}
+        onPointerCancel={handlePointerLeave}
         tabIndex={0}
         onContextMenu={(e) => e.preventDefault()}
       >

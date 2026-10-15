@@ -16,5 +16,6 @@ export function useImageToolDocument<K extends ImageToolKind>(tool:K){
     return await restoreImageToolDocument(value,[...retained()]) as ImageToolDraft<K>
   },[tool,retained])
   const apply=useCallback((draft:ImageToolDraft<K>)=>dispatch({type:'restore',draft}),[])
-  return {draft:history.present,history,dispatch,change,normalize,setFiles,setParameter,retained,accept,restore,apply}
+  const current=useCallback(()=>latest.current.present,[])
+  return {draft:history.present,history,dispatch,change,normalize,setFiles,setParameter,retained,accept,restore,apply,current}
 }

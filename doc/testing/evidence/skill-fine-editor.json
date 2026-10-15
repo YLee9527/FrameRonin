@@ -1,0 +1,611 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "6bb8f87",
+  "scope": "RoninPro customScale formal document and shared fine editor Worker processing",
+  "oracles": {
+    "zipSha256": "78fcf7d29a8a1abe91d12a0333dc3d08916e1b6e03cfb8e575583aa55d4b6df0",
+    "cases": [
+      {
+        "id": "brush-1",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "brush-4",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "brush-5",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "brush-32",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-1",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-8",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-64",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-1",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-30",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-100",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "erase-transparent",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "move-overlap",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "move-clamp-positive",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "move-clamp-negative",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      },
+      {
+        "id": "move-whole-image",
+        "strictRgbaEqual": true,
+        "rectEqual": true
+      }
+    ],
+    "rawGoldenSha256": "9e27cda93c65fe4a7358ee8473cd876c5d97f5ea0b028af9f71425ad41f7720d"
+  },
+  "initialHarnessCorrection": "All initial decoded pixels matched. The no-op whole-image move retained the original selection; the harness initially recorded null, then initialized that prior selection without changing production behavior or loosening criteria.",
+  "fixtures": {
+    "manifest": "skills/frameronin-local/assets/fixtures/fine-editor/manifest.json",
+    "rawGolden": "skills/frameronin-local/assets/fixtures/fine-editor/raw-golden.json",
+    "criterion": "exact raw RGBA; exact decoded PNG RGBA; exact effective selection rectangle"
+  },
+  "paint": {
+    "document": {
+      "id": "36c5fad3-5c25-4717-83b4-00d8a1301618",
+      "kind": "ronin-scale",
+      "revision": 3,
+      "payload": {
+        "tool": "customScale",
+        "parameters": {
+          "width": 16,
+          "height": 12,
+          "keepAspect": true,
+          "pixelated": true,
+          "matteAlgorithm": "contiguous",
+          "nonContiguousTolerance": 5
+        },
+        "files": [
+          {
+            "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+            "name": "source.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+            "name": "image-customScale-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+          "name": "image-customScale-report.json",
+          "type": "application/json"
+        },
+        "editedFile": {
+          "versionId": "d544759c-5a39-42b9-8e2c-ce6bc9a8cc17",
+          "name": "fine-edited.png",
+          "type": "image/png"
+        },
+        "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T12:05:44.373289+00:00"
+    },
+    "counts": {
+      "versions": 4570,
+      "tasks": 107
+    },
+    "pixels": {
+      "center": [
+        4,
+        5
+      ],
+      "size": 4,
+      "color": "#000000",
+      "matchesOriginalCircle": true
+    }
+  },
+  "undo": {
+    "revision": 4,
+    "payload": {
+      "tool": "customScale",
+      "parameters": {
+        "width": 16,
+        "height": 12,
+        "keepAspect": true,
+        "pixelated": true,
+        "matteAlgorithm": "contiguous",
+        "nonContiguousTolerance": 5
+      },
+      "files": [
+        {
+          "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+          "name": "source.png",
+          "type": "image/png"
+        }
+      ],
+      "results": [
+        {
+          "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+          "name": "image-customScale-0.png",
+          "type": "image/png"
+        }
+      ],
+      "reportFile": {
+        "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+        "name": "image-customScale-report.json",
+        "type": "application/json"
+      },
+      "editedFile": null,
+      "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+      "formatVersion": 1
+    }
+  },
+  "reopenResetAndDownload": {
+    "reset": {
+      "id": "36c5fad3-5c25-4717-83b4-00d8a1301618",
+      "kind": "ronin-scale",
+      "revision": 7,
+      "payload": {
+        "tool": "customScale",
+        "parameters": {
+          "width": 16,
+          "height": 12,
+          "keepAspect": true,
+          "pixelated": true,
+          "matteAlgorithm": "contiguous",
+          "nonContiguousTolerance": 5
+        },
+        "files": [
+          {
+            "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+            "name": "source.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+            "name": "image-customScale-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+          "name": "image-customScale-report.json",
+          "type": "application/json"
+        },
+        "editedFile": null,
+        "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T12:07:45.648040+00:00"
+    },
+    "counts": {
+      "versions": 4570,
+      "tasks": 107
+    },
+    "bothDownloadedImagesMatchPaintedVersion": true
+  },
+  "paintRedoUsesSameVersion": true,
+  "resetUndoAndSourceRemovalUndoRestoreExistingFiles": true,
+  "connectedErase": {
+    "document": {
+      "id": "36c5fad3-5c25-4717-83b4-00d8a1301618",
+      "kind": "ronin-scale",
+      "revision": 12,
+      "payload": {
+        "tool": "customScale",
+        "parameters": {
+          "width": 16,
+          "height": 12,
+          "keepAspect": true,
+          "pixelated": true,
+          "matteAlgorithm": "contiguous",
+          "nonContiguousTolerance": 5
+        },
+        "files": [
+          {
+            "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+            "name": "source.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+            "name": "image-customScale-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+          "name": "image-customScale-report.json",
+          "type": "application/json"
+        },
+        "editedFile": {
+          "versionId": "ad17b03e-01a4-4a09-a440-c43a15fa4dd2",
+          "name": "fine-edited.png",
+          "type": "image/png"
+        },
+        "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T12:08:35.537151+00:00"
+    },
+    "strictPixels": true
+  },
+  "selectionMove": {
+    "document": {
+      "id": "36c5fad3-5c25-4717-83b4-00d8a1301618",
+      "kind": "ronin-scale",
+      "revision": 13,
+      "payload": {
+        "tool": "customScale",
+        "parameters": {
+          "width": 16,
+          "height": 12,
+          "keepAspect": true,
+          "pixelated": true,
+          "matteAlgorithm": "contiguous",
+          "nonContiguousTolerance": 5
+        },
+        "files": [
+          {
+            "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+            "name": "source.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+            "name": "image-customScale-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+          "name": "image-customScale-report.json",
+          "type": "application/json"
+        },
+        "editedFile": {
+          "versionId": "332ea0b2-2e17-421f-8923-c8401fb2a2af",
+          "name": "fine-edited.png",
+          "type": "image/png"
+        },
+        "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T12:09:09.702951+00:00"
+    },
+    "strictPixels": true,
+    "rectangle": {
+      "x": 10,
+      "y": 1,
+      "w": 4,
+      "h": 4
+    },
+    "move": [
+      -1,
+      0
+    ]
+  },
+  "conflict": {
+    "original": {
+      "id": "36c5fad3-5c25-4717-83b4-00d8a1301618",
+      "revision": 14,
+      "kind": "ronin-scale"
+    },
+    "originalWidth": 21,
+    "preservedWidth": 18,
+    "blocksNavigation": true,
+    "savedCopy": {
+      "id": "23584f37-279e-40e3-8f3c-77ab1cd1b4a2",
+      "kind": "ronin-scale",
+      "revision": 1,
+      "payload": {
+        "tool": "customScale",
+        "parameters": {
+          "width": 18,
+          "height": 12,
+          "keepAspect": true,
+          "pixelated": true,
+          "matteAlgorithm": "contiguous",
+          "nonContiguousTolerance": 5
+        },
+        "files": [
+          {
+            "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+            "name": "source.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+            "name": "image-customScale-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+          "name": "image-customScale-report.json",
+          "type": "application/json"
+        },
+        "editedFile": {
+          "versionId": "332ea0b2-2e17-421f-8923-c8401fb2a2af",
+          "name": "fine-edited.png",
+          "type": "image/png"
+        },
+        "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T12:10:35.720903+00:00"
+    },
+    "copyReopenKeepsRequested18AndActual16x12": true,
+    "downloadMatchesMoveVersion": true
+  },
+  "largeCancel": {
+    "base": {
+      "id": "13ced8d2-b4d4-4cbd-86b0-5a41c110b867",
+      "revision": 1,
+      "kind": "ronin-scale"
+    },
+    "initialCounts": {
+      "versions": 4572,
+      "tasks": 107
+    },
+    "observation": {
+      "cancelRoundTripMs": 366
+    },
+    "settled": {
+      "counts": {
+        "versions": 4572,
+        "tasks": 107
+      },
+      "document": "13ced8d2-b4d4-4cbd-86b0-5a41c110b867",
+      "revision": 1,
+      "editedFile": null,
+      "measuredAt": 1792066358.569799
+    },
+    "explicitDiscardAndSaveBeforeLeaving": true
+  },
+  "saveWaitingCancellation": {
+    "pendingPaintObserved": true,
+    "saveCancelElapsed": 284,
+    "state": {
+      "alerts": [
+        "保存失败，请重试或另存文档副本；当前内容仍保留: AbortError: Editing task canceled",
+        "AbortError: Editing task canceled\n画布尚有未保存修改；请重试保存。\n重试画布保存\n放弃未保存绘制"
+      ],
+      "busy": 0,
+      "canvas": true,
+      "text": "项目素材与任务\nFrameRonin\nV3\n\n视频转序列帧 · 抠图 · Sprite Sheet\n\n中\nEN\n日\n返回\nRoninPro\n保存到项目\n另存文档副本\n13ced8d2 · v2\n打开文档\n有未保存更改\n保存失败，请重试或另存文档副本；当前内容仍保留: AbortError: Editing task canceled\n撤销\n重做\n上传图片，自定义目标尺寸缩放，支持保持比例与像素硬边缘\n预览使用缩略图；加工与暂存保留完整原图。\n目标宽:\n目标高:\n保持比例\n像素缩放（硬边缘）\n\n点击或拖拽 Sprite Sheet 图片 (PNG)\n\nnoise-2048.png\n抠图算法:\n连通域\nChromaKey 色度键\nChromaKey 自适应\n原图预览2048 × 2048\nFFFF\nFFFB\nFBFB\nFBFF\nC0C0\nC0BE\nBEBE\nBEC0\n应用缩放\n预览\n4096 × 4096\nAbortError: Editing task canceled\n画布尚有未保存修改；请重试保存。\n重试"
+    }
+  },
+  "explicitRetry": {
+    "document": {
+      "id": "13ced8d2-b4d4-4cbd-86b0-5a41c110b867",
+      "kind": "ronin-scale",
+      "revision": 3,
+      "payload": {
+        "tool": "customScale",
+        "parameters": {
+          "width": 4096,
+          "height": 4096,
+          "keepAspect": true,
+          "pixelated": false,
+          "matteAlgorithm": "contiguous",
+          "nonContiguousTolerance": 5
+        },
+        "files": [
+          {
+            "versionId": "6c793634-208e-411c-8fcf-0402291b1302",
+            "name": "noise-2048.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "ebf43820-90e7-4f34-a0c9-194fbb092dc9",
+            "name": "large-result.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "df0b9f87-ce87-422d-8cab-d1ea04fa95bb",
+          "name": "large-report.json",
+          "type": "application/json"
+        },
+        "editedFile": {
+          "versionId": "8cb3072a-d337-4ef4-9432-70e77cab640c",
+          "name": "fine-edited.png",
+          "type": "image/png"
+        },
+        "taskId": "647c37c1-2797-4100-94cb-d7b74e6ca256",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-15T12:19:10.739769+00:00"
+    },
+    "savedCopyId": "a81308d1-7cc4-4bdb-b3d8-86fbfd799451",
+    "counts": {
+      "versions": 4573,
+      "tasks": 107
+    },
+    "editedVersion": "8cb3072a-d337-4ef4-9432-70e77cab640c",
+    "editedSha256": "4cfc7e4bdab80b64cfdb18ccc8f90b44e1c4a79cea23599728f98b5b226d4234",
+    "drawCenter": [
+      1876,
+      1061
+    ],
+    "maxError": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "differentPixels": 0,
+    "onlyExplicitRetryAddedOneVersion": true
+  },
+  "heldPaintingDuringLoad": {
+    "observation": {
+      "alerts": [
+        "读取文档失败；当前内容仍保留: Error: Document changed while loading; current edits are preserved"
+      ],
+      "canvas": [
+        [
+          16,
+          12
+        ]
+      ],
+      "text": "项目素材与任务\nFrameRonin\nV3\n\n视频转序列帧 · 抠图 · Sprite Sheet\n\n中\nEN\n日\n返回\nRoninPro\n保存到项目\n另存文档副本\nc5ff2b16 · v1\n打开文档\n有未保存更改\n读取文档失败；当前内容仍保留: Error: Document changed while loading; current edits are preserved\n撤销\n重做\n当前显示的是上次加工结果；应用新参数请重新执行。\n上传图片，自定义目标尺寸缩放，支持保持比例与像素硬边缘\n预览使用缩略图；加工与暂存保留完整原图。\n目标宽:\n目标高:\n保持比例\n像素缩放（硬边缘）\n\n点击或拖拽 Sprite Sheet 图片 (PNG)\n\nsource.png\n抠图算法:\n连通域\nChromaKey 色度键\nChromaKey 自适应\n原图预览16 × 12\nFFFF\nFFFB\nFBFB\nFBFF\nC0C0\nC0BE\nBEBE\nBEC0\n应用缩放\n预览\n16 ×"
+    },
+    "saved": {
+      "document": {
+        "id": "c5ff2b16-38ab-400d-aee1-5ebd4af37f71",
+        "kind": "ronin-scale",
+        "revision": 2,
+        "payload": {
+          "tool": "customScale",
+          "parameters": {
+            "width": 18,
+            "height": 12,
+            "keepAspect": true,
+            "pixelated": true,
+            "matteAlgorithm": "contiguous",
+            "nonContiguousTolerance": 5
+          },
+          "files": [
+            {
+              "versionId": "24a0be9b-359c-44c1-a754-1d8edf2d374e",
+              "name": "source.png",
+              "type": "image/png"
+            }
+          ],
+          "results": [
+            {
+              "versionId": "af70b265-fe44-44df-8634-cf71900517d0",
+              "name": "image-customScale-0.png",
+              "type": "image/png"
+            }
+          ],
+          "reportFile": {
+            "versionId": "7b88937b-d7bb-4e38-afc8-af29ef0998dc",
+            "name": "image-customScale-report.json",
+            "type": "application/json"
+          },
+          "editedFile": {
+            "versionId": "e9fc39b5-0b7d-4f6d-9cd9-4decbb5a2d93",
+            "name": "fine-edited.png",
+            "type": "image/png"
+          },
+          "taskId": "1d8fbcc5-8659-4f7f-99a2-060aace29fd8",
+          "formatVersion": 1
+        },
+        "updated_at": "2026-10-15T12:34:38.553298+00:00"
+      },
+      "strictPixels": true,
+      "point": [
+        2,
+        2
+      ],
+      "size": 4,
+      "temporaryServiceAndTabClosed": true
+    },
+    "synchronousPendingQuery": true,
+    "pointerReleasedBeforeTemporaryTabClosed": true
+  },
+  "validation": {
+    "pythonTests": 29,
+    "javascriptTests": 34,
+    "runtimeBuild": "passed",
+    "workbenchTypecheckBuild": "passed",
+    "changedModulesEslint": "passed",
+    "skillStructure": "passed",
+    "projectVerify": {
+      "valid": true,
+      "versions": 4575,
+      "rawSha256": "358dc0525720acef2b0297887d16f9d6d53ed68a8edc796bbb12b2fbe2879329"
+    }
+  },
+  "finalCounts": {
+    "versions": 4575,
+    "tasks": 107
+  },
+  "screenshots": [
+    {
+      "file": "skill-fine-editor-reopened.png",
+      "sha256": "317999025c0a160375a92f6d55c6a563b02ff1cfb272601f83564a7a164a8d18"
+    },
+    {
+      "file": "skill-fine-editor-conflict.png",
+      "sha256": "4e53500e8cc236719b23f6a79bda399ba81702c7f62ced3530b50f773d78cf15"
+    },
+    {
+      "file": "skill-fine-editor-canceled.png",
+      "sha256": "63166a5376980642637c4d3acff8d7db90dbf872d637bbc6afde179782246fd0"
+    },
+    {
+      "file": "skill-fine-editor-save-canceled.png",
+      "sha256": "f8b4a37ef3c9d3ec375d831381c251fe4e952b711dc6a910ae106a3b9d60f0d8"
+    },
+    {
+      "file": "skill-fine-editor-held-paint-race.png",
+      "sha256": "e4924bfe7c706852fdbb5567b84d19ac7e9a48fc2ec17dc0a11fcf10b45d74ec"
+    },
+    {
+      "file": "skill-fine-editor-copy-reopened.png",
+      "sha256": "9cd08e1f6fe1f23b24465596c40228e1aa8a218c63e31f22a4355c1520d19f78"
+    }
+  ],
+  "limitations": [
+    "Other standalone image entry documents still need migration and acceptance.",
+    "Full interaction and format regression remains open.",
+    "Joint actual memory peak acceptance is not substituted by these per-operation estimates.",
+    "Remaining local media, editor/game, complete AI and portable distribution work continues."
+  ],
+  "stageStatus": "S2/S3/S4 incomplete"
+}
