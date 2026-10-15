@@ -104,5 +104,6 @@
     "frontend budget overflow",
     "video smaller than original detector minimum",
     "no corner detected fails with empty results"
-  ]
+  ],
+  "codeCommit": "4cf9c97"
 }
