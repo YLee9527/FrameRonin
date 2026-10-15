@@ -18,4 +18,3 @@ export function useImageToolDocument<K extends ImageToolKind>(tool:K){
   const apply=useCallback((draft:ImageToolDraft<K>)=>dispatch({type:'restore',draft}),[])
   return {draft:history.present,history,dispatch,change,normalize,setFiles,setParameter,retained,accept,restore,apply}
 }
-
