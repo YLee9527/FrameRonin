@@ -49,3 +49,7 @@ GIF 预估加入所有前端保留素材、解码帧、中间表面和编码缓�
 序列工作台按页展示最多一行或 24 张缩略图，原始文件仍用于任务、下载和暂存。预计完整动画解码超过预算的八分之一时明确显示静态缩略图；完整 GIF 不降采样。保存导入通知必须先于共享元数据缓存更新，避免首批缩略图漏刷新。1000 帧 256×256 RGBA 样本已实际导出并逐帧核对；该结果不替代整个应用进程族的内存峰值验收。
 
 `video.watermark` 增加 `frontendBytes`，计入前端保留文件。原检测器保留 60 个完整时序采样，采样、stack、方差及视频缓冲进入预算；小于 120×60 的输入在启动前以 WATERMARK_DIMENSION_LIMIT 拒绝，避免原角落区域计算失败。修复临时 PNG 位于所属任务输出目录，正常完成后清理；取消遗留文件仍由任务拥有，不作为正式结果。工作台使用统一任务客户端、0–100% 进度、确认取消和本地视频预览；旧兼容路由保留。
+
+像素操作：`image.pixelate(pixelSize=1..128)`、`image.mergeNearby(strength=0..100)`、`image.palette16(method=rgb|lab,dither)`、`image.pixellise(upscale=1..7,numColors=4..256,scaleResult=1..5,transparentBackground)`。四者及 `image.perfectPixel` 共用可选 `regionX/Y/Width/Height` 与 `frontendBytes`；四个区域字段默认 0 表示整图，指定时必须为图内非空整数矩形，不能只提供位置或一条边。
+
+全部计算、输入解码、裁切和编码在受控 Node 任务内完成，正式 PNG 及 JSON 报告进入项目。报告含原尺寸、实际处理尺寸；Pixellise 另含请求/实际网格放大倍数。PerfectPixel 沿用最大边长 2048，Pixellise 沿用 4200 万检测像素上限和原放大倍数限制；额外预算不足直接拒绝，不再静默降低参数。全局网格、调色及误差扩散不独立分块。颜色数组、量化、抖动及完整输出上限分别估算；OpenCV 运行时保留 576 MiB 余量。预览尺寸与真实坐标分开，缩略图不改变任务输入或暂存内容。

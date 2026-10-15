@@ -21,6 +21,12 @@ def operation(inputs, parameters, output, mode='original_resolution', overhead=1
             'processingMode': mode, 'runtimeOverheadMiB': overhead}
 
 
+def pixel_region():
+    return {'regionX':integer(0,0,8191),'regionY':integer(0,0,8191),
+            'regionWidth':integer(0,0,8192),'regionHeight':integer(0,0,8192),
+            'frontendBytes':integer(0,0,2*1024**3)}
+
+
 REGISTRY = {
     'image.resize': operation(['image'], {'width': integer(256, 1, 8192), 'height': integer(256, 1, 8192),
                                           'filter': choice('nearest', ['nearest', 'lanczos'])}, 'png'),
@@ -70,7 +76,14 @@ REGISTRY = {
     'image.perfectPixel': operation(['image'], {'sampleMethod': choice('center', ['center', 'median', 'majority']),
         'gridCols': integer(0, 0, 2048), 'gridRows': integer(0, 0, 2048), 'minSize': integer(4, 2, 32),
         'peakWidth': number(6, 3, 20), 'refineIntensity': number(0.25, 0, 1),
-        'fixSquare': {'type': 'boolean', 'default': True}}, 'png', 'legacy_prescale_2048', overhead=256),
+        'fixSquare': {'type': 'boolean', 'default': True}, **pixel_region()}, 'png', 'legacy_prescale_2048', overhead=256),
+    'image.pixelate': operation(['image'],{'pixelSize':integer(8,1,128),**pixel_region()},'png_report','original_smoothed_blocks',overhead=256),
+    'image.mergeNearby': operation(['image'],{'strength':number(40,0,100),**pixel_region()},'png_report','global_lab_grid',overhead=256),
+    'image.palette16': operation(['image'],{'method':choice('lab',['rgb','lab']),
+        'dither':{'type':'boolean','default':True},**pixel_region()},'png_report','global_original_median_cut',overhead=256),
+    'image.pixellise': operation(['image'],{'upscale':integer(3,1,7),'numColors':integer(64,4,256),
+        'scaleResult':integer(1,1,5),'transparentBackground':{'type':'boolean','default':False},
+        **pixel_region()},'png_report','global_original_opencv_mesh',overhead=576),
     'workflow.strict': operation(['image+'], {'graph': {'type': 'object', 'default': {}}}, 'png_report', 'global_graph', overhead=256),
     'workflow.legacy': operation(['image+'], {'graph': {'type': 'object', 'default': {}}}, 'png_report', 'compatibility_graph', overhead=256),
     'map.export': operation(['image+'], {'layout': {'type':'object','default':{}},
@@ -182,6 +195,21 @@ def preview(project, payload):
         if bool(values['gridCols']) != bool(values['gridRows']):
             raise RoninError('GRID_DIMENSIONS', 'Provide both manual grid dimensions, or neither.')
         estimate += min(2048**2, max(pixels)) * 64
+    if name in ['image.perfectPixel','image.pixelate','image.mergeNearby','image.palette16','image.pixellise']:
+        source=versions[0]['metadata'];width,height=source['width'],source['height']
+        if values['regionWidth'] or values['regionHeight'] or values['regionX'] or values['regionY']:
+            if not values['regionWidth'] or not values['regionHeight'] or values['regionX']+values['regionWidth']>width or values['regionY']+values['regionHeight']>height:
+                raise RoninError('PIXEL_REGION_INVALID','Select a nonempty rectangle within the input version.')
+            width,height=values['regionWidth'],values['regionHeight']
+        estimate += values['frontendBytes'] + versions[0]['metadata']['bytes']*4
+        if name != 'image.perfectPixel':
+            estimate += width*height*({'image.pixelate':32,'image.mergeNearby':48,'image.palette16':256,'image.pixellise':128}[name])
+        if name == 'image.pixellise':
+            maximum=next((u for u in range(7,0,-1) if width*height*u*u<=42_000_000),1)
+            used=min(values['upscale'],maximum);scaled=width*height*used*used
+            if scaled>42_000_000:
+                raise RoninError('PIXELLISE_DIMENSION_LIMIT','The original mesh detector supports at most 42 million scaled pixels.')
+            estimate += scaled*(64+values['scaleResult']**2*16)
     if name == 'sequence.opticalFlow':
         if not 2 <= len(versions) <= 500 or len({(v['metadata']['width'],v['metadata']['height']) for v in versions}) != 1:
             raise RoninError('OPTICAL_FLOW_FRAMES', 'Select 2–500 frames with identical dimensions; output is limited to 999 frames.')

@@ -9,6 +9,11 @@ import { compositeFrame as originalComposite, originalEncode } from '../.runtime
 import { parseGIF, decompressFrames } from '../assets/workbench/node_modules/gifuct-js'
 import { combine as originalCombine, stitch as originalStitch, slice as originalSlice } from '../.runtime/oracle/original-sequence'
 import { superSplitByTransparent as originalSuperSplit } from '../.runtime/oracle/original-super'
+import * as originalPixel from '../.runtime/oracle/original-pixel'
+import { getPerfectPixel as originalPerfect } from '../.runtime/oracle/original-perfectPixel/perfectPixel'
+import { computeMeshWithScaling as originalMesh } from '../.runtime/oracle/original-pixellise/mesh'
+import { processWithMesh as originalMeshProcess } from '../.runtime/oracle/original-pixellise/pixelate'
+import { loadOpenCv } from '../assets/workbench/src/lib/pixellise/opencv'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -150,7 +155,33 @@ async function runSequence(){
   for(const [index,file]of(await originalSuperSplit(await load(regions),'regions')).entries())zip.file(`super/${index}.png`,file)
   await publish(zip,'browser-sequence-oracle.zip');status.textContent='Original sequence oracle complete: 2 crop/expand grids, 3 stitch modes, floor slices and transparent-region frames'
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence]] as const) {
+async function runPixel(){
+  const selected=document.querySelector<HTMLInputElement>('#pixel')!.files?.[0]
+  if(!selected)throw new Error('Use the fixed pixel fixture')
+  const fixture=await(await fetch('/pixel-fixture.json')).json(),zip=new JSZip()
+  const url=URL.createObjectURL(selected),image=await new Promise<HTMLImageElement>((resolve,reject)=>{
+    const input=new Image();input.onload=()=>resolve(input);input.onerror=()=>reject(new Error('Image decode failed'));input.src=url
+  });URL.revokeObjectURL(url)
+  for(const entry of fixture.cases){
+    const p=entry.parameters
+    let output:Blob
+    if(entry.operation==='image.pixelate')output=await originalPixel.pixelateImage(image,p.pixelSize)
+    else if(entry.operation==='image.mergeNearby')output=await originalPixel.mergeNearbyColorsImage(image,p.strength)
+    else if(entry.operation==='image.palette16')output=await originalPixel.reduceTo16Colors(image,p)
+    else{
+      const canvas=document.createElement('canvas');canvas.width=p.regionWidth||image.naturalWidth;canvas.height=p.regionHeight||image.naturalHeight
+      const context=canvas.getContext('2d')!;context.drawImage(image,p.regionX||0,p.regionY||0,canvas.width,canvas.height,0,0,canvas.width,canvas.height)
+      const data=context.getImageData(0,0,canvas.width,canvas.height)
+      const result=entry.operation==='image.perfectPixel'?originalPerfect(data,{sampleMethod:'center',minSize:4,peakWidth:6,...p,gridSize:{cols:p.gridCols,rows:p.gridRows}})
+        :originalMeshProcess(data,{...p,...originalMesh(await loadOpenCv(),data,p.upscale)})
+      const out=document.createElement('canvas');out.width=result.width;out.height=result.height;out.getContext('2d')!.putImageData(result,0,0)
+      output=await png(out)
+    }
+    zip.file(`${entry.id}.png`,output);status.textContent=`Original pixel oracle: ${entry.id}`
+  }
+  zip.file('fixture.json',JSON.stringify(fixture));await publish(zip,'browser-pixel-oracles.zip');status.textContent=`Original pixel oracle complete: ${fixture.cases.length} cases`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

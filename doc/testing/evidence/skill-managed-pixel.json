@@ -1,0 +1,822 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "2a2e75c",
+  "fixture": {
+    "id": "pixel-original-128-rgba",
+    "source": "source.png",
+    "sha256": "ae90dba290dde79fd34b52459772ee8793f8d275550b7b72df016282c513939a",
+    "sourceDimensions": [
+      128,
+      96
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "cases": [
+      {
+        "id": "block-1",
+        "operation": "image.pixelate",
+        "parameters": {
+          "pixelSize": 1
+        },
+        "criterion": "rgba max channel error 1; identical geometry"
+      },
+      {
+        "id": "block-4",
+        "operation": "image.pixelate",
+        "parameters": {
+          "pixelSize": 4
+        },
+        "criterion": "rgba max channel error 1; identical geometry"
+      },
+      {
+        "id": "block-8",
+        "operation": "image.pixelate",
+        "parameters": {
+          "pixelSize": 8
+        },
+        "criterion": "rgba max channel error 1; identical geometry"
+      },
+      {
+        "id": "merge-1",
+        "operation": "image.mergeNearby",
+        "parameters": {
+          "strength": 1
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "merge-40",
+        "operation": "image.mergeNearby",
+        "parameters": {
+          "strength": 40
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "merge-100",
+        "operation": "image.mergeNearby",
+        "parameters": {
+          "strength": 100
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "palette-rgb-false",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "rgb",
+          "dither": false
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "palette-rgb-true",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "rgb",
+          "dither": true
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "palette-lab-false",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "lab",
+          "dither": false
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "palette-lab-true",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "lab",
+          "dither": true
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "perfect-manual",
+        "operation": "image.perfectPixel",
+        "parameters": {
+          "gridCols": 16,
+          "gridRows": 12,
+          "refineIntensity": 0,
+          "fixSquare": false
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "perfect-region",
+        "operation": "image.perfectPixel",
+        "parameters": {
+          "gridCols": 8,
+          "gridRows": 6,
+          "refineIntensity": 0,
+          "fixSquare": false,
+          "regionX": 8,
+          "regionY": 8,
+          "regionWidth": 64,
+          "regionHeight": 48
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "pixellise-opaque",
+        "operation": "image.pixellise",
+        "parameters": {
+          "upscale": 3,
+          "numColors": 16,
+          "scaleResult": 1,
+          "transparentBackground": false
+        },
+        "criterion": "strict decoded RGBA"
+      },
+      {
+        "id": "pixellise-transparent",
+        "operation": "image.pixellise",
+        "parameters": {
+          "upscale": 3,
+          "numColors": 64,
+          "scaleResult": 2,
+          "transparentBackground": true
+        },
+        "criterion": "strict decoded RGBA"
+      }
+    ],
+    "goldenOutputSha256": {
+      "block-1": "3747ff27017d6132528271a75f191f8e526ad5be886c1095fd90bd96926127ed",
+      "block-4": "3747ff27017d6132528271a75f191f8e526ad5be886c1095fd90bd96926127ed",
+      "block-8": "1e6b596eb329f4723afbbc52f9b4ab873866b5a582105c6364ffb3fd26dd6325",
+      "merge-1": "aa744d25ae4400b0e6d99ca9c3022dff423b35816ec0e89b7ff9f2af7affefc1",
+      "merge-40": "61ed1102ea545e501249102783e5ec4136fb6e316994302d81ce8271c3f1880c",
+      "merge-100": "285abbfe22d678b2b9e26c105c01ec0574d58c6e5c018a7f7a3843be9bf7eb34",
+      "palette-rgb-false": "a886945c424534ecd15a39ddba1981e0a0b1dd86eae23fbcd563875afd4eda48",
+      "palette-rgb-true": "217d8e1f7c70ad6190e6fa7d833e27e121d585b0bf4308d8bd7fa9466dffdea6",
+      "palette-lab-false": "8a1e74a44a2629b226a81d98e1e1f6011617f9c52ca1ebe8b518ff26d37db623",
+      "palette-lab-true": "00743e0a248edab26dcb1009236cebb7f5c1a6cd3fbe9f4403819e2eb671cc3f",
+      "perfect-manual": "60667297412a68d71f2599a820522d4c488a4b866db69ab96707ddff7954e4cc",
+      "perfect-region": "1cbe5c252ec851a0c9dda935c13a0e0b83627e67f47c2916e0e6174807d941c3",
+      "pixellise-opaque": "d19a4a7b3c3c337d0961c4996f689b7c7b98d59bb7a69145f2ba02944dc4071d",
+      "pixellise-transparent": "5bb9981564491540311d8ee8d3d5d58776bd201937214101335019b201ae0fc3"
+    },
+    "originalImplementationSha256": {
+      "reference/frontend/src/components/ImagePixelate.tsx": "6b8e1c670429d610b13bd63271d5cd447f4da0f8f7af1effc08763c694e4b612",
+      "reference/frontend/src/lib/perfectPixel/perfectPixel.ts": "b742db672d0a1f667ddd53981771a8f46147878706e0483885e77a27779a39fd",
+      "reference/frontend/src/lib/pixellise/mesh.ts": "79a1e84ec77d990e85778757e698b6a1e0c4ce2fc9b0de35563e907d87fd4c31",
+      "reference/frontend/src/lib/pixellise/pixelate.ts": "57629f82f3afc5f7b6256fbc6f02555402bb9cb84310425e5f9884d06da4f0a5",
+      "reference/frontend/src/lib/pixellise/colors.ts": "22f318f06d2468c7da10ad5e9e2a1084a7381a36c9a1140fe1c56850425b249b"
+    }
+  },
+  "originalBrowser": {
+    "sourceVersion": "d30e4cbd-01c6-4ea0-91e4-8a7bd1243506",
+    "cases": [
+      {
+        "id": "block-1",
+        "operation": "image.pixelate",
+        "parameters": {
+          "pixelSize": 1
+        },
+        "criterion": "rgba max channel error 1; identical geometry",
+        "taskId": "4795313b-b640-48d6-8a1e-b2a887ca2fe2",
+        "state": "succeeded",
+        "results": [
+          "998cb17c-7de4-44fd-b064-7dfc47d69aea",
+          "ad1f944e-ca88-4cb8-84ea-bf0be3fa3e11"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "block-4",
+        "operation": "image.pixelate",
+        "parameters": {
+          "pixelSize": 4
+        },
+        "criterion": "rgba max channel error 1; identical geometry",
+        "taskId": "c8ab8f59-d7e8-4fef-8fa7-e45e2ce18245",
+        "state": "succeeded",
+        "results": [
+          "a4f273ec-3f43-4d78-91a7-9df613d5145d",
+          "7a2532fc-1b89-4a86-84bf-1f8a991ce543"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "block-8",
+        "operation": "image.pixelate",
+        "parameters": {
+          "pixelSize": 8
+        },
+        "criterion": "rgba max channel error 1; identical geometry",
+        "taskId": "707490c6-0d7e-45d0-9822-bf246ce8b819",
+        "state": "succeeded",
+        "results": [
+          "79ee4f50-ecb2-410f-b4d6-0e67a26339d6",
+          "3e0d3577-deaf-435a-ba74-df8902297672"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": false,
+          "maximumChannelError": 1,
+          "passed": true
+        }
+      },
+      {
+        "id": "merge-1",
+        "operation": "image.mergeNearby",
+        "parameters": {
+          "strength": 1
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "f05bebb0-297d-46fa-b422-06ca34b7a27c",
+        "state": "succeeded",
+        "results": [
+          "82a3e2a3-6ab2-4af6-8784-004b56a239a0",
+          "e7a11161-426e-4316-9ee8-c1b57db668d4"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "merge-40",
+        "operation": "image.mergeNearby",
+        "parameters": {
+          "strength": 40
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "a39f9765-64c6-4722-927d-0c0900bcd41a",
+        "state": "succeeded",
+        "results": [
+          "32f62fa3-ee49-4000-834e-6d54df49b171",
+          "18ce73dc-8f1a-45fa-b22a-d1f28050da85"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "merge-100",
+        "operation": "image.mergeNearby",
+        "parameters": {
+          "strength": 100
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "b91d4b48-9585-4464-9c16-abc4cfd4177f",
+        "state": "succeeded",
+        "results": [
+          "bda3f4e1-ea59-46e5-8709-baefe92a0cf6",
+          "fc7d777e-7f67-4512-9bfe-646b7415f481"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "palette-rgb-false",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "rgb",
+          "dither": false
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "86157b36-b099-4f43-b5eb-1a63ae56ee04",
+        "state": "succeeded",
+        "results": [
+          "504ae0de-99bb-4f06-9a76-e048a9068397",
+          "ab44509c-5622-4cf8-8d6b-3ff04d4dd16a"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "palette-rgb-true",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "rgb",
+          "dither": true
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "ffbf4abd-671a-4aeb-9801-09268b65ac27",
+        "state": "succeeded",
+        "results": [
+          "27fa292d-6d1b-444b-a89d-984b38e4f0f2",
+          "29feaec7-c9b0-4c8d-b399-84123ad63c32"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "palette-lab-false",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "lab",
+          "dither": false
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "b7177c23-6ad3-424a-927b-15abf9ebb4ea",
+        "state": "succeeded",
+        "results": [
+          "fb01ce4c-22b2-445d-9da4-2c5ba8689739",
+          "c168f2c4-4839-4b59-8752-c9fc4349dfc3"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "palette-lab-true",
+        "operation": "image.palette16",
+        "parameters": {
+          "method": "lab",
+          "dither": true
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "a2745280-b831-4d2b-9314-7520e03618f3",
+        "state": "succeeded",
+        "results": [
+          "96fc6f8e-a9cb-4d6c-84a7-f9c716ba3ed9",
+          "928189c2-e3d8-4847-8ac2-1e5d1e53f3b3"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            128,
+            96
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "perfect-manual",
+        "operation": "image.perfectPixel",
+        "parameters": {
+          "gridCols": 16,
+          "gridRows": 12,
+          "refineIntensity": 0,
+          "fixSquare": false
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "f667735e-d4b2-4f6d-be3d-47982f431827",
+        "state": "succeeded",
+        "results": [
+          "2cd6edf3-2281-458c-8192-d7ab112ac310",
+          "f424884f-6217-4bf7-ad3c-26e7002b94e6"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            16,
+            12
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "perfect-region",
+        "operation": "image.perfectPixel",
+        "parameters": {
+          "gridCols": 8,
+          "gridRows": 6,
+          "refineIntensity": 0,
+          "fixSquare": false,
+          "regionX": 8,
+          "regionY": 8,
+          "regionWidth": 64,
+          "regionHeight": 48
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "5bffbaae-f6df-4133-af8a-ac5bab6b1411",
+        "state": "succeeded",
+        "results": [
+          "c55fbf10-7406-45e9-9c46-dbe150bc5e2f",
+          "e0abbd91-cda7-4660-af59-e345fdd31d39"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            8,
+            6
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "pixellise-opaque",
+        "operation": "image.pixellise",
+        "parameters": {
+          "upscale": 3,
+          "numColors": 16,
+          "scaleResult": 1,
+          "transparentBackground": false
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "33f0b732-ec96-44ef-8371-8d4f7669ebcc",
+        "state": "succeeded",
+        "results": [
+          "e1517154-eba0-4e33-a8da-0c04c52b3046",
+          "f22df518-c5d3-49aa-b39c-87319489868e"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            34,
+            26
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      },
+      {
+        "id": "pixellise-transparent",
+        "operation": "image.pixellise",
+        "parameters": {
+          "upscale": 3,
+          "numColors": 64,
+          "scaleResult": 2,
+          "transparentBackground": true
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "a75fb663-028a-487f-8f30-68343ea1cdbe",
+        "state": "succeeded",
+        "results": [
+          "39fb3ebd-19fe-4ab1-b088-c945e24f1c0c",
+          "e47fd8be-d628-4acd-8da0-513270783c77"
+        ],
+        "error": null,
+        "comparison": {
+          "dimensions": [
+            68,
+            52
+          ],
+          "strictRgbaEqual": true,
+          "maximumChannelError": 0,
+          "passed": true
+        }
+      }
+    ],
+    "initialFailure": [
+      {
+        "id": "pixellise-opaque",
+        "operation": "image.pixellise",
+        "parameters": {
+          "upscale": 3,
+          "numColors": 16,
+          "scaleResult": 1,
+          "transparentBackground": false
+        },
+        "criterion": "strict decoded RGBA",
+        "taskId": "a7b04942-790c-4e4e-8152-e1f4643bd12e",
+        "state": "failed",
+        "results": [],
+        "error": {
+          "code": "PROCESSING_FAILED",
+          "message": "Command '['/Users/terryyoung/.local/bin/node', '<repository>/skills/frameronin-local/scripts/js-runtime/run.mjs', '<repository>/.frameronin-work/acceptance-project/tasks/a7b04942-790c-4e4e-8152-e1f4643bd12e/output/request.json']' returned non-zero exit status 1."
+        }
+      }
+    ]
+  },
+  "uiDownloads": [
+    {
+      "id": "block-4",
+      "taskId": "fd06e319-43aa-4d14-80b7-6916a500b729",
+      "versionId": "c8828687-a262-4990-acde-69194efe1c0c",
+      "downloadSha256": "37873ef6e0f62584dbea832cb991170559c59e316abe1e5a7759cc7170f2ba38",
+      "downloadEqualsFormalVersion": true,
+      "strictOriginalPixels": true,
+      "dimensions": [
+        128,
+        96
+      ],
+      "parameters": {
+        "pixelSize": 4,
+        "frontendBytes": 100860664
+      }
+    },
+    {
+      "id": "merge-40",
+      "taskId": "05e736b7-62ff-4b77-9cfb-9e9ef289cf41",
+      "versionId": "26773af1-1e6a-40c7-9bb8-066595a67491",
+      "downloadSha256": "d0cb35572a344e5b650f973d30cee3ef368bb9c6f446a7cd137c118d0fb2fbda",
+      "downloadEqualsFormalVersion": true,
+      "strictOriginalPixels": true,
+      "dimensions": [
+        128,
+        96
+      ],
+      "parameters": {
+        "strength": 40,
+        "frontendBytes": 101058058
+      }
+    },
+    {
+      "id": "palette-lab-true",
+      "taskId": "6fc1e82c-c0cc-4031-8fb4-8f023fad8ed7",
+      "versionId": "b94171f4-ac2f-4f7c-9775-c2a5ea410a81",
+      "downloadSha256": "daba16f01d543b53d75b9f90e688a635eeaa5e4094fc4c24c77460226907ccac",
+      "downloadEqualsFormalVersion": true,
+      "strictOriginalPixels": true,
+      "dimensions": [
+        128,
+        96
+      ],
+      "parameters": {
+        "method": "lab",
+        "dither": true,
+        "frontendBytes": 101060902
+      }
+    },
+    {
+      "id": "pixellise-opaque",
+      "taskId": "8bbc37c4-bf34-4442-8485-d9297c04a0a5",
+      "versionId": "d80d71e5-7991-4ed9-8af4-f65c8e0ae6e7",
+      "downloadSha256": "0ecdea3f5dfc57f9b414c20cbe6035ada19b125b58ba4dff13815c58962ad34a",
+      "downloadEqualsFormalVersion": true,
+      "strictOriginalPixels": true,
+      "dimensions": [
+        34,
+        26
+      ],
+      "parameters": {
+        "upscale": 3,
+        "numColors": 16,
+        "scaleResult": 1,
+        "transparentBackground": false,
+        "frontendBytes": 101075180
+      }
+    },
+    {
+      "id": "perfect-manual",
+      "taskId": "7a8af897-f3b2-42ee-b842-cbe3c6e916c9",
+      "versionId": "2d5f0968-78ad-4343-a5b2-97b57a4a63a2",
+      "downloadSha256": "cac7491a706dc18ec3560d704dcc2e2d83cee737f5e0ceea18d50ce342c0b514",
+      "downloadEqualsFormalVersion": true,
+      "strictOriginalPixels": true,
+      "dimensions": [
+        16,
+        12
+      ],
+      "parameters": {
+        "sampleMethod": "center",
+        "gridCols": 16,
+        "gridRows": 12,
+        "minSize": 4,
+        "peakWidth": 6,
+        "refineIntensity": 0,
+        "fixSquare": false,
+        "frontendBytes": 100876590
+      }
+    },
+    {
+      "id": "perfect-region",
+      "taskId": "695306f8-8d62-4419-9b94-6cfaccb72474",
+      "versionId": "28768231-d7a0-4488-9f42-2a965d66c22a",
+      "downloadSha256": "f24dadb9bf89aada23017074f367816bf5217784a60c1cc80e142ac64605a65c",
+      "downloadEqualsFormalVersion": true,
+      "strictOriginalPixels": true,
+      "dimensions": [
+        8,
+        6
+      ],
+      "parameters": {
+        "regionX": 8,
+        "regionY": 8,
+        "regionWidth": 64,
+        "regionHeight": 48,
+        "sampleMethod": "center",
+        "gridCols": 8,
+        "gridRows": 6,
+        "minSize": 4,
+        "peakWidth": 6,
+        "refineIntensity": 0,
+        "fixSquare": false,
+        "frontendBytes": 100863994
+      }
+    }
+  ],
+  "largeInput": {
+    "taskId": "46afc2e8-448c-4345-87d9-c5ca0847ec06",
+    "sourceDimensions": [
+      8192,
+      8192
+    ],
+    "displayedThumbnail": [
+      128,
+      128
+    ],
+    "report": {
+      "processingDimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "originalDimensions": {
+        "width": 8192,
+        "height": 8192
+      },
+      "selectedDimensions": {
+        "width": 8192,
+        "height": 8192
+      },
+      "files": [
+        "output/result-0000.png"
+      ]
+    },
+    "outputDimensions": [
+      128,
+      128
+    ],
+    "downloadEqualsFormalVersion": true,
+    "paletteRejectedBeforeTask": true
+  },
+  "uiCancellation": {
+    "taskId": "bb76bb88-fc88-455c-bdfd-f47c1fe44c99",
+    "feedbackMs": 299,
+    "state": "canceled",
+    "results": [],
+    "generation": 1,
+    "cancelElapsedSeconds": 0.018673415994271636,
+    "processStopConfirmed": true,
+    "scope": "local_owned_processes",
+    "aiState": null,
+    "ownedProcessCount": 2
+  },
+  "staleParameter": {
+    "taskId": "54bf8251-e02b-4fd9-ab4d-cca39e156127",
+    "resultsRetainedInProject": [
+      "9fc43fa8-ac61-4061-8c46-d0b44045c32b",
+      "75dd876c-5fc3-43f1-8277-0f080b0fa6fe"
+    ],
+    "changedDither": false,
+    "uiResultAbsent": true,
+    "warning": "Inputs or settings changed; results remain in Project assets"
+  },
+  "leftPageDuringProcessing": {
+    "taskId": "ae012232-8914-43aa-9b51-00b4a953560f",
+    "state": "succeeded",
+    "results": [
+      "f43b3ca0-4e46-4f83-8004-4d8408e4a33b",
+      "47d8e2c1-738a-480c-9320-e810a21621cf"
+    ],
+    "metrics": {
+      "peakControlledProcessBytes": 810237952,
+      "budgetBytes": 2147483648,
+      "estimatedBytes": 776884464,
+      "processingMode": "global_original_opencv_mesh"
+    }
+  },
+  "checks": {
+    "engineTests": 25,
+    "jsTests": 23,
+    "workbenchBuild": "passed",
+    "changedModuleESLint": "passed",
+    "finalResourceFocusedRegression": "passed",
+    "latestPerfectPixelUi": "16x12 output from final build passed",
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ]
+  },
+  "remaining": [
+    "pixel editor document persistence and shared undo",
+    "more sampling modes, fractional alpha and format coverage",
+    "whole-application memory and further pathological inputs",
+    "other tools, native interoperability, full AI catalog and distribution"
+  ],
+  "resourceCorrection": {
+    "observedOwnedProcessBytes": 810237952,
+    "initialEstimatedBytes": 776884464,
+    "revisedEstimatedBytes": 978211056,
+    "runtimeReserveAddedMiB": 192,
+    "scope": "owned task processes; whole-application peak remains unverified"
+  },
+  "screenshots": [
+    "skill-pixel-8192.png",
+    "skill-pixel-cancel.png",
+    "skill-pixel-region.png",
+    "skill-pixel-stale-result.png",
+    "skill-pixel-thumbnail-region.png",
+    "skill-pixel-tools.png"
+  ],
+  "validationRepairs": [
+    "oracle image-q package resolution alias",
+    "new OpenCV export did not match private-loader alias; initial managed task failed without results",
+    "optional result dimensions required explicit type validation before rendering"
+  ],
+  "noiseFixture": {
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "seed": 20261015,
+    "generator": "np.random.default_rng(20261015).integers(0,256,(1024,1024,4),dtype=np.uint8); set alpha channel to 255",
+    "fileSha256": "d9afbfc6a890ac1518ac1aba486984b3ff8f5d248f15e288f6640f10c96497c2"
+  },
+  "thumbnailSelection": {
+    "taskId": "a5574c2f-2b42-4787-a1c1-001a579d844e",
+    "versionId": "16917c86-3baa-446b-9a1e-d70456e8971f",
+    "sourceDimensions": [
+      8192,
+      8192
+    ],
+    "thumbnailDimensions": [
+      128,
+      128
+    ],
+    "displayDimensions": [
+      440,
+      440
+    ],
+    "selectedOriginalRegion": [
+      1024,
+      1024,
+      2048,
+      2048
+    ],
+    "processingDimensions": [
+      2048,
+      2048
+    ],
+    "resultDimensions": [
+      16,
+      12
+    ],
+    "allPixelsEqualExpectedRed": true
+  }
+}

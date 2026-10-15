@@ -27,3 +27,5 @@ GIF 工作台使用原浏览器兼容模式：`gif.split` 的 `renderer=browser`
 `sequence.gif` 的 `renderer=browser` 保留 gifenc 逐帧调色板及原透明度阈值，`sizePolicy=first` 按第一帧尺寸缩放其他输入，与原界面一致；默认 `sizePolicy=reject` 拒绝尺寸混用。兼容模式仅支持原来的无限循环 `loop=0`，不会静默忽略其他值。Pillow 默认仍使用同尺寸输入与全局调色板。工作台先核对保留素材预算，通过统一任务取消、版本登记和迟到结果检查；离开工具页后在项目面板查结果。超出预览预算的正式结果继续保留。
 
 `video.watermark` 使用原完整时序检测与 OpenCV 修复，最小尺寸 120×60；不把全局采样改为独立分块。采样和前端文件超过预算时拒绝。工作台支持取消、后台继续、MP4 预览及下载，原音轨以流复制保留。固定合成样本的输出与原实现相同，但小字仍可留下亮色残影；算法一致性不能代替真实素材质量检查。未检测到水印时明确失败，不登记伪成功输出。
+
+像素工具使用 `image.pixelate`、`image.mergeNearby`、`image.palette16`、`image.perfectPixel` 和 `image.pixellise`。先查注册表范围；需要局部处理时提供完整 regionX/Y/Width/Height 矩形。PerfectPixel 最大边长 2048、Pixellise 原全局网格和放大上限保留；其他预算限制明确拒绝，不擅自改成分块或额外缩小。结果附处理尺寸及参数报告，工作台也显示实际尺寸。14 组固定对照通过，不代表任意半透明或所有格式都已验证。

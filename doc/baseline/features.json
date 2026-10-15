@@ -436,10 +436,10 @@
     "outputs": "PNG",
     "dependencies": "FFT/Worker/image-q",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImagePixelate.tsx",
-    "sample": "fixed-image-perfect-pixel",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "pixel-original-128-rgba; fixed-8192-rgba; noise-1024-seed-20261015",
+    "evidence": "doc/testing/evidence/skill-managed-pixel.json",
+    "status": "后台及工作台正式输出、64×48 框选、8192→2048 预缩放尺寸通过；文档/统一撤销及更多采样待验收",
+    "limits": "操作注册表和完整缓冲预算；PerfectPixel 保留 2048 预缩放；Pixellise 保留原网格放大限制并超预算拒绝；编辑文档与统一撤销尚未完成"
   },
   {
     "id": "image.pixelate",
@@ -449,10 +449,10 @@
     "outputs": "PNG",
     "dependencies": "FFT/Worker/image-q",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImagePixelate.tsx",
-    "sample": "fixed-image-pixelate",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "pixel-original-128-rgba; fixed-8192-rgba; noise-1024-seed-20261015",
+    "evidence": "doc/testing/evidence/skill-managed-pixel.json",
+    "status": "原像素块 1/4/8 三组对照通过（8px 最大通道差 1），工作台输出与原样本严格相同；编辑文档待完成",
+    "limits": "操作注册表和完整缓冲预算；PerfectPixel 保留 2048 预缩放；Pixellise 保留原网格放大限制并超预算拒绝；编辑文档与统一撤销尚未完成"
   },
   {
     "id": "image.merge-colors",
@@ -462,10 +462,10 @@
     "outputs": "PNG",
     "dependencies": "FFT/Worker/image-q",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImagePixelate.tsx",
-    "sample": "fixed-image-merge-colors",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "pixel-original-128-rgba; fixed-8192-rgba; noise-1024-seed-20261015",
+    "evidence": "doc/testing/evidence/skill-managed-pixel.json",
+    "status": "原 Lab 合色三种强度严格 RGBA 相同，工作台 40 强度正式下载通过；编辑文档及更多格式待完成",
+    "limits": "操作注册表和完整缓冲预算；PerfectPixel 保留 2048 预缩放；Pixellise 保留原网格放大限制并超预算拒绝；编辑文档与统一撤销尚未完成"
   },
   {
     "id": "image.palette16",
@@ -475,10 +475,10 @@
     "outputs": "PNG",
     "dependencies": "FFT/Worker/image-q",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImagePixelate.tsx",
-    "sample": "fixed-image-palette16",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "pixel-original-128-rgba; fixed-8192-rgba; noise-1024-seed-20261015",
+    "evidence": "doc/testing/evidence/skill-managed-pixel.json",
+    "status": "RGB/Lab × 抖动开关四组严格像素相同，真实工作台下载/取消/参数变化保护通过；大图超预算拒绝",
+    "limits": "操作注册表和完整缓冲预算；PerfectPixel 保留 2048 预缩放；Pixellise 保留原网格放大限制并超预算拒绝；编辑文档与统一撤销尚未完成"
   },
   {
     "id": "image.pixellise",
@@ -488,10 +488,10 @@
     "outputs": "PNG",
     "dependencies": "FFT/Worker/image-q",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImagePixelate.tsx",
-    "sample": "fixed-image-pixellise",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "pixel-original-128-rgba; fixed-8192-rgba; noise-1024-seed-20261015",
+    "evidence": "doc/testing/evidence/skill-managed-pixel.json",
+    "status": "原全局网格两组严格 RGBA 相同，真实工作台下载及离开后后台成功；联合内存及更多输入待验收",
+    "limits": "操作注册表和完整缓冲预算；PerfectPixel 保留 2048 预缩放；Pixellise 保留原网格放大限制并超预算拒绝；编辑文档与统一撤销尚未完成"
   },
   {
     "id": "image.expand",

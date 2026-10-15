@@ -23,6 +23,20 @@ for (const input of request.inputs) {
 const outputs = []
 const extensions = []
 let report = {}
+async function pixelInput(maximum=Infinity){
+  const bitmap=await dom.loadImage(Buffer.from(await blobs[0].arrayBuffer()))
+  const source=dom.createCanvas(bitmap.width,bitmap.height)
+  source.getContext('2d').drawImage(bitmap,0,0)
+  const parameters=request.parameters
+  const x=parameters.regionX??0,y=parameters.regionY??0
+  const inputWidth=parameters.regionWidth||bitmap.width,inputHeight=parameters.regionHeight||bitmap.height
+  const scale=Math.min(1,maximum/Math.max(inputWidth,inputHeight))
+  const width=Math.max(1,Math.round(inputWidth*scale)),height=Math.max(1,Math.round(inputHeight*scale))
+  const canvas=dom.createCanvas(width,height)
+  canvas.getContext('2d').drawImage(source,x,y,inputWidth,inputHeight,0,0,width,height)
+  source.width=1;source.height=1
+  return {canvas,width,height,inputWidth,inputHeight,originalDimensions:{width:bitmap.width,height:bitmap.height}}
+}
 if (request.operation === 'workflow') {
   const parsed = request.compatibility ? algorithms.importLegacyWorkflow(JSON.stringify(request.graph))
     : algorithms.validateStrictWorkflow(request.graph, blobs.length)
@@ -45,19 +59,36 @@ if (request.operation === 'workflow') {
   }
   report = { warnings: parsed.warnings ?? [], strategy: strategy.kind }
 } else if (request.operation === 'perfectPixel') {
-  const bitmap = await dom.loadImage(Buffer.from(await blobs[0].arrayBuffer()))
-  const maximum = algorithms.PERFECT_PIXEL_MAX_SIDE
-  const scale = Math.min(1, maximum / Math.max(bitmap.width, bitmap.height))
-  const width = Math.max(1, Math.round(bitmap.width * scale)), height = Math.max(1, Math.round(bitmap.height * scale))
-  const canvas = dom.createCanvas(width, height), context = canvas.getContext('2d')
-  // Preserve the original browser pre-scaling, which uses the default smoothing.
-  context.imageSmoothingEnabled = true
-  context.drawImage(bitmap, 0, 0, width, height)
-  const result = algorithms.getPerfectPixel(context.getImageData(0, 0, width, height), request.parameters)
-  const output = dom.createCanvas(result.width, result.height)
-  output.getContext('2d').putImageData(result, 0, 0)
+  const input=await pixelInput(algorithms.PERFECT_PIXEL_MAX_SIDE)
+  process.stdout.write(JSON.stringify({progress:.1})+'\n')
+  const result=algorithms.getPerfectPixel(input.canvas.getContext('2d').getImageData(0,0,input.width,input.height),request.parameters)
+  process.stdout.write(JSON.stringify({progress:.8})+'\n')
+  const output=dom.createCanvas(result.width,result.height)
+  output.getContext('2d').putImageData(result,0,0)
   outputs.push(new Blob([await output.encode('png')]))
-  report = { processingDimensions: { width, height }, originalDimensions: { width: bitmap.width, height: bitmap.height } }
+  report={processingDimensions:{width:input.width,height:input.height},originalDimensions:input.originalDimensions,
+    selectedDimensions:{width:input.inputWidth,height:input.inputHeight}}
+} else if (['image.pixelate','image.mergeNearby','image.palette16','image.pixellise'].includes(request.operation)) {
+  const input=await pixelInput(),image={native:input.canvas,naturalWidth:input.width,naturalHeight:input.height}
+  process.stdout.write(JSON.stringify({progress:.1})+'\n')
+  if(request.operation==='image.pixelate')outputs.push(await algorithms.pixelateImage(image,request.parameters.pixelSize))
+  else if(request.operation==='image.mergeNearby')outputs.push(await algorithms.mergeNearbyColorsImage(image,request.parameters.strength))
+  else if(request.operation==='image.palette16')outputs.push(await algorithms.reduceTo16Colors(image,request.parameters))
+  else{
+    const data=input.canvas.getContext('2d').getImageData(0,0,input.width,input.height)
+    const cv=await algorithms.loadOpenCv()
+    const requested=request.parameters.upscale,used=Math.min(requested,algorithms.maxSafeUpscaleForImage(input.width,input.height))
+    const mesh=algorithms.computeMeshWithScaling(cv,data,used)
+    process.stdout.write(JSON.stringify({progress:.4})+'\n')
+    const result=algorithms.processWithMesh(data,{...request.parameters,...mesh})
+    const output=dom.createCanvas(result.width,result.height)
+    output.getContext('2d').putImageData(result,0,0)
+    outputs.push(new Blob([await output.encode('png')]))
+    report={upscaleRequested:requested,upscaleUsed:used,upscaleCapped:used<requested,
+      meshDimensions:{width:mesh.scaledWidth,height:mesh.scaledHeight}}
+  }
+  report={...report,method:'original-pixel-editor',operation:request.operation,parameters:request.parameters,
+    processingDimensions:{width:input.width,height:input.height},originalDimensions:input.originalDimensions}
 } else if (request.operation === 'opticalFlow') {
   const frames = []
   for (const blob of blobs) frames.push(await dom.loadImage(Buffer.from(await blob.arrayBuffer())))

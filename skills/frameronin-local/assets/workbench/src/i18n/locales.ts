@@ -783,7 +783,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     pixelateTabAdvanced: '高级像素化处理',
     pixelateTabPerfectPixel: '完美像素',
     pixelatePerfectPixelHint:
-      'FFT 估周期 + Sobel 细化网格 + 格内采样，将 AI 像素风等「歪网格」图对齐到规整格点。本模块按 theamusing/perfectPixel 开源仓库中的算法源码在前端用 TypeScript 重写实现。原仓库：GitHub theamusing/perfectPixel；原在线演示：theamusing.github.io/perfectPixel_webdemo/',
+      '识别像素网格、细化边界并按格取样，还原逻辑分辨率。边长超过 2048 的输入保留原有预缩放，结果会显示实际处理尺寸。算法来源：theamusing/perfectPixel。',
     pixelatePerfectPixelSample: '格内取样方式',
     pixelatePerfectPixelCenter: '中心像素',
     pixelatePerfectPixelMedian: '中位数',
@@ -1959,7 +1959,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     pixelateTabAdvanced: 'Advanced pixel processing',
     pixelateTabPerfectPixel: 'Perfect Pixel',
     pixelatePerfectPixelHint:
-      'FFT period estimate + Sobel grid refinement + per-cell sampling, for aligning messy AI pixel art. Ported to TypeScript for the browser from the open-source algorithm in theamusing/perfectPixel. Upstream: GitHub theamusing/perfectPixel; original demo: theamusing.github.io/perfectPixel_webdemo/',
+      'Finds the pixel grid, refines edges and samples each cell to restore logical resolution. Images larger than 2048 on either side retain the existing pre-scaling behavior; results show the processing dimensions. Algorithm: theamusing/perfectPixel.',
     pixelatePerfectPixelSample: 'Cell sampling',
     pixelatePerfectPixelCenter: 'Center pixel',
     pixelatePerfectPixelMedian: 'Median',
@@ -3127,7 +3127,7 @@ export const locales: Record<Lang, Record<string, string>> = {
     pixelateTabAdvanced: '高度ピクセル処理',
     pixelateTabPerfectPixel: 'パーフェクトピクセル',
     pixelatePerfectPixelHint:
-      'FFT で周期推定 + Sobel でグリッド補正 + セル内サンプリング。theamusing/perfectPixel のオープンソース実装をブラウザ向けに TypeScript で移植したものです。元リポジトリ: GitHub theamusing/perfectPixel／元デモ: theamusing.github.io/perfectPixel_webdemo/',
+      'ピクセルのグリッドと境界を検出し、セルごとにサンプリングして元の論理解像度を復元します。一辺が 2048 を超える画像は従来どおり事前縮小し、結果に実際の処理サイズを表示します。アルゴリズム: theamusing/perfectPixel。',
     pixelatePerfectPixelSample: 'セル内の取り方',
     pixelatePerfectPixelCenter: '中心ピクセル',
     pixelatePerfectPixelMedian: '中央値',

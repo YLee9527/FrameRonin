@@ -112,6 +112,31 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(rejected['results'],[])
         self.assertTrue(self.project.verify()['valid'])
 
+    def test_pixel_operations_keep_original_outputs_regions_and_strict_resource_checks(self):
+        fixtures=Path(__file__).resolve().parents[1]/'assets/fixtures/pixel'
+        source=self.project.import_file(fixtures/'source.png')
+        cases=json.loads((fixtures/'manifest.json').read_text())['cases']
+        selected={'block-8','merge-40','palette-lab-true','perfect-region','pixellise-opaque','pixellise-transparent'}
+        for case in cases:
+            if case['id'] not in selected:continue
+            payload={'operation':case['operation'],'parameters':case['parameters'],'inputs':[source['id']]}
+            for invalid in [{'regionX':1},{'regionWidth':129,'regionHeight':96},{'frontendBytes':2*1024**3},{'command':'run'}]:
+                values={**case['parameters'],**invalid}
+                if invalid=={'regionX':1}:values.update(regionWidth=0,regionHeight=0)
+                with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':values})
+            result=wait(self.project,submit(self.project,payload)['id'],20)
+            self.assertEqual(result['state'],'succeeded',result)
+            versions=[self.project.version(v) for v in result['results']]
+            output=next(v for v in versions if v['metadata']['extension']=='.png')
+            with Image.open(output['absolutePath']) as actual,Image.open(fixtures/('original-'+case['id']+'.png')) as expected:
+                self.assertEqual(actual.size,expected.size)
+                a,b=actual.convert('RGBA').tobytes(),expected.convert('RGBA').tobytes()
+                if case['operation']=='image.pixelate':self.assertLessEqual(max(abs(x-y) for x,y in zip(a,b)),1)
+                else:self.assertEqual(a,b)
+            report=next(v for v in versions if v['metadata']['extension']=='.json')
+            metadata=json.loads(Path(report['absolutePath']).read_text())
+            self.assertEqual(metadata['processingDimensions'],{'width':64,'height':48} if case['id']=='perfect-region' else {'width':128,'height':96})
+
     def test_browser_gif_runtime_preserves_frames_delays_and_strict_policies(self):
         second = self.root / 'second.png'
         Image.new('RGBA', (8, 8), (20, 220, 40, 255)).save(second)

@@ -21,3 +21,8 @@ export { combineSequenceImages, stitchSequenceImages, sliceSequenceImage } from 
 export { superSplitByTransparent } from '../../assets/workbench/src/lib/superSplitTransparent'
 export { initialSequenceDraft, validateStoredSequence, serializeSequenceDocument, restoreSequenceDocument, sequenceFiles, sequenceMetadata } from '../../assets/workbench/src/localProject/sequenceDocument'
 export { createSequenceHistory, sequenceHistoryReducer } from '../../assets/workbench/src/localProject/sequenceHistory'
+export { pixelateImage, mergeNearbyColorsImage, reduceTo16Colors } from '../../assets/workbench/src/lib/imagePixelAlgorithms'
+export { loadOpenCv } from '../../assets/workbench/src/lib/pixellise/opencv'
+export { computeMeshWithScaling } from '../../assets/workbench/src/lib/pixellise/mesh'
+export { processWithMesh } from '../../assets/workbench/src/lib/pixellise/pixelate'
+export { maxSafeUpscaleForImage } from '../../assets/workbench/src/lib/pixellise/safeUpscale'

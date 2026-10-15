@@ -1,0 +1,170 @@
+{
+  "id": "pixel-original-128-rgba",
+  "source": "source.png",
+  "sha256": "ae90dba290dde79fd34b52459772ee8793f8d275550b7b72df016282c513939a",
+  "sourceDimensions": [
+    128,
+    96
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "cases": [
+    {
+      "id": "block-1",
+      "operation": "image.pixelate",
+      "parameters": {
+        "pixelSize": 1
+      },
+      "criterion": "rgba max channel error 1; identical geometry"
+    },
+    {
+      "id": "block-4",
+      "operation": "image.pixelate",
+      "parameters": {
+        "pixelSize": 4
+      },
+      "criterion": "rgba max channel error 1; identical geometry"
+    },
+    {
+      "id": "block-8",
+      "operation": "image.pixelate",
+      "parameters": {
+        "pixelSize": 8
+      },
+      "criterion": "rgba max channel error 1; identical geometry"
+    },
+    {
+      "id": "merge-1",
+      "operation": "image.mergeNearby",
+      "parameters": {
+        "strength": 1
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "merge-40",
+      "operation": "image.mergeNearby",
+      "parameters": {
+        "strength": 40
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "merge-100",
+      "operation": "image.mergeNearby",
+      "parameters": {
+        "strength": 100
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "palette-rgb-false",
+      "operation": "image.palette16",
+      "parameters": {
+        "method": "rgb",
+        "dither": false
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "palette-rgb-true",
+      "operation": "image.palette16",
+      "parameters": {
+        "method": "rgb",
+        "dither": true
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "palette-lab-false",
+      "operation": "image.palette16",
+      "parameters": {
+        "method": "lab",
+        "dither": false
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "palette-lab-true",
+      "operation": "image.palette16",
+      "parameters": {
+        "method": "lab",
+        "dither": true
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "perfect-manual",
+      "operation": "image.perfectPixel",
+      "parameters": {
+        "gridCols": 16,
+        "gridRows": 12,
+        "refineIntensity": 0,
+        "fixSquare": false
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "perfect-region",
+      "operation": "image.perfectPixel",
+      "parameters": {
+        "gridCols": 8,
+        "gridRows": 6,
+        "refineIntensity": 0,
+        "fixSquare": false,
+        "regionX": 8,
+        "regionY": 8,
+        "regionWidth": 64,
+        "regionHeight": 48
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "pixellise-opaque",
+      "operation": "image.pixellise",
+      "parameters": {
+        "upscale": 3,
+        "numColors": 16,
+        "scaleResult": 1,
+        "transparentBackground": false
+      },
+      "criterion": "strict decoded RGBA"
+    },
+    {
+      "id": "pixellise-transparent",
+      "operation": "image.pixellise",
+      "parameters": {
+        "upscale": 3,
+        "numColors": 64,
+        "scaleResult": 2,
+        "transparentBackground": true
+      },
+      "criterion": "strict decoded RGBA"
+    }
+  ],
+  "goldenOutputSha256": {
+    "block-1": "3747ff27017d6132528271a75f191f8e526ad5be886c1095fd90bd96926127ed",
+    "block-4": "3747ff27017d6132528271a75f191f8e526ad5be886c1095fd90bd96926127ed",
+    "block-8": "1e6b596eb329f4723afbbc52f9b4ab873866b5a582105c6364ffb3fd26dd6325",
+    "merge-1": "aa744d25ae4400b0e6d99ca9c3022dff423b35816ec0e89b7ff9f2af7affefc1",
+    "merge-40": "61ed1102ea545e501249102783e5ec4136fb6e316994302d81ce8271c3f1880c",
+    "merge-100": "285abbfe22d678b2b9e26c105c01ec0574d58c6e5c018a7f7a3843be9bf7eb34",
+    "palette-rgb-false": "a886945c424534ecd15a39ddba1981e0a0b1dd86eae23fbcd563875afd4eda48",
+    "palette-rgb-true": "217d8e1f7c70ad6190e6fa7d833e27e121d585b0bf4308d8bd7fa9466dffdea6",
+    "palette-lab-false": "8a1e74a44a2629b226a81d98e1e1f6011617f9c52ca1ebe8b518ff26d37db623",
+    "palette-lab-true": "00743e0a248edab26dcb1009236cebb7f5c1a6cd3fbe9f4403819e2eb671cc3f",
+    "perfect-manual": "60667297412a68d71f2599a820522d4c488a4b866db69ab96707ddff7954e4cc",
+    "perfect-region": "1cbe5c252ec851a0c9dda935c13a0e0b83627e67f47c2916e0e6174807d941c3",
+    "pixellise-opaque": "d19a4a7b3c3c337d0961c4996f689b7c7b98d59bb7a69145f2ba02944dc4071d",
+    "pixellise-transparent": "5bb9981564491540311d8ee8d3d5d58776bd201937214101335019b201ae0fc3"
+  },
+  "originalImplementationSha256": {
+    "reference/frontend/src/components/ImagePixelate.tsx": "6b8e1c670429d610b13bd63271d5cd447f4da0f8f7af1effc08763c694e4b612",
+    "reference/frontend/src/lib/perfectPixel/perfectPixel.ts": "b742db672d0a1f667ddd53981771a8f46147878706e0483885e77a27779a39fd",
+    "reference/frontend/src/lib/pixellise/mesh.ts": "79a1e84ec77d990e85778757e698b6a1e0c4ce2fc9b0de35563e907d87fd4c31",
+    "reference/frontend/src/lib/pixellise/pixelate.ts": "57629f82f3afc5f7b6256fbc6f02555402bb9cb84310425e5f9884d06da4f0a5",
+    "reference/frontend/src/lib/pixellise/colors.ts": "22f318f06d2468c7da10ad5e9e2a1084a7381a36c9a1140fe1c56850425b249b"
+  }
+}

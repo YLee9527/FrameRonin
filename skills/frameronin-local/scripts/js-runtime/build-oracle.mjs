@@ -32,12 +32,19 @@ const sliceStart=originalGif.indexOf('      const w = img.naturalWidth',original
 const originalSlice=originalGif.slice(sliceStart,originalGif.indexOf('      setCombineFiles',sliceStart))
 await fs.writeFile(path.join(output,'original-sequence.ts'),`export async function combine(selected:HTMLImageElement[],combineCols:number,cropTop:number,cropBottom:number,cropLeft:number,cropRight:number){const imgs:HTMLImageElement[]=[];\n${originalCombine}\nreturn blob;}\nexport async function stitch(imgs:HTMLImageElement[],stitchDirection:string){\n${originalStitch}\nreturn blob;}\nexport async function slice(img:HTMLImageElement,splitRows:number,splitCols:number){const splitFile={name:'fixture.png'};\n${originalSlice}\nreturn files;}`)
 await fs.copyFile(path.join(root,'reference/frontend/src/lib/superSplitTransparent.ts'),path.join(output,'original-super.ts'))
+const originalPixel=await fs.readFile(path.join(root,'reference/frontend/src/components/ImagePixelate.tsx'),'utf8')
+const pixelFunctions=originalPixel.slice(originalPixel.indexOf('function rgbToLab('),originalPixel.indexOf('export default function ImagePixelate'))
+await fs.writeFile(path.join(output,'original-pixel.ts'),pixelFunctions+'\nexport {pixelateImage,mergeNearbyColorsImage,reduceTo16Colors};')
+await fs.cp(path.join(root,'reference/frontend/src/lib/pixellise'),path.join(output,'original-pixellise'),{recursive:true})
+await fs.cp(path.join(root,'reference/frontend/src/lib/perfectPixel'),path.join(output,'original-perfectPixel'),{recursive:true})
+await fs.copyFile(path.join(skill,'assets/fixtures/pixel/manifest.json'),path.join(output,'pixel-fixture.json'))
 const workbench = path.join(skill, 'assets/workbench')
 const config = path.join(skill, '.runtime/oracle-vite.config.mjs')
 // Keep the original browser's Rollup CommonJS handling. An esbuild-only browser
 // bundle exposes Emscripten's self-returning `then` during dynamic import.
 await fs.writeFile(config, `import base from ${JSON.stringify(path.join(workbench, 'vite.config.ts'))};
 export default {...base,root:${JSON.stringify(path.join(skill, 'tests'))},publicDir:false,
+resolve:{alias:{'image-q':${JSON.stringify(path.join(workbench,'node_modules/image-q/dist/esm/image-q.mjs'))}}},
 plugins:base.plugins.filter(p=>p.name!=='copy-404'),build:{outDir:${JSON.stringify(output)},emptyOutDir:false,
 rollupOptions:{input:${JSON.stringify(path.join(skill, 'tests/browser-oracle.html'))}}}};`)
 const result = spawnSync(process.execPath, [path.join(workbench, 'node_modules/vite/bin/vite.js'), 'build', '--config', config],
