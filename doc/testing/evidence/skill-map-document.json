@@ -639,10 +639,41 @@
     "aiGeneratedScriptsRun": false
   },
   "krita": {
-    "status": "not accepted for this new managed PSD",
+    "status": "accepted for this managed PSD on 2026-10-15",
     "priorIndependentSample": "skill-interop.json",
-    "latestNativeToolObservation": "Mac locked despite user reply; no native file open or export confirmed",
-    "required": "open new two-layer PSD and compare independent Krita composite with fixed RGB tolerance 1 and exact alpha"
+    "required": "open new two-layer PSD and compare independent Krita composite with fixed RGB tolerance 1 and exact alpha",
+    "priorObservation": "Mac locked despite user reply; no native file open or export confirmed",
+    "version": "5.3.4.1",
+    "psdVersionId": "717ba8c9-695e-4607-ad3d-b66f73abf519",
+    "psdSha256": "a95b8ebb5ee01113f6f9d2c3df35dfa1046f9b550a1a3c7ea2bc89935b156f07",
+    "nativeLayers": 2,
+    "independentLayerVisibilityAndTransparencyChecked": true,
+    "criterion": "fixed before execution: RGB maximum 1; alpha exact; dimensions equal",
+    "comparison": {
+      "dimensions": [
+        118,
+        64
+      ],
+      "maxChannelError": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "changedPixels": 90,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "47cc925607266cb61582be6f27be28f9be0cfbf66774dbcf6c21be98c6a6f1f1",
+      "passed": true
+    },
+    "screenshots": [
+      "skill-map-krita-layers.png",
+      "skill-map-krita-layer-hidden.png",
+      "skill-map-krita-restored.png",
+      "skill-map-krita-composite.png"
+    ]
   },
   "checks": {
     "pythonTests": 19,
@@ -658,7 +689,6 @@
     "initial expansion direction assertion counted overlapping rows; classify by geometric outside-boundary criterion instead"
   ],
   "remaining": [
-    "new managed PSD native Krita revalidation",
     "combined actual peak for browser, API and all owned processes",
     "macOS 14 and VoiceOver acceptance",
     "complete image-format and map editing race acceptance",

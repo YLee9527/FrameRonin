@@ -86,7 +86,7 @@
 | map.adjacency | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 左侧透明模板严格像素对照、4/8/12 分割及方向约束通过；全部方向交互待验收 |
 | map.feather | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 三组四边羽化 Worker/PNG/PSD 严格像素对照通过；联合实测内存待验收 |
 | map.seam-preview | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 64px 羽化预览严格像素相等；隐藏/边框与完整接缝交互待验收 |
-| map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 后台 PSD 严格合成对照与取消通过；新导出器 Krita 复验待完成，旧独立样本原生通过 |
+| map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 后台 PSD 对照与取消通过；正式结果在 Krita 打开两层、透明度及独立合成验收通过 |
 | map.godot-scene | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 新后台场景在固定可信无脚本 Godot 4.7.2 工程导入及三帧运行通过 |
 | map.godot-pack | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 工作台后台 ZIP/正式版本一致、解包及可信工程导入运行通过 |
 | game.topdown | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |

@@ -1101,7 +1101,7 @@
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/MapStitch.tsx",
     "sample": "map-persistence-and-export-64",
     "evidence": "doc/testing/evidence/skill-map-document.json",
-    "status": "后台 PSD 严格合成对照与取消通过；新导出器 Krita 复验待完成，旧独立样本原生通过",
+    "status": "后台 PSD 严格合成对照与取消通过；新导出器 Krita 复验待完成，旧独立样本原生通过；2026-10-15 正式 PSD 的 Krita 两层/透明度与独立合成复验通过，见 skill-map-document.json",
     "limits": "retained image/history and native export resource forecasts; no independent tiling; per-image bounded decode; full actual combined peak pending"
   },
   {
