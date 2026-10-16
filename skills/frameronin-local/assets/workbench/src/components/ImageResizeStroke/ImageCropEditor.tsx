@@ -1,11 +1,21 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect,useImperativeHandle,useLayoutEffect,useRef,useState,type Ref } from 'react'
+import {flushSync} from 'react-dom'
 import { useLanguage } from '../../i18n/context'
+import {localJson} from '../../localProject/api'
+import {runNormalSourceWorker} from '../../lib/normalImageSourceWorker'
+import {Button,Space,Typography} from 'antd'
 
 const HANDLE_SIZE = 12
 type CropHandle = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | 'move' | null
+export type ImageCropEditorHandle={finishGesture:()=>Promise<void>;hasPendingEdits:()=>boolean;cancelPending:()=>void}
 
 interface Props {
-  imageUrl: string
+  ref?:Ref<ImageCropEditorHandle>
+  file:File
+  retainedBytes:()=>number
+  onReadyChange?:(ready:boolean)=>void
+  onSamplingChange?:(pending:boolean)=>void
+  allowPick?:boolean
   imageSize: { w: number; h: number }
   cropRegion: { left: number; top: number; right: number; bottom: number }
   onChange: (r: { left: number; top: number; right: number; bottom: number }) => void
@@ -14,14 +24,19 @@ interface Props {
 }
 
 export default function ImageCropEditor({
-  imageUrl,
+  ref,
+  file,
+  retainedBytes,
+  onReadyChange,
+  onSamplingChange,
+  allowPick=true,
   imageSize,
   cropRegion,
   onChange,
   onPickColor,
   pickingColor,
 }: Props) {
-  const { t } = useLanguage()
+  const {t,lang}=useLanguage()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [dragging, setDragging] = useState<CropHandle>(null)
   const [startPos, setStartPos] = useState<{
@@ -33,6 +48,29 @@ export default function ImageCropEditor({
     bottom: number
   } | null>(null)
   const [hoverHandle, setHoverHandle] = useState<CropHandle>(null)
+  const pending=useRef(false),currentFile=useRef(file),dragSource=useRef<File|null>(null),retained=useRef(retainedBytes)
+  const sample=useRef<{controller:AbortController;promise:Promise<void>}|null>(null),budget=useRef(0),picker=useRef({pickingColor,onPickColor})
+  const previewController=useRef<AbortController|null>(null),readyListener=useRef(onReadyChange)
+  const samplingListener=useRef(onSamplingChange)
+  const alive=useRef(true)
+  const [preview,setPreview]=useState<{file:File;bitmap:ImageBitmap;width:number;height:number}|null>(null),[error,setError]=useState(''),[reload,setReload]=useState(0)
+  const [canceled,setCanceled]=useState(false),[isSampling,setIsSampling]=useState(false)
+  useLayoutEffect(()=>{currentFile.current=file;retained.current=retainedBytes;picker.current={pickingColor,onPickColor};readyListener.current=onReadyChange;samplingListener.current=onSamplingChange})
+  const ready=preview?.file===file&&preview.width===imageSize.w&&preview.height===imageSize.h
+  useImperativeHandle(ref,()=>({finishGesture:async()=>{pending.current=false;flushSync(()=>{setDragging(null);setStartPos(null)});await sample.current?.promise},hasPendingEdits:()=>pending.current||sample.current!==null,cancelPending:()=>sample.current?.controller.abort()}),[])
+  useLayoutEffect(()=>{alive.current=true;return()=>{alive.current=false;previewController.current?.abort();sample.current?.controller.abort()}},[])
+  useEffect(()=>{
+    const controller=new AbortController();previewController.current=controller;let owned:ImageBitmap|undefined
+    readyListener.current?.(false)
+    void(async()=>{
+      const context=await localJson<{memoryBudgetBytes:number}>('/api/project/context',{signal:controller.signal});budget.current=context.memoryBudgetBytes
+      const result=await runNormalSourceWorker(file,'preview',context.memoryBudgetBytes,retained.current(),controller.signal)
+      if(!alive.current||controller.signal.aborted||currentFile.current!==file){result.bitmap?.close();return}
+      if(result.width!==imageSize.w||result.height!==imageSize.h){result.bitmap?.close();throw new Error('NORMAL_SOURCE_DIMENSIONS_CHANGED: reimport the selected image to refresh its orientation metadata')}
+      owned=result.bitmap!;setPreview({file,bitmap:owned,width:result.width,height:result.height});setError('');setCanceled(false);readyListener.current?.(true)
+    })().catch(error=>{if(!controller.signal.aborted&&currentFile.current===file)setError(String(error))})
+    return()=>{controller.abort();sample.current?.controller.abort();owned?.close()}
+  },[file,reload,imageSize.w,imageSize.h])
 
   const hitTest = (vx: number, vy: number): CropHandle => {
     const { left, top, right, bottom } = cropRegion
@@ -65,27 +103,29 @@ export default function ImageCropEditor({
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const { vx, vy } = toImageCoords(e.clientX, e.clientY)
+    if(!ready)return
     if (pickingColor && onPickColor) {
-      const canvas = canvasRef.current
-      if (!canvas) return
-      const rect = canvas.getBoundingClientRect()
-      const scaleX = imageSize.w / rect.width
-      const scaleY = imageSize.h / rect.height
-      const x = Math.floor((e.clientX - rect.left) * scaleX)
-      const y = Math.floor((e.clientY - rect.top) * scaleY)
-      const ctx = canvas.getContext('2d')
-      if (ctx) {
-        const [r, g, b] = ctx.getImageData(x, y, 1, 1).data
-        onPickColor(r, g, b)
-      }
+      if(!allowPick)return
+      const canvas=canvasRef.current;if(!canvas)return
+      const rect=canvas.getBoundingClientRect(),x=Math.max(0,Math.min(imageSize.w-1,Math.floor((e.clientX-rect.left)*imageSize.w/rect.width))),y=Math.max(0,Math.min(imageSize.h-1,Math.floor((e.clientY-rect.top)*imageSize.h/rect.height)))
+      sample.current?.controller.abort()
+      setIsSampling(true);setError('');samplingListener.current?.(true)
+      const operation={controller:new AbortController(),promise:Promise.resolve()};sample.current=operation
+      operation.promise=runNormalSourceWorker(file,'sample',budget.current,retained.current(),operation.controller.signal,x,y).then(result=>{
+        if(alive.current&&!operation.controller.signal.aborted&&sample.current===operation&&currentFile.current===file&&picker.current.pickingColor){
+          const [r,g,b]=result.color!;flushSync(()=>picker.current.onPickColor?.(r,g,b))
+        }
+      }).catch(error=>{if(!operation.controller.signal.aborted&&currentFile.current===file)setError(String(error))}).finally(()=>{if(sample.current===operation){sample.current=null;if(alive.current){setIsSampling(false);samplingListener.current?.(false)}}})
       return
     }
     const handle = hitTest(vx, vy)
+    pending.current=!!handle;dragSource.current=file
     setDragging(handle)
     setStartPos({ x: vx, y: vy, ...cropRegion })
   }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if(!ready||dragging&&dragSource.current!==file)return
     const coords = toImageCoords(e.clientX, e.clientY)
     if (!dragging || !startPos) {
       setHoverHandle(pickingColor ? null : hitTest(coords.vx, coords.vy))
@@ -117,6 +157,7 @@ export default function ImageCropEditor({
   }
 
   const handleMouseUp = () => {
+    pending.current=false
     setDragging(null)
     setStartPos(null)
   }
@@ -139,16 +180,12 @@ export default function ImageCropEditor({
     return (h && map[h]) ?? 'crosshair'
   }
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas || !imageUrl) return
-    const img = new Image()
-    img.onload = () => {
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
-      canvas.width = imageSize.w
-      canvas.height = imageSize.h
-      ctx.drawImage(img, 0, 0)
+  useEffect(()=>{
+    const canvas=canvasRef.current
+    if(!canvas||!ready||preview?.file!==file)return
+    const bitmap=preview.bitmap,ctx=canvas.getContext('2d');if(!ctx)return
+    canvas.width=bitmap.width;canvas.height=bitmap.height;ctx.drawImage(bitmap,0,0)
+    ctx.save();ctx.scale(bitmap.width/imageSize.w,bitmap.height/imageSize.h)
       const { left, top, right, bottom } = cropRegion
       const w = imageSize.w - left - right
       const h = imageSize.h - top - bottom
@@ -173,25 +210,20 @@ export default function ImageCropEditor({
       ].forEach(([x, y]) => {
         ctx.fillRect(x - 4, y - 4, 8, 8)
       })
-    }
-    img.onerror = () => {
-      const ctx = canvasRef.current?.getContext('2d')
-      if (ctx) {
-        ctx.fillStyle = '#d4c8b8'
-        ctx.fillRect(0, 0, imageSize.w, imageSize.h)
-        ctx.fillStyle = '#6b5d4d'
-        ctx.font = '14px sans-serif'
-        ctx.textAlign = 'center'
-        ctx.fillText(t('errImageLoad'), imageSize.w / 2, imageSize.h / 2)
-      }
-    }
-    img.src = imageUrl
-  }, [imageUrl, cropRegion, imageSize, t])
-
-  if (!imageUrl) return null
+    ctx.restore()
+  },[preview,file,imageSize,cropRegion,ready])
 
   return (
-    <div
+    <div>
+      {error&&<p role="alert">{t('errImageLoad')}: {error}</p>}
+      {isSampling&&<Space style={{marginBottom:8}}><Typography.Text role="status">{lang==='zh'?'正在读取原图颜色':lang==='ja'?'元画像の色を取得中':'Sampling the original image'}</Typography.Text><Button onClick={()=>sample.current?.controller.abort()}>{lang==='zh'?'取消取色':lang==='ja'?'色取得を取消':'Cancel color sample'}</Button></Space>}
+      {!ready&&<Space style={{marginBottom:8}}>
+        {canceled&&<Typography.Text role="status">{lang==='zh'?'预览已取消':lang==='ja'?'プレビューを取り消しました':'Preview canceled'}</Typography.Text>}
+        {!error&&!canceled&&<><Typography.Text role="status">{lang==='zh'?'正在读取预览':lang==='ja'?'プレビューを読込中':'Loading preview'}</Typography.Text>
+        <Button onClick={()=>{previewController.current?.abort();setError('');setCanceled(true)}}>{lang==='zh'?'取消预览':lang==='ja'?'プレビューを取消':'Cancel preview'}</Button></>}
+        <Button onClick={()=>{setError('');setCanceled(false);setReload(value=>value+1)}}>{lang==='zh'?'重试预览':lang==='ja'?'プレビューを再試行':'Retry preview'}</Button>
+      </Space>}
+      <div
       style={{
         overflow: 'auto',
         maxHeight: 400,
@@ -202,14 +234,16 @@ export default function ImageCropEditor({
     >
       <canvas
         ref={canvasRef}
-        width={imageSize.w}
-        height={imageSize.h}
+        width={ready?preview.bitmap.width:1}
+        height={ready?preview.bitmap.height:1}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        style={{ maxWidth: '100%', cursor: getCursor(), display: 'block', imageRendering: 'pixelated' }}
+        aria-label={t('imgOriginalPreview')}
+        style={{width:imageSize.w,maxWidth:'100%',height:'auto',aspectRatio:`${imageSize.w} / ${imageSize.h}`,cursor:ready?getCursor():'wait',display:'block',imageRendering:'pixelated'}}
       />
+      </div>
     </div>
   )
 }

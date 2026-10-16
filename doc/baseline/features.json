@@ -267,10 +267,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
-    "sample": "fixed-image-crop",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "normal-image/manifest.json",
+    "evidence": "doc/testing/evidence/skill-normal-workbench.json",
+    "status": "受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收",
+    "limits": "PNG/JPEG/WebP ≤20 MiB; target side 1–30000 subject to full budget; preview side ≤1024 only; JPEG requires ImageDecoder"
   },
   {
     "id": "image.resize",
@@ -280,10 +280,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
-    "sample": "fixed-image-resize",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "normal-image/manifest.json",
+    "evidence": "doc/testing/evidence/skill-normal-workbench.json",
+    "status": "受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收",
+    "limits": "PNG/JPEG/WebP ≤20 MiB; target side 1–30000 subject to full budget; preview side ≤1024 only; JPEG requires ImageDecoder"
   },
   {
     "id": "image.stroke",
@@ -293,62 +293,62 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
-    "sample": "fixed-image-stroke",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "normal-image/manifest.json",
+    "evidence": "doc/testing/evidence/skill-normal-workbench.json",
+    "status": "受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收",
+    "limits": "PNG/JPEG/WebP ≤20 MiB; target side 1–30000 subject to full budget; preview side ≤1024 only; JPEG requires ImageDecoder"
   },
   {
     "id": "image.paint",
-    "originalEntry": "图片常规",
-    "implementation": "reference/frontend/src/components/ImageResizeStroke.tsx",
+    "originalEntry": "图片常规转入精细处理",
+    "implementation": "reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx",
     "inputs": "image",
     "outputs": "PNG",
     "dependencies": "Canvas",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke/ImageFineEditor.tsx",
     "sample": "fixed-image-paint",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "evidence": "doc/testing/evidence/skill-fine-standalone.json",
+    "status": "常规结果转入精细画布；绘制/擦除、正式文档、撤销和 PNG 下载已验收",
+    "limits": "Shared fine editor; static PNG/JPEG/WebP ≤20 MiB; full format and joint-memory acceptance pending"
   },
   {
     "id": "image.erase",
-    "originalEntry": "图片常规",
-    "implementation": "reference/frontend/src/components/ImageResizeStroke.tsx",
+    "originalEntry": "图片常规转入精细处理",
+    "implementation": "reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx",
     "inputs": "image",
     "outputs": "PNG",
     "dependencies": "Canvas",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke/ImageFineEditor.tsx",
     "sample": "fixed-image-erase",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "evidence": "doc/testing/evidence/skill-fine-standalone.json",
+    "status": "常规结果转入精细画布；绘制/擦除、正式文档、撤销和 PNG 下载已验收",
+    "limits": "Shared fine editor; static PNG/JPEG/WebP ≤20 MiB; full format and joint-memory acceptance pending"
   },
   {
     "id": "image.flip",
-    "originalEntry": "图片常规",
+    "originalEntry": "图片常规：底部扩展中的复制行水平翻转",
     "implementation": "reference/frontend/src/components/ImageResizeStroke.tsx",
     "inputs": "image",
-    "outputs": "PNG",
+    "outputs": "PNG，按三行重排并扩展 floor(height/3)",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
-    "sample": "fixed-image-flip",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "normal-image/manifest.json",
+    "evidence": "doc/testing/evidence/skill-normal-workbench.json",
+    "status": "受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收",
+    "limits": "PNG/JPEG/WebP ≤20 MiB; target side 1–30000 subject to full budget; preview side ≤1024 only; JPEG requires ImageDecoder; legacy ID describes the mirrored extension row, not a standalone flip control"
   },
   {
     "id": "image.transparent-repair",
-    "originalEntry": "图片常规",
-    "implementation": "reference/frontend/src/components/ImageResizeStroke.tsx",
+    "originalEntry": "抠图去背：去背景后修复",
+    "implementation": "reference/frontend/src/components/ImageMatte.tsx",
     "inputs": "image",
     "outputs": "PNG",
     "dependencies": "Canvas",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageResizeStroke.tsx",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageMatte.tsx",
     "sample": "fixed-image-transparent-repair",
     "evidence": null,
     "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "limits": "Corrected original entry attribution; keep complete repair/erosion acceptance pending, do not infer from normal chroma-key tests"
   },
   {
     "id": "fine.image.paint",

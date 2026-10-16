@@ -261,9 +261,18 @@ async function runFineEditor(){
 async function runNormalImage(){
   const fixture=await(await fetch('/normal-image/manifest.json')).json(),zip=new JSZip()
   for(const entry of fixture.cases){
-    const file=await(await fetch(`/normal-image/${entry.input}`)).blob()
+    const fetched=await(await fetch(`/normal-image/${entry.input}`)).blob(),file=entry.mime===undefined?fetched:new Blob([fetched],{type:entry.mime})
     zip.file(`${entry.id}/original.png`,await originalNormal(file,entry.parameters))
     zip.file(`${entry.id}/actual-browser.png`,await processNormalImage(file,entry.parameters))
+    const worker=new Worker(new URL('../assets/workbench/src/lib/normalImage.worker.ts',import.meta.url),{type:'module'})
+    try{
+      const blob=await new Promise<Blob>((resolve,reject)=>{
+        worker.onmessage=event=>{if(event.data.error)reject(new Error(event.data.error));else if(event.data.blob)resolve(event.data.blob)}
+        worker.onerror=event=>reject(new Error(event.message))
+        worker.postMessage({id:entry.id,generation:0,file,parameters:{...entry.parameters,frontendBytes:0},budgetBytes:2*1024**3})
+      })
+      zip.file(`${entry.id}/actual-worker.png`,blob)
+    }finally{worker.terminate()}
     status.textContent=`Normal image: ${entry.id}`
   }
   await publish(zip,'browser-normal-image.zip');status.textContent=`Normal image complete: ${fixture.cases.length} original recipes`

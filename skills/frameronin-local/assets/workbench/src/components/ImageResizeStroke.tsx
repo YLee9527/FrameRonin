@@ -1,25 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback,useEffect,useMemo,useRef,useState } from 'react'
 import { Button, Col, ColorPicker, Divider, InputNumber, message, Row, Slider, Space, Typography } from 'antd'
 import { DownloadOutlined, EditOutlined, InboxOutlined } from '@ant-design/icons'
 import { Checkbox } from 'antd'
 import { Upload } from 'antd'
 import type { UploadFile } from 'antd'
 import { useLanguage } from '../i18n/context'
-import { formatError } from '../i18n/locales'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
-import {
-  applyChromaKey,
-  applyChromaKeyContiguousFromTopLeft,
-  applyInnerStroke,
-  cropImageBlob,
-  extendImageBottom,
-  getTopLeftPixelColor,
-  processAncientCostumeAllActions,
-  resizeImageToBlob,
-} from './ParamsStep/utils'
-import { removeGeminiWatermarkFromBlob } from '../lib/geminiWatermark'
-import ImageCropEditor from './ImageResizeStroke/ImageCropEditor'
+import ImageCropEditor,{type ImageCropEditorHandle} from './ImageResizeStroke/ImageCropEditor'
+import {useNormalImageDocument} from '../localProject/useNormalImageDocument'
+import NormalImageDocumentSurface from '../localProject/NormalImageDocumentSurface'
+import {normalImageDefaults,normalImageReports,type NormalImageSettings} from '../localProject/normalImageDocument'
+import type {NormalImageMode} from '../lib/normalImageTools'
+import {prepareFineInput} from '../localProject/fineEditInput'
+import {fineEditorDimensions} from '../lib/fineEditorPixels'
+import {imageToolMetadata} from '../localProject/imageToolDocument'
+import {runManagedTask,cacheManagedInput} from '../localProject/managedTasks'
+import {useImageToolUrls} from '../localProject/useManagedImageTool'
+import {Progress} from 'antd'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -33,303 +31,116 @@ export interface ImageResizeStrokeProps {
 }
 
 export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeStrokeProps = {}) {
-  const { t } = useLanguage()
-  const [file, setFile] = useState<File | null>(null)
-  const [originalUrl, setOriginalUrl] = useState<string | null>(null)
-  const [originalSize, setOriginalSize] = useState<{ w: number; h: number } | null>(null)
-  const [cropRegion, setCropRegion] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
-  const [bgColor, setBgColor] = useState('#ffffff')
-  const [matteTolerance, setMatteTolerance] = useState(40)
-  const [matteFeather, setMatteFeather] = useState(5)
-  const [enableMatte, setEnableMatte] = useState(false)
-  const [pickingColor, setPickingColor] = useState(false)
-  const [mattePreviewUrl, setMattePreviewUrl] = useState<string | null>(null)
-  const [matteLoading, setMatteLoading] = useState(false)
-  const [targetW, setTargetW] = useState(256)
-  const [targetH, setTargetH] = useState(256)
-  const [keepAspect, setKeepAspect] = useState(true)
-  const [pixelated, setPixelated] = useState(true)
-  const [strokeWidth, setStrokeWidth] = useState(0)
-  const [strokeColor, setStrokeColor] = useState('#000000')
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [extendLoading, setExtendLoading] = useState(false)
-  const [oneClickLoading, setOneClickLoading] = useState(false)
-  const [oneClickAllActionsLoading, setOneClickAllActionsLoading] = useState(false)
-  const [ancientCostumeLoading, setAncientCostumeLoading] = useState(false)
-
-  const oneClickBusy =
-    oneClickLoading ||
-    oneClickAllActionsLoading ||
-    ancientCostumeLoading
-
-  const croppedW = originalSize ? Math.max(1, originalSize.w - cropRegion.left - cropRegion.right) : 0
-  const croppedH = originalSize ? Math.max(1, originalSize.h - cropRegion.top - cropRegion.bottom) : 0
-  const aspectRatio = croppedW > 0 && croppedH > 0 ? croppedH / croppedW : 1
-
-  useEffect(() => {
-    if (croppedW > 0 && croppedH > 0) {
-      setTargetW(croppedW)
-      setTargetH(croppedH)
-    }
-  }, [croppedW, croppedH])
-
-  const handleFile = (f: File | null) => {
-    if (originalUrl) URL.revokeObjectURL(originalUrl)
-    setFile(f)
-    setOriginalUrl(null)
-    setOriginalSize(null)
-    setMattePreviewUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    setPreviewUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    setPreviewBlob(null)
-    setCropRegion({ left: 0, top: 0, right: 0, bottom: 0 })
-    if (f) {
-      const url = URL.createObjectURL(f)
-      setOriginalUrl(url)
-      const img = new Image()
-      img.onload = () => {
-        setOriginalSize({ w: img.width, h: img.height })
+  const {t,lang}=useLanguage(),model=useNormalImageDocument(),{source:file,settings,preview,matte}=model.draft
+  const {width:targetW,height:targetH,keepAspect,pixelated,background:bgColor,tolerance:matteTolerance,feather:matteFeather,enableMatte,strokeWidth,strokeColor}=settings
+  const cropRegion=useMemo(()=>({left:settings.cropLeft,right:settings.cropRight,top:settings.cropTop,bottom:settings.cropBottom}),[settings.cropLeft,settings.cropRight,settings.cropTop,settings.cropBottom])
+  const setField=<K extends keyof NormalImageSettings,>(key:K,value:NormalImageSettings[K])=>model.change(draft=>({...draft,settings:{...draft.settings,[key]:value}}))
+  const setBgColor=(v:string)=>setField('background',v),setMatteTolerance=(v:number)=>setField('tolerance',v),setMatteFeather=(v:number)=>setField('feather',v)
+  const setEnableMatte=(v:boolean)=>setField('enableMatte',v),setKeepAspect=(v:boolean)=>setField('keepAspect',v),setPixelated=(v:boolean)=>setField('pixelated',v)
+  const setStrokeWidth=(v:number)=>setField('strokeWidth',v),setStrokeColor=(v:string)=>setField('strokeColor',v)
+  const [pickingColor,setPickingColor]=useState(false),[preparing,setPreparing]=useState(false),[busy,setBusy]=useState<NormalImageMode|null>(null),[readySource,setReadySource]=useState<File|null>(null)
+  const [canceling,setCanceling]=useState(false),[progress,setProgress]=useState(0)
+  const [sampling,setSampling]=useState(false)
+  const controller=useRef<AbortController|null>(null),alive=useRef(true),request=useRef(0),editor=useRef<ImageCropEditorHandle>(null)
+  useEffect(()=>{alive.current=true;const invalidate=()=>{alive.current=false;request.current++};return invalidate},[])
+  const flush=useCallback(async()=>{await editor.current?.finishGesture()},[])
+  const hasPendingEdits=useCallback(()=>editor.current?.hasPendingEdits()??false,[])
+  const previewFiles=useMemo(()=>preview?[preview.file]:[],[preview]),matteFiles=useMemo(()=>matte?[matte.file]:[],[matte])
+  const outputUrl=useImageToolUrls(previewFiles,previewFiles.map(file=>imageToolMetadata.get(file)))[0]
+  const matteUrl=useImageToolUrls(matteFiles,matteFiles.map(file=>imageToolMetadata.get(file)))[0]
+  const previewBlob=preview?.file??null,previewUrl=outputUrl?.preview??null,mattePreviewUrl=matteUrl?.preview??null
+  const resultParameters=(report:File|undefined)=>report?normalImageReports.get(report)?.parameters as Record<string,unknown>|undefined:undefined
+  const previewParameters=resultParameters(preview?.report),matteParameters=resultParameters(matte?.report)
+  const differs=(parameters:Record<string,unknown>|undefined,keys:(keyof NormalImageSettings)[])=>parameters&&keys.some(key=>JSON.stringify(parameters[key])!==JSON.stringify(settings[key]))
+  const previewOutdated=previewParameters?.mode==='apply'&&differs(previewParameters,Object.keys(normalImageDefaults) as (keyof NormalImageSettings)[])
+  const matteOutdated=differs(matteParameters,['cropLeft','cropRight','cropTop','cropBottom','background','tolerance','feather'])
+  const previousResult=lang==='zh'?'当前显示上次加工结果；应用新参数请重新执行。':lang==='ja'?'前回の処理結果を表示しています。新しい設定を適用するには再実行してください。':'The previous result is shown. Run again to apply the current settings.'
+  const metadata=file?imageToolMetadata.get(file)?.metadata:undefined,size=metadata?fineEditorDimensions(metadata):undefined
+  const sourceKey=useMemo(()=>file?`${file.name}:${crypto.randomUUID()}`:'empty',[file])
+  const originalSize=useMemo(()=>size?.width&&size.height?{w:size.width,h:size.height}:null,[size?.width,size?.height])
+  const croppedW=originalSize?Math.max(1,originalSize.w-cropRegion.left-cropRegion.right):0,croppedH=originalSize?Math.max(1,originalSize.h-cropRegion.top-cropRegion.bottom):0
+  const aspectRatio=croppedW>0&&croppedH>0?croppedH/croppedW:1
+  const setCropRegion=(value:typeof cropRegion|((old:typeof cropRegion)=>typeof cropRegion))=>model.change(draft=>{
+    const previous={left:draft.settings.cropLeft,right:draft.settings.cropRight,top:draft.settings.cropTop,bottom:draft.settings.cropBottom},next=typeof value==='function'?value(previous):value
+    const meta=draft.source?imageToolMetadata.get(draft.source)?.metadata:undefined,source=meta?fineEditorDimensions(meta):undefined
+    return {...draft,settings:{...draft.settings,cropLeft:next.left,cropRight:next.right,cropTop:next.top,cropBottom:next.bottom,
+      width:Math.max(1,(source?.width??256)-next.left-next.right),height:Math.max(1,(source?.height??256)-next.top-next.bottom)}}
+  })
+  const handleFile=async(next:File|null)=>{
+    const generation=++request.current,before=model.current();setPreparing(!!next)
+    try{
+      if(next)await prepareFineInput(next,[...model.retained()].reduce((sum,file)=>sum+file.size*2,0))
+      if(!alive.current||generation!==request.current||model.current()!==before)return false
+      await flush()
+      if(!alive.current||generation!==request.current||model.current()!==before)return false
+      const meta=next?imageToolMetadata.get(next)!.metadata:null,size=meta?fineEditorDimensions(meta):null
+      model.change(draft=>({...draft,source:next,preview:null,matte:null,settings:{...draft.settings,cropLeft:0,cropRight:0,cropTop:0,cropBottom:0,
+        width:size?.width??draft.settings.width,height:size?.height??draft.settings.height}}));setPickingColor(false);return true
+    }catch(error){if(alive.current&&generation===request.current)message.error(String(error));return false}
+    finally{if(alive.current&&generation===request.current)setPreparing(false)}
+  }
+  const handlePickColor=(r:number,g:number,b:number)=>{
+    const color='#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')
+    model.change(draft=>({...draft,settings:{...draft.settings,background:color,enableMatte:true}}));setPickingColor(false)
+    message.success(t('pickedBgColor',{color:color.slice(1)}))
+  }
+  const handleTargetWChange=(width:number)=>{
+    const height=keepAspect?Math.max(1,Math.round(width*aspectRatio)):targetH
+    if(height>30000){message.error(lang==='zh'?'目标尺寸不能超过 30000 像素':lang==='ja'?'サイズは 30000 ピクセル以下にしてください':'Dimensions must be at most 30000 pixels');return}
+    model.change(draft=>({...draft,settings:{...draft.settings,width,height}}))
+  }
+  const handleTargetHChange=(height:number)=>{
+    const width=keepAspect?Math.max(1,Math.round(height/aspectRatio)):targetW
+    if(width>30000){message.error(lang==='zh'?'目标尺寸不能超过 30000 像素':lang==='ja'?'サイズは 30000 ピクセル以下にしてください':'Dimensions must be at most 30000 pixels');return}
+    model.change(draft=>({...draft,settings:{...draft.settings,width,height}}))
+  }
+  const run=async(mode:NormalImageMode)=>{
+    if(controller.current||!model.current().source||preparing||sampling||readySource!==model.current().source)return
+    if(mode==='extendBottom'&&!model.current().preview)return
+    const abort=new AbortController();controller.current=abort;setBusy(mode);setCanceling(false);setProgress(0)
+    try{
+      await flush()
+      abort.signal.throwIfAborted();setPickingColor(false)
+      const before=model.current(),input=mode==='extendBottom'?before.preview?.file:before.source
+      if(!input)return
+      const retained=[...model.retained()],frontendBytes=96*1024**2+retained.reduce((sum,file)=>sum+file.size*2,0)
+      const completed=await runManagedTask('image.normal',[input],{...before.settings,mode,renderer:'browser-worker',frontendBytes},{signal:abort.signal,
+        onProgress:value=>{if(alive.current)setProgress(previous=>Math.max(previous,value))},outputFilter:()=>alive.current})
+      if(!alive.current)return
+      if(model.current()!==before){message.warning(lang==='zh'?'输入或参数已改变，结果保留在项目素材中':lang==='ja'?'入力または設定が変わりました。結果はプロジェクトに保存されています':'Inputs or settings changed; results remain in Project assets');return}
+      let image:File|undefined,report:File|undefined
+      for(const output of completed.outputs){
+        const file=new File([output.blob],output.version.metadata.kind==='image'?'normal-'+mode+'.png':'normal-'+mode+'-report.json',{type:output.version.metadata.kind==='image'?'image/png':'application/json'})
+        imageToolMetadata.set(file,output.version);cacheManagedInput(file,completed.project.id,output.version.id)
+        if(output.version.metadata.kind==='image')image=file
+        else if(output.version.metadata.extension==='.json')report=file
       }
-      img.src = url
-    }
+      if(!image||!report)throw new Error('NORMAL_RESULT_MISSING')
+      const details=JSON.parse(await report.text())
+      if(!details||details.operation!=='image.normal'||details.outputFrames!==1||!details.parameters)throw new Error('NORMAL_REPORT_INVALID')
+      abort.signal.throwIfAborted()
+      if(!alive.current||model.current()!==before)return
+      normalImageReports.set(report,details)
+      const result={file:image,input,report,taskId:completed.taskId}
+      model.change(draft=>mode==='mattePreview'?{...draft,matte:result}:{...draft,preview:result})
+      message.success(t(mode==='mattePreview'?'matteSuccess':mode==='rpgMaker'?'imgOneClickSuccess':mode==='allActions'?'imgOneClickAllActionsSuccess':mode==='ancientCostume'?'imgAncientCostumeSuccess':mode==='extendBottom'?'imgExtendBottomSuccess':strokeWidth>0?'applyStrokeSuccess':'imgResizeSuccess',{n:1}))
+    }catch(error){if(alive.current){if(error instanceof DOMException&&error.name==='AbortError')message.info(lang==='zh'?'加工已取消':lang==='ja'?'処理を取り消しました':'Processing canceled');else message.error(String(error))}}
+    finally{controller.current=null;if(alive.current){setBusy(null);setCanceling(false)}}
   }
-
-  const urlsRef = useRef({ originalUrl: null as string | null, previewUrl: null as string | null, mattePreviewUrl: null as string | null })
-  urlsRef.current = { originalUrl, previewUrl, mattePreviewUrl }
-  useEffect(
-    () => () => {
-      if (urlsRef.current.originalUrl) URL.revokeObjectURL(urlsRef.current.originalUrl)
-      if (urlsRef.current.previewUrl) URL.revokeObjectURL(urlsRef.current.previewUrl)
-      if (urlsRef.current.mattePreviewUrl) URL.revokeObjectURL(urlsRef.current.mattePreviewUrl)
-    },
-    []
-  )
-
-  const handlePickColor = (r: number, g: number, b: number) => {
-    setBgColor(`#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`)
-    setEnableMatte(true)
-    setPickingColor(false)
-    message.success(t('pickedBgColor', { color: [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('') }))
-  }
-
-  const runMattePreview = async () => {
-    if (!file || !bgColor) return
-    const m = bgColor.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-    if (!m) return
-    setMatteLoading(true)
-    try {
-      let blob = await file.arrayBuffer().then((b) => new Blob([b]))
-      blob = await cropImageBlob(blob, cropRegion)
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const r = new FileReader()
-        r.onload = () => resolve(r.result as string)
-        r.onerror = () => reject(new Error('ERR_IMAGE_LOAD'))
-        r.readAsDataURL(blob)
-      })
-      const bgR = parseInt(m[1], 16)
-      const bgG = parseInt(m[2], 16)
-      const bgB = parseInt(m[3], 16)
-      const { dataUrl: matteDataUrl } = await applyChromaKey(dataUrl, bgR, bgG, bgB, matteTolerance, matteFeather)
-      const matteBlob = await fetch(matteDataUrl).then((r) => r.blob())
-      setMattePreviewUrl((old) => {
-        if (old) URL.revokeObjectURL(old)
-        return URL.createObjectURL(matteBlob)
-      })
-      message.success(t('matteSuccess', { n: 1 }))
-    } catch (e) {
-      message.error(t('matteFailed') + ': ' + formatError(e, t))
-    } finally {
-      setMatteLoading(false)
-    }
-  }
-
-  const handleTargetWChange = (w: number) => {
-    setTargetW(w)
-    if (keepAspect && aspectRatio > 0) {
-      setTargetH(Math.round(w * aspectRatio))
-    }
-  }
-
-  const handleTargetHChange = (h: number) => {
-    setTargetH(h)
-    if (keepAspect && aspectRatio > 0) {
-      setTargetW(Math.round(h / aspectRatio))
-    }
-  }
-
-  const applyPreview = async () => {
-    if (!file) return
-    setLoading(true)
-    try {
-      let blob = await file.arrayBuffer().then((b) => new Blob([b]))
-      blob = await cropImageBlob(blob, cropRegion)
-      if (enableMatte && bgColor) {
-        const m = bgColor.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-        if (m) {
-          const bgR = parseInt(m[1], 16)
-          const bgG = parseInt(m[2], 16)
-          const bgB = parseInt(m[3], 16)
-          const dataUrl = await new Promise<string>((resolve, reject) => {
-            const r = new FileReader()
-            r.onload = () => resolve(r.result as string)
-            r.onerror = () => reject(new Error('ERR_IMAGE_LOAD'))
-            r.readAsDataURL(blob)
-          })
-          const { dataUrl: matteDataUrl } = await applyChromaKey(
-            dataUrl,
-            bgR,
-            bgG,
-            bgB,
-            matteTolerance,
-            matteFeather
-          )
-          blob = await fetch(matteDataUrl).then((r) => r.blob())
-        }
-      }
-      blob = await resizeImageToBlob(blob, targetW, targetH, keepAspect, pixelated)
-      if (strokeWidth > 0) {
-        blob = await applyInnerStroke(blob, strokeWidth, strokeColor)
-      }
-      setPreviewBlob(blob)
-      setPreviewUrl((old) => {
-        if (old) URL.revokeObjectURL(old)
-        return URL.createObjectURL(blob)
-      })
-      message.success(strokeWidth > 0 ? t('applyStrokeSuccess') : t('imgResizeSuccess'))
-    } catch (e) {
-      message.error(t('exportFailed') + ': ' + formatError(e, t))
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const download = () => {
-    if (!previewBlob) return
-    const url = URL.createObjectURL(previewBlob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = (file?.name?.replace(/\.[^.]+$/, '') || 'output') + '_resized.png'
-    a.click()
-    URL.revokeObjectURL(url)
-    message.success(t('downloadStarted'))
-  }
-
-  const handleExtendBottom = async () => {
-    if (!previewBlob) return
-    setExtendLoading(true)
-    try {
-      const blob = await extendImageBottom(previewBlob, 48)
-      setPreviewBlob(blob)
-      setPreviewUrl((old) => {
-        if (old) URL.revokeObjectURL(old)
-        return URL.createObjectURL(blob)
-      })
-      message.success(t('imgExtendBottomSuccess'))
-    } catch (e) {
-      message.error(t('exportFailed') + ': ' + formatError(e, t))
-    } finally {
-      setExtendLoading(false)
-    }
-  }
-
-  const handleOneClickProcess = async () => {
-    if (!file) return
-    setOneClickLoading(true)
-    setPreviewUrl((old) => { if (old) URL.revokeObjectURL(old); return null })
-    setPreviewBlob(null)
-    try {
-      let blob = await file.arrayBuffer().then((b) => new Blob([b]))
-      blob = await removeGeminiWatermarkFromBlob(blob)
-      const { r, g, b } = await getTopLeftPixelColor(blob)
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const r2 = new FileReader()
-        r2.onload = () => resolve(r2.result as string)
-        r2.onerror = () => reject(new Error('ERR_READ'))
-        r2.readAsDataURL(blob)
-      })
-      const { dataUrl: matteDataUrl } = await applyChromaKeyContiguousFromTopLeft(dataUrl, r, g, b, 80, 5)
-      blob = await fetch(matteDataUrl).then((res) => res.blob())
-      blob = await resizeImageToBlob(blob, 144, 144, false, true)
-      blob = await extendImageBottom(blob, 48)
-      setPreviewBlob(blob)
-      setPreviewUrl(URL.createObjectURL(blob))
-      message.success(t('imgOneClickSuccess'))
-    } catch (e) {
-      message.error(t('exportFailed') + ': ' + formatError(e, t))
-    } finally {
-      setOneClickLoading(false)
-    }
-  }
-
-  const handleOneClickAllActionsProcess = async () => {
-    if (!file) return
-    setOneClickAllActionsLoading(true)
-    setPreviewUrl((old) => { if (old) URL.revokeObjectURL(old); return null })
-    setPreviewBlob(null)
-    try {
-      let blob = await file.arrayBuffer().then((b) => new Blob([b]))
-      blob = await removeGeminiWatermarkFromBlob(blob)
-      blob = await resizeImageToBlob(blob, 256, 256, false, true)
-      const { r, g, b } = await getTopLeftPixelColor(blob)
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const r2 = new FileReader()
-        r2.onload = () => resolve(r2.result as string)
-        r2.onerror = () => reject(new Error('ERR_READ'))
-        r2.readAsDataURL(blob)
-      })
-      const { dataUrl: matteDataUrl } = await applyChromaKeyContiguousFromTopLeft(dataUrl, r, g, b, 80, 5)
-      blob = await fetch(matteDataUrl).then((res) => res.blob())
-      blob = await cropImageBlob(blob, { left: 0, top: 0, right: 4, bottom: 4 })
-      setPreviewBlob(blob)
-      setPreviewUrl(URL.createObjectURL(blob))
-      message.success(t('imgOneClickAllActionsSuccess'))
-    } catch (e) {
-      message.error(t('exportFailed') + ': ' + formatError(e, t))
-    } finally {
-      setOneClickAllActionsLoading(false)
-    }
-  }
-
-  const handleAncientCostumeProcess = async () => {
-    if (!file) return
-    setAncientCostumeLoading(true)
-    setPreviewUrl((old) => { if (old) URL.revokeObjectURL(old); return null })
-    setPreviewBlob(null)
-    try {
-      let blob = await file.arrayBuffer().then((b) => new Blob([b]))
-      blob = await removeGeminiWatermarkFromBlob(blob)
-      blob = await resizeImageToBlob(blob, 256, 256, false, true)
-      const { r, g, b } = await getTopLeftPixelColor(blob)
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const r2 = new FileReader()
-        r2.onload = () => resolve(r2.result as string)
-        r2.onerror = () => reject(new Error('ERR_READ'))
-        r2.readAsDataURL(blob)
-      })
-      const { dataUrl: matteDataUrl } = await applyChromaKeyContiguousFromTopLeft(dataUrl, r, g, b, 80, 5)
-      blob = await fetch(matteDataUrl).then((res) => res.blob())
-      blob = await processAncientCostumeAllActions(blob)
-      setPreviewBlob(blob)
-      setPreviewUrl(URL.createObjectURL(blob))
-      message.success(t('imgAncientCostumeSuccess'))
-    } catch (e) {
-      message.error(t('exportFailed') + ': ' + formatError(e, t))
-    } finally {
-      setAncientCostumeLoading(false)
-    }
+  const cancel=()=>{if(controller.current){setCanceling(true);controller.current.abort();editor.current?.cancelPending()}}
+  const loading=busy==='apply',matteLoading=busy==='mattePreview',extendLoading=busy==='extendBottom',oneClickLoading=busy==='rpgMaker',oneClickAllActionsLoading=busy==='allActions',ancientCostumeLoading=busy==='ancientCostume',oneClickBusy=busy!==null||preparing||sampling||file!==readySource
+  const applyPreview=()=>run('apply'),runMattePreview=()=>run('mattePreview'),handleExtendBottom=()=>run('extendBottom'),handleOneClickProcess=()=>run('rpgMaker'),handleOneClickAllActionsProcess=()=>run('allActions'),handleAncientCostumeProcess=()=>run('ancientCostume')
+  const download=()=>{
+    if(!previewBlob)return
+    const url=URL.createObjectURL(previewBlob),link=document.createElement('a');link.href=url;link.download=(file?.name.replace(/\.[^.]+$/,'')??'output')+'_resized.png';link.click();URL.revokeObjectURL(url)
   }
 
   const hasCrop = cropRegion.left > 0 || cropRegion.top > 0 || cropRegion.right > 0 || cropRegion.bottom > 0
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%', paddingTop: 8 }}>
+    <NormalImageDocumentSurface model={model} beforeAction={flush} hasPendingEdits={hasPendingEdits}><Space direction="vertical" size="large" style={{ width: '100%', paddingTop: 8 }}>
+      {preparing&&<Text role="status">{lang==='zh'?'正在核验选定素材':lang==='ja'?'素材を検証中':'Checking selected image'}</Text>}
+      {busy&&<Space><Progress percent={Math.round(progress*100)} style={{width:180}}/><Button loading={canceling} onClick={cancel}>{lang==='zh'?'取消加工':lang==='ja'?'処理を取消':'Cancel processing'}</Button></Space>}
       <StashDropZone
         onStashDrop={(f) => handleFile(f)}
         maxSizeMB={IMAGE_MAX_MB}
@@ -341,7 +152,7 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
           accept={IMAGE_ALLOWED.join(',')}
           maxCount={1}
           fileList={file ? [{ uid: '1', name: file.name, size: file.size } as UploadFile] : []}
-          beforeUpload={(f) => {
+          beforeUpload={async(f) => {
             const ext = '.' + (f.name.split('.').pop() || '').toLowerCase()
             if (!IMAGE_ALLOWED.includes(ext)) {
               message.error(t('imageFormatError'))
@@ -351,8 +162,7 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
               message.error(t('imageSizeError'))
               return Upload.LIST_IGNORE
             }
-            handleFile(f)
-            return false
+            return await handleFile(f)?false:Upload.LIST_IGNORE
           }}
           onRemove={() => handleFile(null)}
           style={{ padding: 48 }}
@@ -408,17 +218,24 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
         </div>
       )}
 
-      {file && originalUrl && originalSize && (
+      {file && originalSize && (
         <>
           <Divider style={{ margin: '16px 0' }} />
           <Text strong style={{ display: 'block', marginBottom: 8 }}>{t('imgOriginalPreview')}</Text>
           <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
             {t('imgOriginalSize')}: {originalSize.w} × {originalSize.h}
           </Text>
+          <Text type="secondary" style={{display:'block',marginBottom:12}}>{lang==='zh'?'预览最长边为 1024 像素；裁切坐标、取色和加工使用原图。':lang==='ja'?'プレビューは最大 1024 ピクセルです。切り抜き座標・色取得・処理には元画像を使います。':'Preview is limited to 1024 pixels per side; crop coordinates, sampled colors and processing use the original image.'}</Text>
           <Row gutter={24} align="top">
             <Col xs={24} md={14}>
               <ImageCropEditor
-                imageUrl={originalUrl}
+                key={sourceKey}
+                ref={editor}
+                file={file}
+                retainedBytes={()=>[...model.retained()].reduce((sum,file)=>sum+file.size*2,0)}
+                onReadyChange={ready=>setReadySource(ready?file:null)}
+                onSamplingChange={setSampling}
+                allowPick={!busy}
                 imageSize={originalSize}
                 cropRegion={cropRegion}
                 onChange={setCropRegion}
@@ -426,7 +243,7 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
                 pickingColor={pickingColor}
               />
               <Space style={{ marginTop: 8 }} wrap>
-                <Button size="small" type={pickingColor ? 'primary' : 'default'} onClick={() => setPickingColor(!pickingColor)}>
+                <Button size="small" type={pickingColor ? 'primary' : 'default'} disabled={!!busy} onClick={() => setPickingColor(!pickingColor)}>
                   {t('imgPickColorHint')}
                 </Button>
                 {hasCrop && (
@@ -509,13 +326,14 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
             <Slider min={1} max={100} value={matteTolerance} onChange={setMatteTolerance} style={{ width: 100 }} />
             <Text type="secondary">{t('featherEdge')}:</Text>
             <Slider min={0} max={30} value={matteFeather} onChange={setMatteFeather} style={{ width: 100 }} />
-            <Button type="primary" loading={matteLoading} onClick={runMattePreview} disabled={!enableMatte}>
+            <Button type="primary" loading={matteLoading} onClick={runMattePreview} disabled={!enableMatte||oneClickBusy&&!matteLoading}>
               {t('imgRunMatte')}
             </Button>
           </Space>
           {mattePreviewUrl && (
             <>
               <Text strong style={{ display: 'block', marginTop: 16, marginBottom: 8 }}>{t('imgMattePreview')}</Text>
+              {matteOutdated&&<Text type="secondary">{previousResult}</Text>}
               <div
                 style={{
                   padding: 16,
@@ -541,16 +359,16 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
           </Text>
           <Space wrap>
             <InputNumber
-              min={16}
-              max={4096}
+              min={1}
+              max={30000}
               value={targetW}
               onChange={(v) => handleTargetWChange(v ?? 256)}
               addonBefore={t('width')}
               style={{ width: 120 }}
             />
             <InputNumber
-              min={16}
-              max={4096}
+              min={1}
+              max={30000}
               value={targetH}
               onChange={(v) => handleTargetHChange(v ?? 256)}
               addonBefore={t('height')}
@@ -585,7 +403,7 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
             />
           </Space>
 
-          <Button type="primary" icon={<DownloadOutlined />} onClick={applyPreview} loading={loading}>
+          <Button type="primary" icon={<DownloadOutlined />} onClick={applyPreview} loading={loading} disabled={oneClickBusy&&!loading}>
             {t('imgApplyPreview')}
           </Button>
 
@@ -593,6 +411,7 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
             <>
               <Divider style={{ margin: '24px 0 16px' }} />
               <Text strong style={{ display: 'block', marginBottom: 12 }}>{t('imgPreview')}</Text>
+              {previewOutdated&&<Text type="secondary">{previousResult}</Text>}
               <div
                 style={{
                   padding: 16,
@@ -604,13 +423,14 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
               >
                 <StashableImage
                   src={previewUrl}
+                  stashSrc={outputUrl?.raw}
                   alt={t('imgPreview')}
                   style={{ maxWidth: '100%', maxHeight: 400, display: 'block', imageRendering: 'pixelated' }}
                 />
               </div>
               <div style={{ marginTop: 12 }}>
                 <Space>
-                  <Button type="primary" loading={extendLoading} onClick={handleExtendBottom}>
+                  <Button type="primary" loading={extendLoading} onClick={handleExtendBottom} disabled={oneClickBusy&&!extendLoading}>
                     {t('imgExtendBottom')}
                   </Button>
                   <Button type="primary" icon={<DownloadOutlined />} onClick={download}>
@@ -634,6 +454,6 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
           )}
         </>
       )}
-    </Space>
+    </Space></NormalImageDocumentSurface>
   )
 }

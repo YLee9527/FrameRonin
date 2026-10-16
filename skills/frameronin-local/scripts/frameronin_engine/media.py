@@ -14,7 +14,7 @@ def run(preview, directory, progress):
     directory.mkdir(exist_ok=True)
     name = preview['operation']
     parameters = preview['parameters']
-    if name=='image.customScale' and parameters['renderer']=='browser-worker':
+    if name in ['image.customScale','image.normal'] and parameters['renderer']=='browser-worker':
         from .browser_tasks import wait_for_result
         return wait_for_result(preview,directory,progress)
     paths = [Path(v['absolutePath']) for v in preview['versions']]

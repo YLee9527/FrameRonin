@@ -21,7 +21,7 @@ def location(project,task_id,generation=None):
         if not row:
             raise RoninError('TASK_MISSING','The task does not exist.')
         payload=json.loads(row['payload'])
-        if payload['operation']!='image.customScale' or payload.get('parameters',{}).get('renderer')!='browser-worker':
+        if payload['operation'] not in ['image.customScale','image.normal'] or payload.get('parameters',{}).get('renderer')!='browser-worker':
             raise RoninError('BROWSER_OPERATION_UNSUPPORTED','This task does not accept browser pixels.')
         if generation is not None:
             if type(generation) is not int:
@@ -48,12 +48,13 @@ def heartbeat(project,task_id,generation):
 
 def accept(project,task_id,generation,source):
     directory,row=location(project,task_id,generation)
-    from .operations import parameters as checked_parameters
-    parameters=checked_parameters('image.customScale',json.loads(row['payload'])['parameters'])
+    from .operations import parameters as checked_parameters,normal_output_dimensions
+    payload=json.loads(row['payload']);parameters=checked_parameters(payload['operation'],payload['parameters'])
+    dimensions=normal_output_dimensions(project.version(payload['inputs'][0])['metadata'],parameters) if payload['operation']=='image.normal' else (parameters['width'],parameters['height'])
     # Decode and inspect outside the writer lock so cancellation is responsive.
     try:
         with Image.open(source) as image:
-            if image.format!='PNG' or image.size!=(parameters['width'],parameters['height']) or getattr(image,'n_frames',1)!=1:
+            if image.format!='PNG' or image.size!=dimensions or getattr(image,'n_frames',1)!=1:
                 raise RoninError('BROWSER_OUTPUT_INVALID','The Worker result must be one PNG with the reviewed dimensions.')
             image.load()
     except (OSError,ValueError,Image.DecompressionBombError) as error:

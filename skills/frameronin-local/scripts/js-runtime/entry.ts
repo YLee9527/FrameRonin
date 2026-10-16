@@ -35,4 +35,7 @@ export {eraseConnected,movePixelSelection,fineEditorImageSize,checkFineEditorBud
 export {runFineEditorWorker} from '../../assets/workbench/src/lib/fineEditorWorker'
 export {prepareFineInput} from '../../assets/workbench/src/localProject/fineEditInput'
 export {processNormalImage} from '../../assets/workbench/src/lib/normalImageTools'
+export {runNormalSourceWorker} from '../../assets/workbench/src/lib/normalImageSourceWorker'
+export {initialNormalImageDraft,validateStoredNormalImage,serializeNormalImage,restoreNormalImage,normalImageDefaults} from '../../assets/workbench/src/localProject/normalImageDocument'
+export {createNormalImageHistory,normalImageHistoryReducer} from '../../assets/workbench/src/localProject/useNormalImageDocument'
 export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/localProject/navigationGuard'

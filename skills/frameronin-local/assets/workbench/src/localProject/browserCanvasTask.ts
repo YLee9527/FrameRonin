@@ -3,7 +3,7 @@ import { jsonPost, localJson } from './api'
 type Ready={ready:boolean;generation?:number;state?:string}
 /** Runs beyond its component's lifetime. The existing queue owns publication;
  * this Worker supplies only a PNG, never paths, task state or version IDs. */
-export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void){
+export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void,options:{operation:string;budgetBytes:number}={operation:'image.customScale',budgetBytes:0}){
   let worker:Worker|null=null,timer:ReturnType<typeof setInterval>|null=null,generation:number|undefined
   let heartbeatFailure:((reason:unknown)=>void)|null=null
   const stop=()=>worker?.terminate()
@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=new Worker(new URL('../lib/smoothResize.worker.ts',import.meta.url),{type:'module'})
+    worker=options.operation==='image.normal'?new Worker(new URL('../lib/normalImage.worker.ts',import.meta.url),{type:'module'}):
+      new Worker(new URL('../lib/smoothResize.worker.ts',import.meta.url),{type:'module'})
     const blob=await new Promise<Blob>((resolve,reject)=>{
       heartbeatFailure=reject
       signal.addEventListener('abort',()=>reject(new DOMException('Task canceled','AbortError')),{once:true})
@@ -35,7 +36,7 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
         else if(event.data.blob instanceof Blob)resolve(event.data.blob)
         else reject(new Error('BROWSER_OUTPUT_INVALID'))
       }
-      worker!.postMessage({id,generation,file,parameters})
+      worker!.postMessage({id,generation,file,parameters,budgetBytes:options.budgetBytes})
     })
     signal.throwIfAborted()
     const form=new FormData();form.append('generation',String(generation));form.append('file',blob,'worker-result.png')

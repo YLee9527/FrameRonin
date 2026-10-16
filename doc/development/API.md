@@ -58,7 +58,7 @@ GIF 预估加入所有前端保留素材、解码帧、中间表面和编码缓�
 
 RoninPro 操作 `image.customScale`、`sequence.unifySize`、`image.findDuplicates` 的参数、范围以注册表为准。八个固定缩放预设沿用原始硬边缘缩放、左上角取色、三种抠图及右/下裁边；统一尺寸不缩放各输入；重复检测按真实单元尺寸分桶后逐像素核对，报告的 groups 使用 0-based 索引。后者支持原来的 64×64 单元，区别于其他序列入口的 1000 帧限制。
 
-平滑缩放的 `renderer=browser-worker` 是工作台专用模式，预览额外返回 requiresWorkbench=true 和 original_host_canvas_worker。CLI submit 与通用 proposal-execute 返回 WORKBENCH_REQUIRED，避免提交一个没有浏览器执行端的悬空任务；工作台同源 `/api/tasks` 可调度该模式。其他操作预览的 requiresWorkbench 为 false。注册表默认 native；平滑缩放未显式选择 Worker 时返回 BROWSER_RENDERER_REQUIRED，不能隐式切换滤波。
+自定义缩放及常规图片的 `renderer=browser-worker` 是工作台专用模式，预览额外返回 requiresWorkbench=true 和 original_host_canvas_worker。CLI submit 与通用 proposal-execute 返回 WORKBENCH_REQUIRED，避免提交一个没有浏览器执行端的悬空任务；工作台同源 `/api/tasks` 可调度该模式。其他操作预览的 requiresWorkbench 为 false。注册表默认 native；需要原宿主像素行为的输入或参数未显式选择 Worker 时返回 BROWSER_RENDERER_REQUIRED，不能隐式切换滤波或解码器。
 
 Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态）、`/heartbeat` 与 `/failure`（POST，只接收 generation）、`/result`（POST multipart，generation 与 PNG）通信。仍由已有串行队列创建并持有受控后台进程；后者等待浏览器像素，核验结果后调用原统一完成事务。执行代次、当前 running 状态、PNG 真实格式、单帧及审阅尺寸均重验。上传不采用客户端路径或文件名；单次压缩内容最多 min(预算/4,128MiB)，完全写入及解码校验后才以不可覆盖的硬链接交付。取消先使完成代次失效，Worker 立即 terminate；本地进程停止确认仍只涵盖后台所属进程，不能据此推断浏览器或 AI 服务端状态。15 秒心跳丢失明确失败，不自动重试。
 
@@ -72,10 +72,12 @@ Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态�
 
 独立精细入口使用 image-fine 文档与相同保存接口，无加工任务或结果报告。源图与编辑 PNG 分别保存版本；恢复预检包含源文件大小/格式和编辑 PNG 的实际显示尺寸。JPEG 使用 Worker ImageDecoder 保留原 HTMLImage 画布颜色，无该解码能力时明确报 FINE_EDITOR_JPEG_DECODER_UNAVAILABLE；PNG/WebP 保留已有解码路径。版本元数据增加 EXIF 方向、显示尺寸和容器格式，原编码尺寸继续保留。
 
-共享精细编辑器不再在主线程做全图连通擦除、选区搬移或 PNG 编码。普通笔尖只读写局部矩形，沿用原像素圆判定；PNG 文件快照用于缩放文档的统一撤销。独立精细处理入口当前仍保留内部像素历史，最多 30 步并联合限制 256 MiB；该入口的正式文档迁移另行验收，不能把共享 Worker 验收视为全部编辑器已完成。
+共享精细编辑器不再在主线程做全图连通擦除、选区搬移或 PNG 编码。普通笔尖只读写局部矩形，沿用原像素圆判定；PNG 文件快照用于缩放及独立精细文档的统一撤销。内部像素历史最多 30 步并联合限制 256 MiB；正式文档另有有界文件历史，不能把共享 Worker 验收视为全部编辑器已完成。
 
 `image.normal` 提供原常规图片的六种确定性配方：`apply`（裁切→可选全图色度键→硬边缩放→可选内描边）、`mattePreview`（裁切→全图色度键）、`extendBottom`（三行复制翻转扩展）、`rpgMaker`（水印修复→连通抠图→144×144→扩展）、`allActions`（水印修复→256×256→连通抠图→右/下各裁 4px）、`ancientCostume`（水印修复→256×256→连通抠图→1024×896 重排）。输入一个正式图像版本，输出 PNG 与报告。
 
-参数含 `mode`、四个 `crop*` 非负边距、`width/height`（1–4096）、`keepAspect/pixelated/enableMatte`、`background/strokeColor`（六位十六进制颜色）、`tolerance`（1–100）、`feather`（0–30）、`strokeWidth`（0–20）及 `frontendBytes`。仅裁切阶段使用边距，须保留至少一个像素；其余配方保持原固定顺序和尺寸。完整中间缓冲、源文件及前端保留预算先行估算，输出超过 30000 边长或超预算拒绝。现有原生路径只接受 apply 的硬边缩放；平滑处理明确报 BROWSER_RENDERER_REQUIRED，等待原宿主 Canvas 路径接入，不替换滤镜。
+参数含 `mode`、`renderer`、四个 `crop*` 非负边距、`width/height`（1–30000）、`keepAspect/pixelated/enableMatte`、`background/strokeColor`（六位十六进制颜色）、`tolerance`（1–100）、`feather`（0–30）、`strokeWidth`（0–20）及 `frontendBytes`。仅裁切阶段使用边距，须保留至少一个像素；其余配方保持原固定顺序和尺寸。完整中间缓冲、源文件及前端保留预算先行估算，输出超过 30000 边长或超预算拒绝。原生路径只接受无 ICC 的实际 PNG，且 apply 必须硬边缩放；JPEG/WebP、带 ICC 的 PNG 和平滑 apply 使用原宿主 Canvas Worker，不能用原生解码或滤镜近似代替。
 
-该操作目前是引擎检查点；常规工作台仍使用原入口计算，受控任务界面、正式文档与完整取消交互继续迁移。`extendBottom` 参数名来自旧 UI，实际扩展量为 floor(height/3)，并保留原余数行行为。直接引擎处理一/两像素高 JPEG 的无操作结果会明确编码 PNG，避免 JPEG 内容配 PNG 扩展名。
+常规工作台统一使用 browser-worker：源图预览和原图取色也在独立可取消 Worker 完成，主线程只绘制最长边 1024 的预览。裁切、取色及加工仍使用原图坐标与像素；预览尺寸不改变正式输出。JPEG 需要 ImageDecoder，否则明确报 NORMAL_JPEG_DECODER_UNAVAILABLE。源图预检不通过时保留当前文档。
+
+六种配方使用既有任务队列、心跳、执行代次及统一发布；服务端按操作、输入版本和预期尺寸校验实际 PNG。取消先使结果失效并终止 Worker；取消后迟到上传拒绝发布。参数或输入变化后只保留项目结果，不覆盖当前文档；离开工具页后任务继续，关闭浏览器标签会终止其 Worker，失联按任务协议核对。`extendBottom` 实际扩展量为 floor(height/3)，保留原余数行行为；它使用上一张主结果，抠图辅助预览独立保留。普通短图不扩展时，工作台仍输出真实 PNG。

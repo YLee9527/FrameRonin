@@ -1,0 +1,629 @@
+{
+  "date": "2026-10-16",
+  "baselineCommit": "a9bcbfe",
+  "scope": "Normal image workbench, host Worker, image-normal documents and history; checkpoint only, S2/S3/S4 incomplete",
+  "browserOracle": {
+    "zipSha256": "71675ab3d5c0b7ee095fd832ae75f121a1febee5b4ee6676a07f998c2826fe1f",
+    "cases": [
+      {
+        "id": "identity",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "fa04196bf03bb9b6c29be2fa579f67a4b0c2ac4cebd1a607a7b8168f46ab4893",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "crop-asymmetric",
+        "dimensions": [
+          172,
+          114
+        ],
+        "originalRgbaSha256": "17a06a56a559bcb75aaa9c5b7f4f205c3cc1d3210a61cb4f00d615ce92cc06ee",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "stretch-nearest",
+        "dimensions": [
+          83,
+          117
+        ],
+        "originalRgbaSha256": "e59285b55eee88d5e281b813182611c891c089aa92dc4805002d9889ed2474f1",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "center-nearest",
+        "dimensions": [
+          97,
+          113
+        ],
+        "originalRgbaSha256": "4f6c1f6975e0fddc1356d138535f7da258a9292a69e7c05becd85db33f30e3e2",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "matte-and-resize",
+        "dimensions": [
+          113,
+          79
+        ],
+        "originalRgbaSha256": "b24557f6b6fd2802945bcc298a968c289dca48955aac3785d2f8096da082e034",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "stroke-1",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "3f7feed6f11e9f076b3f5a8fbd9760aa2e6ccfcddc9e99a9f6fa4fd1e0ffbf5a",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "stroke-20",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "5bf8a677a20df7147754e4480ada7464860b27af951ba3486f707a9fc806fa03",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "matte-preview",
+        "dimensions": [
+          184,
+          128
+        ],
+        "originalRgbaSha256": "2e77ab72a75f0357fe9f88ab9d107cdfc3bf516e98192f481ca2408d7ae55ad4",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "matte-minimum",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "550e85e3ccb3317e511ea774de7c6b01d6c4e71eda8e65783df5e574645b186a",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "matte-maximum",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "550e85e3ccb3317e511ea774de7c6b01d6c4e71eda8e65783df5e574645b186a",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "extend-regular",
+        "dimensions": [
+          192,
+          192
+        ],
+        "originalRgbaSha256": "b7ea5c72a403bfe709fff286ac815ca9a1824d738322cf0df047a6765ae3dfa3",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "extend-uneven",
+        "dimensions": [
+          192,
+          193
+        ],
+        "originalRgbaSha256": "871518cf1fb90b56181559759d5d25addd5157d0d415446548d579e1789b6bf4",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "extend-short",
+        "dimensions": [
+          192,
+          2
+        ],
+        "originalRgbaSha256": "75dff0c826d9b10327274cc40189b4d1263c5f961a77f7a646a8d214f4854d30",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "rpg-maker",
+        "dimensions": [
+          144,
+          192
+        ],
+        "originalRgbaSha256": "51df302b9464e7a7c63ee2b51fd96bef350fe4f3cdeca8179ca5acceb2882606",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "all-actions",
+        "dimensions": [
+          252,
+          252
+        ],
+        "originalRgbaSha256": "59ac5909bceda709340dbc5530d0ee2f97c488ebf524f6adb68a134685e8c3cd",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "ancient-costume",
+        "dimensions": [
+          1024,
+          896
+        ],
+        "originalRgbaSha256": "41eab6b4413841a4f6c2cc523fa3623a3a50a68fd840b353e7d69765e4d1e87c",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "rpg-maker-mask96",
+        "dimensions": [
+          144,
+          192
+        ],
+        "originalRgbaSha256": "40c3368e0461e986ef25ae725623538b39790db32226384837a130b6e4283bec",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "all-actions-mask96",
+        "dimensions": [
+          252,
+          252
+        ],
+        "originalRgbaSha256": "a34c97020261b8b6768a02732cbb3fc4f2e6d97a26f2986b726ec866de071033",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "smooth-stretch",
+        "dimensions": [
+          83,
+          117
+        ],
+        "originalRgbaSha256": "4a08cb08fb2df92b685b94cde62bf2ff94e21e6507c6d0e42f1e2f75914f66a8",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "smooth-center",
+        "dimensions": [
+          97,
+          113
+        ],
+        "originalRgbaSha256": "d0269a7909a7f0cb12b5226922fd016aa0ccc300ec1b19909ea491025baa6f92",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "smooth-crop-matte-stroke",
+        "dimensions": [
+          113,
+          79
+        ],
+        "originalRgbaSha256": "26a9b5259305c3d6d70d0333aa0b213d5c745cc8957748c72522b977e8d2d691",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "rpg-maker-empty-mime",
+        "dimensions": [
+          144,
+          192
+        ],
+        "originalRgbaSha256": "51df302b9464e7a7c63ee2b51fd96bef350fe4f3cdeca8179ca5acceb2882606",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "wide-original-size",
+        "dimensions": [
+          5000,
+          8
+        ],
+        "originalRgbaSha256": "40e6451d3ddec408a4da9960120ed07105f3190cade55c931a83aa6c93dc274c",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "photo-jpg-apply",
+        "dimensions": [
+          83,
+          117
+        ],
+        "originalRgbaSha256": "1014a4afc0e5efcfae51537e55143f6450a9a153df2181927f3b94952dc54841",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "photo-jpg-matte",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "fcc22f2fe3e86aca5b329206481cfd7867f17d10cddc68d8fdef3565572f41b3",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "photo-webp-apply",
+        "dimensions": [
+          83,
+          117
+        ],
+        "originalRgbaSha256": "e59285b55eee88d5e281b813182611c891c089aa92dc4805002d9889ed2474f1",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "photo-webp-matte",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "550e85e3ccb3317e511ea774de7c6b01d6c4e71eda8e65783df5e574645b186a",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "photo-jpg-rpg",
+        "dimensions": [
+          144,
+          192
+        ],
+        "originalRgbaSha256": "fe525f251117ac36c0a6c205a0758eb32b71d795c8115c9548722af22eaaaa24",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      },
+      {
+        "id": "profiled-apply",
+        "dimensions": [
+          192,
+          144
+        ],
+        "originalRgbaSha256": "fa04196bf03bb9b6c29be2fa579f67a4b0c2ac4cebd1a607a7b8168f46ab4893",
+        "actual-browserStrictRgbaEqual": true,
+        "actual-workerStrictRgbaEqual": true
+      }
+    ],
+    "wideUi": {
+      "dimensions": [
+        5000,
+        8
+      ],
+      "strictRgbaEqual": true
+    }
+  },
+  "nativeCases": 20,
+  "ui": {
+    "downloads": [
+      {
+        "case": "apply",
+        "dimensions": [
+          192,
+          144
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "4f54a3e99007d7656300ff9e3d965536c644e6682c23eab2d1342734910abcd6"
+      },
+      {
+        "case": "extend previous main",
+        "dimensions": [
+          192,
+          192
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "211ccb8f2116168b6431127513819420570d36e927b7cf4fcffcd4d07bc898cd"
+      },
+      {
+        "case": "smooth apply",
+        "dimensions": [
+          113,
+          79
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "1acd9110498b9a1bfb21809289eaea5c4e8ea9a360668104d29c78ca46ce255f"
+      },
+      {
+        "case": "5000x8 full resolution",
+        "dimensions": [
+          5000,
+          8
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "7706d25bc0f31e3c34d7e08dc7e8259da235d6a124330282902cb7de86d23172"
+      },
+      {
+        "case": "rpgMaker",
+        "dimensions": [
+          144,
+          192
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "ea9eb322fd2d985c180ec6cccfbff72510ec74cf0f1a921729446c52faf2c411"
+      },
+      {
+        "case": "allActions",
+        "dimensions": [
+          252,
+          252
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "fc7c4bc30b6d8f058c74683ba7349a9a694c88cfc15267ff0d0994b28158d88f"
+      },
+      {
+        "case": "ancientCostume",
+        "dimensions": [
+          1024,
+          896
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "a5c71fcbacdd607f1710010b861920bed99c3f2295ed829a62f6363ea573e2e5"
+      },
+      {
+        "case": "separate matte preview",
+        "dimensions": [
+          184,
+          128
+        ],
+        "strictRgbaEqual": true,
+        "pngSha256": "f290f90e3b8ab201574119c753256c20161d381a75e43d62d73712a8ae73a500"
+      }
+    ],
+    "sourceVersion": "aa1527b8-d2e9-4561-b488-9a85e1a18760",
+    "mainAndMatte": {
+      "formatVersion": 1,
+      "settings": {
+        "cropLeft": 3,
+        "cropTop": 7,
+        "cropRight": 5,
+        "cropBottom": 9,
+        "width": 184,
+        "height": 128,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": true,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000"
+      },
+      "source": {
+        "versionId": "aa1527b8-d2e9-4561-b488-9a85e1a18760",
+        "name": "source.png",
+        "type": "image/png"
+      },
+      "preview": {
+        "file": {
+          "versionId": "1ede5b2b-8a85-446c-bc0b-2d4ac0a62135",
+          "name": "normal-extendBottom.png",
+          "type": "image/png"
+        },
+        "input": {
+          "versionId": "4e330bac-f520-4e3e-a3a9-ccd9e3e4f7b7",
+          "name": "normal-apply.png",
+          "type": "image/png"
+        },
+        "report": {
+          "versionId": "a811c29f-ddc9-4f58-b6a7-0701b3a41f91",
+          "name": "normal-extendBottom-report.json",
+          "type": "application/json"
+        },
+        "taskId": "6994f16f-c536-4b88-8ced-2bf9980f429f"
+      },
+      "matte": {
+        "file": {
+          "versionId": "6125fcb8-bfcf-4978-b79c-11e823739f3f",
+          "name": "normal-mattePreview.png",
+          "type": "image/png"
+        },
+        "input": {
+          "versionId": "aa1527b8-d2e9-4561-b488-9a85e1a18760",
+          "name": "source.png",
+          "type": "image/png"
+        },
+        "report": {
+          "versionId": "2883185d-6ddb-4a18-8e82-695f37dd2f54",
+          "name": "normal-mattePreview-report.json",
+          "type": "application/json"
+        },
+        "taskId": "d13caa42-8d24-41a4-9bda-cc70945cc898"
+      }
+    },
+    "history": {
+      "before": {
+        "versions": 4598,
+        "tasks": 111
+      },
+      "after": {
+        "versions": 4598,
+        "tasks": 111
+      },
+      "results": [
+        {
+          "phase": "undo",
+          "dimensions": [
+            192,
+            144
+          ],
+          "strictRgbaEqual": true
+        },
+        {
+          "phase": "redo",
+          "dimensions": [
+            192,
+            192
+          ],
+          "strictRgbaEqual": true
+        },
+        {
+          "phase": "reopen",
+          "dimensions": [
+            192,
+            192
+          ],
+          "strictRgbaEqual": true
+        }
+      ]
+    },
+    "savedDocument": {
+      "id": "374c5943-583e-42d7-ab48-d16c4be87840",
+      "kind": "image-normal"
+    },
+    "cancellation": {
+      "taskId": "4ed92115-3ef6-436f-b5f3-3280e1a74bd9",
+      "state": "canceled",
+      "results": [],
+      "generation": 1,
+      "observedWorkerPhasePercent": 20,
+      "sourceDimensions": {
+        "width": 4096,
+        "height": 4096
+      },
+      "previewCanvas": {
+        "width": 1024,
+        "height": 1024
+      },
+      "uiFeedbackAndSettledMs": 313,
+      "ownedProcessCancellation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.014067333075217903,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 1
+      },
+      "browserWorkerTerminatedByAbort": true
+    },
+    "revisionConflict": {
+      "documentId": "742d196f-ce2c-43de-9556-1b06e8f2fc17",
+      "originalRevision": 4,
+      "externalRevision": 5,
+      "backAndShortcutBlocked": true,
+      "recoveredCopy": {
+        "id": "c7c300be-0e1a-4f1d-a424-86ff7d53b130",
+        "revision": 1
+      }
+    },
+    "delayedUploadParameterChange": {
+      "taskId": "fb0a3c04-60e5-4c68-8e6a-38ee92fea01a",
+      "state": "succeeded",
+      "results": [
+        "836080db-d0f7-405d-bf48-f410fdfa4575",
+        "f55ca9e3-37db-4707-8f52-12ab12343339"
+      ],
+      "documentId": "c6d7cd28-137f-4d22-941a-a7e057f2d54f",
+      "settings": {
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 32,
+        "height": 24,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#ffffff",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000"
+      },
+      "preview": null,
+      "assertions": {
+        "changedParametersPreserved": true,
+        "stalePreviewNotApplied": true,
+        "projectResultRetained": true,
+        "colorAfterCancel": "#ffffff"
+      }
+    },
+    "navigationDuringProcessing": {
+      "taskId": "d6e2416f-8a33-4430-81f3-f17b3bc8544b",
+      "state": "succeeded",
+      "results": [
+        "d79ae94f-c0bf-428b-8abe-a9d925ebd0a1",
+        "8da636ad-5dbc-4387-89c7-5b180ae04872"
+      ],
+      "assertions": {
+        "continuedAfterViewNavigation": true,
+        "projectResultRetained": true,
+        "unmountedDocumentNotOverwritten": true
+      }
+    },
+    "sourcePreviewCancel": {
+      "delayedWorkerSeconds": 2,
+      "latePreviewNotApplied": true,
+      "retrySuccessful": true,
+      "sourceRetained": true,
+      "processingBlockedUntilReady": true
+    },
+    "colorSampleCancel": {
+      "delayedWorkerSeconds": 2,
+      "observedSamplingStatus": true,
+      "processingBlocked": true,
+      "cancelSuccessful": true,
+      "backgroundAfterLateWorker": "#ffffff",
+      "noProcessingTaskCreated": true
+    },
+    "heldGestureDuringRestore": {
+      "delayedContentSeconds": 2,
+      "mouseHeldWithoutMovement": true,
+      "candidateRejected": true,
+      "message": "Document changed while loading; current edits are preserved",
+      "testSetup": "Canvas must be decoded, ready and visible before pressing; initial off-viewport attempts did not exercise the guard."
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ],
+    "wideAccessibleTargetDimensions": [
+      5000,
+      8
+    ]
+  },
+  "automatedChecks": {
+    "pythonTests": 33,
+    "javascriptTests": 41,
+    "runtimeBuild": true,
+    "workbenchBuild": true,
+    "changedModulesEslint": true,
+    "skillValidator": true,
+    "project": {
+      "valid": true,
+      "counts": {
+        "versions": 4616,
+        "tasks": 119,
+        "documents": 40
+      },
+      "activeTasks": 0
+    }
+  },
+  "screenshots": [
+    "skill-normal-workbench.png",
+    "skill-normal-conflict.png",
+    "skill-normal-held-restore.png",
+    "skill-normal-preview-canceled.png",
+    "skill-normal-late-parameters.png"
+  ],
+  "acceptanceSupport": "skills/frameronin-local/tests/support/gated_workbench.py; owned loopback project, optional file flags, no production test switch",
+  "limits": [
+    "Worker tasks survive in-app navigation but require the browser tab to remain alive; closing the tab is reconciled by the lease protocol.",
+    "Native image.normal only accepts actual PNG without ICC; smooth apply and photographic/profiled sources require the explicit host Worker.",
+    "The source preview alone is bounded to 1024; processing and output use original pixels subject to resource preflight.",
+    "JPEG requires host ImageDecoder support; other browser/EXIF/ICC combinations and animated images need additional acceptance.",
+    "Cancellation measures owned local processes separately; joint browser/engine peak RSS remains unverified.",
+    "Remaining media/editor modules, complete AI templates/quality and portable distribution remain incomplete."
+  ]
+}

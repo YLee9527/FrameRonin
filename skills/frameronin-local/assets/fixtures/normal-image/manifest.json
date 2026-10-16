@@ -377,19 +377,264 @@
         "strokeWidth": 0,
         "strokeColor": "#000000"
       }
+    },
+    {
+      "id": "smooth-stretch",
+      "input": "source.png",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 83,
+        "height": 117,
+        "keepAspect": false,
+        "pixelated": false,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "smooth-center",
+      "input": "source.png",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 97,
+        "height": 113,
+        "keepAspect": true,
+        "pixelated": false,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "smooth-crop-matte-stroke",
+      "input": "source.png",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 7,
+        "cropTop": 11,
+        "cropRight": 13,
+        "cropBottom": 19,
+        "width": 113,
+        "height": 79,
+        "keepAspect": true,
+        "pixelated": false,
+        "enableMatte": true,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 3,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "rpg-maker-empty-mime",
+      "input": "source.png",
+      "parameters": {
+        "mode": "rpgMaker",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 192,
+        "height": 144,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000"
+      },
+      "mime": ""
+    },
+    {
+      "id": "wide-original-size",
+      "input": "wide.png",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 5000,
+        "height": 8,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000"
+      }
+    },
+    {
+      "id": "photo-jpg-apply",
+      "input": "source.jpg",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 83,
+        "height": 117,
+        "keepAspect": false,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "photo-jpg-matte",
+      "input": "source.jpg",
+      "parameters": {
+        "mode": "mattePreview",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 192,
+        "height": 144,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "photo-webp-apply",
+      "input": "source.webp",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 83,
+        "height": 117,
+        "keepAspect": false,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "photo-webp-matte",
+      "input": "source.webp",
+      "parameters": {
+        "mode": "mattePreview",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 192,
+        "height": 144,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "photo-jpg-rpg",
+      "input": "source.jpg",
+      "parameters": {
+        "mode": "rpgMaker",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 192,
+        "height": 144,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
+    },
+    {
+      "id": "profiled-apply",
+      "input": "profiled.png",
+      "parameters": {
+        "mode": "apply",
+        "cropLeft": 0,
+        "cropTop": 0,
+        "cropRight": 0,
+        "cropBottom": 0,
+        "width": 192,
+        "height": 144,
+        "keepAspect": true,
+        "pixelated": true,
+        "enableMatte": false,
+        "background": "#18c060",
+        "tolerance": 40,
+        "feather": 5,
+        "strokeWidth": 0,
+        "strokeColor": "#000000",
+        "renderer": "browser-worker"
+      }
     }
   ],
   "sources": {
+    "wide.png": "21cb393e10a56af96081ec07f38764148f69abdd7ba73d0b93e11a46ee8a9818",
     "uneven.png": "874bd8a75486b68daae480daf296d16bd443ff85157601bd6eda93493481b132",
     "short.jpg": "de966754dd329f52954e93298c07031048ea62a9afa21b75d48b258f49ea489a",
     "short.png": "4f9cc7b5ff6e8ed0d4c7012ce8067d6a004af962715b9882c9379c085a131279",
     "source.png": "972e2aef1cf43aa7c34d45476c3da6dcc9560925ddd5677ed846075f6831d394",
-    "large.png": "1d9ab1056b53e07d8d0ad4d94ba963268f1c56702285d1cc91fe2895dc9bccff"
+    "source.jpg": "60373c140c5a81fdbad72731dc739c3c42af3b8ba8277696d5a6d5cf4ca6bcc6",
+    "large.png": "1d9ab1056b53e07d8d0ad4d94ba963268f1c56702285d1cc91fe2895dc9bccff",
+    "source.webp": "a1f2cfe6b5b36235035cc2bb6feba4795eea34107f61cd49f8f597ab1634c144",
+    "profiled.png": "af1ad84e3921d807d39e3591d6eaee4238045d1a629e0d7fb0e7ca01d5b27751"
   },
   "originalSources": {
     "reference/frontend/src/components/ImageResizeStroke.tsx": "2ba3c98e8db28eb17591f99395cf914f75f21f93617dfcef2ed9696158cd9ebd",
     "reference/frontend/src/components/ParamsStep/utils.ts": "51c2c0dd5253c665f76de50f4708508591a63cbcda9888d826bbbbd4cdd19c31",
     "reference/frontend/src/lib/geminiWatermark.ts": "52e85580efadaaf90df84e5895c2bb06b09fb88c68b5f1c555bbc2db995799db"
   },
-  "criteria": "Exact decoded dimensions and RGBA for all fixed cases; native and original browser results must agree. No tolerance."
+  "criteria": "Exact decoded dimensions and RGBA against original browser outputs for all fixed browser and Worker cases. Native execution is compared only for cases not marked browser-worker; photographic formats, ICC and smooth apply require the host Worker. No tolerance."
 }

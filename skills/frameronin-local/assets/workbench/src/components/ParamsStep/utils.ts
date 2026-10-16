@@ -1,5 +1,6 @@
 /** 工具函数：帧处理、画布、抠图等 */
 import { resizeImageToBlobCanvasLegacy } from './utilsResizeCanvasLegacy'
+import {normalChromaPixels,normalContiguousPixels} from '../../lib/normalMattePixels'
 
 /** 裁切图片：按 left/top/right/bottom 裁掉边缘 */
 export async function cropImageBlob(
@@ -127,6 +128,8 @@ export async function resizeImageToBlobNearestNeighborPS(
 
 /** 图片按3行切分，行高=h/3。将第3行下移1行高度，第2行复制到第3行位置并水平翻转。输出高度 = h + rowHeight */
 export async function extendImageBottom(blob: Blob, _bottomPx: number): Promise<Blob> {
+  // Preserve the legacy call signature; the recipe derives its extension from h/3.
+  void _bottomPx
   const img = await (typeof createImageBitmap === 'function'
     ? createImageBitmap(blob)
     : new Promise<HTMLImageElement>((resolve, reject) => {
@@ -374,10 +377,11 @@ export async function applyInnerStroke(blob: Blob, strokeWidth: number, strokeCo
   }
   const dx = [-1, -1, -1, 0, 0, 1, 1, 1]
   const dy = [-1, 0, 1, -1, 1, -1, 0, 1]
-  while (queue.length > 0) {
+  let head = 0
+  while (head < queue.length) {
     let processed = 0
-    while (queue.length > 0 && processed < YIELD_BATCH) {
-      const idx = queue.shift()!
+    while (head < queue.length && processed < YIELD_BATCH) {
+      const idx = queue[head++]!
       const d = dist[idx]
       const x = idx % w
       const y = (idx / w) | 0
@@ -392,7 +396,7 @@ export async function applyInnerStroke(blob: Blob, strokeWidth: number, strokeCo
       }
       processed++
     }
-    if (queue.length > 0) await yieldToMain()
+    if (head < queue.length) await yieldToMain()
   }
 
   const stroked = new Uint8Array(w * h)
@@ -581,19 +585,7 @@ export function applyChromaKey(
       if (!ctx) return reject(new Error('ERR_CANVAS_CREATE'))
       ctx.drawImage(img, 0, 0)
       const id = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const d = id.data
-      for (let i = 0; i < d.length; i += 4) {
-        const r = d[i]
-        const g = d[i + 1]
-        const b = d[i + 2]
-        const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2)
-        if (dist <= tolerance) {
-          d[i + 3] = 0
-        } else if (feather > 0 && dist < tolerance + feather) {
-          const t = (dist - tolerance) / feather
-          d[i + 3] = Math.round(255 * Math.min(1, t))
-        }
-      }
+      normalChromaPixels(id.data,bgR,bgG,bgB,tolerance,feather)
       ctx.putImageData(id, 0, 0)
       const resultDataUrl = canvas.toDataURL('image/png')
       canvas.toBlob(
@@ -872,58 +864,8 @@ export function applyChromaKeyContiguousFromTopLeft(
       if (!ctx) return reject(new Error('ERR_CANVAS_CREATE'))
       ctx.drawImage(img, 0, 0)
       const id = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const d = id.data
-      const w = canvas.width
-      const h = canvas.height
-
-      const idx = (x: number, y: number) => (y * w + x) * 4
-      const dist = (i: number) =>
-        Math.sqrt(
-          (d[i]! - bgR) ** 2 + (d[i + 1]! - bgG) ** 2 + (d[i + 2]! - bgB) ** 2
-        )
-      const match = (i: number) => dist(i) <= tolerance
-
-      const toRemove = new Set<number>()
-      const start = idx(0, 0)
-      if (!match(start)) {
-        ctx.putImageData(id, 0, 0)
-        canvas.toBlob(
-          (blob) =>
-            blob
-              ? resolve({ blob, dataUrl: canvas.toDataURL('image/png') })
-              : reject(new Error('ERR_EXPORT')),
-          'image/png',
-          0.95
-        )
-        return
-      }
-
-      const stack: [number, number][] = [[0, 0]]
-      toRemove.add(idx(0, 0))
-      const vis = new Set<number>()
-      vis.add(idx(0, 0))
-      const dx = [0, 1, 0, -1]
-      const dy = [-1, 0, 1, 0]
-      while (stack.length > 0) {
-        const [x, y] = stack.pop()!
-        for (let k = 0; k < 4; k++) {
-          const nx = x + dx[k]!
-          const ny = y + dy[k]!
-          if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue
-          const i = idx(nx, ny)
-          if (vis.has(i)) continue
-          vis.add(i)
-          if (match(i)) {
-            toRemove.add(i)
-            stack.push([nx, ny])
-          }
-        }
-      }
-
-      for (const i of toRemove) {
-        d[i + 3] = 0
-      }
-      ctx.putImageData(id, 0, 0)
+      normalContiguousPixels(id.data,canvas.width,canvas.height,bgR,bgG,bgB,tolerance)
+      ctx.putImageData(id,0,0)
       const resultDataUrl = canvas.toDataURL('image/png')
       canvas.toBlob(
         (blob) =>

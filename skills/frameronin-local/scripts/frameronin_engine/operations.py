@@ -74,8 +74,9 @@ REGISTRY = {
         'matteAlgorithm':choice('contiguous',['contiguous','chromaKey','chromaKeyAdaptive']),
         'nonContiguousTolerance':number(5,0,100),'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_resize_and_matte_presets',overhead=256),
     'image.normal': operation(['image'],{'mode':choice('apply',['apply','mattePreview','extendBottom','rpgMaker','allActions','ancientCostume']),
+        'renderer':choice('native',['native','browser-worker']),
         'cropLeft':integer(0,0,30000),'cropTop':integer(0,0,30000),'cropRight':integer(0,0,30000),'cropBottom':integer(0,0,30000),
-        'width':integer(256,1,4096),'height':integer(256,1,4096),'keepAspect':{'type':'boolean','default':True},
+        'width':integer(256,1,30000),'height':integer(256,1,30000),'keepAspect':{'type':'boolean','default':True},
         'pixelated':{'type':'boolean','default':True},'enableMatte':{'type':'boolean','default':False},
         'background':{'type':'color','default':'#ffffff'},'tolerance':number(40,1,100),'feather':number(5,0,30),
         'strokeWidth':integer(0,0,20),'strokeColor':{'type':'color','default':'#000000'},
@@ -164,18 +165,17 @@ def preview(project, payload):
     pixels = [v['metadata'].get('width', 0) * v['metadata'].get('height', 0) for v in versions]
     estimate = spec['runtimeOverheadMiB'] * 1024**2 + max(pixels, default=0) * 4 * 4
     if name=='image.normal':
-        source=versions[0]['metadata'];width,height=source.get('displayWidth',source['width']),source.get('displayHeight',source['height'])
-        if source.get('containerFormat')=='WEBP':width,height=source['width'],source['height']
-        if values['mode'] in ['apply','mattePreview']:
-            width-=values['cropLeft']+values['cropRight'];height-=values['cropTop']+values['cropBottom']
-            if min(width,height)<1:raise RoninError('CROP_OUTSIDE_IMAGE','The crop must retain at least one source pixel in each dimension.')
-        if values['mode']=='apply':
-            if not values['pixelated']:raise RoninError('BROWSER_RENDERER_REQUIRED','Smooth normal-image processing requires the original host Canvas renderer; this route is not yet available.')
-            width,height=values['width'],values['height']
-        elif values['mode']=='extendBottom':height+=height//3
-        elif values['mode']=='rpgMaker':width,height=144,192
-        elif values['mode']=='allActions':width,height=252,252
-        elif values['mode']=='ancientCostume':width,height=1024,896
+        source=versions[0]['metadata'];width,height=normal_output_dimensions(source,values)
+        if values['renderer']=='native':
+            from PIL import Image
+            try:
+                with Image.open(versions[0]['absolutePath']) as image:
+                    needs_host=image.format!='PNG' or bool(image.info.get('icc_profile'))
+            except (OSError,ValueError,Image.DecompressionBombError) as error:
+                raise RoninError('NORMAL_SOURCE_INVALID','The selected source image header cannot be decoded.') from error
+            if needs_host:raise RoninError('BROWSER_RENDERER_REQUIRED','Normal-image recipes with photographic formats or color profiles use the original host Canvas Worker; no native decoder is substituted.')
+        if values['mode']=='apply' and not values['pixelated'] and values['renderer']!='browser-worker':
+            raise RoninError('BROWSER_RENDERER_REQUIRED','Smooth normal-image processing requires the original host Canvas Worker; no native filter is substituted.')
         if max(width,height)>30000:raise RoninError('NORMAL_DIMENSION_LIMIT','The output must be at most 30000 pixels per side.')
         estimate+=max(max(pixels),width*height)*64+values['frontendBytes']+source['bytes']*8
     if name in ['image.customScale','sequence.unifySize','image.findDuplicates']:
@@ -313,8 +313,22 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name=='image.customScale' and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.customScale','image.normal'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,
             'output': spec['output'], 'assetId': payload.get('assetId'),'requiresWorkbench':requires_workbench}
+
+
+def normal_output_dimensions(source,values):
+    width,height=source.get('displayWidth',source['width']),source.get('displayHeight',source['height'])
+    if source.get('containerFormat')=='WEBP':width,height=source['width'],source['height']
+    if values['mode'] in ['apply','mattePreview']:
+        width-=values['cropLeft']+values['cropRight'];height-=values['cropTop']+values['cropBottom']
+        if min(width,height)<1:raise RoninError('CROP_OUTSIDE_IMAGE','The crop must retain at least one source pixel in each dimension.')
+    if values['mode']=='apply':width,height=values['width'],values['height']
+    elif values['mode']=='extendBottom':height+=height//3
+    elif values['mode']=='rpgMaker':width,height=144,192
+    elif values['mode']=='allActions':width,height=252,252
+    elif values['mode']=='ancientCostume':width,height=1024,896
+    return width,height

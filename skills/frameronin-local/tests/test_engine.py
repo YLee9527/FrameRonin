@@ -234,6 +234,11 @@ class ProjectTests(unittest.TestCase):
         for case in manifest['cases']:
             if case['input'] not in imports:imports[case['input']]=self.project.import_file(fixtures/case['input'])
             payload={'operation':'image.normal','inputs':[imports[case['input']]['id']],'parameters':case['parameters']}
+            if case['parameters'].get('renderer')=='browser-worker':
+                self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+                with self.assertRaises(RoninError):submit(self.project,payload)
+                with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':{**case['parameters'],'renderer':'native'}})
+                continue
             result=wait(self.project,submit(self.project,payload)['id'],30)
             self.assertEqual(result['state'],'succeeded',(case['id'],result))
             versions=[self.project.version(value) for value in result['results']]
@@ -244,14 +249,11 @@ class ProjectTests(unittest.TestCase):
             report=json.loads(Path(next(v for v in versions if v['metadata']['extension']=='.json')['absolutePath']).read_text())
             self.assertEqual(report['operation'],'image.normal');self.assertEqual(report['outputFrames'],1)
         for values in [{'mode':'unknown'},{'command':'run'},{'cropLeft':30000},{'cropTop':30000},
-                       {'pixelated':False},{'width':4097},{'tolerance':0},{'strokeWidth':21},
+                       {'pixelated':False},{'width':30001},{'tolerance':0},{'strokeWidth':21},
                        {'strokeColor':'red'},{'frontendBytes':2*1024**3}]:
             with self.assertRaises(RoninError):preview(self.project,{'operation':'image.normal','inputs':[self.version['id']],'parameters':values})
         short=self.project.import_file(fixtures/'short.jpg')
-        result=wait(self.project,submit(self.project,{'operation':'image.normal','inputs':[short['id']],'parameters':{'mode':'extendBottom'}})['id'],20)
-        self.assertEqual(result['state'],'succeeded',result)
-        with Image.open(self.project.version(result['results'][0])['absolutePath']) as actual:
-            self.assertEqual(actual.format,'PNG');self.assertEqual(actual.size,(192,2))
+        with self.assertRaises(RoninError):preview(self.project,{'operation':'image.normal','inputs':[short['id']],'parameters':{'mode':'extendBottom'}})
         self.assertTrue(self.project.verify()['valid'])
 
     def test_normal_image_cancel_stops_the_algorithm_process_without_publishing(self):
@@ -269,6 +271,31 @@ class ProjectTests(unittest.TestCase):
         self.assertLess(elapsed,5);self.assertEqual(accepted['state'],'canceled')
         final=task(self.project,created['id']);self.assertEqual(final['results'],[]);self.assertEqual(final['generation'],1)
         time.sleep(.2);self.assertEqual(task(self.project,created['id'])['results'],[])
+
+    def test_normal_browser_recipes_validate_each_output_shape_and_late_publication(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        from frameronin_engine.operations import parameters,normal_output_dimensions
+        for mode in ['apply','mattePreview','extendBottom','rpgMaker','allActions','ancientCostume']:
+            values={'mode':mode,'renderer':'browser-worker','width':37,'height':29,'pixelated':False}
+            payload={'operation':'image.normal','inputs':[self.version['id']],'parameters':values}
+            with self.assertRaises(RoninError):submit(self.project,payload)
+            created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+            while not ready(self.project,created['id'])['ready']:
+                self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+            width,height=normal_output_dimensions(self.version['metadata'],parameters('image.normal',values))
+            wrong=self.root/'wrong-shape.png';Image.new('RGBA',(width+1,height),(200,30,60,128)).save(wrong)
+            with self.assertRaises(RoninError):accept(self.project,created['id'],0,wrong)
+            output=self.root/'normal-browser.png';Image.new('RGBA',(width,height),(200,30,60,128)).save(output)
+            accept(self.project,created['id'],0,output)
+            result=wait(self.project,created['id'],10);self.assertEqual(result['state'],'succeeded',result)
+            self.assertEqual(len(result['results']),2)
+            with self.assertRaises(Cancelled):accept(self.project,created['id'],0,output)
+        created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+        while not ready(self.project,created['id'])['ready']:
+            self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+        cancel(self.project,created['id'])
+        with self.assertRaises(Cancelled):accept(self.project,created['id'],0,output)
+        self.assertEqual(task(self.project,created['id'])['results'],[])
 
     def test_browser_pixels_use_owned_queue_generation_and_late_results_cannot_publish(self):
         from frameronin_engine.browser_tasks import ready,heartbeat,accept

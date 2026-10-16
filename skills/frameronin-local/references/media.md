@@ -36,4 +36,4 @@ RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、
 
 这三项的加工结果、输入与参数均可保存为正式文档；自定义缩放另保留精细绘制 PNG。统一撤销/重做复用已有版本，不重新加工。所有参数与输入改变都使当前视图不再接受旧任务结果；原件仍保留，已成功结果在项目中可查。其他加工入口与完整联合资源验收继续按仓库对照表执行。
 
-常规图片引擎 `image.normal` 已提供 apply、mattePreview、extendBottom、rpgMaker、allActions、ancientCostume 六种原配方，输出 PNG 和参数报告。执行前查询参数与预算；apply 的平滑缩放目前明确拒绝，等待宿主 Canvas 任务接入。常规工作台的任务界面和文档仍在迁移，不能把原入口已可操作视为统一后台已经完成。底部扩展沿用三行重排，扩展高度为原图的三分之一取整；一键配方的固定尺寸不受常规参数影响。
+常规图片 `image.normal` 提供 apply、mattePreview、extendBottom、rpgMaker、allActions、ancientCostume 六种原配方，输出 PNG 和参数报告。执行前查询参数与预算。工作台在可取消 Canvas Worker 中保留原平滑缩放与解码行为；CLI 原生模式仅接受无 ICC 的 PNG，且 apply 必须硬边缩放。需要宿主模式时使用工作台，不自动改用近似滤镜或解码器。底部扩展读取上一主结果，按三行复制翻转，扩展高度为其高度的三分之一取整；一键配方固定尺寸不受常规参数影响。
