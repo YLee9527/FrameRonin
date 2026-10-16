@@ -1,0 +1,2047 @@
+{
+  "date": "2026-10-16",
+  "baselineCommit": "ff2763e",
+  "scope": "Scatter detection/manual boxes/PNG JPEG WebP ZIP with managed Worker, strict publication and formal document history. S2/S3/S4 remain incomplete.",
+  "original": {
+    "source": "reference/frontend/src/components/RoninProScatterSlice.tsx",
+    "sha256": "a51e6567b726f0aab709348a231734095169e7e7383ffd0a74613394ea08f4a7",
+    "sourceCanvasOptions": {
+      "willReadFrequently": true
+    },
+    "semantics": [
+      "four-connected foreground; auto mode alpha cutoff below 250",
+      "filter components before transitive bounding-box merging",
+      "original 8px comparator and double export sort",
+      "fractional source crop with floor destination size; original Canvas encoding"
+    ]
+  },
+  "browserOracle": {
+    "archiveSha256": "03e20257f1894762284275ce98bfc09f232a0b6a2f3d391fa2ad52646b826b7d",
+    "cases": [
+      {
+        "kind": "detect",
+        "id": "auto-alpha",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "526baa04e5416665bf19b5f5c72f92b9e512bbaf894b8e4abe9f9eee75b51710"
+      },
+      {
+        "kind": "detect",
+        "id": "alpha-all-pixels",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "6779aa19e7d965de30117764abe43ca4ce6d8cf1bd26799d237bcc9344b0d9c0"
+      },
+      {
+        "kind": "detect",
+        "id": "alpha-threshold-1",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "f45f60dc43bf8e7a3d4fa37b6cc62bdc810506f62c43a07ab9c4a498f7b618d0"
+      },
+      {
+        "kind": "detect",
+        "id": "alpha-threshold-120",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "91d5c2b731b13fda8f6512d5a45181f8870ab4c14cca5c66bae1db4bc9cda294"
+      },
+      {
+        "kind": "detect",
+        "id": "column-order",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "92333ae770cf9f4067ad228e00d72aa18929873d3eca51d2ebb36df9d0c342ec"
+      },
+      {
+        "kind": "detect",
+        "id": "minimum-pixels",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "52bedd265d818a9193822b70bf52fd1c2513c9637a8aebe6574c752a1ad9a712"
+      },
+      {
+        "kind": "detect",
+        "id": "minimum-side",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "3b4a6e342a63e1e83c13413d2268ef04e8a94615edd4f3fa6c4140a1464e7d45"
+      },
+      {
+        "kind": "detect",
+        "id": "opaque-auto",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "89500bc4ad2fa8f8f24044d8dddc8c4fd710b7ff0828f7b27421e296aba056e2"
+      },
+      {
+        "kind": "detect",
+        "id": "explicit-key",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "6f36494e1620a9f30656a987f04ca8454bfc125c749e2b76ac08bf3874829502"
+      },
+      {
+        "kind": "detect",
+        "id": "merge-gap",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "dc7ec436a21e3989d0f17c828f085eaabc565aa34687558088e45a941d6f289c"
+      },
+      {
+        "kind": "detect",
+        "id": "merge-gap-maximum",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "f0dd518c86ed408b2df14c8e1eb34d480956b292a49ab295d0cb29b85208d38b"
+      },
+      {
+        "kind": "detect",
+        "id": "photo-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "6d897773fc1592e4df37c0bca61ac4bf6951b69d1a746fccb63c6627785e75dc"
+      },
+      {
+        "kind": "detect",
+        "id": "alpha-webp",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "5022caca3289e6ed6da044daa4214a7b6b869570fb8a99031b5bd4c221a0192b"
+      },
+      {
+        "kind": "detect",
+        "id": "profiled-png",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "c1aeb6c08e5d5821cd67f7fce5d96c26d612f04c13a9bc24d4accba73651e1a8"
+      },
+      {
+        "kind": "detect",
+        "id": "oriented-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "f44512770f5878d0801d11772ab82b76596ce7c089cd6f6972709d383b30f5b1"
+      },
+      {
+        "kind": "detect",
+        "id": "oriented-png",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "fa5659876da91044c4a3b6bff31f3588ebb335e1cc24d5d364553f55740ff068"
+      },
+      {
+        "kind": "detect",
+        "id": "oriented-webp",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "33f955f0cf4901d0d711a942ea86bffb013d5fb785be66663ac54872be58afff"
+      },
+      {
+        "kind": "detect",
+        "id": "jpeg-444-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "f04ea6c54e2fad189f5f11966a8894bde4e69c0dbc79589aaa9a85ecffccd1ff"
+      },
+      {
+        "kind": "detect",
+        "id": "jpeg-422-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "7bb87bfd00d8477f902d202c000945e9d77575750ad0829de915b59a72467871"
+      },
+      {
+        "kind": "detect",
+        "id": "jpeg-progressive-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "de5fc0ea70ba8467a0a5baf26b3b7def5e1c88f933572cc3b792eb5def0f0f7c"
+      },
+      {
+        "kind": "detect",
+        "id": "jpeg-gray-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "ee32b521fe637ea66d675c1f9c395082cd8f271af2bce504d881e8689479429c"
+      },
+      {
+        "kind": "detect",
+        "id": "jpeg-cmyk-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "7d46ba52d2085cc090d6d2b0f6b7ec94cbe908951ff3d2028c15de3545bed37e"
+      },
+      {
+        "kind": "detect",
+        "id": "jpeg-orientation8-jpg",
+        "equal": true,
+        "frozenBaselineEqual": true,
+        "frozenSha256": "ced95c29ce183a90cf19877cc3d8c787141ab3e693ce70fff560990a1aa77b02"
+      },
+      {
+        "kind": "export",
+        "id": "png-0.4-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "40fbd6f635e6f21fbebdd27c6178fed0cb43cec79e0fb979ea21ffb4151b3c6e"
+      },
+      {
+        "kind": "export",
+        "id": "png-0.4-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "ca724249b8a05b0986b0f04a2e8b684ad9a9821bedf347f0b186e54ed7bbe4d1"
+      },
+      {
+        "kind": "export",
+        "id": "png-0.92-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "40fbd6f635e6f21fbebdd27c6178fed0cb43cec79e0fb979ea21ffb4151b3c6e"
+      },
+      {
+        "kind": "export",
+        "id": "png-0.92-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "ca724249b8a05b0986b0f04a2e8b684ad9a9821bedf347f0b186e54ed7bbe4d1"
+      },
+      {
+        "kind": "export",
+        "id": "png-1-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "40fbd6f635e6f21fbebdd27c6178fed0cb43cec79e0fb979ea21ffb4151b3c6e"
+      },
+      {
+        "kind": "export",
+        "id": "png-1-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "ca724249b8a05b0986b0f04a2e8b684ad9a9821bedf347f0b186e54ed7bbe4d1"
+      },
+      {
+        "kind": "export",
+        "id": "jpeg-0.4-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "5bd8d588ee0295e6fccbc233114383bb3bb491c3ca7aafafc66e144ae7e37788"
+      },
+      {
+        "kind": "export",
+        "id": "jpeg-0.4-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "f7a438d705bac85552e374330a0cd66591f517b5bda8019a4fb3ba4e215d76a0"
+      },
+      {
+        "kind": "export",
+        "id": "jpeg-0.92-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "bad5447e53061c7e16b8f96091f5a94539206866017a20681db5d53ae0ea0616"
+      },
+      {
+        "kind": "export",
+        "id": "jpeg-0.92-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "6f56b33a67a38b9fba2728caf71f4c3dc31b0a4aa4d08009b33b75840e8b1884"
+      },
+      {
+        "kind": "export",
+        "id": "jpeg-1-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "649eeb2246865db23c7f255c98af71d2bcd6386bea86458460e739b1aa4037ed"
+      },
+      {
+        "kind": "export",
+        "id": "jpeg-1-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "5df727bfef84068572f01992e0609bb067ee6fda81727f6d451068cf9b136c32"
+      },
+      {
+        "kind": "export",
+        "id": "webp-0.4-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "db14f6ab5c9f3e6e0eaa84b8d7843f4af252ec6e2740a128a6833c36527fc6ad"
+      },
+      {
+        "kind": "export",
+        "id": "webp-0.4-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "77ce553b5bb1ef13b007f4b8bf2418ee56f27296ae71c191ce781b54115674ec"
+      },
+      {
+        "kind": "export",
+        "id": "webp-0.92-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "fed8fb236e72b2a52c4f2e40d23b0cb1809a40d8919b98aad0b23f34f1b8da62"
+      },
+      {
+        "kind": "export",
+        "id": "webp-0.92-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "402d1b1763a207d49a68a99f102e55a39fc486c6fc0687ea01014b99a94f3e27"
+      },
+      {
+        "kind": "export",
+        "id": "webp-1-row-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "07ce6754e8fdb563b9bc5ccfb1bd0b5f465ab6c3801c026aee0d0d304e1e7407"
+      },
+      {
+        "kind": "export",
+        "id": "webp-1-column-major",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "4830b07fdf4e84d067e8e4821ca11c7c595b0554f781d2b3841eb380562b9402"
+      },
+      {
+        "kind": "export",
+        "id": "input-photo-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "6f6431b252a1ef323803379e4fd1276f2291e7d228df66bc6f90c11348bc71cf"
+      },
+      {
+        "kind": "export",
+        "id": "input-alpha-webp",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "a6849231e4db150e905bde9846205d17f15352697b8c180efe6ebb8cf94decd4"
+      },
+      {
+        "kind": "export",
+        "id": "input-profiled-png",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "a6849231e4db150e905bde9846205d17f15352697b8c180efe6ebb8cf94decd4"
+      },
+      {
+        "kind": "export",
+        "id": "input-oriented-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "dc222b2cc775b73e57b054ea97cb86bb552add5ddd2c52f4eb83d817b5a0cd16"
+      },
+      {
+        "kind": "export",
+        "id": "input-oriented-png",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "126ceb452a81dd18cf5a467cbe622292b2cc50c54e39b2e867d1de33b0e5c534"
+      },
+      {
+        "kind": "export",
+        "id": "input-oriented-webp",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "a6849231e4db150e905bde9846205d17f15352697b8c180efe6ebb8cf94decd4"
+      },
+      {
+        "kind": "export",
+        "id": "sanitized-list",
+        "equal": true,
+        "members": [
+          {
+            "name": "idle-attack.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "jump-3.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "..-stay.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "98b516c093e3f76c551b12f0f3b1d94807881503d9d8ffb41bfdf33079fb7365"
+      },
+      {
+        "kind": "export",
+        "id": "custom-overrides",
+        "equal": true,
+        "members": [
+          {
+            "name": "one-custom.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "list-two.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "三方向.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "8130befcaa39359a07929650f81d5d4064a1a36d3c1fa8f199d61a993b291400"
+      },
+      {
+        "kind": "export",
+        "id": "per-row-names",
+        "equal": true,
+        "members": [
+          {
+            "name": "actor-a-1.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "actor-a-2.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "actor-b-1.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "a081619a8cf54c0aaaa640ffa35837c3a5c18fad3c04d0ae3d9a5ed723d77333"
+      },
+      {
+        "kind": "export",
+        "id": "sort-threshold-chain",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              4,
+              4
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "0636dd76dd4bf3d4b5f494fc3eeff2699dae523745ceab6b9f48bde85e39bcb4"
+      },
+      {
+        "kind": "export",
+        "id": "input-jpeg-444-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "abf3076c8adb6338f347f6d6babfb3ebec6a935897e663594f7cd01eb83224d8"
+      },
+      {
+        "kind": "export",
+        "id": "input-jpeg-422-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "f0347ecec869a44f50ab12d957e4d8b5bc9904e4b61e1762ee537e2e41529a1d"
+      },
+      {
+        "kind": "export",
+        "id": "input-jpeg-progressive-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "989a76afe65ecfd8dd268c76308c155a1997b1427cb79a7e8518e101a99196a7"
+      },
+      {
+        "kind": "export",
+        "id": "input-jpeg-gray-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "96a068b461c0eed94d5325ebffcc0a7c2699ceb00432e6bd582f1249e191b4da"
+      },
+      {
+        "kind": "export",
+        "id": "input-jpeg-cmyk-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "0d5d8401d159545ddad1a5509b959fa062078c0d8ded7d4e530d544e656c96d4"
+      },
+      {
+        "kind": "export",
+        "id": "input-jpeg-orientation8-jpg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "181dc328ed4f7cbb664675cd85805e753d1fb406f18256adef99edfeb24eb941"
+      },
+      {
+        "kind": "export",
+        "id": "auto-ui-png",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              11,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              16
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              17,
+              13
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "662c0d320d850053a1079dcababeb85a0bfec9da22acc5d8e7b771c95376c62b"
+      },
+      {
+        "kind": "export",
+        "id": "auto-ui-jpeg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              11,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              12,
+              16
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "format": "JPEG",
+            "dimensions": [
+              17,
+              13
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "1831b93fb9db8c9f8f881e717ac6776b1bf9346dc2b8cf54b81e9db06b800947"
+      },
+      {
+        "kind": "export",
+        "id": "auto-ui-webp",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "format": "WEBP",
+            "dimensions": [
+              11,
+              12
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "format": "WEBP",
+            "dimensions": [
+              12,
+              16
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "format": "WEBP",
+            "dimensions": [
+              17,
+              13
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ],
+        "frozenBaselineEqual": true,
+        "frozenSha256": "6e861301f964741df084f3158206dabd4f6fa42f8c6694c77b595afb02ec1e51"
+      }
+    ],
+    "detectionCases": 23,
+    "exportCases": 37,
+    "criteria": "Detection dimensions, ordered geometry and labels match exactly excluding generated UUID values; ZIP members retain reviewed order, names, format, dimensions and decoded pixels.",
+    "frozenDirectory": "skills/frameronin-local/assets/fixtures/scatter/original",
+    "verifier": "skills/frameronin-local/tests/compare_scatter_oracle.py"
+  },
+  "diagnosis": {
+    "initialHarnessCorrection": "Original source canvas must be CPU-readable (willReadFrequently=true). Correcting the harness did not fix the two JPEG failures.",
+    "rejectedVideoFrameCases": [
+      {
+        "kind": "export",
+        "id": "input-photo-jpg",
+        "equal": false,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": false,
+            "encodedBytesEqual": false,
+            "maxChannelError": [
+              36,
+              15,
+              19,
+              0
+            ]
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": false,
+            "encodedBytesEqual": false,
+            "maxChannelError": [
+              24,
+              15,
+              14,
+              0
+            ]
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": false,
+            "encodedBytesEqual": false,
+            "maxChannelError": [
+              10,
+              5,
+              36,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "export",
+        "id": "input-oriented-jpg",
+        "equal": false,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              10
+            ],
+            "strictRgbaEqual": false,
+            "encodedBytesEqual": false,
+            "maxChannelError": [
+              2,
+              2,
+              18,
+              0
+            ]
+          },
+          {
+            "name": "sprite-002.png",
+            "format": "PNG",
+            "dimensions": [
+              10,
+              15
+            ],
+            "strictRgbaEqual": false,
+            "encodedBytesEqual": false,
+            "maxChannelError": [
+              9,
+              4,
+              9,
+              0
+            ]
+          },
+          {
+            "name": "sprite-003.png",
+            "format": "PNG",
+            "dimensions": [
+              18,
+              12
+            ],
+            "strictRgbaEqual": false,
+            "encodedBytesEqual": false,
+            "maxChannelError": [
+              12,
+              7,
+              22,
+              0
+            ]
+          }
+        ]
+      }
+    ],
+    "acceptedPath": "createImageBitmap -> CPU-readable full source OffscreenCanvas -> original crops. All 60 final cases and frozen originals match.",
+    "pendingRelatedRegression": "Add these strong chroma-edge JPEG fixtures to Fine/Normal/Expand routes; their current independent ImageDecoder baselines do not prove these new samples."
+  },
+  "actualWorkbench": {
+    "projectId": "65cebb34-1fce-4c85-a988-5271f0c54a3e",
+    "sourceDimensions": [
+      64,
+      48
+    ],
+    "detection": {
+      "taskId": "e14ca7a1-e020-4f8a-82a6-350294600255",
+      "boxes": 3,
+      "strictOriginalGeometry": true
+    },
+    "formats": [
+      {
+        "format": "png",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.png",
+            "size": [
+              11,
+              12
+            ],
+            "format": "PNG",
+            "strictRgbaEqual": true
+          },
+          {
+            "name": "sprite-002.png",
+            "size": [
+              12,
+              16
+            ],
+            "format": "PNG",
+            "strictRgbaEqual": true
+          },
+          {
+            "name": "sprite-003.png",
+            "size": [
+              17,
+              13
+            ],
+            "format": "PNG",
+            "strictRgbaEqual": true
+          }
+        ]
+      },
+      {
+        "format": "jpeg",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.jpg",
+            "size": [
+              11,
+              12
+            ],
+            "format": "JPEG",
+            "strictRgbaEqual": true
+          },
+          {
+            "name": "sprite-002.jpg",
+            "size": [
+              12,
+              16
+            ],
+            "format": "JPEG",
+            "strictRgbaEqual": true
+          },
+          {
+            "name": "sprite-003.jpg",
+            "size": [
+              17,
+              13
+            ],
+            "format": "JPEG",
+            "strictRgbaEqual": true
+          }
+        ]
+      },
+      {
+        "format": "webp",
+        "equal": true,
+        "members": [
+          {
+            "name": "sprite-001.webp",
+            "size": [
+              11,
+              12
+            ],
+            "format": "WEBP",
+            "strictRgbaEqual": true
+          },
+          {
+            "name": "sprite-002.webp",
+            "size": [
+              12,
+              16
+            ],
+            "format": "WEBP",
+            "strictRgbaEqual": true
+          },
+          {
+            "name": "sprite-003.webp",
+            "size": [
+              17,
+              13
+            ],
+            "format": "WEBP",
+            "strictRgbaEqual": true
+          }
+        ]
+      }
+    ],
+    "history": {
+      "windowBefore": {
+        "versions": 5,
+        "tasks": 2
+      },
+      "windowAfter": {
+        "versions": 5,
+        "tasks": 2
+      },
+      "undoHidesArchive": true,
+      "redoReopenDownloadSha256": {
+        "redo": "fb6126960f14442dadf6d18fe1ec9689c8859cf3cd8de307de0c2d0ce01c0212",
+        "reopen": "fb6126960f14442dadf6d18fe1ec9689c8859cf3cd8de307de0c2d0ce01c0212",
+        "original": "fb6126960f14442dadf6d18fe1ec9689c8859cf3cd8de307de0c2d0ce01c0212"
+      },
+      "note": "Counts refer only to the isolated first PNG undo/redo/reopen window; later format and race tests intentionally create tasks."
+    },
+    "manual": {
+      "documentId": "e8ccf00d-e4c9-43ba-a147-76acd1f2d03a",
+      "revision": 14,
+      "boxes": [
+        {
+          "id": "d3e2a0cb-4200-42f2-ba40-de92f5e91bcb",
+          "x": 8,
+          "y": 7,
+          "w": 11,
+          "h": 12,
+          "kind": "sprite",
+          "name": ""
+        },
+        {
+          "id": "44a848be-dc95-45dd-a706-abf33ce8d000",
+          "x": 24,
+          "y": 6,
+          "w": 12,
+          "h": 16,
+          "kind": "sprite",
+          "name": ""
+        },
+        {
+          "id": "9adfc756-a646-48d8-a9f8-81d5055665e6",
+          "x": 12,
+          "y": 30,
+          "w": 17,
+          "h": 13,
+          "kind": "sprite",
+          "name": ""
+        },
+        {
+          "id": "b864fdb6-ac25-4dc2-9b11-e046ff89ee9b",
+          "x": 42,
+          "y": 30,
+          "w": 12,
+          "h": 14,
+          "kind": "sprite",
+          "name": "manual-west"
+        }
+      ],
+      "exportNames": [
+        "north.png",
+        "east.png",
+        "south.png",
+        "manual-west.png"
+      ],
+      "downloadSha256": "8cfaf61cb262978367e6882590132e44cae6484562ab9b1cbf468774565047ca",
+      "actions": [
+        "add, undo, redo",
+        "move",
+        "resize",
+        "delete, undo",
+        "clear all, undo",
+        "selected name and name list"
+      ],
+      "collisionRejectedBeforeTask": true
+    },
+    "conflict": {
+      "backAndBBlocked": true,
+      "copyDocumentId": "dd456547-5f67-4ba3-8354-27e11e2f52d2",
+      "copyRetainedName": "conflict-kept"
+    },
+    "heldGestureRestore": {
+      "delaySeconds": 2,
+      "canvasVisible": true,
+      "readingRejectedBeforePointerRelease": true,
+      "savedBoxX": 43
+    },
+    "lateParameters": {
+      "delayUploadSeconds": 2,
+      "retainedMinPixels": 8,
+      "retainedBoxes": 4,
+      "lateResultInProjectOnly": true
+    },
+    "cancellation": {
+      "sourcePreparationFeedbackMs": 404,
+      "sourcePreviousDocumentRetained": true,
+      "previewCanceledThenRetried": true,
+      "latePreviewNotApplied": true,
+      "processingInputDimensions": [
+        6000,
+        6000
+      ],
+      "processingPhaseObservedBeforeClick": true,
+      "processingFeedbackMs": 392,
+      "taskId": "225b62ce-bd80-49a0-98be-3d9b89e13a3e",
+      "state": "canceled",
+      "generation": 1,
+      "results": [],
+      "browserStopMeasurement": "Worker terminate occurs synchronously in AbortSignal handler; UI latency measured. No independent browser-process or combined-RSS stop metric is claimed."
+    },
+    "navigation": {
+      "target": "RoninPro tool list",
+      "taskId": "0c90dbeb-73ab-4003-bfbe-b64b459a2161",
+      "state": "succeeded",
+      "results": [
+        "3cdbac01-9370-435a-85df-2a91b4a42aca",
+        "a89d2ee7-acd3-413b-911a-5c32220b67df"
+      ],
+      "inputDimensions": [
+        6000,
+        6000
+      ]
+    },
+    "budget": {
+      "rejectedDimensions": [
+        8192,
+        8192
+      ],
+      "error": "FINE_EDITOR_RESOURCE_LIMIT",
+      "previousDimensionsRetained": [
+        6000,
+        6000
+      ],
+      "persistentSpecificReason": true,
+      "note": "Shared input preparation rejects this sample before scatter computation; an already accepted immutable import copy may remain."
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ],
+    "screenshots": [
+      "doc/testing/evidence/skill-scatter-workbench.png",
+      "doc/testing/evidence/skill-scatter-budget.png"
+    ]
+  },
+  "validation": {
+    "pythonTests": 35,
+    "jsTests": 48,
+    "failures": 0,
+    "runtimeBuild": "passed",
+    "workbenchBuild": "passed",
+    "focusedEslint": "passed",
+    "skillValidator": "Skill is valid!",
+    "projectVerify": {
+      "valid": true,
+      "database": "ok",
+      "versions": 19,
+      "documents": 2,
+      "tasks": 8,
+      "states": {
+        "canceled": 1,
+        "succeeded": 7
+      }
+    }
+  },
+  "intentionalDefectCorrections": [
+    "Duplicate/case/NFC filename collisions reject instead of silently overwriting ZIP entries.",
+    "Rounded add/resize rectangles remain within source bounds and at least 1px.",
+    "Original scatter menu referred to a fixed-grid mode not actually implemented in this component; corrected copy, separate CustomSlice remains in scope."
+  ],
+  "limits": {
+    "maxOutputBoxes": 4096,
+    "maxPremergeComponents": 16384,
+    "sourceFileMiB": 20,
+    "historySteps": 50,
+    "historyFilesMiB": 256,
+    "historyJsonMiB": 64,
+    "encodedResultMiB": 128,
+    "workerMode": "Host browser required; retain tab. Closing it loses lease and requires reconciliation."
+  },
+  "remaining": [
+    "Joint browser/engine peak memory and resource accounting",
+    "Broader format/browser/animated-input compatibility",
+    "Keyboard-only canvas editing and VoiceOver acceptance",
+    "Other media/editing/game modules, full AI templates and distribution; S2/S3/S4 not complete"
+  ]
+}

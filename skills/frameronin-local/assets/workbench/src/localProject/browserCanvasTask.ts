@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=options.operation==='image.expandShrink'?new Worker(new URL('../lib/expandShrink.worker.ts',import.meta.url),{type:'module'}):
+    worker=options.operation.startsWith('image.scatter')?new Worker(new URL('../lib/scatterSlice.worker.ts',import.meta.url),{type:'module'}):
+      options.operation==='image.expandShrink'?new Worker(new URL('../lib/expandShrink.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.normal'?new Worker(new URL('../lib/normalImage.worker.ts',import.meta.url),{type:'module'}):
       new Worker(new URL('../lib/smoothResize.worker.ts',import.meta.url),{type:'module'})
     const blob=await new Promise<Blob>((resolve,reject)=>{
@@ -37,7 +38,7 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
         else if(event.data.blob instanceof Blob)resolve(event.data.blob)
         else reject(new Error('BROWSER_OUTPUT_INVALID'))
       }
-      worker!.postMessage({id,generation,file,parameters,budgetBytes:options.budgetBytes})
+      worker!.postMessage({id,generation,file,parameters,budgetBytes:options.budgetBytes,operation:options.operation})
     })
     signal.throwIfAborted()
     const form=new FormData();form.append('generation',String(generation));form.append('file',blob,'worker-result.png')

@@ -89,3 +89,15 @@ Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态�
 该操作始终需要原宿主 Worker，默认参数也返回 requiresWorkbench=true；CLI 与通用提案执行返回 WORKBENCH_REQUIRED，不创建悬空任务。默认 renderer 在任务接收端按注册表解析，不能仅检查原始 JSON 是否显式包含该字段。JPEG 需要 ImageDecoder；缺少时返回 EXPAND_SHRINK_JPEG_DECODER_UNAVAILABLE，不换解码器。
 
 预算为 256 MiB 运行时余量、源像素×40、目标像素×40、文件字节×8 与前端保留量之和，并由 Worker 再检。服务端验证收到的单帧 PNG 尺寸与原任务一致后，沿用执行代次和统一发布。离开工具页后继续，关闭标签后核对失联；不自动重做。
+
+## 零散识别与切片
+
+`image.scatterDetect` 接收 detect（mode=auto/alpha/colorkey、colorKey、threshold=1–120、mergeGap=0–24、minPixels=1–900000000、minSide=1–30000）、order（row-major/column-major）、frontendBytes。输出原图尺寸及画框 JSON、参数报告。保留原四连通检测、先过滤后传递合框、8px 排序容差；输出最多 4096 框、合并前最多 16384 个合格区域，超限明确拒绝。
+
+`image.scatterExport` 接收审阅后的 layout：`{format,quality,entries:[{box,name}]}`。format 为 png/jpeg/webp，quality 为 0.4–1；box 含唯一 ID、图内 x/y/w/h 与可选 kind/name/row/col。entries 是执行前固定的顺序和最终文件名，避免服务端另写排序算法改变原浏览器的比较器行为。拒绝未知字段、重复 ID、越界、路径分隔符、控制字符、无效 UTF-8、超过 255 UTF-8 字节或 NFC/大小写折叠后重名的文件；不再静默覆盖 ZIP 成员。
+
+两项仅使用 `renderer=browser-worker`，预览返回 requiresWorkbench=true，CLI/通用提案直接执行拒绝。源图为静态 PNG/JPEG/WebP ≤20 MiB；解码和完整算法在一次性 Worker 中，界面仅绘制最长边 1024 的预览。保留原 CPU-readable 源画布及 bitmap 解码路径；本模块强色度边缘 JPEG 的 ImageDecoder/VideoFrame 对照失败，不能沿用其他工具的解码假设。
+
+预算含 256 MiB 余量、源像素×32、文件字节×8、前端保留量和 16384×512 区域余量；导出另加全部裁片像素×16及最大裁片像素×16。输入准备还受共享精细入口的更保守预算约束。收到 JSON 时校验尺寸、字段和画框；收到 ZIP 时核对成员完整顺序/名称、实际图片格式及 floor(w)×floor(h)，拒绝目录、加密、链接与未支持压缩方式，不解压到文件系统。编码总量上限 min(预算/4,128MiB)。
+
+`/browser/result` 仍只接受 generation 和上传内容，不使用客户端路径；先完整校验，再在写入锁中复验执行代次并交付 JSON 或 ZIP。统一完成事务登记结果和报告。取消立即失效并 terminate Worker；前端参数/输入/画框改变后旧结果只留项目。关闭浏览器标签的失联语义与其他宿主 Worker 相同。

@@ -1,3 +1,5 @@
+import {originalScatterDetect,originalScatterExport} from '../.runtime/oracle/original-scatter'
+import {reviewScatterExport} from '../assets/workbench/src/lib/scatterSlice'
 import {originalExpandShrink} from '../.runtime/oracle/original-expand-shrink'
 import { featheredImageCanvas, makeRelativeTemplate, layeredPsdBlob } from '../.runtime/oracle/original-map'
 import { mapFeatherPreview } from '../assets/workbench/src/lib/mapPreview'
@@ -296,7 +298,31 @@ async function runExpandShrink(){
   }
   await publish(zip,'browser-expand-shrink.zip');status.textContent=`Expand shrink complete: ${fixture.cases.length} original comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink]] as const) {
+async function runScatter(){
+  const fixture=await(await fetch('/scatter/manifest.json')).json(),zip=new JSZip()
+  for(const kind of ['detect','export'] as const)for(const entry of fixture[kind]){
+    const file=new File([await(await fetch(`/scatter/${entry.input}`)).blob()],entry.input)
+    const original=kind==='detect'?new Blob([JSON.stringify(await originalScatterDetect(file,entry.parameters))],{type:'application/json'}):await originalScatterExport(file,entry.parameters)
+    zip.file(`${kind}/${entry.id}/original.${kind==='detect'?'json':'zip'}`,original)
+    const worker=new Worker(new URL('../assets/workbench/src/lib/scatterSlice.worker.ts',import.meta.url),{type:'module'})
+    try{
+      const parameters=kind==='detect'?entry.parameters:{layout:reviewScatterExport(entry.parameters,...fixture.dimensions[entry.input])}
+      const blob=await new Promise<Blob>((resolve,reject)=>{
+        worker.onmessage=event=>{if(event.data.error)reject(new Error(event.data.error));else if(event.data.blob)resolve(event.data.blob)}
+        worker.onerror=event=>reject(new Error(event.message))
+        worker.postMessage({id:entry.id,generation:0,file,parameters:{...parameters,frontendBytes:0},operation:kind==='detect'?'image.scatterDetect':'image.scatterExport',budgetBytes:2*1024**3})
+      })
+      zip.file(`${kind}/${entry.id}/actual.${kind==='detect'?'json':'zip'}`,blob)
+    }finally{worker.terminate()}
+    if(kind==='export'&&entry.input.endsWith('.jpg')){
+      const probe=new Worker(new URL('./support/scatterDecoderProbe.worker.ts',import.meta.url),{type:'module'})
+      try{const blob=await new Promise<Blob>((resolve,reject)=>{probe.onmessage=e=>e.data.error?reject(new Error(e.data.error)):resolve(e.data.blob);probe.onerror=e=>reject(new Error(e.message));probe.postMessage({file,layout:reviewScatterExport(entry.parameters,...fixture.dimensions[entry.input])})});zip.file(`${kind}/${entry.id}/bitmap.zip`,blob)}finally{probe.terminate()}
+    }
+    status.textContent=`Scatter ${kind}: ${entry.id}`
+  }
+  await publish(zip,'browser-scatter.zip');status.textContent=`Scatter complete: ${fixture.detect.length} detections and ${fixture.export.length} ZIP exports`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

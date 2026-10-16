@@ -2,6 +2,7 @@
 import math
 from .errors import RoninError
 from .project import checked_id, memory_budget
+from .scatter import DETECT_DEFAULTS
 
 
 def integer(default, low, high):
@@ -85,6 +86,12 @@ REGISTRY = {
         'cellWidth':integer(32,1,512),'cellHeight':integer(32,1,512),
         'renderer':choice('browser-worker',['browser-worker']),
         'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_fractional_grid_crop_pad',overhead=256),
+    'image.scatterDetect': operation(['image'],{'detect':{'type':'object','default':DETECT_DEFAULTS},
+        'order':choice('row-major',['row-major','column-major']),'renderer':choice('browser-worker',['browser-worker']),
+        'frontendBytes':integer(0,0,2*1024**3)},'json_report','original_connected_components',overhead=256),
+    'image.scatterExport': operation(['image'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'zip_report','reviewed_fractional_slices',overhead=256),
     'sequence.unifySize': operation(['image+'],{'columns':integer(4,1,64),
         'horizontal':choice('center',['left','center','right']),'vertical':choice('bottom',['top','center','bottom']),
         'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_integer_alignment',overhead=256),
@@ -168,6 +175,9 @@ def preview(project, payload):
         raise RoninError('INPUT_KIND', 'A selected asset has an incompatible media kind.')
     pixels = [v['metadata'].get('width', 0) * v['metadata'].get('height', 0) for v in versions]
     estimate = spec['runtimeOverheadMiB'] * 1024**2 + max(pixels, default=0) * 4 * 4
+    if name in ['image.scatterDetect','image.scatterExport']:
+        from .scatter import estimate as scatter_estimate
+        estimate=scatter_estimate(versions[0]['metadata'],values,name=='image.scatterExport')
     if name=='image.expandShrink':
         source=versions[0]['metadata'];width,height=values['columns']*values['cellWidth'],values['rows']*values['cellHeight']
         if max(width,height,source['width'],source['height'])>30000:raise RoninError('GRID_DIMENSION_LIMIT','Input and output sides must be at most 30000 pixels.')
@@ -323,7 +333,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['image.customScale','image.normal','image.expandShrink'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,

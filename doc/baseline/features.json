@@ -630,13 +630,13 @@
     "originalEntry": "散图切片",
     "implementation": "reference/frontend/src/components/RoninProScatterSlice.tsx",
     "inputs": "image",
-    "outputs": "PNG ZIP",
-    "dependencies": "Canvas/JSZip",
+    "outputs": "ordered PNG/JPEG/WebP ZIP + detection JSON + reports",
+    "dependencies": "host Canvas Worker/JSZip + local project queue",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProScatterSlice.tsx",
-    "sample": "fixed-image-scatter-slice",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "assets/fixtures/scatter: 23 detections + 37 ZIP exports; real manual/workbench/race samples",
+    "evidence": "doc/testing/evidence/skill-scatter.json",
+    "status": "original oracle and managed workbench/document checkpoint passed; complete S2/S3/S4 regression pending",
+    "limits": "static PNG/JPEG/WebP ≤20 MiB; host Worker required; 4096 boxes / 16384 premerge components; budget and collision rejection; no fixed-grid UI in this original component"
   },
   {
     "id": "image.custom-slice",

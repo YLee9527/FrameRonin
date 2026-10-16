@@ -39,3 +39,5 @@ RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、
 常规图片 `image.normal` 提供 apply、mattePreview、extendBottom、rpgMaker、allActions、ancientCostume 六种原配方，输出 PNG 和参数报告。执行前查询参数与预算。工作台在可取消 Canvas Worker 中保留原平滑缩放与解码行为；CLI 原生模式仅接受无 ICC 的 PNG，且 apply 必须硬边缩放。需要宿主模式时使用工作台，不自动改用近似滤镜或解码器。底部扩展读取上一主结果，按三行复制翻转，扩展高度为其高度的三分之一取整；一键配方固定尺寸不受常规参数影响。
 
 网格扩图/缩图 `image.expandShrink` 按 N×M 每格中心裁切或透明补边，保留原小数坐标及默认滤波，不缩放每格。使用工作台“扩图与缩图”执行；CLI 预览能核对参数与预算，但直接提交返回 WORKBENCH_REQUIRED。输入静态 PNG/JPEG/WebP ≤20 MiB，行列 1–64、格宽高 1–512；输出目标尺寸及完整预算超限时明确拒绝。AI 创意扩图按 ImageGen 参考执行。
+
+零散切图使用工作台 RoninPro → 零散切图。`image.scatterDetect` 保留自动/Alpha/色键、四连通及合框；`image.scatterExport` 按审阅后的画框、顺序和名称输出 PNG/JPEG/WebP ZIP，两者都需要宿主 Worker。输入静态 PNG/JPEG/WebP ≤20 MiB，最多 4096 框；重名、越界、超预算或不支持的实际编码明确失败。不要用固定网格切片代替本入口，也不要通过 CLI 提交没有浏览器执行端的任务。

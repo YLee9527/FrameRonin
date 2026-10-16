@@ -1,0 +1,1919 @@
+{
+  "detect": [
+    {
+      "id": "auto-alpha",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "alpha-all-pixels",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "alpha",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "alpha-threshold-1",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 1,
+          "mergeGap": 0,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "alpha-threshold-120",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 120,
+          "mergeGap": 0,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "column-order",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "minimum-pixels",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 150,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "minimum-side",
+      "input": "alpha.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 12
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "opaque-auto",
+      "input": "opaque.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "explicit-key",
+      "input": "opaque.png",
+      "parameters": {
+        "detect": {
+          "mode": "colorkey",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "merge-gap",
+      "input": "transitive.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 3,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "merge-gap-maximum",
+      "input": "transitive.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 24,
+          "minPixels": 1,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "photo-jpg",
+      "input": "photo.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "alpha-webp",
+      "input": "alpha.webp",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "profiled-png",
+      "input": "profiled.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "oriented-jpg",
+      "input": "oriented.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "oriented-png",
+      "input": "oriented.png",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "oriented-webp",
+      "input": "oriented.webp",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-444-jpg",
+      "input": "jpeg-444.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-422-jpg",
+      "input": "jpeg-422.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-progressive-jpg",
+      "input": "jpeg-progressive.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-gray-jpg",
+      "input": "jpeg-gray.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-cmyk-jpg",
+      "input": "jpeg-cmyk.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-orientation8-jpg",
+      "input": "jpeg-orientation8.jpg",
+      "parameters": {
+        "detect": {
+          "mode": "auto",
+          "colorKey": "#ffffff",
+          "threshold": 24,
+          "mergeGap": 0,
+          "minPixels": 4,
+          "minSide": 1
+        },
+        "order": "row-major"
+      }
+    }
+  ],
+  "export": [
+    {
+      "id": "png-0.4-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "png-0.4-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "png-0.92-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "png-0.92-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "png-1-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 1,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "png-1-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 1,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "jpeg-0.4-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-0.4-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "jpeg-0.92-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-0.92-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "jpeg-1-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 1,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "jpeg-1-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 1,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "webp-0.4-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "webp-0.4-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "webp-0.92-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "webp-0.92-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "webp-1-row-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 1,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "webp-1-column-major",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 1,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "column-major"
+      }
+    },
+    {
+      "id": "input-photo-jpg",
+      "input": "photo.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-alpha-webp",
+      "input": "alpha.webp",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-profiled-png",
+      "input": "profiled.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-oriented-jpg",
+      "input": "oriented.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-oriented-png",
+      "input": "oriented.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-oriented-webp",
+      "input": "oriented.webp",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "sanitized-list",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": " idle / attack , jump:* 3\n../stay ",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "custom-overrides",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": "one: custom"
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": "三方向"
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "list-one,list-two,list-three",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "per-row-names",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "grid",
+            "name": "",
+            "row": 0,
+            "col": 0
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "grid",
+            "name": "",
+            "row": 0,
+            "col": 1
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "grid",
+            "name": "",
+            "row": 1,
+            "col": 0
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "actor-a\nactor-b",
+        "namePerRow": true,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "sort-threshold-chain",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 30,
+            "y": 0,
+            "w": 4,
+            "h": 4,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 0,
+            "y": 9,
+            "w": 4,
+            "h": 4,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 20,
+            "y": 17,
+            "w": 4,
+            "h": 4,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-jpeg-444-jpg",
+      "input": "jpeg-444.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-jpeg-422-jpg",
+      "input": "jpeg-422.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-jpeg-progressive-jpg",
+      "input": "jpeg-progressive.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-jpeg-gray-jpg",
+      "input": "jpeg-gray.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-jpeg-cmyk-jpg",
+      "input": "jpeg-cmyk.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "input-jpeg-orientation8-jpg",
+      "input": "jpeg-orientation8.jpg",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a",
+            "x": 2.5,
+            "y": 2.25,
+            "w": 12.75,
+            "h": 10.5,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "b",
+            "x": 20.25,
+            "y": 6.5,
+            "w": 10.5,
+            "h": 15.25,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "c",
+            "x": 9.5,
+            "y": 27.25,
+            "w": 18.25,
+            "h": 12.5,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.4,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "auto-ui-png",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a4974b80-8aa2-4e29-b296-f7e1723982e9",
+            "x": 3,
+            "y": 4,
+            "w": 11,
+            "h": 12,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "bb5990cc-2426-4363-8f57-540b59959aa9",
+            "x": 24,
+            "y": 6,
+            "w": 12,
+            "h": 16,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "d4ebf717-4029-42fe-b730-9c5937a23628",
+            "x": 12,
+            "y": 30,
+            "w": 17,
+            "h": 13,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "png",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "auto-ui-jpeg",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a4974b80-8aa2-4e29-b296-f7e1723982e9",
+            "x": 3,
+            "y": 4,
+            "w": 11,
+            "h": 12,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "bb5990cc-2426-4363-8f57-540b59959aa9",
+            "x": 24,
+            "y": 6,
+            "w": 12,
+            "h": 16,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "d4ebf717-4029-42fe-b730-9c5937a23628",
+            "x": 12,
+            "y": 30,
+            "w": 17,
+            "h": 13,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "jpeg",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    },
+    {
+      "id": "auto-ui-webp",
+      "input": "alpha.png",
+      "parameters": {
+        "boxes": [
+          {
+            "id": "a4974b80-8aa2-4e29-b296-f7e1723982e9",
+            "x": 3,
+            "y": 4,
+            "w": 11,
+            "h": 12,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "bb5990cc-2426-4363-8f57-540b59959aa9",
+            "x": 24,
+            "y": 6,
+            "w": 12,
+            "h": 16,
+            "kind": "sprite",
+            "name": ""
+          },
+          {
+            "id": "d4ebf717-4029-42fe-b730-9c5937a23628",
+            "x": 12,
+            "y": 30,
+            "w": 17,
+            "h": 13,
+            "kind": "sprite",
+            "name": ""
+          }
+        ],
+        "format": "webp",
+        "quality": 0.92,
+        "namesText": "",
+        "namePerRow": false,
+        "order": "row-major"
+      }
+    }
+  ],
+  "dimensions": {
+    "transitive.png": [
+      96,
+      32
+    ],
+    "alpha.webp": [
+      64,
+      48
+    ],
+    "alpha.png": [
+      64,
+      48
+    ],
+    "oriented.webp": [
+      64,
+      48
+    ],
+    "photo.jpg": [
+      64,
+      48
+    ],
+    "opaque.png": [
+      64,
+      48
+    ],
+    "profiled.png": [
+      64,
+      48
+    ],
+    "oriented.png": [
+      48,
+      64
+    ],
+    "oriented.jpg": [
+      48,
+      64
+    ],
+    "jpeg-444.jpg": [
+      64,
+      48
+    ],
+    "jpeg-422.jpg": [
+      64,
+      48
+    ],
+    "jpeg-progressive.jpg": [
+      64,
+      48
+    ],
+    "jpeg-gray.jpg": [
+      64,
+      48
+    ],
+    "jpeg-cmyk.jpg": [
+      64,
+      48
+    ],
+    "jpeg-orientation8.jpg": [
+      48,
+      64
+    ]
+  },
+  "sources": {
+    "transitive.png": "04135dd92571ac650ee0c64cf5735e22db063c3d86183795bbda53377c858bcc",
+    "alpha.webp": "b37e07f9538e64d366742cf01d114989cc103a21a5b22a99ccf298efbad36755",
+    "alpha.png": "4509260c0ebfe73a5af4d2f350a8186b32fedfd2f557686e2ba407621cf6e55f",
+    "oriented.webp": "83be4d2b6cfaee0d7814823c0e49fe204e00b554e46069e9587c60f17b17cb88",
+    "photo.jpg": "99bc0f06f8ae654e670cd1d200380e56d23541827dccd2d4ac74f78488d91607",
+    "opaque.png": "3a28b4ab0e536f9f2cbd732318c3e5263ba454231ed2e9b7a1a548f8223a815a",
+    "profiled.png": "e78a698f1615f165ba0b14c16176651150e101a15b66980a043a4dd4abb257bf",
+    "oriented.png": "66ee28cfccce540d2b819fa8686c357cc984b0d341f2cbc87aa282693a4974d8",
+    "oriented.jpg": "982f820df903b94af60a7847501d4d4e537501873fcb9865f6b3660e7c77f47e",
+    "jpeg-444.jpg": "1d885af5a98ceaaaa0474787530f93ddaa9af9e30db9742609afae655c19c389",
+    "jpeg-422.jpg": "2610345802f5a16c7e6e8c107d4072d4af3b1cc6820eda1ae5ab9784dd3bbec0",
+    "jpeg-progressive.jpg": "f20d0f1e0c71a3bb6e6a984a05eca915faf72f892d611f276c6abf408f8c31af",
+    "jpeg-gray.jpg": "2c660f3b3135deb267281955c52829bc25c207e34d9f0143cd493823c9bb4a6d",
+    "jpeg-cmyk.jpg": "8b079967e1820da147294151a6508ef6cd8eaba3d64d1edeaba3b6d7d0d63868",
+    "jpeg-orientation8.jpg": "ff84fe1252b3f511fd0ca4bcbad8f4222a65a2126d5a7b1e4140066445be14a7"
+  },
+  "originalSource": "reference/frontend/src/components/RoninProScatterSlice.tsx",
+  "originalSha256": "a51e6567b726f0aab709348a231734095169e7e7383ffd0a74613394ea08f4a7",
+  "criteria": "Detection dimensions, ordered geometry and labels match exactly excluding generated UUID values; ZIP members retain reviewed order, names, format, dimensions and decoded pixels."
+}

@@ -41,3 +41,9 @@ export {createNormalImageHistory,normalImageHistoryReducer} from '../../assets/w
 export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/localProject/navigationGuard'
 
 export {expandShrinkImage,validateExpandShrinkParameters,checkExpandShrinkBudget} from '../../assets/workbench/src/lib/expandShrinkImage'
+
+export {scatterDetectDefaults,validateScatterDetect,validateScatterBoxes,orderedScatterBoxes,detectScatterPixels,scatterExportEntries,checkScatterBudget,exportScatterZip,exportReviewedScatterZip,reviewScatterExport,validateReviewedScatterExport} from '../../assets/workbench/src/lib/scatterSlice'
+
+export {initialScatterDraft,validateStoredScatter,serializeScatter,restoreScatter} from '../../assets/workbench/src/localProject/scatterDocument'
+export {createScatterHistory,scatterHistoryReducer} from '../../assets/workbench/src/localProject/useScatterDocument'
+export {scatterSourceWorker} from '../../assets/workbench/src/lib/scatterSourceWorker'

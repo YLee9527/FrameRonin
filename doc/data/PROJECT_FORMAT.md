@@ -73,3 +73,11 @@ workflow 文档 payload 使用 formatVersion 1，graph 使用历史迁移后的 
 `kind=image-expand-shrink` 使用共享图像工具格式 1，`tool=expandShrink`，参数为 columns、rows、cellWidth、cellHeight。最多一个原件和一个 PNG 结果，editedFile 为 null；结果及报告绑定原成功任务。当前参数可以不同于旧结果参数，恢复按原任务核对 PNG 尺寸，并提示重新执行才应用新参数。
 
 恢复先检查字段、格式、源文件上限、读取预算和任务/版本绑定，再读取内容；报告参数核对实际任务。输入替换、四个参数的完整手势与已登记结果共用 50 步/256 MiB 历史，重做与重开复用已有版本。另存使用新文档 ID，已导出文件继续保留。
+
+## 零散切图文档
+
+`kind=scatter`、`formatVersion=1` 保存 source、info、settings、boxes、selectedId、detection 和 archive。源图使用 `{versionId,name,type}`；info 保存原显示尺寸和文件名基部。settings 包括识别、编辑/新增工具、格式/质量、命名、排序、缩放及尺寸标签。画框使用稳定 ID 和原图坐标，最多 4096 个，必须在图内且宽高至少 1px。
+
+detection 和 archive 分别为 `{data,report,taskId}`，引用正式 JSON/ZIP 及报告；重开先核对成功任务、源版本、完整结果顺序、格式、尺寸与读取预算，再读取最多五个唯一文件。手动修改画框不必重新识别；当前参数与上次 ZIP 可以不同，界面明确提示重新执行才应用新参数。
+
+源图替换、完整画框手势、删除/清空、名称/参数及已有结果共用 50 步/256 MiB 文件历史，另限制 JSON 历史估算 64 MiB。保存/打开/导航/撤销前结束当前手势并等待输入准备。修订冲突和读取期间的新编辑保留当前内容，可另存副本；重做或重开直接使用已有 ZIP，不生成任务或版本。导出文件不随撤销删除。

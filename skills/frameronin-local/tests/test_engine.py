@@ -272,6 +272,49 @@ class ProjectTests(unittest.TestCase):
         final=task(self.project,created['id']);self.assertEqual(final['results'],[]);self.assertEqual(final['generation'],1)
         time.sleep(.2);self.assertEqual(task(self.project,created['id'])['results'],[])
 
+    def test_scatter_review_and_json_zip_publication_rejects_unreviewed_or_late_results(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        from frameronin_engine.scatter import DETECT_DEFAULTS
+        detect={'operation':'image.scatterDetect','inputs':[self.version['id']],'parameters':{}}
+        layout={'format':'png','quality':.92,'entries':[{'name':'tile.png','box':{'id':'one','x':1.5,'y':2.25,'w':8.5,'h':4.75,'kind':'sprite','name':''}}]}
+        export={'operation':'image.scatterExport','inputs':[self.version['id']],'parameters':{'layout':layout}}
+        for payload in [detect,export]:
+            self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+            with self.assertRaises(RoninError):submit(self.project,payload)
+        for change in [{'detect':{**DETECT_DEFAULTS,'command':'run'}},{'detect':{**DETECT_DEFAULTS,'threshold':0}},
+                       {'detect':{**DETECT_DEFAULTS,'minPixels':True}},{'frontendBytes':2*1024**3}]:
+            with self.assertRaises(RoninError):preview(self.project,{**detect,'parameters':change})
+        for change in [lambda v:v.update(extra='run'),lambda v:v['entries'][0].update(name='../outside.png'),
+            lambda v:v['entries'][0]['box'].update(x=10),lambda v:v['entries'][0]['box'].update(x=10**800),
+            lambda v:v.update(quality=10**800),lambda v:v['entries'][0].update(name='\ud800.png'),
+            lambda v:v['entries'].append({**v['entries'][0],'name':'TILE.png'}),lambda v:v['entries'][0]['box'].update(extra=True)]:
+            invalid=json.loads(json.dumps(layout));change(invalid)
+            with self.assertRaises(RoninError):preview(self.project,{**export,'parameters':{'layout':invalid}})
+        def running(payload):
+            created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+            while not ready(self.project,created['id'])['ready']:
+                self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+            return created['id']
+        tid=running(detect);data=self.root/'detection.json'
+        result={'formatVersion':1,'width':16,'height':12,'boxes':[{'id':'one','x':2,'y':3,'w':1,'h':1,'kind':'sprite','name':''}]}
+        invalid={**result,'command':'read-file'};data.write_text(json.dumps(invalid))
+        with self.assertRaises(RoninError):accept(self.project,tid,0,data)
+        data.write_text(json.dumps(result));accept(self.project,tid,0,data)
+        completed=wait(self.project,tid,10);self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text())
+        self.assertEqual(report['detectedBoxes'],1);self.assertEqual(report['outputFrames'],0)
+        tid=running(export);archive=self.root/'slices.zip';image=self.root/'slice.png';Image.new('RGBA',(8,4),(100,20,200,128)).save(image)
+        for name in ['../outside.png','unexpected.png']:
+            with zipfile.ZipFile(archive,'w') as zip:zip.write(image,name)
+            with self.assertRaises(RoninError):accept(self.project,tid,0,archive)
+        with zipfile.ZipFile(archive,'w') as zip:zip.write(image,'tile.png')
+        accept(self.project,tid,0,archive);completed=wait(self.project,tid,10)
+        self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text());self.assertEqual(report['exportedSlices'],1)
+        tid=running(export);cancel(self.project,tid)
+        with self.assertRaises(Cancelled):accept(self.project,tid,0,archive)
+        self.assertFalse(task(self.project,tid)['results']);self.assertTrue(self.project.verify()['valid'])
+
     def test_expand_shrink_requires_workbench_checks_limits_and_reconciles_publication(self):
         from frameronin_engine.browser_tasks import ready,accept
         payload={'operation':'image.expandShrink','inputs':[self.version['id']],

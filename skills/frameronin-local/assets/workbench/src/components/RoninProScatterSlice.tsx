@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import {
   Button,
@@ -23,7 +23,17 @@ import {
   PlusOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
-import JSZip from 'jszip'
+import {flushSync} from 'react-dom'
+import {MAX_SCATTER_BOXES,orderedScatterBoxes,reviewScatterExport,validateScatterBoxes} from '../lib/scatterSlice'
+import {scatterSourceWorker} from '../lib/scatterSourceWorker'
+import {useScatterDocument} from '../localProject/useScatterDocument'
+import {scatterReports} from '../localProject/scatterDocument'
+import {ScatterDocumentSurface} from '../localProject/ScatterDocumentSurface'
+import {useScatterSource} from '../localProject/useScatterSource'
+import {prepareFineInput} from '../localProject/fineEditInput'
+import {imageToolMetadata} from '../localProject/imageToolDocument'
+import {cacheManagedInput,runManagedTask} from '../localProject/managedTasks'
+import {Progress} from 'antd'
 import type { Lang } from '../i18n/locales'
 import { useLanguage } from '../i18n/context'
 import StashDropZone from './StashDropZone'
@@ -174,10 +184,10 @@ interface UiText {
 const UI_TEXT: Record<Lang, UiText> = {
   zh: {
     moduleTitle: '零散切图',
-    moduleLead: '上传单张图后，可按规则网格切图，或自动识别零散区域并在画布上手动增删改框，最后批量打包导出。',
+    moduleLead: '上传单张图后，自动识别零散区域并在画布上手动增删改框，按顺序与名称批量打包导出。',
     uploadTitle: '源图',
     uploadHint: '点击、拖入或从暂存区拖入 PNG / JPG / WebP',
-    uploadSubHint: '所有处理都在浏览器本地完成，不上传服务器。',
+    uploadSubHint: '仅在本机处理，素材副本保存在当前项目。',
     demo: '加载演示图',
     clearImage: '清空图片',
     exportTitle: '导出',
@@ -221,7 +231,7 @@ const UI_TEXT: Record<Lang, UiText> = {
     selectedNamePlaceholder: '可覆盖导出文件名',
     downloadSpriteZip: '下载零散 ZIP',
     statusTitle: '当前状态',
-    statusDefault: '先加载图片，再在网格切图或零散切图模式下预览与导出。',
+    statusDefault: '先加载图片，识别或手动添加零散框后预览与导出。',
     previewTitleIdle: '等待加载图片',
     previewTitleGrid: '网格切图预览',
     previewTitleSprites: '零散切图预览',
@@ -263,10 +273,10 @@ const UI_TEXT: Record<Lang, UiText> = {
   },
   en: {
     moduleTitle: 'Scatter Slice',
-    moduleLead: 'Load one image, slice by a regular grid or detect scattered regions, then edit boxes directly on the canvas and export them as a ZIP.',
+    moduleLead: 'Load one image, detect scattered regions, edit boxes on the canvas, then export an ordered and named ZIP.',
     uploadTitle: 'Source',
     uploadHint: 'Click, drop, or drag from stash: PNG / JPG / WebP',
-    uploadSubHint: 'Everything runs locally in the browser.',
+    uploadSubHint: 'Processed on this computer; selected copies are saved in the current project.',
     demo: 'Load demo',
     clearImage: 'Clear image',
     exportTitle: 'Export',
@@ -310,7 +320,7 @@ const UI_TEXT: Record<Lang, UiText> = {
     selectedNamePlaceholder: 'Override exported file name',
     downloadSpriteZip: 'Download scatter ZIP',
     statusTitle: 'Status',
-    statusDefault: 'Load an image first, then preview and export in grid or scatter mode.',
+    statusDefault: 'Load an image, detect or draw scattered regions, then preview and export.',
     previewTitleIdle: 'Waiting for an image',
     previewTitleGrid: 'Grid preview',
     previewTitleSprites: 'Scatter preview',
@@ -352,10 +362,10 @@ const UI_TEXT: Record<Lang, UiText> = {
   },
   ja: {
     moduleTitle: '零散切り出し',
-    moduleLead: '1 枚の画像を読み込み、固定グリッド分割または零散領域の自動検出を行い、キャンバス上で枠を編集して ZIP で書き出します。',
+    moduleLead: '画像から散在する領域を検出し、キャンバスで枠を編集して、順序と名前を指定した ZIP に書き出します。',
     uploadTitle: '元画像',
     uploadHint: 'クリック・ドロップ・スタッシュから PNG / JPG / WebP',
-    uploadSubHint: '処理はすべてブラウザ内で完結します。',
+    uploadSubHint: 'このコンピュータで処理し、選択した画像のコピーをプロジェクトに保存します。',
     demo: 'デモ読込',
     clearImage: '画像をクリア',
     exportTitle: '書き出し',
@@ -399,7 +409,7 @@ const UI_TEXT: Record<Lang, UiText> = {
     selectedNamePlaceholder: '書き出し名を上書き',
     downloadSpriteZip: '零散 ZIP',
     statusTitle: '状態',
-    statusDefault: 'まず画像を読み込み、グリッドまたは零散モードでプレビューと書き出しを行ってください。',
+    statusDefault: '画像を読み込み、領域を検出または手動追加して、プレビューと書き出しを行ってください。',
     previewTitleIdle: '画像を待機中',
     previewTitleGrid: 'グリッドプレビュー',
     previewTitleSprites: '零散プレビュー',
@@ -463,59 +473,12 @@ function makeId() {
 function sanitizeFileName(value: string | undefined, fallback: string) {
   const cleaned = String(value || '')
     .trim()
-    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
+    .split('').map(character=>character.charCodeAt(0)<32?'-':character).join('')
+    .replace(/[<>:"/\\|?*]/g, '-')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
   return cleaned || fallback
-}
-
-function parseNames(value: string) {
-  return value
-    .split(/[\n,]+/)
-    .map((item) => item.trim())
-    .filter(Boolean)
-}
-
-function outputMime(format: ExportFormat) {
-  return format === 'png' ? 'image/png' : `image/${format}`
-}
-
-function outputSuffix(format: ExportFormat) {
-  return format === 'jpeg' ? 'jpg' : format
-}
-
-function loadImageFromFile(file: File): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const objectUrl = URL.createObjectURL(file)
-    const img = new Image()
-    img.onload = () => {
-      URL.revokeObjectURL(objectUrl)
-      resolve(img)
-    }
-    img.onerror = () => {
-      URL.revokeObjectURL(objectUrl)
-      reject(new Error('load image failed'))
-    }
-    img.src = objectUrl
-  })
-}
-
-function createOffscreenCanvas(width: number, height: number) {
-  const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-  return canvas
-}
-
-function canvasToBlob(canvas: HTMLCanvasElement, format: ExportFormat, quality: number): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error('toBlob failed'))),
-      outputMime(format),
-      format === 'png' ? undefined : quality,
-    )
-  })
 }
 
 function normalizeRect(a: Point, b: Point): SliceBox {
@@ -524,16 +487,6 @@ function normalizeRect(a: Point, b: Point): SliceBox {
   const w = Math.abs(a.x - b.x)
   const h = Math.abs(a.y - b.y)
   return { id: makeId(), x, y, w, h, name: '' }
-}
-
-function hexToRgb(hex: string) {
-  const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  if (!match) return { r: 255, g: 255, b: 255 }
-  return {
-    r: Number.parseInt(match[1], 16),
-    g: Number.parseInt(match[2], 16),
-    b: Number.parseInt(match[3], 16),
-  }
 }
 
 function hitHandle(box: SliceBox, point: Point, displayScale: number): ResizeHandle | null {
@@ -558,28 +511,11 @@ function resizeSprite(origin: SliceBox, handle: ResizeHandle, point: Point, imag
   if (handle.includes('w')) left = point.x
   if (handle.includes('e')) right = point.x
 
-  const x = clamp(Math.min(left, right), 0, image.width)
-  const y = clamp(Math.min(top, bottom), 0, image.height)
+  const x = clamp(Math.min(left, right), 0, image.width-1)
+  const y = clamp(Math.min(top, bottom), 0, image.height-1)
   const w = clamp(Math.abs(right - left), 1, image.width - x)
   const h = clamp(Math.abs(bottom - top), 1, image.height - y)
   return { ...origin, x, y, w, h }
-}
-
-function cropBox(sourceCanvas: HTMLCanvasElement, box: SliceBox) {
-  const canvas = createOffscreenCanvas(box.w, box.h)
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('ctx missing')
-  ctx.drawImage(sourceCanvas, box.x, box.y, box.w, box.h, 0, 0, box.w, box.h)
-  return canvas
-}
-
-function sampledBackgroundColor(sourceCtx: CanvasRenderingContext2D | null, imageInfo: LoadedImageInfo | null) {
-  if (!sourceCtx || !imageInfo) {
-    return { hex: '#ffffff', rgb: { r: 255, g: 255, b: 255, a: 255 } }
-  }
-  const [r, g, b, a] = sourceCtx.getImageData(0, 0, 1, 1).data
-  const hex = `#${[r, g, b].map((value) => value.toString(16).padStart(2, '0')).join('')}`
-  return { hex, rgb: { r, g, b, a } }
 }
 
 function formatText(template: string, params?: Record<string, string | number>) {
@@ -599,32 +535,24 @@ export default function RoninProScatterSlice() {
   const wrapRef = useRef<HTMLDivElement | null>(null)
   const imageCanvasRef = useRef<HTMLCanvasElement | null>(null)
   const overlayCanvasRef = useRef<HTMLCanvasElement | null>(null)
-  const sourceCanvasRef = useRef<HTMLCanvasElement>(createOffscreenCanvas(1, 1))
   const displayMetricsRef = useRef<DisplayMetrics>({ scale: 1, pixelRatio: 1 })
 
-  const [uploadFile, setUploadFile] = useState<File | null>(null)
-  const [imageInfo, setImageInfo] = useState<LoadedImageInfo | null>(null)
-  const [tool, setTool] = useState<ToolMode>('edit')
-  const [format, setFormat] = useState<ExportFormat>('png')
-  const [quality, setQuality] = useState(0.92)
-  const [namesText, setNamesText] = useState('')
-  const [order, setOrder] = useState<OrderMode>('row-major')
-  const [namePerRow, setNamePerRow] = useState(false)
-  const [detect, setDetect] = useState<DetectConfig>({
-    mode: 'auto',
-    colorKey: '#ffffff',
-    threshold: 24,
-    mergeGap: 0,
-    minPixels: 4,
-    minSide: 1,
-  })
-  const [sprites, setSprites] = useState<SliceBox[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [selectedName, setSelectedName] = useState('')
-  const [zoom, setZoom] = useState<'fit' | '1' | '2' | '4' | '8'>('fit')
-  const [showResolution, setShowResolution] = useState(true)
-  const [resolutionFontSize, setResolutionFontSize] = useState(16)
-  const [statusText, setStatusText] = useState(text.statusDefault)
+  const model=useScatterDocument(),{settings,source:uploadFile,info:imageInfo,boxes:sprites,selectedId}=model.draft
+  const {tool,format,quality,namesText,order,namePerRow,detect,zoom,showResolution,resolutionFontSize}=settings
+  const setSprites=model.boxes,setSelectedId=model.select,setting=model.setting
+  const setTool=(v:ToolMode)=>setting('tool',v),setFormat=(v:ExportFormat)=>setting('format',v),setQuality=(v:number)=>setting('quality',v)
+  const setNamesText=(v:string)=>setting('namesText',v),setOrder=(v:OrderMode)=>setting('order',v),setNamePerRow=(v:boolean)=>setting('namePerRow',v)
+  const setDetect=(v:DetectConfig|((old:DetectConfig)=>DetectConfig))=>setting('detect',v),setZoom=(v:'fit'|'1'|'2'|'4'|'8')=>setting('zoom',v)
+  const setShowResolution=(v:boolean)=>setting('showResolution',v),setResolutionFontSize=(v:number)=>setting('resolutionFontSize',v)
+  const retainedFiles=model.retained,dispatch=model.dispatch
+  const retainedBytes=useCallback(()=>96*1024**2+[...retainedFiles()].reduce((sum,file)=>sum+file.size*2,0),[retainedFiles])
+  const source=useScatterSource(uploadFile,retainedBytes)
+  const sourceSizeChanged=!!(source.raster&&imageInfo&&(source.raster.width!==imageInfo.width||source.raster.height!==imageInfo.height))
+  const raster=sourceSizeChanged?null:source.raster
+  const [busy,setBusy]=useState<'detect'|'export'|null>(null),[progress,setProgress]=useState(0),[canceling,setCanceling]=useState(false),[preparing,setPreparing]=useState(false)
+  const controller=useRef<AbortController|null>(null),incoming=useRef<{controller:AbortController;promise:Promise<void>}|null>(null),alive=useRef(true)
+  useEffect(()=>{alive.current=true;return()=>{alive.current=false;incoming.current?.controller.abort()}},[])
+  const [statusText, setStatusText] = useState('')
   const [interaction, setInteraction] = useState<InteractionState>(null)
 
   const setStatus = useCallback((value: string) => {
@@ -636,27 +564,18 @@ export default function RoninProScatterSlice() {
     [sprites, selectedId],
   )
 
-  useEffect(() => {
-    setSelectedName(selectedSprite?.name ?? '')
-  }, [selectedSprite])
-
-  const orderedBoxes = useCallback(
-    (boxes: SliceBox[]) => {
-      const items = boxes.map((box) => ({ ...box }))
-      items.sort((a, b) => {
-        if (order === 'column-major') {
-          if (Math.abs(a.x - b.x) > 8) return a.x - b.x
-          return a.y - b.y
-        }
-        if (Math.abs(a.y - b.y) > 8) return a.y - b.y
-        return a.x - b.x
-      })
-      return items
-    },
-    [order],
-  )
+  const selectedName=selectedSprite?.name??''
+  const orderedBoxes=useCallback((boxes:SliceBox[])=>orderedScatterBoxes(boxes,order),[order])
 
   const currentBoxes = useMemo(() => orderedBoxes(sprites), [orderedBoxes, sprites])
+  const currentExport=useMemo(()=>{
+    if(!imageInfo||!sprites.length)return null
+    // Incomplete names are editable; execution displays the validation error.
+    try{return reviewScatterExport({boxes:sprites,format,quality,namesText,namePerRow,order},imageInfo.width,imageInfo.height)}catch{return null}
+  },[imageInfo,sprites,format,quality,namesText,namePerRow,order])
+  const archiveReport=model.draft.archive?scatterReports.get(model.draft.archive.report):undefined
+  const archiveParameters=archiveReport?.parameters as {layout?:unknown}|undefined
+  const archiveOutdated=model.draft.archive&&(!currentExport||JSON.stringify(currentExport)!==JSON.stringify(archiveParameters?.layout))
 
   const currentSelectionLabel = useMemo(() => {
     const index = sprites.findIndex((sprite) => sprite.id === selectedId)
@@ -745,7 +664,7 @@ export default function RoninProScatterSlice() {
     imageCtx.clearRect(0, 0, imageCanvas.width, imageCanvas.height)
     imageCtx.setTransform(pixelRatio * scale, 0, 0, pixelRatio * scale, 0, 0)
     imageCtx.imageSmoothingEnabled = scale < 2
-    imageCtx.drawImage(sourceCanvasRef.current, 0, 0)
+    if(raster?.bitmap.width)imageCtx.drawImage(raster.bitmap,0,0,imageInfo.width,imageInfo.height)
 
     overlayCtx.setTransform(1, 0, 0, 1, 0, 0)
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height)
@@ -806,6 +725,7 @@ export default function RoninProScatterSlice() {
     overlayCtx.restore()
   }, [
     currentBoxes,
+    raster,
     imageInfo,
     interaction,
     resolutionFontSize,
@@ -831,281 +751,100 @@ export default function RoninProScatterSlice() {
     }
   }, [renderAll])
 
-  const clearImage = useCallback(() => {
-    setUploadFile(null)
-    setImageInfo(null)
-    setSprites([])
-    setSelectedId(null)
-    setSelectedName('')
-    setInteraction(null)
-    setStatus(text.uploadRemoved)
-  }, [setStatus, text.uploadRemoved])
-
-  const applyLoadedImage = useCallback(
-    async (file: File) => {
-      try {
-        const img = await loadImageFromFile(file)
-        const sourceCanvas = sourceCanvasRef.current
-        sourceCanvas.width = img.naturalWidth
-        sourceCanvas.height = img.naturalHeight
-        const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true })
-        if (!sourceCtx) throw new Error('ctx missing')
-        sourceCtx.clearRect(0, 0, img.naturalWidth, img.naturalHeight)
-        sourceCtx.drawImage(img, 0, 0)
-        const nextInfo = {
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-          fileNameBase: file.name.replace(/\.[^.]+$/, '') || 'scatter-slice',
-        }
-        const sampled = sampledBackgroundColor(sourceCtx, nextInfo)
-        setUploadFile(file)
-        setImageInfo(nextInfo)
-        setDetect((prev) => ({ ...prev, colorKey: sampled.hex }))
-        setSprites([])
-        setSelectedId(null)
-        setSelectedName('')
-        setTool('edit')
-        setInteraction(null)
-        setStatus(text.loadedOk)
-      } catch (error) {
-        console.error(error)
-        messageApi.error(text.loadFailed)
-        setStatus(text.loadFailed)
+  const interactionRef=useRef(interaction),finishRef=useRef<()=>void>(()=>{})
+  const beforeAction=useCallback(async()=>{flushSync(()=>finishRef.current());await incoming.current?.promise;dispatch({type:'end'})},[dispatch])
+  const hasPendingEdits=useCallback(()=>interactionRef.current!==null||incoming.current!==null,[])
+  const clearImage=()=>{
+    incoming.current?.controller.abort()
+    model.change(draft=>({...draft,source:null,info:null,boxes:[],selectedId:null,detection:null,archive:null}))
+    setInteraction(null);setStatus(text.uploadRemoved)
+  }
+  const applyLoadedImage=(file:File)=>{
+    incoming.current?.controller.abort()
+    const operation={controller:new AbortController(),promise:Promise.resolve()};incoming.current=operation;setPreparing(true)
+    const work=(async()=>{
+      const before=model.current()
+      const prepared=await prepareFineInput(file,retainedBytes())
+      operation.controller.signal.throwIfAborted()
+      const next=await scatterSourceWorker(file,prepared.memoryBudgetBytes,retainedBytes(),operation.controller.signal)
+      if(!alive.current||operation.controller.signal.aborted||incoming.current!==operation||model.current()!==before){next.bitmap.close();if(alive.current&&!operation.controller.signal.aborted)messageApi.warning(lang==='zh'?'文档已改变，请重新选择素材':lang==='ja'?'文書が変わりました。素材を選び直してください':'The document changed; select the image again');return}
+      const color='#'+next.color.slice(0,3).map(value=>value.toString(16).padStart(2,'0')).join('')
+      source.accept(next)
+      model.change(draft=>({...draft,source:file,info:{width:next.width,height:next.height,fileNameBase:file.name.replace(/\.[^.]+$/,'')||'scatter-slice'},boxes:[],selectedId:null,detection:null,archive:null,settings:{...draft.settings,tool:'edit',detect:{...draft.settings.detect,colorKey:color}}}))
+      setInteraction(null);setStatus(text.loadedOk)
+    })().catch(error=>{if(alive.current&&!operation.controller.signal.aborted){messageApi.error(String(error));setStatus(`${text.loadFailed} ${String(error)}`)}})
+    // Stop waiting immediately when a selection is canceled. A source import
+    // already accepted by the project remains an immutable input copy.
+    const canceled=new Promise<void>(resolve=>operation.controller.signal.addEventListener('abort',()=>resolve(),{once:true}))
+    operation.promise=Promise.race([work,canceled]).finally(()=>{if(incoming.current===operation){incoming.current=null;if(alive.current)setPreparing(false)}})
+    return operation.promise
+  }
+  const runTask=async(mode:'detect'|'export')=>{
+    if(controller.current||!raster||preparing)return
+    const abort=new AbortController();controller.current=abort;setBusy(mode);setProgress(0);setCanceling(false)
+    try{
+      await beforeAction();abort.signal.throwIfAborted()
+      const before=model.current();if(!before.source||!before.info)return
+      const operation=mode==='detect'?'image.scatterDetect':'image.scatterExport'
+      const parameters=mode==='detect'?{detect:before.settings.detect,order:before.settings.order}:{layout:reviewScatterExport({boxes:before.boxes,format:before.settings.format,quality:before.settings.quality,namesText:before.settings.namesText,namePerRow:before.settings.namePerRow,order:before.settings.order},before.info.width,before.info.height)}
+      const completed=await runManagedTask(operation,[before.source],{...parameters,renderer:'browser-worker',frontendBytes:retainedBytes()},{signal:abort.signal,onProgress:value=>{if(alive.current)setProgress(old=>Math.max(old,value))},outputFilter:()=>alive.current})
+      if(!alive.current)return
+      if(model.current()!==before){messageApi.warning(lang==='zh'?'编辑已改变，结果保留在项目中':lang==='ja'?'編集が変わりました。結果はプロジェクトに保存されています':'Edits changed; results remain in Project assets');return}
+      if(completed.outputs.length!==2)throw new Error('SCATTER_RESULT_COUNT')
+      const files=completed.outputs.map((output,index)=>{
+        const file=new File([output.blob],index===1?'scatter-report.json':mode==='detect'?'scatter-detection.json':'scatter-slices.zip',{type:index===0&&mode==='export'?'application/zip':'application/json'})
+        imageToolMetadata.set(file,output.version);cacheManagedInput(file,completed.project.id,output.version.id);return file
+      })
+      const result={data:files[0],report:files[1],taskId:completed.taskId},report=JSON.parse(await files[1].text())
+      if(report.operation!==operation)throw new Error('SCATTER_REPORT_OPERATION')
+      scatterReports.set(files[1],report)
+      let boxes:SliceBox[]|undefined
+      if(mode==='detect'){
+        const data=JSON.parse(await files[0].text())
+        if(data.formatVersion!==1||data.width!==before.info.width||data.height!==before.info.height)throw new Error('SCATTER_DETECTION_DIMENSIONS')
+        validateScatterBoxes(data.boxes,data.width,data.height);boxes=data.boxes
       }
-    },
-    [messageApi, setStatus, text.loadFailed, text.loadedOk],
-  )
-
-  const detectSprites = useCallback(() => {
-    if (!imageInfo) {
-      messageApi.warning(text.detectNeedImage)
-      setStatus(text.detectNeedImage)
-      return
-    }
-
-    const sourceCtx = sourceCanvasRef.current.getContext('2d', { willReadFrequently: true })
-    if (!sourceCtx) return
-
-    const { width, height } = imageInfo
-    const imageData = sourceCtx.getImageData(0, 0, width, height).data
-    const active = new Uint8Array(width * height)
-    const visited = new Uint8Array(width * height)
-    const queue = new Uint32Array(width * height)
-    let detectionMode = detect.mode
-
-    if (detectionMode === 'auto') {
-      let usesAlpha = false
-      for (let index = 3; index < imageData.length; index += 4) {
-        if (imageData[index]! < 250) {
-          usesAlpha = true
-          break
-        }
+      abort.signal.throwIfAborted();if(!alive.current||model.current()!==before)return
+      model.change(draft=>mode==='detect'?{...draft,boxes:boxes!,selectedId:boxes![0]?.id??null,detection:result,settings:{...draft.settings,tool:'edit'}}:{...draft,archive:result})
+      if(mode==='detect')setStatus(formatText(text.detectDone,{count:boxes!.length}))
+      else{
+        const url=URL.createObjectURL(result.data),link=document.createElement('a');link.href=url;link.download=sanitizeFileName(before.info.fileNameBase,'scatter-slice')+'-sprites.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
+        setStatus(formatText(text.exportDoneSprites,{count:report.exportedSlices}));messageApi.success(formatText(text.exportDoneSprites,{count:report.exportedSlices}))
       }
-      detectionMode = usesAlpha ? 'alpha' : 'colorkey'
-    }
-
-    const keyColor = hexToRgb(detect.colorKey || sampledBackgroundColor(sourceCtx, imageInfo).hex)
-    for (let y = 0; y < height; y += 1) {
-      for (let x = 0; x < width; x += 1) {
-        const pixelIndex = y * width + x
-        const offset = pixelIndex * 4
-        const r = imageData[offset]!
-        const g = imageData[offset + 1]!
-        const b = imageData[offset + 2]!
-        const a = imageData[offset + 3]!
-        active[pixelIndex] =
-          detectionMode === 'alpha'
-            ? a > detect.threshold
-              ? 1
-              : 0
-            : a > 0 && Math.abs(r - keyColor.r) + Math.abs(g - keyColor.g) + Math.abs(b - keyColor.b) > detect.threshold * 3
-              ? 1
-              : 0
+    }catch(error){if(alive.current){
+      if(error instanceof DOMException&&error.name==='AbortError'){
+        const label=lang==='zh'?'加工已取消':lang==='ja'?'処理を取り消しました':'Processing canceled';messageApi.info(label);setStatus(label)
+      }else{
+        const raw=String(error),label=raw.includes('FILENAME_COLLISION')?lang==='zh'?'切片名称重复或过长，请修改后导出。':lang==='ja'?'ファイル名が重複しているか長すぎます。修正して再実行してください。':'Slice filenames collide or are too long. Rename them before exporting.':raw
+        messageApi.error(label);setStatus(label)
       }
-    }
-
-    const boxes: SliceBox[] = []
-    for (let index = 0; index < active.length; index += 1) {
-      if (!active[index] || visited[index]) continue
-      let head = 0
-      let tail = 0
-      queue[tail] = index
-      tail += 1
-      visited[index] = 1
-      let minX = width
-      let minY = height
-      let maxX = 0
-      let maxY = 0
-      let pixels = 0
-
-      while (head < tail) {
-        const current = queue[head]!
-        head += 1
-        const x = current % width
-        const y = Math.floor(current / width)
-        pixels += 1
-        minX = Math.min(minX, x)
-        minY = Math.min(minY, y)
-        maxX = Math.max(maxX, x)
-        maxY = Math.max(maxY, y)
-
-        if (x > 0) {
-          const next = current - 1
-          if (active[next] && !visited[next]) {
-            visited[next] = 1
-            queue[tail] = next
-            tail += 1
-          }
-        }
-        if (x < width - 1) {
-          const next = current + 1
-          if (active[next] && !visited[next]) {
-            visited[next] = 1
-            queue[tail] = next
-            tail += 1
-          }
-        }
-        if (y > 0) {
-          const next = current - width
-          if (active[next] && !visited[next]) {
-            visited[next] = 1
-            queue[tail] = next
-            tail += 1
-          }
-        }
-        if (y < height - 1) {
-          const next = current + width
-          if (active[next] && !visited[next]) {
-            visited[next] = 1
-            queue[tail] = next
-            tail += 1
-          }
-        }
-      }
-
-      const componentWidth = maxX - minX + 1
-      const componentHeight = maxY - minY + 1
-      if (pixels >= detect.minPixels && componentWidth >= detect.minSide && componentHeight >= detect.minSide) {
-        boxes.push({ id: makeId(), x: minX, y: minY, w: componentWidth, h: componentHeight, kind: 'sprite', name: '' })
-      }
-    }
-
-    const merged: SliceBox[] = []
-    const remaining = [...boxes]
-    while (remaining.length) {
-      let box = remaining.shift()!
-      let changed = true
-      while (changed) {
-        changed = false
-        for (let index = remaining.length - 1; index >= 0; index -= 1) {
-          const other = remaining[index]!
-          const intersects =
-            other.x <= box.x + box.w + detect.mergeGap &&
-            other.x + other.w >= box.x - detect.mergeGap &&
-            other.y <= box.y + box.h + detect.mergeGap &&
-            other.y + other.h >= box.y - detect.mergeGap
-          if (intersects) {
-            const left = Math.min(box.x, other.x)
-            const top = Math.min(box.y, other.y)
-            const right = Math.max(box.x + box.w, other.x + other.w)
-            const bottom = Math.max(box.y + box.h, other.y + other.h)
-            box = { ...box, x: left, y: top, w: right - left, h: bottom - top }
-            remaining.splice(index, 1)
-            changed = true
-          }
-        }
-      }
-      merged.push(box)
-    }
-
-    const sorted = orderedBoxes(merged)
-    setSprites(sorted)
-    setSelectedId(sorted[0]?.id ?? null)
-    setTool('edit')
-    setInteraction(null)
-    setStatus(formatText(text.detectDone, { count: sorted.length }))
-  }, [detect, imageInfo, messageApi, orderedBoxes, setStatus, text.detectDone, text.detectNeedImage])
-
-  const defaultNameFor = useCallback(
-    (box: SliceBox, index: number, ordered: SliceBox[]) => {
-      const explicitNames = parseNames(namesText)
-      if (box.name) return sanitizeFileName(box.name, `slice-${index + 1}`)
-      if (box.kind === 'grid' && namePerRow && explicitNames.length) {
-        const rowName = typeof box.row === 'number' ? explicitNames[box.row] : undefined
-        if (rowName) return sanitizeFileName(`${rowName}-${(box.col ?? 0) + 1}`, `slice-${index + 1}`)
-      }
-      const provided = explicitNames[index]
-      if (provided) return sanitizeFileName(provided, `slice-${index + 1}`)
-      if (box.kind === 'grid') return `r${(box.row ?? 0) + 1}-c${(box.col ?? 0) + 1}`
-      return `sprite-${String(ordered.findIndex((item) => item.id === box.id) + 1).padStart(3, '0')}`
-    },
-    [namePerRow, namesText],
-  )
-
-  const downloadZip = useCallback(async () => {
-    if (!imageInfo) {
-      messageApi.warning(text.detectNeedImage)
-      setStatus(text.detectNeedImage)
-      return
-    }
-    const boxes = orderedBoxes(sprites)
-    if (!boxes.length) {
-      messageApi.warning(text.noExportSlices)
-      setStatus(text.noExportSlices)
-      return
-    }
-    setStatus(formatText(text.exportPreparingSprites, { count: boxes.length }))
-
-    try {
-      const zip = new JSZip()
-      const ordered = orderedBoxes(boxes)
-      for (let index = 0; index < ordered.length; index += 1) {
-        const box = ordered[index]!
-        const blob = await canvasToBlob(cropBox(sourceCanvasRef.current, box), format, quality)
-        zip.file(`${defaultNameFor(box, index, ordered)}.${outputSuffix(format)}`, blob)
-      }
-      const archive = await zip.generateAsync({ type: 'blob' })
-      const url = URL.createObjectURL(archive)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${sanitizeFileName(imageInfo.fileNameBase, 'scatter-slice')}-sprites.zip`
-      a.click()
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
-      const doneText = formatText(text.exportDoneSprites, { count: ordered.length })
-      setStatus(doneText)
-      messageApi.success(doneText)
-    } catch (error) {
-      console.error(error)
-      messageApi.error(String(error))
-    }
-  }, [
-    defaultNameFor,
-    format,
-    imageInfo,
-    messageApi,
-    orderedBoxes,
-    quality,
-    setStatus,
-    sprites,
-    text.detectNeedImage,
-    text.exportDoneSprites,
-    text.exportPreparingSprites,
-    text.noExportSlices,
-  ])
+    }}
+    finally{controller.current=null;if(alive.current){setBusy(null);setCanceling(false)}}
+  }
+  const detectSprites=()=>{void runTask('detect')}
+  const downloadZip=()=>runTask('export')
+  const downloadArchive=()=>{
+    if(!model.draft.archive||!imageInfo)return
+    const url=URL.createObjectURL(model.draft.archive.data),link=document.createElement('a');link.href=url;link.download=sanitizeFileName(imageInfo.fileNameBase,'scatter-slice')+'-sprites.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
+  }
+  const cancelTask=()=>{if(controller.current){setCanceling(true);controller.current.abort()}}
 
   const updateSelectedName = useCallback(
     (value: string) => {
-      setSelectedName(value)
       setSprites((prev) => prev.map((item) => (item.id === selectedId ? { ...item, name: value } : item)))
     },
-    [selectedId],
+    [selectedId,setSprites],
   )
 
   const handlePointerDown = useCallback(
     (event: ReactPointerEvent<HTMLCanvasElement>) => {
-      if (!imageInfo) return
+      if (!imageInfo||!raster||busy) return
       const point = pointFromEvent(event)
       if (!point) return
+      if(tool==='add'&&sprites.length>=MAX_SCATTER_BOXES){
+        setStatus(lang==='zh'?'最多保留 4096 个切片框，请先删除部分画框。':lang==='ja'?'枠は 4096 個までです。枠を削除してから追加してください。':'Use at most 4096 slice boxes. Delete a box before adding another.')
+        return
+      }
       event.currentTarget.setPointerCapture(event.pointerId)
       if (tool === 'add') {
         setInteraction({ type: 'add', start: point, previewBox: { id: makeId(), x: point.x, y: point.y, w: 0, h: 0, name: '' } })
@@ -1126,7 +865,7 @@ export default function RoninProScatterSlice() {
         setInteraction(null)
       }
     },
-    [hitSprite, imageInfo, pointFromEvent, selectedId, sprites, tool],
+    [hitSprite, imageInfo, pointFromEvent, selectedId, sprites, tool,raster,busy,setSelectedId,lang,setStatus],
   )
 
   const handlePointerMove = useCallback(
@@ -1160,29 +899,34 @@ export default function RoninProScatterSlice() {
         )
       }
     },
-    [imageInfo, interaction, pointFromEvent, selectedId],
+    [imageInfo, interaction, pointFromEvent, selectedId,setSprites],
   )
 
   const handlePointerUp = useCallback(() => {
     if (interaction?.type === 'add') {
       const { x, y, w, h } = interaction.previewBox
       if (w >= 4 && h >= 4) {
-        const nextBox: SliceBox = { id: makeId(), x: round(x), y: round(y), w: round(w), h: round(h), kind: 'sprite', name: '' }
+        const left=clamp(round(x),0,imageInfo!.width-1),top=clamp(round(y),0,imageInfo!.height-1)
+        const nextBox: SliceBox = { id: makeId(), x:left,y:top,w:clamp(round(w),1,imageInfo!.width-left),h:clamp(round(h),1,imageInfo!.height-top),kind:'sprite',name:'' }
         setSprites((prev) => [...prev, nextBox])
         setSelectedId(nextBox.id)
         setStatus(text.addedBox)
       }
     }
     setInteraction(null)
-  }, [interaction, setStatus, text.addedBox])
+  }, [interaction, setStatus, text.addedBox,setSprites,setSelectedId,imageInfo])
+
+  useLayoutEffect(()=>{interactionRef.current=interaction;finishRef.current=handlePointerUp},[interaction,handlePointerUp])
 
   const uploadFileList = uploadFile
     ? ([{ uid: 'scatter-source', name: uploadFile.name, originFileObj: uploadFile }] as UploadFile[])
     : []
 
   return (
-    <div style={{ width: '100%' }}>
+    <ScatterDocumentSurface model={model} beforeAction={beforeAction} hasPendingEdits={hasPendingEdits}><div style={{ width: '100%' }}>
       {contextHolder}
+      {(busy||preparing||source.loading)&&<Space style={{marginBottom:12}}><Progress percent={Math.round(progress*100)} style={{width:180}}/><Button loading={canceling} onClick={()=>{if(busy)cancelTask();else if(preparing)incoming.current?.controller.abort();else source.cancel()}}>{lang==='zh'?'取消加工':lang==='ja'?'処理を取消':'Cancel processing'}</Button></Space>}
+      {(source.error||sourceSizeChanged)&&<Space><Text role="alert">{sourceSizeChanged?'SCATTER_SOURCE_SIZE_CHANGED':source.error}</Text><Button onClick={source.retry}>{lang==='zh'?'重试预览':lang==='ja'?'再試行':'Retry preview'}</Button></Space>}
       <div style={{ marginBottom: 18 }}>
         <Title level={5} style={{ marginTop: 0, marginBottom: 8 }}>{text.moduleTitle}</Title>
         <Paragraph type="secondary" style={{ marginBottom: 0, maxWidth: 860, lineHeight: 1.7 }}>
@@ -1236,6 +980,7 @@ export default function RoninProScatterSlice() {
                     <Col xs={24} md={8}>
                       <Text type="secondary" style={{ fontSize: 12 }}>{text.detectMode}</Text>
                       <Select
+                        aria-label={text.detectMode}
                         value={detect.mode}
                         onChange={(value) => setDetect((prev) => ({ ...prev, mode: value }))}
                         style={{ width: '100%', marginTop: 6 }}
@@ -1250,6 +995,7 @@ export default function RoninProScatterSlice() {
                       <Text type="secondary" style={{ fontSize: 12 }}>{text.colorKey}</Text>
                       <Input
                         type="color"
+                        aria-label={text.colorKey}
                         value={detect.colorKey}
                         onChange={(e) => setDetect((prev) => ({ ...prev, colorKey: e.target.value }))}
                         style={{ width: '100%', marginTop: 6, padding: 4, height: 32 }}
@@ -1258,6 +1004,8 @@ export default function RoninProScatterSlice() {
                     <Col xs={24} md={8}>
                       <Text type="secondary" style={{ fontSize: 12 }}>{text.selectedName}</Text>
                       <Input
+                        aria-label={text.selectedName}
+                        maxLength={1000}
                         value={selectedName}
                         onChange={(e) => updateSelectedName(e.target.value)}
                         placeholder={text.selectedNamePlaceholder}
@@ -1294,7 +1042,7 @@ export default function RoninProScatterSlice() {
                     <Col xs={12} md={6}>
                       <Text type="secondary" style={{ fontSize: 12 }}>{text.minPixels}</Text>
                       <InputNumber
-                        min={1}
+                        min={1} max={900000000} precision={0} aria-label={text.minPixels}
                         value={detect.minPixels}
                         onChange={(v) => setDetect((prev) => ({ ...prev, minPixels: Math.max(1, Number(v) || 1) }))}
                         style={{ width: '100%', marginTop: 6 }}
@@ -1303,7 +1051,7 @@ export default function RoninProScatterSlice() {
                     <Col xs={12} md={6}>
                       <Text type="secondary" style={{ fontSize: 12 }}>{text.minSide}</Text>
                       <InputNumber
-                        min={1}
+                        min={1} max={30000} precision={0} aria-label={text.minSide}
                         value={detect.minSide}
                         onChange={(v) => setDetect((prev) => ({ ...prev, minSide: Math.max(1, Number(v) || 1) }))}
                         style={{ width: '100%', marginTop: 6 }}
@@ -1311,7 +1059,7 @@ export default function RoninProScatterSlice() {
                     </Col>
                     <Col xs={24} md={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Space wrap>
-                        <Button onClick={detectSprites}>{text.autoDetect}</Button>
+                        <Button disabled={!raster||!!busy||preparing} loading={busy==='detect'} onClick={detectSprites}>{text.autoDetect}</Button>
                         <Button type={tool === 'edit' ? 'primary' : 'default'} icon={<EditOutlined />} onClick={() => setTool('edit')}>
                           {text.editTool}
                         </Button>
@@ -1327,14 +1075,13 @@ export default function RoninProScatterSlice() {
                               return
                             }
                             const remaining = sprites.filter((item) => item.id !== selectedId)
-                            setSprites(remaining)
-                            setSelectedId(remaining[0]?.id ?? null)
+                            model.change(draft=>({...draft,boxes:remaining,selectedId:remaining[0]?.id??null}))
                             setStatus(text.deletedBox)
                           }}
                         >
                           {text.deleteSelected}
                         </Button>
-                        <Button onClick={() => { setSprites([]); setSelectedId(null); setSelectedName(''); setStatus(text.clearedBoxes) }}>
+                        <Button onClick={() => { model.change(draft=>({...draft,boxes:[],selectedId:null}));setStatus(text.clearedBoxes) }}>
                           {text.clearAll}
                         </Button>
                       </Space>
@@ -1351,7 +1098,7 @@ export default function RoninProScatterSlice() {
             <Card styles={{ body: { padding: 18 } }} style={{ ...PANEL_STYLE, minHeight: 760, background: 'linear-gradient(180deg, rgba(255,255,255,0.96), rgba(244,236,224,0.96))' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' }}>
               <div>
-                <Text type="secondary" style={{ display: 'block', letterSpacing: 0.3 }}>Preview</Text>
+                <Text type="secondary" style={{ display: 'block', letterSpacing: 0.3 }}>{lang==='zh'?'预览':lang==='ja'?'プレビュー':'Preview'}</Text>
                 <Title level={4} style={{ margin: '6px 0 0', fontSize: 28 }}>{stageTitle}</Title>
               </div>
               <Space wrap size={[12, 8]} style={{ justifyContent: 'flex-end' }}>
@@ -1377,6 +1124,7 @@ export default function RoninProScatterSlice() {
                 <div style={{ minWidth: 120 }}>
                   <Text type="secondary" style={{ fontSize: 12 }}>{text.zoom}</Text>
                   <Select
+                    aria-label={text.zoom}
                     value={zoom}
                     onChange={(value) => {
                       setZoom(value)
@@ -1408,6 +1156,8 @@ export default function RoninProScatterSlice() {
                 <canvas ref={imageCanvasRef} />
                 <canvas
                   ref={overlayCanvasRef}
+                  aria-label={text.previewTitleSprites}
+                  tabIndex={0}
                   style={{ cursor: tool === 'add' ? 'crosshair' : 'default' }}
                   onPointerDown={handlePointerDown}
                   onPointerMove={handlePointerMove}
@@ -1430,7 +1180,7 @@ export default function RoninProScatterSlice() {
             <Card styles={{ body: { padding: 18 } }} style={PANEL_STYLE}>
               <Space direction="vertical" size={10} style={{ width: '100%' }}>
                 <Text strong>{text.statusTitle}</Text>
-                <Text type="secondary" style={{ lineHeight: 1.7 }}>{statusText}</Text>
+                <Text type="secondary" style={{ lineHeight: 1.7 }}>{statusText||(imageInfo?(lang==='zh'?'已读取项目文档':lang==='ja'?'プロジェクト文書を読み込みました':'Project document loaded'):text.statusDefault)}</Text>
               </Space>
             </Card>
           </Col>
@@ -1442,6 +1192,7 @@ export default function RoninProScatterSlice() {
                   <Col xs={24} md={8}>
                     <Text type="secondary" style={{ fontSize: 12 }}>{text.exportFormat}</Text>
                     <Select
+                      aria-label={text.exportFormat}
                       value={format}
                       onChange={(value) => setFormat(value)}
                       style={{ width: '100%', marginTop: 4 }}
@@ -1455,6 +1206,7 @@ export default function RoninProScatterSlice() {
                   <Col xs={24} md={8}>
                     <Text type="secondary" style={{ fontSize: 12 }}>{text.exportOrder}</Text>
                     <Select
+                      aria-label={text.exportOrder}
                       value={order}
                       onChange={(value) => setOrder(value)}
                       style={{ width: '100%', marginTop: 4 }}
@@ -1481,6 +1233,7 @@ export default function RoninProScatterSlice() {
                   <Col xs={24} md={16}>
                     <Text type="secondary" style={{ fontSize: 12 }}>{text.exportNames}</Text>
                     <TextArea
+                      maxLength={256*1024} aria-label={text.exportNames}
                       value={namesText}
                       onChange={(e) => setNamesText(e.target.value)}
                       rows={2}
@@ -1490,10 +1243,15 @@ export default function RoninProScatterSlice() {
                   </Col>
                   <Col xs={24} md={8} style={{ display: 'flex', alignItems: 'end' }}>
                     <Space direction="vertical" size={10} style={{ width: '100%' }}>
-                      <Checkbox checked={namePerRow} onChange={(e) => setNamePerRow(e.target.checked)}>
+                      {model.draft.archive&&<>
+                        <Text type="secondary">{String(archiveReport?.format??'').toUpperCase()} · {String(archiveReport?.exportedSlices??'')} {lang==='zh'?'个已有切片':lang==='ja'?'枚の保存済み画像':'saved slices'}</Text>
+                        {archiveOutdated&&<Text type="secondary">{lang==='zh'?'已有 ZIP 来自上次导出；应用新参数请重新执行。':lang==='ja'?'前回の ZIP です。新しい設定を適用するには再実行してください。':'The saved ZIP is from the previous export. Run again to apply current settings.'}</Text>}
+                        <Button icon={<DownloadOutlined/>} onClick={downloadArchive}>{lang==='zh'?'下载已有 ZIP':lang==='ja'?'保存済み ZIP をダウンロード':'Download saved ZIP'}</Button>
+                      </>}
+                      <Checkbox disabled={!sprites.some(box=>box.kind==='grid')} title={lang==='zh'?'按行命名用于网格切片；零散区域使用文件名列表。':lang==='ja'?'行名はグリッド用です。散在領域はファイル名リストを使います。':'Row names apply to grid cells; scattered regions use the filename list.'} checked={namePerRow} onChange={(e) => setNamePerRow(e.target.checked)}>
                         {text.exportNamePerRow}
                       </Checkbox>
-                      <Button type="primary" icon={<DownloadOutlined />} onClick={() => void downloadZip()} block>
+                      <Button type="primary" icon={<DownloadOutlined />} disabled={!raster||!!busy||preparing||!sprites.length} loading={busy==='export'} onClick={() => void downloadZip()} block>
                         {text.downloadSpriteZip}
                       </Button>
                     </Space>
@@ -1504,6 +1262,6 @@ export default function RoninProScatterSlice() {
           </Col>
         </Row>
       </Space>
-    </div>
+    </div></ScatterDocumentSurface>
   )
 }
