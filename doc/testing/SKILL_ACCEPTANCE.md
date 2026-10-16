@@ -235,3 +235,13 @@ JPEG 的 VideoFrame 路径曾产生最多 36 的通道误差，改为 bitmap 解
 6000×6000 大图在 Worker 发出 processing 后取消，取消控件及状态约 392ms 内反馈，最终任务 canceled、结果为空；源图准备取消约 404ms，原文档保留。预览取消、延迟后仍不接收结果及重试通过。延迟上传时改参数，旧结果仅保留项目；返回工具列表后大图识别任务成功。8192×8192 输入被共享准备预算拒绝，保留原图，并持续显示具体错误。以上不是浏览器和后台进程联合 RSS 或全部编码阶段停止的实测。
 
 35 Python / 48 JS、运行时及工作台构建、相关 ESLint 与 Skill 校验通过；详细记录见 [零散切图证据](evidence/skill-scatter.json)。复现：构建 browser-oracle 并从其页面运行散图对照、下载 ZIP，再用 `tests/compare_scatter_oracle.py <download.zip> --output <report.json>` 同时核对新原版、迁移版和冻结基线。S2/S3/S4 其余模块、联合内存、完整 AI 和分发继续实施。
+
+## 2026-10-16：自定义切片处理内核检查点
+
+新增接缝方案、按已审阅布局切片、由正式 ZIP 重排合成三条受控宿主 Worker 操作。原成熟 L7/均分、透明行列检测、区域裁切、行带错位、单行折线及重排代码独立保留；不将全局 Alpha 搜索分块。原 RoninProCustomSlice 界面本次尚未切换，不能把此记录视为整个模块的交互/取消/保存已经验收。
+
+真实浏览器对照 43 项全部严格相同：10 个 L7/均分/自动方案 JSON、26 个 ZIP、7 个重排 PNG。覆盖小数区域/边缘、余数与比像素密的网格、正负错位、顶/中/底拐点、JPEG 色度采样/渐进/CMYK/灰度/方向、ICC PNG/WebP，以及不同尺寸帧的右对齐、居中、负数镜像、空格、重复及四向补边。ZIP 保留原成员顺序/名称/尺寸和解码 RGBA，合成同样严格比较尺寸、格式及 RGBA。
+
+43 个真实浏览器输出经独立正式项目的队列、内容校验和统一发布全部成功，编码字节保持不变；SQLite 与 101 个版本校验通过。额外回归覆盖未知字段、图外区域、非单调切线、超范围偏移、非法/布尔帧索引、预算、计划篡改、ZIP 越界成员和取消后迟到登记拒绝。该登记驱动由测试脚本发送已下载的真实 Worker 内容，不冒充工作台按钮到结果的闭环。
+
+36 Python / 52 JS、运行时与工作台构建、相关 ESLint 和 Skill 校验通过。详情见 [自定义切片内核证据](evidence/skill-custom-slice-engine.json)。复现 browser-oracle 的 custom slice 控件后，使用 `tests/compare_custom_oracle.py <download.zip> --output <report.json>`；`tests/accept_custom_oracle.py` 可将同一下载内容送入新的空验收项目。专用文档、撤销/恢复、原 L7 拖拽、重排 TXT、扩边预设、实际取消/导航及联合内存仍继续实施，S2/S3/S4 保持未完成。

@@ -101,3 +101,17 @@ Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态�
 预算含 256 MiB 余量、源像素×32、文件字节×8、前端保留量和 16384×512 区域余量；导出另加全部裁片像素×16及最大裁片像素×16。输入准备还受共享精细入口的更保守预算约束。收到 JSON 时校验尺寸、字段和画框；收到 ZIP 时核对成员完整顺序/名称、实际图片格式及 floor(w)×floor(h)，拒绝目录、加密、链接与未支持压缩方式，不解压到文件系统。编码总量上限 min(预算/4,128MiB)。
 
 `/browser/result` 仍只接受 generation 和上传内容，不使用客户端路径；先完整校验，再在写入锁中复验执行代次并交付 JSON 或 ZIP。统一完成事务登记结果和报告。取消立即失效并 terminate Worker；前端参数/输入/画框改变后旧结果只留项目。关闭浏览器标签的失联语义与其他宿主 Worker 相同。
+
+## 自定义切片处理内核
+
+以下三个操作的处理内核和统一登记已验证，原 RoninPro 自定义切片界面尚未迁入该协议；完整交互、文档及取消仍待验收。三者均为 `renderer=browser-worker`、requiresWorkbench=true，CLI 与通用提案直接执行拒绝，不创建无人提供浏览器结果的任务。
+
+`image.customSlicePlan` 接收一个静态 PNG/JPEG/WebP（≤20 MiB），参数为 mode（grid/auto）、columns/rows（1–64）、refine（l7/uniform）、bandPercent（10–50）及 frontendBytes。使用原透明行列检测、整行/列 Alpha 搜索及相同代价时的最近名义切线规则。单行保持均匀竖线，拐点默认为高度一半。返回格式 1 的 JSON、源尺寸、行列、完整边界、零行偏移、bendY/deltaX，以及参数报告。自动检测可超过 64 行或列，但总格数不超过 4096。
+
+`image.customSlice` 接收严格 layout：grid 的 columns/rows；regions 的 `{id,x,y,w,h}[]`；bands 的 colStarts/rowStarts/bandColOffset；或 polyline 的 colStarts/bendY/deltaX。字段按模式精确匹配。保留原余数格、小数区域取整、右/下边缘裁断、多行错位、单行折线的两矩形硬拷贝及拐点为 0 时的多边形裁切。网格比源像素密时保留原最小 1px 格行为。自定义区域起点必须在源图内，拒绝原先可能产生无意义透明 1px 的图外起点；宽高跨越边缘时仍按原算法截到边缘。
+
+输出为按零起始序号命名的 `frame_000.png` 等 ZIP 和报告，最多 4096 帧。ZIP 不增加清单文件，保持原导出结构；报告单独记录每帧尺寸。接收端核对完整成员名、顺序、PNG 格式、单帧及预计尺寸，完全解码后才允许统一发布。
+
+`image.customCompose` 读取一个已导入的切片 ZIP，composition 包含 rows、columns、grid、expandUp/Down/Left/Right。格数最多 4096，每方向补边 0–128；grid 严格为对应矩阵，0 留空，正数为从 1 开始的帧，负数水平镜像。保留最大尺寸格子内的右对齐、垂直居中及整格镜像。输出真实 PNG 和报告，目标边长不超过 30000。扩边预设仅为前端参数设置，待工作台迁移时一并验证。
+
+源图/切片预算包含 256 MiB 余量、源像素×40、文件字节×8、前端保留量、全部输出像素×16及最大帧像素×16。合成在 ZIP 膨胀前检查中央目录：最多 128 MiB 压缩文件、min(预算/8,128MiB) 成员编码总量，仅按顺序的 PNG、无目录/链接/加密，支持 STORE/DEFLATE。合成预算另计压缩字节×4、展开 PNG 字节×4、最大帧像素×40、输出像素×32和前端保留量；逐次解码所需帧并关闭，避免把所有帧同时解码。JPEG 直接裁切使用已对照的 ImageDecoder/VideoFrame 路径；不继承散图工具的中间画布解码假设。

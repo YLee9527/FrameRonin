@@ -643,26 +643,26 @@
     "originalEntry": "自定义切片",
     "implementation": "reference/frontend/src/components/RoninProCustomSlice.tsx",
     "inputs": "image",
-    "outputs": "PNG ZIP",
-    "dependencies": "Canvas/JSZip",
+    "outputs": "PNG frame ZIP, rearranged PNG, parameter TXT",
+    "dependencies": "host Canvas Worker/JSZip + local queue; legacy UI migration pending",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomSlice.tsx",
-    "sample": "fixed-image-custom-slice",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "assets/fixtures/custom-slice: 10 plans + 26 ZIPs + 7 compositions",
+    "evidence": "doc/testing/evidence/skill-custom-slice-engine.json",
+    "status": "processing kernel and 43 original-oracle/publication cases passed; complete workbench/document/interaction acceptance pending",
+    "limits": "static image ≤20 MiB; host Worker required; 4096 cells; 128 MiB ZIP/encoded caps and full operation budget; GUI still awaits managed integration"
   },
   {
     "id": "image.seam-preview",
     "originalEntry": "自定义切片",
     "implementation": "reference/frontend/src/components/RoninProCustomSlice.tsx",
     "inputs": "image",
-    "outputs": "PNG ZIP",
-    "dependencies": "Canvas/JSZip",
+    "outputs": "interactive seam layout; PNG ZIP via custom slice",
+    "dependencies": "host Canvas Worker/JSZip + local queue; legacy UI migration pending",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomSlice.tsx",
-    "sample": "fixed-image-seam-preview",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "assets/fixtures/custom-slice: 10 plans + 26 ZIPs + 7 compositions",
+    "evidence": "doc/testing/evidence/skill-custom-slice-engine.json",
+    "status": "processing kernel and 43 original-oracle/publication cases passed; complete workbench/document/interaction acceptance pending",
+    "limits": "static image ≤20 MiB; host Worker required; 4096 cells; 128 MiB ZIP/encoded caps and full operation budget; GUI still awaits managed integration"
   },
   {
     "id": "image.resize-hard",

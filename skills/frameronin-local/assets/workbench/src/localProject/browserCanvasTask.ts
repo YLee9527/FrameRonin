@@ -2,7 +2,7 @@ import { jsonPost, localJson } from './api'
 
 type Ready={ready:boolean;generation?:number;state?:string}
 /** Runs beyond its component's lifetime. The existing queue owns publication;
- * this Worker supplies only a PNG, never paths, task state or version IDs. */
+ * this Worker supplies only encoded content, never paths, task state or version IDs. */
 export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void,options:{operation:string;budgetBytes:number}={operation:'image.customScale',budgetBytes:0}){
   let worker:Worker|null=null,timer:ReturnType<typeof setInterval>|null=null,generation:number|undefined
   let heartbeatFailure:((reason:unknown)=>void)|null=null
@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=options.operation.startsWith('image.scatter')?new Worker(new URL('../lib/scatterSlice.worker.ts',import.meta.url),{type:'module'}):
+    worker=['image.customSlicePlan','image.customSlice','image.customCompose'].includes(options.operation)?new Worker(new URL('../lib/customSlice.worker.ts',import.meta.url),{type:'module'}):
+      options.operation.startsWith('image.scatter')?new Worker(new URL('../lib/scatterSlice.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.expandShrink'?new Worker(new URL('../lib/expandShrink.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.normal'?new Worker(new URL('../lib/normalImage.worker.ts',import.meta.url),{type:'module'}):
       new Worker(new URL('../lib/smoothResize.worker.ts',import.meta.url),{type:'module'})

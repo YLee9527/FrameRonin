@@ -272,6 +272,48 @@ class ProjectTests(unittest.TestCase):
         final=task(self.project,created['id']);self.assertEqual(final['results'],[]);self.assertEqual(final['generation'],1)
         time.sleep(.2);self.assertEqual(task(self.project,created['id'])['results'],[])
 
+    def test_custom_slice_plan_zip_and_signed_composition_use_reviewed_geometry(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        from frameronin_engine.custom_slice import archive_sizes
+        plan={'operation':'image.customSlicePlan','inputs':[self.version['id']],'parameters':{'columns':2,'rows':2,'refine':'uniform'}}
+        slicing={'operation':'image.customSlice','inputs':[self.version['id']],'parameters':{'layout':{'mode':'grid','columns':2,'rows':2}}}
+        for payload in [plan,slicing]:
+            self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+            with self.assertRaises(RoninError):submit(self.project,payload)
+        for layout in [{'mode':'grid','columns':65,'rows':1},{'mode':'regions','regions':[{'id':'one','x':16,'y':0,'w':1,'h':1}]},
+            {'mode':'polyline','colStarts':[0,8,16],'bendY':5,'deltaX':8},{'mode':'bands','colStarts':[0,10,8,16],'rowStarts':[0,12],'bandColOffset':[0]},
+            {'mode':'grid','columns':2,'rows':2,'command':'run'}]:
+            with self.assertRaises(RoninError):preview(self.project,{**slicing,'parameters':{'layout':layout}})
+        def running(payload):
+            created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+            while not ready(self.project,created['id'])['ready']:
+                self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+            return created['id']
+        tid=running(plan);file=self.root/'custom-plan.json'
+        value={'formatVersion':1,'width':16,'height':12,'columns':2,'rows':2,'colStarts':[0,8,16],'rowStarts':[0,6,12],'bandColOffset':[0,0],'bendY':6,'deltaX':0}
+        for invalid in [{**value,'columns':3},{**value,'deltaX':1},{**value,'extra':'read-file'}]:
+            file.write_text(json.dumps(invalid))
+            with self.assertRaises(RoninError):accept(self.project,tid,0,file)
+        file.write_text(json.dumps(value));accept(self.project,tid,0,file);completed=wait(self.project,tid,10)
+        self.assertEqual(completed['state'],'succeeded',completed)
+        tid=running(slicing);archive=self.root/'custom-slices.zip';frame=self.root/'custom-frame.png';Image.new('RGBA',(8,6),(10,40,90,128)).save(frame)
+        with zipfile.ZipFile(archive,'w') as zip:
+            for i in range(4):zip.write(frame,f'frame_{i:03d}.png')
+        accept(self.project,tid,0,archive);completed=wait(self.project,tid,10);self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text());self.assertEqual(report['outputFrames'],4);self.assertEqual(report['frameSizes'],[{'w':8,'h':6}]*4)
+        composition={'rows':2,'columns':2,'grid':[[1,-2],[4,0]],'expandUp':1,'expandDown':2,'expandLeft':1,'expandRight':2}
+        compose={'operation':'image.customCompose','inputs':[completed['results'][0]],'parameters':{'composition':composition}}
+        for change in [{'grid':[[1,5],[0,0]]},{'grid':[[1,True],[0,0]]},{'rows':10**800},{'expandUp':129},{'command':'run'}]:
+            with self.assertRaises(RoninError):preview(self.project,{**compose,'parameters':{'composition':{**composition,**change}}})
+        self.assertTrue(preview(self.project,compose)['requiresWorkbench']);tid=running(compose);png=self.root/'composed.png';Image.new('RGBA',(22,18)).save(png);accept(self.project,tid,0,png)
+        completed=wait(self.project,tid,10);self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text());self.assertEqual((report['width'],report['height'],report['sourceFrames']),(22,18,4))
+        tid=running(compose);cancel(self.project,tid)
+        with self.assertRaises(Cancelled):accept(self.project,tid,0,png)
+        with zipfile.ZipFile(archive,'w') as zip:zip.write(frame,'../outside.png')
+        with self.assertRaises(RoninError):archive_sizes(archive,2*1024**3)
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_scatter_review_and_json_zip_publication_rejects_unreviewed_or_late_results(self):
         from frameronin_engine.browser_tasks import ready,accept
         from frameronin_engine.scatter import DETECT_DEFAULTS

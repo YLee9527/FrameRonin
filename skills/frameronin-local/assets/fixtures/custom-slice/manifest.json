@@ -1,0 +1,841 @@
+{
+  "plan": [
+    {
+      "id": "grid-uniform-1",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "grid",
+        "columns": 3,
+        "rows": 1,
+        "refine": "uniform",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "grid-uniform-2",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "grid",
+        "columns": 3,
+        "rows": 2,
+        "refine": "uniform",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "grid-l7-1",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "grid",
+        "columns": 3,
+        "rows": 1,
+        "refine": "l7",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "grid-l7-2",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "grid",
+        "columns": 3,
+        "rows": 2,
+        "refine": "l7",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "auto-uniform-1",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "auto",
+        "columns": 3,
+        "rows": 1,
+        "refine": "uniform",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "auto-uniform-2",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "auto",
+        "columns": 3,
+        "rows": 2,
+        "refine": "uniform",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "auto-l7-1",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "auto",
+        "columns": 3,
+        "rows": 1,
+        "refine": "l7",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "auto-l7-2",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "auto",
+        "columns": 3,
+        "rows": 2,
+        "refine": "l7",
+        "bandPercent": 25
+      }
+    },
+    {
+      "id": "band-10",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "grid",
+        "columns": 3,
+        "rows": 2,
+        "refine": "l7",
+        "bandPercent": 10
+      }
+    },
+    {
+      "id": "band-50",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "mode": "grid",
+        "columns": 3,
+        "rows": 2,
+        "refine": "l7",
+        "bandPercent": 50
+      }
+    }
+  ],
+  "slice": [
+    {
+      "id": "grid-remainders",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "grid-identity",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 1,
+          "rows": 1
+        }
+      }
+    },
+    {
+      "id": "custom-fractional",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "regions",
+          "regions": [
+            {
+              "id": "one",
+              "x": 1.9,
+              "y": 2.9,
+              "w": 19.9,
+              "h": 12.1
+            },
+            {
+              "id": "two",
+              "x": 31,
+              "y": 25,
+              "w": 100,
+              "h": 100
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "bands-jagged",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "bands",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "rowStarts": [
+            0,
+            14,
+            29
+          ],
+          "bandColOffset": [
+            2,
+            -2
+          ]
+        }
+      }
+    },
+    {
+      "id": "poly-0--3",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 0,
+          "deltaX": -3
+        }
+      }
+    },
+    {
+      "id": "poly-0-0",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 0,
+          "deltaX": 0
+        }
+      }
+    },
+    {
+      "id": "poly-0-3",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 0,
+          "deltaX": 3
+        }
+      }
+    },
+    {
+      "id": "poly-14--3",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 14,
+          "deltaX": -3
+        }
+      }
+    },
+    {
+      "id": "poly-14-0",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 14,
+          "deltaX": 0
+        }
+      }
+    },
+    {
+      "id": "poly-14-3",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 14,
+          "deltaX": 3
+        }
+      }
+    },
+    {
+      "id": "poly-29--3",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 29,
+          "deltaX": -3
+        }
+      }
+    },
+    {
+      "id": "poly-29-0",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 29,
+          "deltaX": 0
+        }
+      }
+    },
+    {
+      "id": "poly-29-3",
+      "input": "custom-slice/sheet.png",
+      "parameters": {
+        "layout": {
+          "mode": "polyline",
+          "colStarts": [
+            0,
+            11,
+            24,
+            37
+          ],
+          "bendY": 29,
+          "deltaX": 3
+        }
+      }
+    },
+    {
+      "id": "subpixel-grid",
+      "input": "custom-slice/tiny.png",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 4,
+          "rows": 4
+        }
+      }
+    },
+    {
+      "id": "source-photo-jpg",
+      "input": "scatter/photo.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-jpeg-444-jpg",
+      "input": "scatter/jpeg-444.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-jpeg-422-jpg",
+      "input": "scatter/jpeg-422.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-jpeg-progressive-jpg",
+      "input": "scatter/jpeg-progressive.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-jpeg-gray-jpg",
+      "input": "scatter/jpeg-gray.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-jpeg-cmyk-jpg",
+      "input": "scatter/jpeg-cmyk.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-jpeg-orientation8-jpg",
+      "input": "scatter/jpeg-orientation8.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-oriented-jpg",
+      "input": "scatter/oriented.jpg",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-oriented-png",
+      "input": "scatter/oriented.png",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-oriented-webp",
+      "input": "scatter/oriented.webp",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-profiled-png",
+      "input": "scatter/profiled.png",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    },
+    {
+      "id": "source-alpha-webp",
+      "input": "scatter/alpha.webp",
+      "parameters": {
+        "layout": {
+          "mode": "grid",
+          "columns": 3,
+          "rows": 2
+        }
+      }
+    }
+  ],
+  "compose": [
+    {
+      "id": "identity",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 1,
+          "columns": 3,
+          "grid": [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          "expandUp": 0,
+          "expandDown": 0,
+          "expandLeft": 0,
+          "expandRight": 0
+        }
+      }
+    },
+    {
+      "id": "flip",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 1,
+          "columns": 3,
+          "grid": [
+            [
+              1,
+              -2,
+              -3
+            ]
+          ],
+          "expandUp": 0,
+          "expandDown": 0,
+          "expandLeft": 0,
+          "expandRight": 0
+        }
+      }
+    },
+    {
+      "id": "repeat-empty",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 2,
+          "columns": 3,
+          "grid": [
+            [
+              2,
+              0,
+              -2
+            ],
+            [
+              1,
+              3,
+              1
+            ]
+          ],
+          "expandUp": 0,
+          "expandDown": 0,
+          "expandLeft": 0,
+          "expandRight": 0
+        }
+      }
+    },
+    {
+      "id": "padding",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 2,
+          "columns": 2,
+          "grid": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              -1
+            ]
+          ],
+          "expandUp": 2,
+          "expandDown": 3,
+          "expandLeft": 4,
+          "expandRight": 5
+        }
+      }
+    },
+    {
+      "id": "up-only",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 1,
+          "columns": 3,
+          "grid": [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          "expandUp": 30,
+          "expandDown": 0,
+          "expandLeft": 0,
+          "expandRight": 0
+        }
+      }
+    },
+    {
+      "id": "maximum-padding",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 1,
+          "columns": 1,
+          "grid": [
+            [
+              -3
+            ]
+          ],
+          "expandUp": 128,
+          "expandDown": 128,
+          "expandLeft": 128,
+          "expandRight": 128
+        }
+      }
+    },
+    {
+      "id": "all-empty",
+      "input": "custom-slice/sheet.png",
+      "layout": {
+        "mode": "regions",
+        "regions": [
+          {
+            "id": "a",
+            "x": 1,
+            "y": 1,
+            "w": 11,
+            "h": 13
+          },
+          {
+            "id": "b",
+            "x": 20,
+            "y": 4,
+            "w": 16,
+            "h": 7
+          },
+          {
+            "id": "c",
+            "x": 15,
+            "y": 18,
+            "w": 8,
+            "h": 10
+          }
+        ]
+      },
+      "parameters": {
+        "composition": {
+          "rows": 2,
+          "columns": 2,
+          "grid": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "expandUp": 0,
+          "expandDown": 0,
+          "expandLeft": 0,
+          "expandRight": 0
+        }
+      }
+    }
+  ],
+  "originalSource": "reference/frontend/src/components/RoninProCustomSlice.tsx",
+  "originalSha256": "4875bb264060546378196538f75ca432f1986203d5568c007f676fcdf1fc7a58",
+  "sources": {
+    "custom-slice/sheet.png": "ac7c3f8992068bbf9c0c351e0db05b57729f0e8cb88a633487b8adb10d1ec2f0",
+    "custom-slice/tiny.png": "b84fa07897e28728bb042af28328b09c4eefe41209c357900d6155206f93918e",
+    "scatter/alpha.webp": "b37e07f9538e64d366742cf01d114989cc103a21a5b22a99ccf298efbad36755",
+    "scatter/jpeg-422.jpg": "2610345802f5a16c7e6e8c107d4072d4af3b1cc6820eda1ae5ab9784dd3bbec0",
+    "scatter/jpeg-444.jpg": "1d885af5a98ceaaaa0474787530f93ddaa9af9e30db9742609afae655c19c389",
+    "scatter/jpeg-cmyk.jpg": "8b079967e1820da147294151a6508ef6cd8eaba3d64d1edeaba3b6d7d0d63868",
+    "scatter/jpeg-gray.jpg": "2c660f3b3135deb267281955c52829bc25c207e34d9f0143cd493823c9bb4a6d",
+    "scatter/jpeg-orientation8.jpg": "ff84fe1252b3f511fd0ca4bcbad8f4222a65a2126d5a7b1e4140066445be14a7",
+    "scatter/jpeg-progressive.jpg": "f20d0f1e0c71a3bb6e6a984a05eca915faf72f892d611f276c6abf408f8c31af",
+    "scatter/oriented.jpg": "982f820df903b94af60a7847501d4d4e537501873fcb9865f6b3660e7c77f47e",
+    "scatter/oriented.png": "66ee28cfccce540d2b819fa8686c357cc984b0d341f2cbc87aa282693a4974d8",
+    "scatter/oriented.webp": "83be4d2b6cfaee0d7814823c0e49fe204e00b554e46069e9587c60f17b17cb88",
+    "scatter/photo.jpg": "99bc0f06f8ae654e670cd1d200380e56d23541827dccd2d4ac74f78488d91607",
+    "scatter/profiled.png": "e78a698f1615f165ba0b14c16176651150e101a15b66980a043a4dd4abb257bf"
+  }
+}

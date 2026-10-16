@@ -47,3 +47,5 @@ export {scatterDetectDefaults,validateScatterDetect,validateScatterBoxes,ordered
 export {initialScatterDraft,validateStoredScatter,serializeScatter,restoreScatter} from '../../assets/workbench/src/localProject/scatterDocument'
 export {createScatterHistory,scatterHistoryReducer} from '../../assets/workbench/src/localProject/useScatterDocument'
 export {scatterSourceWorker} from '../../assets/workbench/src/lib/scatterSourceWorker'
+
+export {computeCustomPlan,validateCustomPlan,validateCustomPlanParameters,validateCustomLayout,customSliceSizes,checkCustomSliceBudget,exportCustomSlices,validateCustomCompose,customComposeSize,checkCustomComposeBudget,inspectCustomZip,composeCustomSlices} from '../../assets/workbench/src/lib/customSlice'

@@ -1,4 +1,5 @@
 import {originalScatterDetect,originalScatterExport} from '../.runtime/oracle/original-scatter'
+import {originalCustomPlan,originalCustomSplit,originalCustomCompose} from '../.runtime/oracle/original-custom-slice'
 import {reviewScatterExport} from '../assets/workbench/src/lib/scatterSlice'
 import {originalExpandShrink} from '../.runtime/oracle/original-expand-shrink'
 import { featheredImageCanvas, makeRelativeTemplate, layeredPsdBlob } from '../.runtime/oracle/original-map'
@@ -322,7 +323,28 @@ async function runScatter(){
   }
   await publish(zip,'browser-scatter.zip');status.textContent=`Scatter complete: ${fixture.detect.length} detections and ${fixture.export.length} ZIP exports`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter]] as const) {
+async function runCustomSlice(){
+ const fixture=await(await fetch('/custom-slice/manifest.json')).json(),zip=new JSZip()
+ for(const kind of ['plan','slice','compose'] as const)for(const entry of fixture[kind]){
+  const source=new File([await(await fetch('/'+entry.input)).blob()],entry.input.split('/').at(-1))
+  const input=kind==='compose'?await originalCustomSplit(source,{layout:entry.layout}):source
+  const original=kind==='plan'?new Blob([JSON.stringify(await originalCustomPlan(source,entry.parameters))],{type:'application/json'}):kind==='slice'?await originalCustomSplit(source,entry.parameters):await originalCustomCompose(input,entry.parameters)
+  const suffix=kind==='plan'?'json':kind==='slice'?'zip':'png'
+  zip.file(`${kind}/${entry.id}/original.${suffix}`,original)
+  if(kind==='compose')zip.file(`${kind}/${entry.id}/input.zip`,input)
+  const worker=new Worker(new URL('../assets/workbench/src/lib/customSlice.worker.ts',import.meta.url),{type:'module'})
+  try{
+   const blob=await new Promise<Blob>((resolve,reject)=>{
+    worker.onerror=event=>reject(new Error(event.message));worker.onmessage=event=>{if(event.data.error)reject(new Error(event.data.error));else if(event.data.blob)resolve(event.data.blob)}
+    worker.postMessage({id:entry.id,generation:0,file:input,operation:kind==='plan'?'image.customSlicePlan':kind==='slice'?'image.customSlice':'image.customCompose',parameters:{...entry.parameters,frontendBytes:0,renderer:'browser-worker'},budgetBytes:2*1024**3})
+   })
+   zip.file(`${kind}/${entry.id}/actual.${suffix}`,blob)
+  }finally{worker.terminate()}
+  status.textContent=`Custom ${kind}: ${entry.id}`
+ }
+ await publish(zip,'browser-custom-slice.zip');status.textContent=`Custom slice complete: ${fixture.plan.length} plans, ${fixture.slice.length} ZIPs, ${fixture.compose.length} compositions`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

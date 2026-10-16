@@ -92,6 +92,16 @@ REGISTRY = {
     'image.scatterExport': operation(['image'],{'layout':{'type':'object','default':{}},
         'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
         'zip_report','reviewed_fractional_slices',overhead=256),
+    'image.customSlicePlan': operation(['image'],{'mode':choice('grid',['grid','auto']),
+        'columns':integer(8,1,64),'rows':integer(4,1,64),'refine':choice('l7',['l7','uniform']),
+        'bandPercent':integer(25,10,50),'renderer':choice('browser-worker',['browser-worker']),
+        'frontendBytes':integer(0,0,2*1024**3)},'json_report','original_alpha_seams',overhead=256),
+    'image.customSlice': operation(['image'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'zip_report','reviewed_grid_regions_or_seams',overhead=256),
+    'image.customCompose': operation(['archive'],{'composition':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'png_report','original_signed_frame_composition',overhead=256),
     'sequence.unifySize': operation(['image+'],{'columns':integer(4,1,64),
         'horizontal':choice('center',['left','center','right']),'vertical':choice('bottom',['top','center','bottom']),
         'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_integer_alignment',overhead=256),
@@ -178,6 +188,9 @@ def preview(project, payload):
     if name in ['image.scatterDetect','image.scatterExport']:
         from .scatter import estimate as scatter_estimate
         estimate=scatter_estimate(versions[0]['metadata'],values,name=='image.scatterExport')
+    if name in ['image.customSlicePlan','image.customSlice','image.customCompose']:
+        from .custom_slice import estimate as custom_estimate
+        estimate=custom_estimate(versions[0],name,values,memory_budget())
     if name=='image.expandShrink':
         source=versions[0]['metadata'];width,height=values['columns']*values['cellWidth'],values['rows']*values['cellHeight']
         if max(width,height,source['width'],source['height'])>30000:raise RoninError('GRID_DIMENSION_LIMIT','Input and output sides must be at most 30000 pixels.')
@@ -333,7 +346,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,
