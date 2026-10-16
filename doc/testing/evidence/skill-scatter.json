@@ -1,6 +1,7 @@
 {
   "date": "2026-10-16",
   "baselineCommit": "ff2763e",
+  "codeCommit": "06a8113",
   "scope": "Scatter detection/manual boxes/PNG JPEG WebP ZIP with managed Worker, strict publication and formal document history. S2/S3/S4 remain incomplete.",
   "original": {
     "source": "reference/frontend/src/components/RoninProScatterSlice.tsx",
