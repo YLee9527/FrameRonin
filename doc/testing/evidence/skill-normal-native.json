@@ -654,5 +654,6 @@
     "case": "direct two-pixel JPEG extendBottom",
     "error": "ReferenceError: createImageBitmap is not defined in the native DOM adapter",
     "resolution": "Use the supported Image decoder before explicit PNG encoding; the dedicated regression now passes"
-  }
+  },
+  "codeCommit": "71803cd"
 }
