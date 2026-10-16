@@ -73,6 +73,13 @@ REGISTRY = {
         'renderer':choice('native',['native','browser-worker']),
         'matteAlgorithm':choice('contiguous',['contiguous','chromaKey','chromaKeyAdaptive']),
         'nonContiguousTolerance':number(5,0,100),'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_resize_and_matte_presets',overhead=256),
+    'image.normal': operation(['image'],{'mode':choice('apply',['apply','mattePreview','extendBottom','rpgMaker','allActions','ancientCostume']),
+        'cropLeft':integer(0,0,30000),'cropTop':integer(0,0,30000),'cropRight':integer(0,0,30000),'cropBottom':integer(0,0,30000),
+        'width':integer(256,1,4096),'height':integer(256,1,4096),'keepAspect':{'type':'boolean','default':True},
+        'pixelated':{'type':'boolean','default':True},'enableMatte':{'type':'boolean','default':False},
+        'background':{'type':'color','default':'#ffffff'},'tolerance':number(40,1,100),'feather':number(5,0,30),
+        'strokeWidth':integer(0,0,20),'strokeColor':{'type':'color','default':'#000000'},
+        'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_normal_image_recipes',overhead=256),
     'sequence.unifySize': operation(['image+'],{'columns':integer(4,1,64),
         'horizontal':choice('center',['left','center','right']),'vertical':choice('bottom',['top','center','bottom']),
         'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_integer_alignment',overhead=256),
@@ -156,6 +163,21 @@ def preview(project, payload):
         raise RoninError('INPUT_KIND', 'A selected asset has an incompatible media kind.')
     pixels = [v['metadata'].get('width', 0) * v['metadata'].get('height', 0) for v in versions]
     estimate = spec['runtimeOverheadMiB'] * 1024**2 + max(pixels, default=0) * 4 * 4
+    if name=='image.normal':
+        source=versions[0]['metadata'];width,height=source.get('displayWidth',source['width']),source.get('displayHeight',source['height'])
+        if source.get('containerFormat')=='WEBP':width,height=source['width'],source['height']
+        if values['mode'] in ['apply','mattePreview']:
+            width-=values['cropLeft']+values['cropRight'];height-=values['cropTop']+values['cropBottom']
+            if min(width,height)<1:raise RoninError('CROP_OUTSIDE_IMAGE','The crop must retain at least one source pixel in each dimension.')
+        if values['mode']=='apply':
+            if not values['pixelated']:raise RoninError('BROWSER_RENDERER_REQUIRED','Smooth normal-image processing requires the original host Canvas renderer; this route is not yet available.')
+            width,height=values['width'],values['height']
+        elif values['mode']=='extendBottom':height+=height//3
+        elif values['mode']=='rpgMaker':width,height=144,192
+        elif values['mode']=='allActions':width,height=252,252
+        elif values['mode']=='ancientCostume':width,height=1024,896
+        if max(width,height)>30000:raise RoninError('NORMAL_DIMENSION_LIMIT','The output must be at most 30000 pixels per side.')
+        estimate+=max(max(pixels),width*height)*64+values['frontendBytes']+source['bytes']*8
     if name in ['image.customScale','sequence.unifySize','image.findDuplicates']:
         if name=='image.customScale':
             if values['mode']=='resize' and not values['pixelated'] and values['renderer']!='browser-worker':

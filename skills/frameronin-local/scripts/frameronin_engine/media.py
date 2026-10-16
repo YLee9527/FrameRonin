@@ -22,7 +22,7 @@ def run(preview, directory, progress):
     browser_gif = name in ['gif.split', 'sequence.gif'] and parameters['renderer'] == 'browser'
     sequence_canvas = name in ['sequence.combine','sequence.stitch','image.sliceBrowser','image.superSlice','image.blank']
     pixel_canvas = name in ['image.pixelate','image.mergeNearby','image.palette16','image.pixellise']
-    ronin_tools = name in ['image.customScale','sequence.unifySize','image.findDuplicates']
+    ronin_tools = name in ['image.customScale','sequence.unifySize','image.findDuplicates','image.normal']
     if name in ['image.perfectPixel', 'workflow.strict', 'workflow.legacy', 'sequence.opticalFlow', 'map.export', 'map.template'] or browser_gif or sequence_canvas or pixel_canvas or ronin_tools:
         from .workflows import ROOT
         node = shutil.which('node')

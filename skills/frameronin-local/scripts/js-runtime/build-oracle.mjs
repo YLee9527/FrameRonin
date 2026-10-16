@@ -41,6 +41,20 @@ await fs.copyFile(path.join(skill,'assets/fixtures/pixel/manifest.json'),path.jo
 await fs.cp(path.join(skill,'assets/fixtures/ronin'),path.join(output,'ronin-fixtures'),{recursive:true})
 await fs.cp(path.join(skill,'assets/fixtures/sequence'),path.join(output,'sequence'),{recursive:true})
 for(const name of ['utils.ts','utilsResizeCanvasLegacy.ts'])await fs.copyFile(path.join(root,'reference/frontend/src/components/ParamsStep',name),path.join(output,name))
+await fs.copyFile(path.join(root,'reference/frontend/src/lib/geminiWatermark.ts'),path.join(output,'original-gemini-watermark.ts'))
+const normalSource=await fs.readFile(path.join(root,'reference/frontend/src/components/ImageResizeStroke.tsx'),'utf8')
+const recipes=[['apply','applyPreview'],['mattePreview','runMattePreview'],['extendBottom','handleExtendBottom'],['rpgMaker','handleOneClickProcess'],['allActions','handleOneClickAllActionsProcess'],['ancientCostume','handleAncientCostumeProcess']]
+const originalRecipes=recipes.map(([mode,handler])=>{
+  const start=normalSource.indexOf(`  const ${handler} = async () => {`)
+  if(start<0)throw new Error(`Original recipe missing: ${handler}`)
+  const block=normalSource.slice(start,normalSource.indexOf('\n  const ',start+1))
+  const begin=block.indexOf(mode==='extendBottom'?'      const blob = await':'      let blob = await')
+  const end=block.indexOf(mode==='mattePreview'?'      setMattePreviewUrl':'      setPreviewBlob(blob)',begin)
+  if(begin<0||end<begin)throw new Error(`Original recipe markers changed: ${handler}`)
+  return `if(mode===${JSON.stringify(mode)}){${block.slice(begin,end)}return ${mode==='mattePreview'?'matteBlob':'blob'};}`
+}).join('\n')
+await fs.writeFile(path.join(output,'original-normal.ts'),`import {applyChromaKey,applyChromaKeyContiguousFromTopLeft,applyInnerStroke,cropImageBlob,extendImageBottom,getTopLeftPixelColor,processAncientCostumeAllActions,resizeImageToBlob} from './utils';\nimport {removeGeminiWatermarkFromBlob} from './original-gemini-watermark';\nexport async function originalNormal(file:Blob,p:any){const previewBlob=file,{mode,width:targetW,height:targetH,keepAspect,pixelated,enableMatte,background:bgColor,tolerance:matteTolerance,feather:matteFeather,strokeWidth,strokeColor}=p;const cropRegion={left:p.cropLeft,top:p.cropTop,right:p.cropRight,bottom:p.cropBottom},m=bgColor.match(/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i);\n${originalRecipes}\nthrow new Error('Original recipe unknown');}`)
+await fs.cp(path.join(skill,'assets/fixtures/normal-image'),path.join(output,'normal-image'),{recursive:true})
 await fs.copyFile(path.join(root,'reference/frontend/src/lib/spriteGridDuplicate.ts'),path.join(output,'original-duplicate.ts'))
 const originalScale=await fs.readFile(path.join(root,'reference/frontend/src/components/RoninProCustomScale.tsx'),'utf8')
 const scaleBody=originalScale.slice(originalScale.indexOf('  const runMatteStep'),originalScale.indexOf('  return (\n    <Space'))

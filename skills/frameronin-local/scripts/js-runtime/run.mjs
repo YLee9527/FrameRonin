@@ -89,6 +89,11 @@ if (request.operation === 'workflow') {
   }
   report={...report,method:'original-pixel-editor',operation:request.operation,parameters:request.parameters,
     processingDimensions:{width:input.width,height:input.height},originalDimensions:input.originalDimensions}
+} else if(request.operation==='image.normal'){
+  if(request.parameters.mode==='apply'&&!request.parameters.pixelated)throw new Error('BROWSER_RENDERER_REQUIRED')
+  process.stdout.write(JSON.stringify({progress:.1})+'\n')
+  outputs.push(await algorithms.processNormalImage(blobs[0],request.parameters))
+  report={method:'original-normal-image-recipes',operation:request.operation,parameters:request.parameters,outputFrames:1}
 } else if (['image.customScale','sequence.unifySize','image.findDuplicates'].includes(request.operation)) {
   process.stdout.write(JSON.stringify({progress:.05})+'\n')
   const images=[]

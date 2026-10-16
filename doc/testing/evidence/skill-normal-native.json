@@ -1,0 +1,658 @@
+{
+  "date": "2026-10-16",
+  "phase": "native recipe engine checkpoint; normal workbench still uses original code, full migration pending",
+  "browserOracle": {
+    "zipSha256": "a4202cca94faf1625a1cf662e7572525ffdc4b3755ee5a7bde2e04bb6f548c17",
+    "cases": [
+      {
+        "id": "identity",
+        "dimensions": [
+          192,
+          144
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "4f54a3e99007d7656300ff9e3d965536c644e6682c23eab2d1342734910abcd6"
+      },
+      {
+        "id": "crop-asymmetric",
+        "dimensions": [
+          172,
+          114
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "f35cc011c2422c0a877ce109ccfdff2afc801af35564068d54b1d8e965ee7e70"
+      },
+      {
+        "id": "stretch-nearest",
+        "dimensions": [
+          83,
+          117
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "70cb7a4edd3ce5f3ad3de395ac820781cd51f472ee899428e2ec6b882c6fc9ad"
+      },
+      {
+        "id": "center-nearest",
+        "dimensions": [
+          97,
+          113
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "94fd22683b0a8a47d0c110632bbce49936714f493b0be961caa7af99711f0c3f"
+      },
+      {
+        "id": "matte-and-resize",
+        "dimensions": [
+          113,
+          79
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "082f998384b6d08d3fba6e0b9b2cafc4b90bef2f580ccba89b95f912ce0ec395"
+      },
+      {
+        "id": "stroke-1",
+        "dimensions": [
+          192,
+          144
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "3306b161e8d80fd1e440f17d9ccfc452c0bef178ab0b15c3e219afbd1ce4047e"
+      },
+      {
+        "id": "stroke-20",
+        "dimensions": [
+          192,
+          144
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "8572b98b4b64b14225bd07eeb6c7b75ffdacb8232ce20c8508dff802b094f285"
+      },
+      {
+        "id": "matte-preview",
+        "dimensions": [
+          184,
+          128
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "f290f90e3b8ab201574119c753256c20161d381a75e43d62d73712a8ae73a500"
+      },
+      {
+        "id": "matte-minimum",
+        "dimensions": [
+          192,
+          144
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "11ed626a4f194b5fbd340dfeaac950d29506f1844c52ac0d13cb36146cd82dd3"
+      },
+      {
+        "id": "matte-maximum",
+        "dimensions": [
+          192,
+          144
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "11ed626a4f194b5fbd340dfeaac950d29506f1844c52ac0d13cb36146cd82dd3"
+      },
+      {
+        "id": "extend-regular",
+        "dimensions": [
+          192,
+          192
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "211ccb8f2116168b6431127513819420570d36e927b7cf4fcffcd4d07bc898cd"
+      },
+      {
+        "id": "extend-uneven",
+        "dimensions": [
+          192,
+          193
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "501702521785693da55a3c2dffdb13bd78e3b09a67c618981020fe8ae5f269fb"
+      },
+      {
+        "id": "extend-short",
+        "dimensions": [
+          192,
+          2
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "4f9cc7b5ff6e8ed0d4c7012ce8067d6a004af962715b9882c9379c085a131279"
+      },
+      {
+        "id": "rpg-maker",
+        "dimensions": [
+          144,
+          192
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "ea9eb322fd2d985c180ec6cccfbff72510ec74cf0f1a921729446c52faf2c411"
+      },
+      {
+        "id": "all-actions",
+        "dimensions": [
+          252,
+          252
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "fc7c4bc30b6d8f058c74683ba7349a9a694c88cfc15267ff0d0994b28158d88f"
+      },
+      {
+        "id": "ancient-costume",
+        "dimensions": [
+          1024,
+          896
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "a5c71fcbacdd607f1710010b861920bed99c3f2295ed829a62f6363ea573e2e5"
+      },
+      {
+        "id": "rpg-maker-mask96",
+        "dimensions": [
+          144,
+          192
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "8840964d660abcbaaba16266ca8fdaf008f45f78a89ea62e057d4ad29794c27a"
+      },
+      {
+        "id": "all-actions-mask96",
+        "dimensions": [
+          252,
+          252
+        ],
+        "browserStrictRgbaEqual": true,
+        "originalPngSha256": "b656f78fba4e0a77457d65839f664f7f032ebba0b782d147aedb0168726e3d19"
+      }
+    ]
+  },
+  "nativeCases": [
+    {
+      "case": "identity",
+      "taskId": "1ae6460c-6247-4043-895d-e0133fe3cd9a",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "b4bd32ee-1c5a-4d36-b1c1-ba1e4bfda09d",
+        "44bfa911-0fb9-445c-aad5-12cb816843b4"
+      ],
+      "dimensions": [
+        192,
+        144
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 92405760,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "crop-asymmetric",
+      "taskId": "88c900cf-b67f-426a-a7bd-6eb1a03ff061",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "a5004599-189b-4f87-b910-e0f2982de952",
+        "4949e179-70cb-49e8-9cb9-dc82ad4c3fe4"
+      ],
+      "dimensions": [
+        172,
+        114
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 122683392,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "stretch-nearest",
+      "taskId": "c2ae584b-a312-485d-a700-43126eecb754",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "06029c0f-f060-455c-971f-0ad6f68e1b32",
+        "060caec8-6e78-4e34-9e8f-6e3a919ee571"
+      ],
+      "dimensions": [
+        83,
+        117
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 114655232,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "center-nearest",
+      "taskId": "4f62ab07-f9ea-4c1e-bf79-7ab96a112060",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "59c562ec-7c58-4b5a-b762-7dec06c19419",
+        "b79a6d58-ff35-43df-8619-b56ac402ad14"
+      ],
+      "dimensions": [
+        97,
+        113
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 121602048,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "matte-and-resize",
+      "taskId": "5a7db548-6281-433f-9586-2e3639ac93d9",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "e32f810b-3b4d-4d55-a2e7-dfb38c7867e0",
+        "4c216a2c-c613-4ff9-9daf-574f57f67d55"
+      ],
+      "dimensions": [
+        113,
+        79
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 120946688,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "stroke-1",
+      "taskId": "2abc7d8f-9f51-4c01-a290-9493c9f967a3",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "d377d9e2-c0e0-41d9-a6ac-ab952bb1711b",
+        "847c1b37-e8ab-4e0b-9133-949d5ce0df87"
+      ],
+      "dimensions": [
+        192,
+        144
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 121012224,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "stroke-20",
+      "taskId": "6142a562-5897-44b7-b272-89a9e3ae1b96",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "dbfae4c4-c351-4952-91e2-e1fb993e1658",
+        "b45d1826-c1b5-48ab-93c7-d4f3bb081538"
+      ],
+      "dimensions": [
+        192,
+        144
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 136822784,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "matte-preview",
+      "taskId": "32279f2a-f4bc-425c-a86b-1411088ab984",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "a2f2a9cd-081f-4df2-8b8d-21211f923519",
+        "12889661-415e-4b2b-b0d8-8fe5bcf8715d"
+      ],
+      "dimensions": [
+        184,
+        128
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 122241024,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "matte-minimum",
+      "taskId": "3451d91a-c397-424c-854d-dbc9549d33d3",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "b315acc8-1d07-483d-8756-ba28ebb8bc1b",
+        "cf9610e0-b086-445f-84e4-0928560a57bf"
+      ],
+      "dimensions": [
+        192,
+        144
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 134414336,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "matte-maximum",
+      "taskId": "7dc9fc69-7c36-452e-bc23-f88a58741d72",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "37e2cf9a-81b8-46c3-9871-cb8e5ce1d2ff",
+        "d8dbb09b-1f03-46ab-b4a0-76665665b6e8"
+      ],
+      "dimensions": [
+        192,
+        144
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 121176064,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "extend-regular",
+      "taskId": "2390b035-5edd-4488-bfc0-524bbf1d6eca",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "d1f6706d-fa1c-440d-a98d-59ee9da10554",
+        "fc187c84-5752-49b7-8a4f-64ca152a84de"
+      ],
+      "dimensions": [
+        192,
+        192
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 121372672,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 271243544,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "extend-uneven",
+      "taskId": "f7b0b4e1-a2eb-47fb-9806-3b47c1d94a2a",
+      "inputVersion": "07e83728-64ed-4d96-a642-a75a9fd6dc9d",
+      "resultVersions": [
+        "fb0df631-73c3-4ba3-8de0-89ce20ce26ad",
+        "ada2bd78-91b6-454a-80c9-3b733174d7ea"
+      ],
+      "dimensions": [
+        192,
+        193
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 120848384,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 271258936,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "extend-short",
+      "taskId": "65d344c7-281f-4e92-ba80-4ed9cc3889bc",
+      "inputVersion": "b07aebbb-b2d1-46d4-927d-126cab482916",
+      "resultVersions": [
+        "64b2de9c-0166-4078-8588-bd1bac10728c",
+        "dfb09e1b-0e72-4657-b005-bc7b3ed3d587"
+      ],
+      "dimensions": [
+        192,
+        2
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 121765888,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 268466872,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "rpg-maker",
+      "taskId": "65e6d4b5-9694-4658-b8ab-a4e66994c270",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "bc568a4d-f8d1-4153-8483-82ced209067f",
+        "94c7853c-dc60-4305-9695-9a420004c176"
+      ],
+      "dimensions": [
+        144,
+        192
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 120963072,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 270653720,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "all-actions",
+      "taskId": "a856cf9a-2a4d-4996-9de5-69cc4de0ccd5",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "7c1121f6-a5e3-4f95-be1e-c6dfffe1d61a",
+        "4b917874-4c1e-483f-8148-39147cc57f81"
+      ],
+      "dimensions": [
+        252,
+        252
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 124469248,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 272948504,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "ancient-costume",
+      "taskId": "4a85beaa-00ff-402c-9a7f-af152893a772",
+      "inputVersion": "1d346951-2286-47b2-9933-074c54c9661d",
+      "resultVersions": [
+        "74ae05da-1f72-4897-bfbc-e36dc95ed550",
+        "484a6bcb-0713-476f-8dfe-1a5b2d61e791"
+      ],
+      "dimensions": [
+        1024,
+        896
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 149553152,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 327604504,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "rpg-maker-mask96",
+      "taskId": "ed4c437f-7b26-4e46-bcb2-17fb23f142d7",
+      "inputVersion": "5ca6f214-f385-4e71-89be-3f6afd844784",
+      "resultVersions": [
+        "3f2863b9-821c-4d7b-81e6-f2ffc4cc5437",
+        "37f6ee6d-f275-43a0-abc2-7461e4db7708"
+      ],
+      "dimensions": [
+        144,
+        192
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 287817728,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 363196984,
+        "processingMode": "original_normal_image_recipes"
+      }
+    },
+    {
+      "case": "all-actions-mask96",
+      "taskId": "25b45a5b-9396-4f18-8294-2bdf0bd14ac9",
+      "inputVersion": "5ca6f214-f385-4e71-89be-3f6afd844784",
+      "resultVersions": [
+        "4d2cf32e-c771-485e-a8f5-bb83a5cfba1a",
+        "273bd2b7-7fdb-4c25-a51d-c5e15751aec1"
+      ],
+      "dimensions": [
+        252,
+        252
+      ],
+      "strictRgbaEqual": true,
+      "metrics": {
+        "peakControlledProcessBytes": 153600000,
+        "budgetBytes": 2147483648,
+        "estimatedBytes": 363196984,
+        "processingMode": "original_normal_image_recipes"
+      }
+    }
+  ],
+  "cancellation": {
+    "id": "8f80f455-6665-4e3b-b51b-729a9c25a387",
+    "state": "canceled",
+    "generation": 1,
+    "payload": {
+      "operation": "image.normal",
+      "inputs": [
+        "5ca6f214-f385-4e71-89be-3f6afd844784"
+      ],
+      "parameters": {
+        "width": 4096,
+        "height": 4096,
+        "strokeWidth": 20
+      }
+    },
+    "progress": 0.1,
+    "pid": 16481,
+    "process_created": 1792117078.569741,
+    "error": null,
+    "results": [],
+    "created_at": "2026-10-16T02:17:58.245348+00:00",
+    "updated_at": "2026-10-16T02:17:58.940498+00:00",
+    "cancelElapsedSeconds": 0.0123600410297513,
+    "processStopConfirmed": true
+  },
+  "negativeChecks": [
+    {
+      "parameters": {
+        "mode": "unknown"
+      },
+      "error": {
+        "code": "PARAMETER_VALUE",
+        "message": "Unsupported parameter value.",
+        "details": {
+          "parameter": "mode"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "cropLeft": 30000
+      },
+      "error": {
+        "code": "CROP_OUTSIDE_IMAGE",
+        "message": "The crop must retain at least one source pixel in each dimension.",
+        "details": {}
+      }
+    },
+    {
+      "parameters": {
+        "pixelated": false
+      },
+      "error": {
+        "code": "BROWSER_RENDERER_REQUIRED",
+        "message": "Smooth normal-image processing requires the original host Canvas renderer; this route is not yet available.",
+        "details": {}
+      }
+    },
+    {
+      "parameters": {
+        "command": "run"
+      },
+      "error": {
+        "code": "PARAMETER_UNKNOWN",
+        "message": "Unknown parameters are rejected.",
+        "details": {
+          "fields": [
+            "command"
+          ]
+        }
+      }
+    },
+    {
+      "parameters": {
+        "strokeWidth": 21
+      },
+      "error": {
+        "code": "PARAMETER_RANGE",
+        "message": "A parameter is outside the allowed range.",
+        "details": {
+          "parameter": "strokeWidth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "frontendBytes": 2147483648
+      },
+      "error": {
+        "code": "RESOURCE_LIMIT",
+        "message": "The operation exceeds the memory budget; adjust its parameters.",
+        "details": {
+          "estimatedBytes": 2420562200,
+          "budgetBytes": 2147483648
+        }
+      }
+    }
+  ],
+  "projectVerify": {
+    "valid": true,
+    "database": "ok",
+    "versions": 40
+  },
+  "knownBehavior": [
+    "extendBottom adds floor(height/3), mirrors the second row and moves the third; leftover source rows preserve the original blank/remainder behavior",
+    "one/two-pixel JPEG direct engine extension explicitly encodes PNG; the original UI only extended already encoded PNG previews"
+  ],
+  "pending": [
+    "normal workbench task integration and formal document/undo",
+    "original smooth Canvas path",
+    "more source formats, native peak versus frontend joint memory, pointer interactions",
+    "all remaining S2/S3/S4 scope"
+  ],
+  "validation": {
+    "pythonTests": 32,
+    "javascriptTests": 38,
+    "runtimeBuild": true,
+    "workbenchBuild": true,
+    "changedModuleEslint": true
+  },
+  "initialFailure": {
+    "case": "direct two-pixel JPEG extendBottom",
+    "error": "ReferenceError: createImageBitmap is not defined in the native DOM adapter",
+    "resolution": "Use the supported Image decoder before explicit PNG encoding; the dedicated regression now passes"
+  }
+}

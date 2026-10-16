@@ -20,6 +20,8 @@ import {splitSpriteSheetGrid as originalSplitGrid,findDuplicateFrameIndexGroups 
 import {originalFineEditor} from '../.runtime/oracle/original-fine-editor'
 import {runFineEditorWorker} from '../assets/workbench/src/lib/fineEditorWorker'
 import {stampFineCircle} from '../assets/workbench/src/lib/fineEditorPixels'
+import {originalNormal} from '../.runtime/oracle/original-normal'
+import {processNormalImage} from '../assets/workbench/src/lib/normalImageTools'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -256,7 +258,17 @@ async function runFineEditor(){
   }
   zip.file('checks.json',JSON.stringify(checks));await publish(zip,'browser-fine-editor.zip');status.textContent=`Fine editor complete: ${fixture.cases.length} original/Worker comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor]] as const) {
+async function runNormalImage(){
+  const fixture=await(await fetch('/normal-image/manifest.json')).json(),zip=new JSZip()
+  for(const entry of fixture.cases){
+    const file=await(await fetch(`/normal-image/${entry.input}`)).blob()
+    zip.file(`${entry.id}/original.png`,await originalNormal(file,entry.parameters))
+    zip.file(`${entry.id}/actual-browser.png`,await processNormalImage(file,entry.parameters))
+    status.textContent=`Normal image: ${entry.id}`
+  }
+  await publish(zip,'browser-normal-image.zip');status.textContent=`Normal image complete: ${fixture.cases.length} original recipes`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

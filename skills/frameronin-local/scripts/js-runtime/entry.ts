@@ -34,4 +34,5 @@ export {createImageToolHistory,imageToolHistoryReducer} from '../../assets/workb
 export {eraseConnected,movePixelSelection,fineEditorImageSize,checkFineEditorBudget,stampFineCircle,fineEditorDimensions} from '../../assets/workbench/src/lib/fineEditorPixels'
 export {runFineEditorWorker} from '../../assets/workbench/src/lib/fineEditorWorker'
 export {prepareFineInput} from '../../assets/workbench/src/localProject/fineEditInput'
+export {processNormalImage} from '../../assets/workbench/src/lib/normalImageTools'
 export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/localProject/navigationGuard'

@@ -73,3 +73,9 @@ Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态�
 独立精细入口使用 image-fine 文档与相同保存接口，无加工任务或结果报告。源图与编辑 PNG 分别保存版本；恢复预检包含源文件大小/格式和编辑 PNG 的实际显示尺寸。JPEG 使用 Worker ImageDecoder 保留原 HTMLImage 画布颜色，无该解码能力时明确报 FINE_EDITOR_JPEG_DECODER_UNAVAILABLE；PNG/WebP 保留已有解码路径。版本元数据增加 EXIF 方向、显示尺寸和容器格式，原编码尺寸继续保留。
 
 共享精细编辑器不再在主线程做全图连通擦除、选区搬移或 PNG 编码。普通笔尖只读写局部矩形，沿用原像素圆判定；PNG 文件快照用于缩放文档的统一撤销。独立精细处理入口当前仍保留内部像素历史，最多 30 步并联合限制 256 MiB；该入口的正式文档迁移另行验收，不能把共享 Worker 验收视为全部编辑器已完成。
+
+`image.normal` 提供原常规图片的六种确定性配方：`apply`（裁切→可选全图色度键→硬边缩放→可选内描边）、`mattePreview`（裁切→全图色度键）、`extendBottom`（三行复制翻转扩展）、`rpgMaker`（水印修复→连通抠图→144×144→扩展）、`allActions`（水印修复→256×256→连通抠图→右/下各裁 4px）、`ancientCostume`（水印修复→256×256→连通抠图→1024×896 重排）。输入一个正式图像版本，输出 PNG 与报告。
+
+参数含 `mode`、四个 `crop*` 非负边距、`width/height`（1–4096）、`keepAspect/pixelated/enableMatte`、`background/strokeColor`（六位十六进制颜色）、`tolerance`（1–100）、`feather`（0–30）、`strokeWidth`（0–20）及 `frontendBytes`。仅裁切阶段使用边距，须保留至少一个像素；其余配方保持原固定顺序和尺寸。完整中间缓冲、源文件及前端保留预算先行估算，输出超过 30000 边长或超预算拒绝。现有原生路径只接受 apply 的硬边缩放；平滑处理明确报 BROWSER_RENDERER_REQUIRED，等待原宿主 Canvas 路径接入，不替换滤镜。
+
+该操作目前是引擎检查点；常规工作台仍使用原入口计算，受控任务界面、正式文档与完整取消交互继续迁移。`extendBottom` 参数名来自旧 UI，实际扩展量为 floor(height/3)，并保留原余数行行为。直接引擎处理一/两像素高 JPEG 的无操作结果会明确编码 PNG，避免 JPEG 内容配 PNG 扩展名。
