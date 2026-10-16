@@ -401,5 +401,6 @@
     "Cancellation acceptance uses a delayed Worker script and occurs before algorithm execution; further mid-computation stopping measurements remain pending.",
     "In-app navigation keeps the task owner alive; closing the browser tab terminates its Worker and requires lease reconciliation without automatic retry.",
     "Only fixed browser/format/orientation cases were accepted; additional combinations, other tools, full AI templates and portable distribution remain in the full scope."
-  ]
+  ],
+  "codeCommit": "d988d994ad12d019a266094a12ed86009dea2787"
 }
