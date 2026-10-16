@@ -1,6 +1,7 @@
 {
   "date": "2026-10-16",
   "baselineCommit": "15f81ff",
+  "codeCommit": "b31f02a",
   "scope": "Custom slice processing kernel only: L7/uniform/auto plan, grid/regions/bands/polyline ZIP and signed/padded composition PNG. Original workbench still awaits migration; S2/S3/S4 remain incomplete.",
   "original": {
     "source": "reference/frontend/src/components/RoninProCustomSlice.tsx",

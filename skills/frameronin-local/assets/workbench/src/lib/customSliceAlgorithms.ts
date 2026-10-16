@@ -485,4 +485,3 @@ export function splitByRegions(img: SliceImage, regions: Region[]): HTMLCanvasEl
   }
   return results
 }
-
