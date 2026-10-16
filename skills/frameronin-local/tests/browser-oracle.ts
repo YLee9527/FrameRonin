@@ -226,19 +226,23 @@ async function runSmoothWorker(){
   await publish(zip,'browser-smooth-worker.zip');status.textContent='Worker smooth resize complete: 6 cases'
 }
 async function runFineEditor(){
-  const fixture=await(await fetch('/fine-editor/manifest.json')).json(),file=await(await fetch('/fine-editor/source.png')).blob(),zip=new JSZip(),checks=[]
+  const fixture=await(await fetch('/fine-editor/manifest.json')).json(),zip=new JSZip(),checks=[]
   for(const entry of fixture.cases){
-    const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height
-    const context=canvas.getContext('2d')!;context.drawImage(bitmap,0,0);bitmap.close()
+    const file=await(await fetch(`/fine-editor/${entry.input??'source.png'}`)).blob()
+    const url=URL.createObjectURL(file),image=await new Promise<HTMLImageElement>((resolve,reject)=>{
+      const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error('Original image decode failed'));image.src=url
+    }),canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight
+    const context=canvas.getContext('2d')!;context.drawImage(image,0,0);URL.revokeObjectURL(url)
     const input=context.getImageData(0,0,canvas.width,canvas.height),raw=new Uint8ClampedArray(input.data)
     const originalCanvas={width:canvas.width,height:canvas.height,getContext:()=>({
       getImageData:context.getImageData.bind(context),
       putImageData:(image:ImageData,x:number,y:number)=>{raw.set(image.data);context.putImageData(image,x,y)},
     })} as unknown as HTMLCanvasElement
     const originalRect=originalFineEditor(originalCanvas,entry.action,entry.parameters),expected=await png(canvas)
-    zip.file('raw-input.json',JSON.stringify([...input.data]));zip.file(`${entry.id}/raw-original.json`,JSON.stringify([...raw]))
+    if(!entry.input)zip.file('raw-input.json',JSON.stringify([...input.data]))
+    zip.file(`${entry.id}/raw-input.json`,JSON.stringify([...input.data]));zip.file(`${entry.id}/raw-original.json`,JSON.stringify([...raw]))
     const decoded=await runFineEditorWorker({action:'decode',file,budget:2*1024**3,retained:0},new AbortController().signal,0)
-    let request:any={action:entry.action,width:decoded.width,height:decoded.height,pixels:decoded.pixels,budget:2*1024**3,retained:0,...entry.parameters}
+    let request:any={action:entry.action==='none'?'encode':entry.action,width:decoded.width,height:decoded.height,pixels:decoded.pixels,budget:2*1024**3,retained:0,...entry.parameters}
     if(entry.action==='brush'||entry.action==='eraser'){
       context.putImageData(new ImageData(decoded.pixels!,decoded.width,decoded.height),0,0)
       const p=entry.parameters
@@ -247,6 +251,7 @@ async function runFineEditor(){
     }
     const actual=await runFineEditorWorker(request,new AbortController().signal,1)
     zip.file(`${entry.id}/original.png`,expected);zip.file(`${entry.id}/actual.png`,actual.blob!)
+    zip.file(`${entry.id}/size.json`,JSON.stringify({width:canvas.width,height:canvas.height}))
     checks.push({id:entry.id,originalRect,workerRect:actual.rect??null});status.textContent=`Fine editor: ${entry.id}`
   }
   zip.file('checks.json',JSON.stringify(checks));await publish(zip,'browser-fine-editor.zip');status.textContent=`Fine editor complete: ${fixture.cases.length} original/Worker comparisons`

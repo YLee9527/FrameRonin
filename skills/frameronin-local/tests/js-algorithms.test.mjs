@@ -9,22 +9,88 @@ const skill = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dom = installDom(path.join(skill, 'assets/workbench/public'), 2 * 1024 ** 3)
 const algorithms = await import(pathToFileURL(path.join(skill, '.runtime/js/algorithms.mjs')).href)
 
+test('standalone fine documents keep original and painted versions without task dispatch and reject incompatible edits before content reads',async()=>{
+  const native=globalThis.fetch,id=index=>`00000000-0000-0000-0000-${String(index).padStart(12,'0')}`
+  const source=new File(['source'],'source.png',{type:'image/png'}),paint=new File(['painted'],'painted.png',{type:'image/png'})
+  const entries=new Map([[id(1),source],[id(2),paint]])
+  let imports=0,reads=0,badDimensions=false,large=false,badSource=false
+  const version=key=>({id:key,metadata:{kind:'image',extension:badSource?'.gif':'.png',bytes:entries.get(key).size,
+    width:large?8192:badDimensions&&key===id(2)?17:16,height:large?8192:12}})
+  globalThis.fetch=async(url,options={})=>{
+    if(url==='/api/project/context')return Response.json({project:{id:'fine-doc'},memoryBudgetBytes:2*1024**3})
+    if(url==='/api/assets'){imports++;return Response.json(version(options.body.get('file').name==='source.png'?id(1):id(2)))}
+    if(String(url).startsWith('/api/versions/')){
+      const key=String(url).split('/')[3]
+      if(String(url).endsWith('/content')){reads++;return new Response(entries.get(key))}
+      return Response.json(version(key))
+    }
+    throw new Error(`Unexpected task or unscoped request: ${url}`)
+  }
+  try{
+    const draft={...algorithms.initialImageToolDraft('fineEdit'),files:[source],editedFile:paint}
+    const stored=await algorithms.serializeImageToolDocument(draft),restored=await algorithms.restoreImageToolDocument(stored)
+    assert.equal(await restored.editedFile.text(),'painted');assert.equal(restored.taskId,null);assert.equal(imports,2)
+    await algorithms.serializeImageToolDocument(restored);assert.equal(imports,2)
+    for(const change of [v=>v.parameters.command='run',v=>v.files=[],v=>v.taskId=id(3),v=>v.results=[v.files[0]],v=>v.editedFile.name='../outside.png']){
+      const invalid=structuredClone(stored);change(invalid);assert.throws(()=>algorithms.validateStoredImageTool(invalid))
+    }
+    const before=reads;badDimensions=true
+    await assert.rejects(algorithms.restoreImageToolDocument(stored),/EDIT_DIMENSIONS/);assert.equal(reads,before);badDimensions=false;large=true
+    await assert.rejects(algorithms.restoreImageToolDocument(stored),/RESOURCE_LIMIT/);assert.equal(reads,before);large=false;badSource=true
+    await assert.rejects(algorithms.restoreImageToolDocument(stored),/SOURCE_LIMIT/);assert.equal(reads,before)
+  }finally{globalThis.fetch=native}
+})
+
+test('fine image handoff validates source type, size and processing budget before replacing a document',async()=>{
+  const native=globalThis.fetch;let requests=0,width=16,kind='image'
+  globalThis.fetch=async(url,options={})=>{
+    requests++
+    if(url==='/api/project/context')return Response.json({project:{id:'fine-intake'},memoryBudgetBytes:2*1024**3})
+    if(url==='/api/assets'||String(url).startsWith('/api/versions/'))return Response.json({id:'fine-input',metadata:{kind,extension:'.png',bytes:options.body?.get('file')?.size??6,width,height:width}})
+    throw new Error(String(url))
+  }
+  try{
+    for(const file of [new File(['x'],'unsafe.gd'),new File(['x'],'../source.png'),new File([],'empty.png'),new File([new Uint8Array(21*1024**2)],'large.png')])await assert.rejects(algorithms.prepareFineInput(file),/SOURCE_/)
+    assert.equal(requests,0)
+    const file=new File(['source'],'source.png',{type:'image/png'})
+    assert.equal((await algorithms.prepareFineInput(file)).version.id,'fine-input')
+    width=8192;await assert.rejects(algorithms.prepareFineInput(file),/RESOURCE_LIMIT/)
+    width=16;kind='animation';await assert.rejects(algorithms.prepareFineInput(file),/SOURCE_TYPE/)
+  }finally{globalThis.fetch=native}
+})
+
+test('failed or overlapping save navigation never reports a successful transition',async()=>{
+  let moved=0
+  const fail=algorithms.registerSaveGuard(async()=>{throw new Error('save failed')})
+  try{assert.equal(await algorithms.navigateWithSave(()=>moved++),false);assert.equal(moved,0)}finally{fail()}
+  let release
+  const wait=algorithms.registerSaveGuard(()=>new Promise(resolve=>{release=resolve}))
+  const first=algorithms.navigateWithSave(()=>moved++)
+  try{
+    assert.equal(await algorithms.navigateWithSave(()=>moved++),false);assert.equal(moved,0)
+    release();assert.equal(await first,true);assert.equal(moved,1)
+  }finally{release?.();wait()}
+})
+
 test('fine editor stamps, connected erasure and overlapping moves match frozen original raw RGBA',async()=>{
   const directory=path.join(skill,'assets/fixtures/fine-editor'),fixture=JSON.parse(await fs.readFile(path.join(directory,'manifest.json'))),golden=JSON.parse(await fs.readFile(path.join(directory,'raw-golden.json')))
   for(const entry of fixture.cases){
-    const pixels=new Uint8ClampedArray(golden.input),p=entry.parameters,{width,height}=golden
+    const pixels=new Uint8ClampedArray(golden.inputs?.[entry.id]??golden.input),p=entry.parameters,{width,height}=golden.sizes?.[entry.id]??golden
     const context={
       getImageData(x,y,w,h){const image=new ImageData(w,h);for(let row=0;row<h;row++)image.data.set(pixels.subarray(((y+row)*width+x)*4,((y+row)*width+x+w)*4),row*w*4);return image},
       putImageData(image,x,y){for(let row=0;row<image.height;row++)pixels.set(image.data.subarray(row*image.width*4,(row+1)*image.width*4),((y+row)*width+x)*4)},
     }
     if(entry.action==='erase')algorithms.eraseConnected(pixels,width,height,p.x,p.y,p.tolerance)
     else if(entry.action==='move')algorithms.movePixelSelection(pixels,width,height,p.rect,p.dx,p.dy)
-    else algorithms.stampFineCircle(context,width,height,p.x,p.y,entry.action==='brush'?p.brushSize:p.eraserSize,entry.action==='brush'?[24,86,192]:null)
+    else if(entry.action!=='none')algorithms.stampFineCircle(context,width,height,p.x,p.y,entry.action==='brush'?p.brushSize:p.eraserSize,entry.action==='brush'?[24,86,192]:null)
     assert.deepEqual([...pixels],golden.expected[entry.id],entry.id)
   }
 })
 
 test('fine editor preflights PNG, JPEG and WebP headers and total pixel/history budget before decoding',async()=>{
+  const oriented={width:16,height:12,displayWidth:12,displayHeight:16}
+  for(const containerFormat of ['JPEG','PNG'])assert.deepEqual(algorithms.fineEditorDimensions({...oriented,containerFormat}),{width:12,height:16})
+  assert.deepEqual(algorithms.fineEditorDimensions({...oriented,containerFormat:'WEBP'}),{width:16,height:12})
   const canvas=dom.createCanvas(17,11);canvas.getContext('2d').fillRect(0,0,17,11)
   for(const format of ['png','jpeg','webp']){
     const blob=new Blob([await canvas.encode(format)])

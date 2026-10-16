@@ -1,9 +1,11 @@
 import ProjectPanel from './localProject/ProjectPanel'
 import ImageGenPanel from './localProject/ImageGenPanel'
 import { navigateWithSave } from './localProject/navigationGuard'
-import { lazy, Suspense, useCallback, useState, useEffect } from 'react'
+import { lazy, Suspense, useCallback, useState, useEffect,useRef } from 'react'
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { App as AntdApp, Button, Card, ConfigProvider, Layout, Spin, Steps } from 'antd'
+import { App as AntdApp, Button, Card, ConfigProvider, Layout, Spin, Steps,message } from 'antd'
+import {managedFile} from './localProject/managedTasks'
+import {prepareFineInput} from './localProject/fineEditInput'
 import zhCN from 'antd/locale/zh_CN'
 import enUS from 'antd/locale/en_US'
 import jaJP from 'antd/locale/ja_JP'
@@ -79,6 +81,22 @@ function App() {
   const [imageSubMode, setImageSubMode] = useState<ImageSubMode | 'select'>('select')
   /** 常规处理 → 精细处理 图稿传递 */
   const [imageHandoffToFine, setImageHandoffToFine] = useState<File | null>(null)
+  const handoffRunning=useRef(false),currentView=useRef('')
+  currentView.current=`${mode??'home'}:${mode==='image'?imageSubMode:''}`
+  const sendToFineProcess=async(blob:Blob,suggestedFilename:string)=>{
+    if(handoffRunning.current)return false
+    handoffRunning.current=true
+    const before=currentView.current
+    try{
+      const proposed=/\.(png|jpe?g|webp)$/i.test(suggestedFilename)?suggestedFilename:`${suggestedFilename}.png`
+      const dot=proposed.lastIndexOf('.'),extension=proposed.slice(dot),name=proposed.slice(0,dot).slice(0,255-extension.length)+extension
+      const file=managedFile(blob,name,blob.type||'image/png')
+      await prepareFineInput(file)
+      if(currentView.current!==before)return false
+      return await navigateWithSave(()=>{setImageHandoffToFine(file);setImageSubMode('fine');updateMode('image')})
+    }catch(error){message.error(String(error));return false}
+    finally{handoffRunning.current=false}
+  }
 
   const [step, setStep] = useState<Step>('upload')
   const [file, setFile] = useState<File | null>(null)
@@ -109,19 +127,15 @@ function App() {
       if (tag === 'input' || tag === 'textarea') return
       if (el instanceof HTMLElement && el.isContentEditable) return
       e.preventDefault()
-      if (mode === 'video') {
-        setStep('upload')
-        setFile(null)
-      }
-      if (mode === 'image') {
-        setImageSubMode('select')
-      }
-      setRoninProDeepLink(null)
-      setMode(null)
+      void navigateWithSave(()=>{
+        if(mode==='video'){setStep('upload');setFile(null)}
+        if(mode==='image')setImageSubMode('select')
+        setRoninProDeepLink(null);updateMode(null)
+      })
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 C 进入 gif、帧排序、合并模块 */
   useEffect(() => {
@@ -138,7 +152,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 R 进入 RoninPro → 自定义缩放 */
   useEffect(() => {
@@ -156,7 +170,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 T 进入 RoninPro → 自定义流程蓝图 */
   useEffect(() => {
@@ -174,7 +188,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 N 进入 RoninPro → 单图调整 Pro */
   useEffect(() => {
@@ -192,7 +206,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 G 进入 Gemini 水印去除 */
   useEffect(() => {
@@ -209,7 +223,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 V 进入一键/精细像素图处理 */
   useEffect(() => {
@@ -227,7 +241,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   /** 首页按 S 进入 Sprite Sheet 调整 */
   useEffect(() => {
@@ -244,7 +258,7 @@ function App() {
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [mode])
+  }, [mode,setMode])
 
   const wastelandTheme: ThemeConfig = {
     token: {
@@ -343,7 +357,7 @@ function App() {
                 <Button
                   type="text"
                   icon={<ArrowLeftOutlined />}
-                  onClick={() => imageSubMode === 'select' ? setMode(null) : setImageSubMode('select')}
+                  onClick={() => {void navigateWithSave(()=>{if(imageSubMode==='select')updateMode(null);else setImageSubMode('select')})}}
                 >
                   {imageSubMode === 'select' ? t('backToHome') : t('back')}
                 </Button>
@@ -351,15 +365,7 @@ function App() {
               {imageSubMode === 'select' ? (
                 <ImageModuleEntry onSelect={setImageSubMode} />
               ) : imageSubMode === 'normal' ? (
-                <ImageResizeStroke
-                  onSendToFineProcess={(blob, suggestedFilename) => {
-                    const name = /\.(png|jpe?g|webp)$/i.test(suggestedFilename)
-                      ? suggestedFilename
-                      : `${suggestedFilename}.png`
-                    setImageHandoffToFine(new File([blob], name, { type: 'image/png' }))
-                    setImageSubMode('fine')
-                  }}
-                />
+                <ImageResizeStroke onSendToFineProcess={sendToFineProcess}/>
               ) : (
                 <ImageFineProcess
                   handoffFile={imageHandoffToFine}
@@ -509,14 +515,7 @@ function App() {
                 onBack={() => { setRoninProDeepLink(null); setMode(null) }}
                 deepLinkFeature={roninProDeepLink}
                 onDeepLinkConsumed={consumeRoninProDeepLink}
-                onSendToFineProcess={(blob, suggestedFilename) => {
-                  const name = /\.(png|jpe?g|webp)$/i.test(suggestedFilename)
-                    ? suggestedFilename
-                    : `${suggestedFilename}.png`
-                  setImageHandoffToFine(new File([blob], name, { type: blob.type || 'image/png' }))
-                  setImageSubMode('fine')
-                  setMode('image')
-                }}
+                onSendToFineProcess={sendToFineProcess}
               />
             </Card>
           ) : mode === 'mapStitch' ? (

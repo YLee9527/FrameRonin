@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { runManagedTask, importManagedInputs,cacheManagedInput } from '../.runtime/js/managed-tasks.mjs'
+import { runManagedTask, importManagedInputs,cacheManagedInput,managedFile } from '../.runtime/js/managed-tasks.mjs'
 
 globalThis.window = globalThis
 const nativeFetch = globalThis.fetch
@@ -65,6 +65,20 @@ test('concurrent document save and processing share one selected input import', 
     const [a,b] = await Promise.all([importManagedInputs([selected]),importManagedInputs([selected])])
     assert.equal(imports,1);assert.deepEqual(a.inputs,['shared-input']);assert.deepEqual(a.inputs,b.inputs)
   } finally { globalThis.fetch = nativeFetch }
+})
+test('renamed handoff Files reuse a verified version only inside its project',async()=>{
+  const original=new File(['unchanged bytes'],'result.png',{type:'image/png'})
+  cacheManagedInput(original,'test-project','verified-result')
+  const renamed=managedFile(original,'fine.png')
+  assert.equal(renamed.name,'fine.png');assert.equal(renamed.type,'image/png');assert.equal(await renamed.text(),await original.text())
+  let requests=fixture({'/api/versions/verified-result':()=>response({id:'verified-result',metadata:{kind:'image',bytes:15,width:1,height:1}})})
+  try{
+    assert.deepEqual((await importManagedInputs([renamed])).inputs,['verified-result'])
+    assert(!requests.some(request=>request.url==='/api/assets'))
+    requests=fixture({'/api/project/context':()=>response({project:{id:'other-project'},memoryBudgetBytes:2*1024**3})})
+    assert.deepEqual((await importManagedInputs([renamed])).inputs,['input'])
+    assert.equal(requests.filter(request=>request.url==='/api/assets').length,1)
+  }finally{globalThis.fetch=nativeFetch}
 })
 test('result manifests are all preflighted, fetched with a bounded pool, and retain output order',async()=>{
   const outputs=Array.from({length:31},(_,index)=>String(index));let active=0,peak=0

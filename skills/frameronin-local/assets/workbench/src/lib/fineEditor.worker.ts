@@ -6,17 +6,29 @@ export type FineEditorResult={width:number;height:number;pixels?:Uint8ClampedArr
 
 self.onmessage=async(event:MessageEvent<FineEditorRequest&{id:string;generation:number}>)=>{
   const request=event.data,{id,generation}=request
-  let bitmap:ImageBitmap|undefined
+  let bitmap:ImageBitmap|undefined,decoder:ImageDecoder|undefined,frame:VideoFrame|undefined
   try{
     let pixels:Uint8ClampedArray,width:number,height:number
     if(request.action==='decode'){
       const size=await fineEditorImageSize(request.file);width=size.width;height=size.height
       checkFineEditorBudget(width,height,request.file.size,request.budget,request.retained)
-      bitmap=await createImageBitmap(request.file)
-      if(bitmap.width!==width||bitmap.height!==height)throw new Error('FINE_EDITOR_DECODE_SIZE_CHANGED')
+      const signature=new Uint8Array(await request.file.slice(0,2).arrayBuffer())
+      let image:ImageBitmap|VideoFrame
+      if(signature[0]===255&&signature[1]===216){
+        // The bitmap JPEG decoder rounds subsampled colors differently from
+        // the original HTMLImage canvas path. Keep its exact raster semantics.
+        if(typeof ImageDecoder==='undefined'||!await ImageDecoder.isTypeSupported('image/jpeg'))throw new Error('FINE_EDITOR_JPEG_DECODER_UNAVAILABLE')
+        decoder=new ImageDecoder({data:await request.file.arrayBuffer(),type:'image/jpeg'})
+        frame=(await decoder.decode({frameIndex:0})).image;image=frame
+      }else{bitmap=await createImageBitmap(request.file);image=bitmap}
+      const decodedWidth=frame?.displayWidth??bitmap!.width,decodedHeight=frame?.displayHeight??bitmap!.height
+      // EXIF can rotate the displayed image; the pixel count and budget stay
+      // unchanged. Other decoder/header disagreements remain invalid.
+      if(!(decodedWidth===width&&decodedHeight===height||decodedWidth===height&&decodedHeight===width))throw new Error('FINE_EDITOR_DECODE_SIZE_CHANGED')
+      width=decodedWidth;height=decodedHeight
       const canvas=new OffscreenCanvas(width,height),context=canvas.getContext('2d')
       if(!context)throw new Error('FINE_EDITOR_CANVAS_UNAVAILABLE')
-      context.drawImage(bitmap,0,0);pixels=context.getImageData(0,0,width,height).data
+      context.drawImage(image,0,0);pixels=context.getImageData(0,0,width,height).data
       self.postMessage({id,generation,result:{width,height,pixels}},[pixels.buffer]);return
     }
     width=request.width;height=request.height;pixels=request.pixels
@@ -38,5 +50,5 @@ self.onmessage=async(event:MessageEvent<FineEditorRequest&{id:string;generation:
     const blob=await canvas.convertToBlob({type:'image/png'})
     self.postMessage({id,generation,result:{width,height,blob,pixels:request.action==='encode'?undefined:pixels,rect}},request.action==='encode'?[]:[pixels.buffer])
   }catch(error){self.postMessage({id,generation,error:String(error)})}
-  finally{bitmap?.close()}
+  finally{bitmap?.close();frame?.close();decoder?.close()}
 }

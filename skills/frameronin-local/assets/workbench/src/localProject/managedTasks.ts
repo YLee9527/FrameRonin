@@ -1,7 +1,7 @@
 import { jsonPost, localFetch, localJson } from './api'
 import { browserCanvasTask } from './browserCanvasTask'
 
-export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; frames?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
+export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; displayWidth?:number;displayHeight?:number;orientation?:number;containerFormat?:string;frames?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
 type Version = ManagedVersion
 type Task = { id: string; state: string; progress: number; results: string[]; error?: { code: string; message: string } }
 type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void; outputFilter?: (version: Version) => boolean }
@@ -66,6 +66,14 @@ export function cacheManagedInput(file: Blob, project: string, version: string) 
   // Call only after loading and verifying this version in the current project.
   // Every subsequent use still revalidates it through the scoped version API.
   imported.set(file, { project, version })
+}
+
+/** Preserve a verified reference only when wrapping the same bytes in a renamed File. */
+export function managedFile(source:Blob,name:string,type=source.type){
+  const file=new File([source],name,{type})
+  const reference=imported.get(source)
+  if(reference)imported.set(file,reference)
+  return file
 }
 
 export async function runManagedTask(operation: string, files: Blob[], parameters: object, options: Options = {}) {

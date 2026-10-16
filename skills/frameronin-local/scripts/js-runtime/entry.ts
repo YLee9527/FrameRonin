@@ -31,5 +31,7 @@ export { createPixelHistory, pixelHistoryReducer } from '../../assets/workbench/
 export { customScaleImage, unifyImageSizes } from '../../assets/workbench/src/lib/roninImageTools'
 export {initialImageToolDraft,validateStoredImageTool,serializeImageToolDocument,restoreImageToolDocument,imageToolMetadata,imageToolReport} from '../../assets/workbench/src/localProject/imageToolDocument'
 export {createImageToolHistory,imageToolHistoryReducer} from '../../assets/workbench/src/localProject/imageToolHistory'
-export {eraseConnected,movePixelSelection,fineEditorImageSize,checkFineEditorBudget,stampFineCircle} from '../../assets/workbench/src/lib/fineEditorPixels'
+export {eraseConnected,movePixelSelection,fineEditorImageSize,checkFineEditorBudget,stampFineCircle,fineEditorDimensions} from '../../assets/workbench/src/lib/fineEditorPixels'
 export {runFineEditorWorker} from '../../assets/workbench/src/lib/fineEditorWorker'
+export {prepareFineInput} from '../../assets/workbench/src/localProject/fineEditInput'
+export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/localProject/navigationGuard'

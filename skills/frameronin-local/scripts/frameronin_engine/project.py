@@ -50,11 +50,20 @@ def memory_budget():
     return min(psutil.virtual_memory().total // 4, 2 * 1024**3)
 
 
+def image_display_metadata(image):
+    orientation = image.getexif().get(274, 1)
+    if type(orientation) is not int or orientation not in range(1, 9):
+        orientation = 1
+    width, height = image.size
+    return {'orientation': orientation, 'displayWidth': height if orientation >= 5 else width,
+            'displayHeight': width if orientation >= 5 else height, 'containerFormat': image.format}
+
+
 def inspect_media(path):
     path = Path(path)
     result = {'bytes': path.stat().st_size, 'extension': path.suffix.lower()}
     if path.suffix.lower() in IMAGE_EXTENSIONS:
-        from PIL import Image
+        from PIL import Image,ImageOps
         try:
             with Image.open(path) as image:
                 width, height = image.size
@@ -62,6 +71,7 @@ def inspect_media(path):
                 if estimate > memory_budget():
                     raise RoninError('RESOURCE_LIMIT', 'Image decoding exceeds the project memory budget.',
                                      {'estimatedBytes': estimate, 'budgetBytes': memory_budget()})
+                result.update(image_display_metadata(image))
                 count = getattr(image, 'n_frames', 1)
                 durations = []
                 transparency = False
@@ -72,7 +82,7 @@ def inspect_media(path):
                     if image.mode == 'RGBA' or 'transparency' in image.info:
                         transparency |= image.convert('RGBA').getchannel('A').getextrema()[0] < 255
                     if index == 0:
-                        thumbnail = image.convert('RGBA')
+                        thumbnail = ImageOps.exif_transpose(image).convert('RGBA')
                         thumbnail.thumbnail((128, 128), Image.Resampling.NEAREST)
                         buffer = io.BytesIO()
                         thumbnail.save(buffer, format='PNG')
@@ -238,6 +248,12 @@ class Project:
         path = self.safe(result['path'])
         if not path.is_file() or (verify and digest(path) != result['sha256']):
             raise RoninError('VERSION_CONTENT_CHANGED', 'The selected asset version is missing or its content changed.')
+        # Old JPEG/WebP indices lack the browser's EXIF display dimensions.
+        # Supplement them without changing raw dimensions, IDs or stored files.
+        if result['metadata'].get('extension') in ['.jpg','.jpeg','.webp'] and 'displayWidth' not in result['metadata']:
+            from PIL import Image
+            with Image.open(path) as image:
+                result['metadata'].update(image_display_metadata(image))
         result['absolutePath'] = str(path)
         return result
 
@@ -402,7 +418,7 @@ class Project:
         checked_id(document_id)
         if type(expected_revision) is not int or expected_revision < 0:
             raise RoninError('DOCUMENT_REVISION_INVALID', 'Document revisions are non-negative integers.')
-        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request','ronin-scale','ronin-unify','ronin-duplicates']:
+        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request','ronin-scale','ronin-unify','ronin-duplicates','image-fine']:
             raise RoninError('DOCUMENT_KIND_INVALID', 'Unknown editable document kind.')
         serialized = json.dumps(payload, ensure_ascii=False, allow_nan=False)
         if len(serialized.encode()) > 64 * 1024**2:

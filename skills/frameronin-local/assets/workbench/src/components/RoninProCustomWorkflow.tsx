@@ -31,7 +31,7 @@ import {
   type WorkflowNodeType,
 } from '../lib/roninProWorkflow'
 import { importLegacyWorkflow } from '../lib/strictWorkflow'
-import { runManagedTask } from '../localProject/managedTasks'
+import { runManagedTask,cacheManagedInput } from '../localProject/managedTasks'
 import DocumentSaveBar from '../localProject/DocumentSaveBar'
 import { createWorkflowHistory, workflowHistoryReducer, type WorkflowDraft } from '../localProject/workflowHistory'
 import { serializeWorkflowDocument, restoreWorkflowDocument, type WorkflowSnapshot, type StoredWorkflow, type WorkflowInputFile } from '../localProject/workflowDocument'
@@ -133,7 +133,7 @@ function createWorkflowInputFile(file: File): WorkflowInputFile {
 
 export interface RoninProCustomWorkflowProps {
   /** 右键结果图「发送到精细处理」：跳转像素图片 → 精细处理并带入该图 */
-  onSendToFineProcess?: (blob: Blob, suggestedFilename: string) => void
+  onSendToFineProcess?: (blob: Blob, suggestedFilename: string) => boolean|void|Promise<boolean|void>
 }
 
 export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninProCustomWorkflowProps = {}) {
@@ -147,7 +147,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
   const [fileItems, setFileItems] = useState<WorkflowInputFile[]>([])
   const fileItemsRef = useRef(fileItems)
   fileItemsRef.current = fileItems
-  const [results, setResults] = useState<{ name: string; url: string }[]>([])
+  const [results, setResults] = useState<{ name: string; url: string;file:File }[]>([])
   const [running, setRunning] = useState(false)
   const [canceling, setCanceling] = useState(false)
   const [taskProgress, setTaskProgress] = useState(0)
@@ -374,7 +374,7 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
         prev.forEach((r) => URL.revokeObjectURL(r.url))
         return []
       })
-      const out: { name: string; url: string }[] = []
+      const out: { name: string; url: string;file:File }[] = []
       try {
         const { strategy } = strategyResult
         const selected = [...fileItems]
@@ -397,7 +397,9 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
           const base = names[index].replace(/\.[^.]+$/, '')
           const suffix = strategy.kind === 'dag_once' && strategy.topo.some(node => node.type === 'matteDoubleBackground')
             ? '_workflow_doublebg.png' : '_workflow.png'
-          out.push({ name: `${base}${suffix}`, url: URL.createObjectURL(output.blob) })
+          const file=new File([output.blob],`${base}${suffix}`,{type:'image/png'})
+          cacheManagedInput(file,result.project.id,output.version.id)
+          out.push({name:file.name,url:URL.createObjectURL(file),file})
         }
         setResults(out)
         message.success(t('roninProWorkflowDone'))
@@ -1540,12 +1542,9 @@ export default function RoninProCustomWorkflow({ onSendToFineProcess }: RoninPro
                             onClick: () => {
                               void (async () => {
                                 try {
-                                  const res = await fetch(r.url)
-                                  const blob = await res.blob()
                                   const base = r.name.replace(/\.[^.]+$/, '') || `workflow_${Date.now()}`
                                   const name = /\.(png|jpe?g|webp)$/i.test(r.name) ? r.name : `${base}.png`
-                                  onSendToFineProcess(blob, name)
-                                  message.success(t('imgSendToFineProcessDone'))
+                                  if(await onSendToFineProcess(r.file,name)!==false)message.success(t('imgSendToFineProcessDone'))
                                 } catch {
                                   message.error(t('roninProWorkflowFailed'))
                                 }

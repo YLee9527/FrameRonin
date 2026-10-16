@@ -94,7 +94,7 @@ interface RoninProProps {
   onBack?: () => void
   deepLinkFeature?: string | null
   onDeepLinkConsumed?: () => void
-  onSendToFineProcess?: (blob: Blob, suggestedFilename: string) => void
+  onSendToFineProcess?: (blob: Blob, suggestedFilename: string) => boolean|void|Promise<boolean|void>
 }
 
 export default function RoninPro({
@@ -111,7 +111,7 @@ export default function RoninPro({
     if (!deepLinkFeature) return
     setActiveFeature(deepLinkFeature)
     onDeepLinkConsumed?.()
-  }, [deepLinkFeature, onDeepLinkConsumed])
+  }, [deepLinkFeature, onDeepLinkConsumed,setActiveFeature])
 
   const displayedFeature = deepLinkFeature === 'sheetPro' ? 'sheetPro' : activeFeature
   const shellMaxWidth =

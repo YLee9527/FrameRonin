@@ -65,7 +65,7 @@ await fs.writeFile(path.join(output,'original-fine-editor.ts'),`type SelRect={x:
 const useCallback=(fn:any)=>fn,canvasRef={current:canvas},imgSize={w:canvas.width,h:canvas.height};
 const {tool=action,brushColor='#000000',brushSize=4,eraserSize=8,tolerance:superEraserTolerance=30}=p;
 const pushHistory=()=>{};let rect:any=p.rect??null;const setSelectionRect=(v:any)=>{rect=v};
-${fineCallbacks}\nif(action==='move')commitSelectMove(p.rect,p.dx,p.dy);else if(action==='erase')superEraserAt(p.x,p.y);else drawAt(p.x,p.y);return rect;}`)
+${fineCallbacks}\nif(action==='move')commitSelectMove(p.rect,p.dx,p.dy);else if(action==='erase')superEraserAt(p.x,p.y);else if(action!=='none')drawAt(p.x,p.y);return rect;}`)
 await fs.cp(path.join(skill,'assets/fixtures/fine-editor'),path.join(output,'fine-editor'),{recursive:true})
 const config = path.join(skill, '.runtime/oracle-vite.config.mjs')
 // Keep the original browser's Rollup CommonJS handling. An esbuild-only browser

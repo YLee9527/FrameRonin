@@ -70,6 +70,37 @@ class ProjectTests(unittest.TestCase):
             with self.assertRaises(RoninError):
                 manifest({'versions': [self.version['id']]})
 
+    def test_display_metadata_preserves_exif_source_and_supplements_old_photo_indices(self):
+        import base64
+        import io
+        from frameronin_engine.project import digest
+        exif = Image.Exif()
+        exif[274] = 6
+        for extension in ['.jpg', '.png', '.webp']:
+            source = self.root / ('oriented' + extension)
+            with Image.open(self.source) as original:
+                image = original.convert('RGB' if extension == '.jpg' else 'RGBA')
+                image.save(source, exif=exif)
+            before = digest(source)
+            version = self.project.import_file(source)
+            metadata = version['metadata']
+            self.assertEqual((metadata['width'], metadata['height']), (16, 12))
+            self.assertEqual((metadata['displayWidth'], metadata['displayHeight'], metadata['orientation']), (12, 16, 6))
+            thumbnail = base64.b64decode(metadata['thumbnailDataUrl'].split(',', 1)[1])
+            with Image.open(io.BytesIO(thumbnail)) as preview:
+                self.assertEqual(preview.size, (12, 16))
+            self.assertEqual(digest(source), before)
+            self.assertEqual(digest(version['absolutePath']), before)
+            if extension in ['.jpg', '.webp']:
+                old = {key: value for key, value in metadata.items() if key not in ['displayWidth', 'displayHeight', 'orientation', 'containerFormat']}
+                with self.project.connection() as db:
+                    db.execute('UPDATE versions SET metadata=? WHERE id=?', (json.dumps(old), version['id']))
+                supplemented = self.project.version(version['id'])['metadata']
+                self.assertEqual((supplemented['displayWidth'], supplemented['displayHeight']), (12, 16))
+                with self.project.connection() as db:
+                    stored = json.loads(db.execute('SELECT metadata FROM versions WHERE id=?', (version['id'],)).fetchone()[0])
+                self.assertNotIn('displayWidth', stored)
+
     def test_map_layout_permissions_resources_and_formal_outputs(self):
         feather = {'top':0,'right':0,'bottom':0,'left':0}
         layout = {'sourceName':'source.png','width':16,'height':12,'horizontalOverlapPercent':15,'verticalOverlapPercent':15,
@@ -98,7 +129,7 @@ class ProjectTests(unittest.TestCase):
     def test_ronin_document_kinds_reopen_stable_refs_and_keep_revision_conflicts(self):
         before=len(self.project.assets())
         for kind,tool,parameters in [('ronin-scale','customScale',{'width':256,'height':256,'keepAspect':True,'pixelated':True,'matteAlgorithm':'contiguous','nonContiguousTolerance':5}),
-            ('ronin-unify','unifySize',{'columns':4,'horizontal':'center','vertical':'bottom'}),('ronin-duplicates','findDuplicates',{'columns':8,'rows':4})]:
+            ('ronin-unify','unifySize',{'columns':4,'horizontal':'center','vertical':'bottom'}),('ronin-duplicates','findDuplicates',{'columns':8,'rows':4}),('image-fine','fineEdit',{})]:
             document_id=identifier()
             payload={'formatVersion':1,'tool':tool,'parameters':parameters,'files':[{'versionId':self.version['id'],'name':'source.png','type':'image/png'}],
                 'results':[],'reportFile':None,'editedFile':None,'taskId':None}

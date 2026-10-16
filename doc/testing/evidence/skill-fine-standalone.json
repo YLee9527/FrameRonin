@@ -1,0 +1,931 @@
+{
+  "date": "2026-10-16",
+  "baselineCommit": "6e00d89",
+  "scope": "Standalone image-fine document, safe handoff, source orientation and actual PNG export; S2/S3/S4 remain incomplete",
+  "initialFailure": {
+    "zipSha256": "fd15276ea5c70e9dd223092fe260fd588e396dc997921d9be11995ca7a6344b5",
+    "cases": [
+      {
+        "id": "brush-1",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "brush-4",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "brush-5",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "brush-32",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-1",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-8",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-64",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-1",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-30",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-100",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-transparent",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-overlap",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-clamp-positive",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-clamp-negative",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-whole-image",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-png",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-jpg",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": false,
+        "maxChannelError": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-lossless-webp",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-lossy-webp",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-oriented-jpg",
+        "width": 12,
+        "height": 16,
+        "strictRgbaEqual": false,
+        "maxChannelError": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-oriented-png",
+        "width": 12,
+        "height": 16,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-oriented-webp",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      }
+    ]
+  },
+  "fix": "JPEG ImageDecoder preserves original HTMLImage canvas pixels; default bitmap JPEG decoding differed by at most one RGB step. PNG/WebP keep their original bitmap route. Missing JPEG ImageDecoder rejects decoding explicitly.",
+  "originalBrowserComparisons": {
+    "zipSha256": "3fe88f51250469373dbe055291c7d1f6b847e063c482175472b3a571dfa1853d",
+    "cases": [
+      {
+        "id": "brush-1",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "brush-4",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "brush-5",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "brush-32",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-1",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-8",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "eraser-64",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-1",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-30",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-connected-100",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "erase-transparent",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-overlap",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-clamp-positive",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-clamp-negative",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "move-whole-image",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-png",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-jpg",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-lossless-webp",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-lossy-webp",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-oriented-jpg",
+        "width": 12,
+        "height": 16,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-oriented-png",
+        "width": 12,
+        "height": 16,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      },
+      {
+        "id": "export-source-oriented-webp",
+        "width": 16,
+        "height": 12,
+        "strictRgbaEqual": true,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "rectEqual": true
+      }
+    ]
+  },
+  "actualWorkbenchExports": [
+    {
+      "source": "source-oriented.jpg",
+      "outputFormat": "PNG",
+      "dimensions": [
+        12,
+        16
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "a304aa2989cb26894fcb8601c9523dd0cecacaac6e9f1f4b9a87e30a9fc95755"
+    },
+    {
+      "source": "source.jpg",
+      "outputFormat": "PNG",
+      "dimensions": [
+        16,
+        12
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "f12c0692a68c00015a61aba5dff6f024fa595544bcc7f0417e8cff7b501ebd58"
+    },
+    {
+      "source": "source-lossless.webp",
+      "outputFormat": "PNG",
+      "dimensions": [
+        16,
+        12
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea"
+    },
+    {
+      "source": "source-lossy.webp",
+      "outputFormat": "PNG",
+      "dimensions": [
+        16,
+        12
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "26a5f75917a80360566f6e0affafbad0456045bb8aeca8fef131f9e4cf80fcfa"
+    },
+    {
+      "source": "source-oriented.png",
+      "outputFormat": "PNG",
+      "dimensions": [
+        12,
+        16
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "c93121bb05b9846922737d1ae8ceaff9dae5e501a80ccb68dd3cb55e87ba01bf"
+    },
+    {
+      "source": "source-oriented.webp",
+      "outputFormat": "PNG",
+      "dimensions": [
+        16,
+        12
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea"
+    },
+    {
+      "source": "source.png",
+      "outputFormat": "PNG",
+      "dimensions": [
+        16,
+        12
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea"
+    }
+  ],
+  "history": [
+    {
+      "phase": "paint",
+      "strictRgbaEqual": true,
+      "sha256": "51a1ed99ec0e91207709be1c5dc78bd9359b4ddcf3b8e9a14f6393323d50e2f4"
+    },
+    {
+      "phase": "undo",
+      "strictRgbaEqual": true,
+      "sha256": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea"
+    },
+    {
+      "phase": "redo",
+      "strictRgbaEqual": true,
+      "sha256": "51a1ed99ec0e91207709be1c5dc78bd9359b4ddcf3b8e9a14f6393323d50e2f4"
+    }
+  ],
+  "paintDocument": {
+    "id": "d132c0d0-b8a5-4476-8a5b-0713869fb639",
+    "kind": "image-fine",
+    "revision": 3,
+    "payload": {
+      "tool": "fineEdit",
+      "parameters": {},
+      "files": [
+        {
+          "versionId": "360a57f6-4b2a-4cae-8c57-0974a0e17ec2",
+          "name": "source.png",
+          "type": "image/png"
+        }
+      ],
+      "results": [],
+      "reportFile": null,
+      "editedFile": {
+        "versionId": "f7cdc643-caa5-470b-b48a-da06b7066d42",
+        "name": "fine-edited.png",
+        "type": "image/png"
+      },
+      "taskId": null,
+      "formatVersion": 1
+    },
+    "updated_at": "2026-10-16T01:58:52.914422+00:00"
+  },
+  "reopenedStrictRgbaEqual": true,
+  "reopenedSha256": "51a1ed99ec0e91207709be1c5dc78bd9359b4ddcf3b8e9a14f6393323d50e2f4",
+  "conflictChecks": {
+    "backButton": "rejected navigation after external writer incremented original to revision 5",
+    "homeShortcutB": "rejected navigation after external writer incremented copy to revision 2",
+    "saveAs": "new copy e304e742, reopened after full page reload; original input and painted versions reused",
+    "screenshots": [
+      "skill-fine-standalone-conflict.png",
+      "skill-fine-standalone-hotkey-conflict.png",
+      "skill-fine-standalone-reopened.png"
+    ]
+  },
+  "handoffs": {
+    "normal": "source_for_fine.png accepted into document 54c9dc29; first import needed for the old normal tool result",
+    "workflow": {
+      "before": {
+        "versions": 4587,
+        "tasks": 108,
+        "latest": {
+          "id": "98f070ea-f85b-4117-9309-8808ecb97445",
+          "state": "succeeded",
+          "results": "[\"3967a6ba-5493-48ab-b627-6734de44cc23\", \"7cf2b5b2-7307-4fe9-93ee-f12f9fd2de6a\"]"
+        }
+      },
+      "after": {
+        "versions": 4587,
+        "tasks": 108
+      },
+      "document": {
+        "id": "b170d738-fc13-4882-bb21-b73f6c7acf75",
+        "kind": "image-fine",
+        "revision": 2,
+        "payload": {
+          "tool": "fineEdit",
+          "parameters": {},
+          "files": [
+            {
+              "versionId": "3967a6ba-5493-48ab-b627-6734de44cc23",
+              "name": "source_workflow.png",
+              "type": "image/png"
+            }
+          ],
+          "results": [],
+          "reportFile": null,
+          "editedFile": null,
+          "taskId": null,
+          "formatVersion": 1
+        },
+        "updated_at": "2026-10-16T02:03:35.932966+00:00"
+      },
+      "sameSourceVersion": true
+    }
+  },
+  "orientationPaintDocuments": [
+    {
+      "document": {
+        "id": "61565c73-0db6-468c-889d-cfe7faccd6d3",
+        "kind": "image-fine",
+        "revision": 3,
+        "payload": {
+          "tool": "fineEdit",
+          "parameters": {},
+          "files": [
+            {
+              "versionId": "0ce44bce-45d4-43a1-8ff0-e4fa02cbbd50",
+              "name": "source-oriented.webp",
+              "type": "image/webp"
+            }
+          ],
+          "results": [],
+          "reportFile": null,
+          "editedFile": {
+            "versionId": "48f73c89-bff0-4ff5-9f66-25165941746d",
+            "name": "fine-edited.png",
+            "type": "image/png"
+          },
+          "taskId": null,
+          "formatVersion": 1
+        },
+        "updated_at": "2026-10-16T02:04:06.606718+00:00"
+      },
+      "sourceMetadata": {
+        "bytes": 184,
+        "extension": ".webp",
+        "orientation": 6,
+        "displayWidth": 12,
+        "displayHeight": 16,
+        "containerFormat": "WEBP",
+        "kind": "image",
+        "width": 16,
+        "height": 12,
+        "frames": 1,
+        "durationsMs": [
+          0
+        ],
+        "transparency": true,
+        "pixelFormat": "RGBA8",
+        "processingDimensions": {
+          "width": 16,
+          "height": 12
+        }
+      },
+      "editedMetadata": {
+        "bytes": 303,
+        "extension": ".png",
+        "orientation": 1,
+        "displayWidth": 16,
+        "displayHeight": 12,
+        "containerFormat": "PNG",
+        "kind": "image",
+        "width": 16,
+        "height": 12,
+        "frames": 1,
+        "durationsMs": [
+          100
+        ],
+        "transparency": true,
+        "pixelFormat": "RGBA8",
+        "processingDimensions": {
+          "width": 16,
+          "height": 12
+        }
+      },
+      "strictPaintPixelsEqual": true
+    },
+    {
+      "document": {
+        "id": "393273de-8015-4096-acae-bd8391869bb5",
+        "kind": "image-fine",
+        "revision": 3,
+        "payload": {
+          "tool": "fineEdit",
+          "parameters": {},
+          "files": [
+            {
+              "versionId": "3e62668f-90c4-48b4-bdf8-bf29432bf2d9",
+              "name": "source-oriented.jpg",
+              "type": "image/jpeg"
+            }
+          ],
+          "results": [],
+          "reportFile": null,
+          "editedFile": {
+            "versionId": "328759a1-6b9e-4ff1-a402-2d35d61c2824",
+            "name": "fine-edited.png",
+            "type": "image/png"
+          },
+          "taskId": null,
+          "formatVersion": 1
+        },
+        "updated_at": "2026-10-16T02:04:29.326621+00:00"
+      },
+      "sourceMetadata": {
+        "bytes": 810,
+        "extension": ".jpg",
+        "orientation": 6,
+        "displayWidth": 12,
+        "displayHeight": 16,
+        "containerFormat": "JPEG",
+        "kind": "image",
+        "width": 16,
+        "height": 12,
+        "frames": 1,
+        "durationsMs": [
+          100
+        ],
+        "transparency": false,
+        "pixelFormat": "RGBA8",
+        "processingDimensions": {
+          "width": 16,
+          "height": 12
+        }
+      },
+      "editedMetadata": {
+        "bytes": 597,
+        "extension": ".png",
+        "orientation": 1,
+        "displayWidth": 12,
+        "displayHeight": 16,
+        "containerFormat": "PNG",
+        "kind": "image",
+        "width": 12,
+        "height": 16,
+        "frames": 1,
+        "durationsMs": [
+          100
+        ],
+        "transparency": false,
+        "pixelFormat": "RGBA8",
+        "processingDimensions": {
+          "width": 12,
+          "height": 16
+        }
+      },
+      "strictPaintPixelsEqual": true
+    }
+  ],
+  "actualInteractions": [
+    "7 source format uploads and PNG downloads",
+    "black brush at (4,4), radius 2; exact PNG pixels",
+    "undo and redo reuse original/painted versions",
+    "save, save as, full reload and reopen",
+    "back and B shortcut preserve document on revision conflict",
+    "source removal and undo",
+    "invalid PNG preserves selected JPEG and edited version",
+    "Chinese, English and Japanese document/editor controls"
+  ],
+  "validation": {
+    "pythonTests": 30,
+    "javascriptTests": 38,
+    "runtimeBuild": true,
+    "workbenchBuild": true,
+    "changedModuleEslint": true,
+    "skillStructure": true,
+    "projectIntegrity": {
+      "valid": true,
+      "database": "ok",
+      "versions": 4591,
+      "failed": 0
+    }
+  },
+  "pending": [
+    "animated PNG/WebP handling",
+    "additional EXIF/ICC and cross-browser decoding; JPEG requires ImageDecoder",
+    "complete pointer, keyboard and view-state regression",
+    "whole application joint peak RSS and preparation cancellation",
+    "normal image pipeline background migration and remaining S2/S3/S4 scope"
+  ]
+}

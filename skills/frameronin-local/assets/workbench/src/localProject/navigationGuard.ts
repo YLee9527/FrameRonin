@@ -8,13 +8,15 @@ export function registerSaveGuard(guard: SaveGuard): () => void {
 }
 
 /** Save before unmounting an editor. A rejected save keeps the current view. */
-export async function navigateWithSave(changeView: () => void): Promise<void> {
-  if (navigating) return
+export async function navigateWithSave(changeView: () => void): Promise<boolean> {
+  if (navigating) return false
   navigating = true
   try {
     for (const guard of guards) await guard()
     changeView()
+    return true
   } catch {
     // The editor displays the save error and retains its document.
+    return false
   } finally { navigating = false }
 }

@@ -29,7 +29,7 @@ const IMAGE_MAX_MB = 20
 
 export interface ImageResizeStrokeProps {
   /** 将当前生成预览（Blob）转入精细处理子模块 */
-  onSendToFineProcess?: (blob: Blob, suggestedFilename: string) => void
+  onSendToFineProcess?: (blob: Blob, suggestedFilename: string) => boolean|void|Promise<boolean|void>
 }
 
 export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeStrokeProps = {}) {
@@ -620,10 +620,9 @@ export default function ImageResizeStroke({ onSendToFineProcess }: ImageResizeSt
                     <Button
                       type="default"
                       icon={<EditOutlined />}
-                      onClick={() => {
+                      onClick={async() => {
                         const base = (file?.name?.replace(/\.[^.]+$/, '') || 'output') + '_for_fine.png'
-                        onSendToFineProcess(previewBlob, base)
-                        message.success(t('imgSendToFineProcessDone'))
+                        if(await onSendToFineProcess(previewBlob,base)!==false)message.success(t('imgSendToFineProcessDone'))
                       }}
                     >
                       {t('imgSendToFineProcess')}

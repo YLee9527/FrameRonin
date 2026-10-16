@@ -695,7 +695,8 @@ export default function ImageFineEditor({ imageUrl, onExport,binding,disabled=fa
   },[pushHistory,clearSelectUi,markDirty])
   const exportBlob=useCallback(async()=>{
     await finishGesture.current()
-    if(liveBinding.current)return liveBinding.current.file
+    // Every fine-editor download is PNG, including an untouched JPEG/WebP
+    // source. Preserve the original version while encoding the visible canvas.
     return await execute(async(signal,version)=>{
       const result=await pixelRequest('encode',signal,version)
       if(!result.blob)throw new Error('FINE_EDITOR_OUTPUT_INVALID')

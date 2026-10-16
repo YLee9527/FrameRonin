@@ -1,4 +1,10 @@
 export type PixelRect={x:number;y:number;w:number;h:number}
+// The original browser canvas applies JPEG/PNG EXIF orientation, but its WebP
+// decoder leaves that marker unapplied. The frozen source-format oracles cover
+// this difference; Pillow's normalized preview dimensions are not interchangeable.
+export const fineEditorDimensions=(metadata:{width?:number;height?:number;displayWidth?:number;displayHeight?:number;containerFormat?:string;extension?:string})=>
+  metadata.containerFormat==='WEBP'||metadata.extension==='.webp'?{width:metadata.width,height:metadata.height}:
+    {width:metadata.displayWidth??metadata.width,height:metadata.displayHeight??metadata.height}
 
 /** Same integer circle as the original stamp, with only a bounded pixel read. */
 export function stampFineCircle(context:Pick<CanvasRenderingContext2D,'getImageData'|'putImageData'>,width:number,height:number,px:number,py:number,size:number,rgb:number[]|null){
