@@ -272,6 +272,31 @@ class ProjectTests(unittest.TestCase):
         final=task(self.project,created['id']);self.assertEqual(final['results'],[]);self.assertEqual(final['generation'],1)
         time.sleep(.2);self.assertEqual(task(self.project,created['id'])['results'],[])
 
+    def test_expand_shrink_requires_workbench_checks_limits_and_reconciles_publication(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        payload={'operation':'image.expandShrink','inputs':[self.version['id']],
+            'parameters':{'columns':3,'rows':2,'cellWidth':8,'cellHeight':9}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        for change in [{'columns':65},{'rows':0},{'cellWidth':513},{'cellHeight':1.5},
+            {'columns':64,'cellWidth':512},{'frontendBytes':2*1024**3},{'renderer':'native'},{'command':'run'}]:
+            with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':{**payload['parameters'],**change}})
+        created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+        while not ready(self.project,created['id'])['ready']:
+            self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+        wrong=self.root/'wrong-grid.png';Image.new('RGBA',(25,18)).save(wrong)
+        with self.assertRaises(RoninError):accept(self.project,created['id'],0,wrong)
+        output=self.root/'grid.png';Image.new('RGBA',(24,18),(100,50,200,128)).save(output)
+        accept(self.project,created['id'],0,output)
+        result=wait(self.project,created['id'],10);self.assertEqual(result['state'],'succeeded',result)
+        self.assertEqual(len(result['results']),2)
+        with self.assertRaises(Cancelled):accept(self.project,created['id'],0,output)
+        document_id=identifier();saved=self.project.save_document(document_id,'image-expand-shrink',{'fixture':'grid'},0)
+        self.assertEqual(Project(self.project.root).document(document_id)['revision'],saved['revision'])
+        created=submit(self.project,payload,browser_client=True);cancel(self.project,created['id'])
+        with self.assertRaises(Cancelled):accept(self.project,created['id'],0,output)
+        self.assertEqual(task(self.project,created['id'])['results'],[])
+
     def test_normal_browser_recipes_validate_each_output_shape_and_late_publication(self):
         from frameronin_engine.browser_tasks import ready,accept
         from frameronin_engine.operations import parameters,normal_output_dimensions

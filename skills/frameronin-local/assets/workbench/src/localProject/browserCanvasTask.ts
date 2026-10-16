@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=options.operation==='image.normal'?new Worker(new URL('../lib/normalImage.worker.ts',import.meta.url),{type:'module'}):
+    worker=options.operation==='image.expandShrink'?new Worker(new URL('../lib/expandShrink.worker.ts',import.meta.url),{type:'module'}):
+      options.operation==='image.normal'?new Worker(new URL('../lib/normalImage.worker.ts',import.meta.url),{type:'module'}):
       new Worker(new URL('../lib/smoothResize.worker.ts',import.meta.url),{type:'module'})
     const blob=await new Promise<Blob>((resolve,reject)=>{
       heartbeatFailure=reject

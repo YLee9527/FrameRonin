@@ -81,6 +81,10 @@ REGISTRY = {
         'background':{'type':'color','default':'#ffffff'},'tolerance':number(40,1,100),'feather':number(5,0,30),
         'strokeWidth':integer(0,0,20),'strokeColor':{'type':'color','default':'#000000'},
         'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_normal_image_recipes',overhead=256),
+    'image.expandShrink': operation(['image'],{'columns':integer(4,1,64),'rows':integer(4,1,64),
+        'cellWidth':integer(32,1,512),'cellHeight':integer(32,1,512),
+        'renderer':choice('browser-worker',['browser-worker']),
+        'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_fractional_grid_crop_pad',overhead=256),
     'sequence.unifySize': operation(['image+'],{'columns':integer(4,1,64),
         'horizontal':choice('center',['left','center','right']),'vertical':choice('bottom',['top','center','bottom']),
         'frontendBytes':integer(0,0,2*1024**3)},'png_report','original_integer_alignment',overhead=256),
@@ -164,6 +168,12 @@ def preview(project, payload):
         raise RoninError('INPUT_KIND', 'A selected asset has an incompatible media kind.')
     pixels = [v['metadata'].get('width', 0) * v['metadata'].get('height', 0) for v in versions]
     estimate = spec['runtimeOverheadMiB'] * 1024**2 + max(pixels, default=0) * 4 * 4
+    if name=='image.expandShrink':
+        source=versions[0]['metadata'];width,height=values['columns']*values['cellWidth'],values['rows']*values['cellHeight']
+        if max(width,height,source['width'],source['height'])>30000:raise RoninError('GRID_DIMENSION_LIMIT','Input and output sides must be at most 30000 pixels.')
+        if source['bytes']>20*1024**2 or source.get('containerFormat') not in ['PNG','JPEG','WEBP']:
+            raise RoninError('GRID_SOURCE_LIMIT','Select a static PNG, JPEG or WebP up to 20 MiB.')
+        estimate=spec['runtimeOverheadMiB']*1024**2+max(pixels)*40+width*height*40+source['bytes']*8+values['frontendBytes']
     if name=='image.normal':
         source=versions[0]['metadata'];width,height=normal_output_dimensions(source,values)
         if values['renderer']=='native':
@@ -313,7 +323,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['image.customScale','image.normal'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.customScale','image.normal','image.expandShrink'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,

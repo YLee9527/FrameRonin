@@ -21,7 +21,8 @@ def location(project,task_id,generation=None):
         if not row:
             raise RoninError('TASK_MISSING','The task does not exist.')
         payload=json.loads(row['payload'])
-        if payload['operation'] not in ['image.customScale','image.normal'] or payload.get('parameters',{}).get('renderer')!='browser-worker':
+        from .operations import parameters as checked_parameters
+        if payload['operation'] not in ['image.customScale','image.normal','image.expandShrink'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
             raise RoninError('BROWSER_OPERATION_UNSUPPORTED','This task does not accept browser pixels.')
         if generation is not None:
             if type(generation) is not int:
@@ -50,7 +51,9 @@ def accept(project,task_id,generation,source):
     directory,row=location(project,task_id,generation)
     from .operations import parameters as checked_parameters,normal_output_dimensions
     payload=json.loads(row['payload']);parameters=checked_parameters(payload['operation'],payload['parameters'])
-    dimensions=normal_output_dimensions(project.version(payload['inputs'][0])['metadata'],parameters) if payload['operation']=='image.normal' else (parameters['width'],parameters['height'])
+    if payload['operation']=='image.normal':dimensions=normal_output_dimensions(project.version(payload['inputs'][0])['metadata'],parameters)
+    elif payload['operation']=='image.expandShrink':dimensions=(parameters['columns']*parameters['cellWidth'],parameters['rows']*parameters['cellHeight'])
+    else:dimensions=(parameters['width'],parameters['height'])
     # Decode and inspect outside the writer lock so cancellation is responsive.
     try:
         with Image.open(source) as image:

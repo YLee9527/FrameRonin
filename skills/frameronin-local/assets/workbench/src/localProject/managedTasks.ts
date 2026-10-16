@@ -98,7 +98,7 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     if (signal?.aborted) abort()
     while (['queued', 'running'].includes(record.state)) {
       signal?.throwIfAborted()
-      if(['image.customScale','image.normal'].includes(operation)&&(parameters as {renderer?:string}).renderer==='browser-worker'&&record.state==='running'&&!browserRun){
+      if(['image.customScale','image.normal','image.expandShrink'].includes(operation)&&(parameters as {renderer?:string}).renderer==='browser-worker'&&record.state==='running'&&!browserRun){
         browserRun=browserCanvasTask(record.id,files[0],parameters,browserController.signal,()=>options.onProgress?.(.2),{operation,budgetBytes:memoryBudgetBytes}).catch(error=>{browserError=error})
       }
       if(browserError)throw browserError

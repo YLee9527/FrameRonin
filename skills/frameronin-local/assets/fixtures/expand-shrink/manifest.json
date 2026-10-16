@@ -1,0 +1,167 @@
+{
+  "cases": [
+    {
+      "id": "identity",
+      "input": "source.png",
+      "parameters": {
+        "columns": 1,
+        "rows": 1,
+        "cellWidth": 13,
+        "cellHeight": 11
+      }
+    },
+    {
+      "id": "integer-crop",
+      "input": "grid.png",
+      "parameters": {
+        "columns": 4,
+        "rows": 4,
+        "cellWidth": 10,
+        "cellHeight": 12
+      }
+    },
+    {
+      "id": "integer-pad",
+      "input": "grid.png",
+      "parameters": {
+        "columns": 4,
+        "rows": 4,
+        "cellWidth": 20,
+        "cellHeight": 24
+      }
+    },
+    {
+      "id": "fractional-crop",
+      "input": "source.png",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 3,
+        "cellHeight": 4
+      }
+    },
+    {
+      "id": "fractional-pad",
+      "input": "source.png",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    },
+    {
+      "id": "mixed-crop-pad",
+      "input": "source.png",
+      "parameters": {
+        "columns": 2,
+        "rows": 3,
+        "cellWidth": 4,
+        "cellHeight": 8
+      }
+    },
+    {
+      "id": "empty-source-cells",
+      "input": "source.png",
+      "parameters": {
+        "columns": 64,
+        "rows": 64,
+        "cellWidth": 1,
+        "cellHeight": 1
+      }
+    },
+    {
+      "id": "maximum-grid",
+      "input": "grid.png",
+      "parameters": {
+        "columns": 64,
+        "rows": 64,
+        "cellWidth": 2,
+        "cellHeight": 2
+      }
+    },
+    {
+      "id": "maximum-cell",
+      "input": "grid.png",
+      "parameters": {
+        "columns": 1,
+        "rows": 1,
+        "cellWidth": 512,
+        "cellHeight": 512
+      }
+    },
+    {
+      "id": "source-jpg",
+      "input": "source.jpg",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    },
+    {
+      "id": "source-webp",
+      "input": "source.webp",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    },
+    {
+      "id": "profiled-png",
+      "input": "profiled.png",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    },
+    {
+      "id": "oriented-jpg",
+      "input": "oriented.jpg",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    },
+    {
+      "id": "oriented-png",
+      "input": "oriented.png",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    },
+    {
+      "id": "oriented-webp",
+      "input": "oriented.webp",
+      "parameters": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 8,
+        "cellHeight": 9
+      }
+    }
+  ],
+  "sources": {
+    "oriented.webp": "13a9ec4338daa07bef169772404ff8492ae0a31a161eb6eb12bd6ca4cf2af9eb",
+    "grid.png": "09c6ccd04f5752891906b04fcb39a6d22bd5e85e42e16728622f15f0308e8adb",
+    "source.png": "3d14c7a7399d11e22d5b914a73a46c8bbc7a338d530d2a88a4639d40d7410d1f",
+    "source.jpg": "1099e8a21060f4637c6d7557e4939befda588b8f1b2b6ff84d17121e7960f7a4",
+    "source.webp": "8f6aa89974a22fe26bcfb54e6647a119f5f0c25f61ecbad78097736d8d6a900d",
+    "profiled.png": "8a652e82b530cd39efd7b07a9ee2edbee37884293e9d12f410ec176c497ab0ed",
+    "oriented.png": "872edf1711adda522697ba0a7f01b0afdf1a07e25855e432775fb43f5717f133",
+    "oriented.jpg": "824df90599eb4b81c50b653ce3cf6730737532577ec7d32fc9312ae4fe28097e"
+  },
+  "originalSource": "reference/frontend/src/components/ImageExpandShrink.tsx",
+  "originalSha256": "90de6e16d6d06ef9bf382f8e5f29cdc9f3f8150449938e8ceabfc2e12ad0caf0",
+  "criteria": "Exact decoded dimensions and RGBA against the original HTMLImage Canvas algorithm; no tolerance."
+}

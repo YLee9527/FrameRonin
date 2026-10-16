@@ -516,10 +516,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageExpandShrink.tsx",
-    "sample": "fixed-image-expand",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "expand-shrink/manifest.json",
+    "evidence": "doc/testing/evidence/skill-expand-shrink.json",
+    "status": "15 组原算法严格对照；受控 Worker、正式文档/历史/下载、取消与迟到保护通过；联合内存及更多取消样本继续验收",
+    "limits": "Static PNG/JPEG/WebP ≤20 MiB; columns/rows 1–64, cell size 1–512; target sides ≤30000 and full budget; host Worker/ImageDecoder for JPEG required"
   },
   {
     "id": "image.shrink",
@@ -529,10 +529,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageExpandShrink.tsx",
-    "sample": "fixed-image-shrink",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "expand-shrink/manifest.json",
+    "evidence": "doc/testing/evidence/skill-expand-shrink.json",
+    "status": "15 组原算法严格对照；受控 Worker、正式文档/历史/下载、取消与迟到保护通过；联合内存及更多取消样本继续验收",
+    "limits": "Static PNG/JPEG/WebP ≤20 MiB; columns/rows 1–64, cell size 1–512; target sides ≤30000 and full budget; host Worker/ImageDecoder for JPEG required"
   },
   {
     "id": "image.rembg",

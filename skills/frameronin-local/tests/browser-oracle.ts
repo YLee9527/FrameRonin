@@ -1,3 +1,4 @@
+import {originalExpandShrink} from '../.runtime/oracle/original-expand-shrink'
 import { featheredImageCanvas, makeRelativeTemplate, layeredPsdBlob } from '../.runtime/oracle/original-map'
 import { mapFeatherPreview } from '../assets/workbench/src/lib/mapPreview'
 import { interpolateMidFrameOpticalFlow } from '../assets/workbench/src/lib/opticalFlowInterpolate'
@@ -277,7 +278,25 @@ async function runNormalImage(){
   }
   await publish(zip,'browser-normal-image.zip');status.textContent=`Normal image complete: ${fixture.cases.length} original recipes`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage]] as const) {
+async function runExpandShrink(){
+  const fixture=await(await fetch('/expand-shrink/manifest.json')).json(),zip=new JSZip()
+  for(const entry of fixture.cases){
+    const file=await(await fetch(`/expand-shrink/${entry.input}`)).blob()
+    zip.file(`${entry.id}/original.png`,await originalExpandShrink(file,entry.parameters))
+    const worker=new Worker(new URL('../assets/workbench/src/lib/expandShrink.worker.ts',import.meta.url),{type:'module'})
+    try{
+      const blob=await new Promise<Blob>((resolve,reject)=>{
+        worker.onmessage=event=>{if(event.data.error)reject(new Error(event.data.error));else if(event.data.blob)resolve(event.data.blob)}
+        worker.onerror=event=>reject(new Error(event.message))
+        worker.postMessage({id:entry.id,generation:0,file,parameters:{...entry.parameters,frontendBytes:0},budgetBytes:2*1024**3})
+      })
+      zip.file(`${entry.id}/actual-worker.png`,blob)
+    }finally{worker.terminate()}
+    status.textContent=`Expand/shrink: ${entry.id}`
+  }
+  await publish(zip,'browser-expand-shrink.zip');status.textContent=`Expand shrink complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

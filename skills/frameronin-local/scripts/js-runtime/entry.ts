@@ -39,3 +39,5 @@ export {runNormalSourceWorker} from '../../assets/workbench/src/lib/normalImageS
 export {initialNormalImageDraft,validateStoredNormalImage,serializeNormalImage,restoreNormalImage,normalImageDefaults} from '../../assets/workbench/src/localProject/normalImageDocument'
 export {createNormalImageHistory,normalImageHistoryReducer} from '../../assets/workbench/src/localProject/useNormalImageDocument'
 export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/localProject/navigationGuard'
+
+export {expandShrinkImage,validateExpandShrinkParameters,checkExpandShrinkBudget} from '../../assets/workbench/src/lib/expandShrinkImage'

@@ -1,23 +1,25 @@
 import { cacheManagedInput, importManagedInputs, loadManagedVersions,type ManagedVersion } from './managedTasks'
 import { localFetch, localJson } from './api'
 import {checkFineEditorBudget,fineEditorDimensions} from '../lib/fineEditorPixels'
+import {validateExpandShrinkParameters,type ExpandShrinkParameters} from '../lib/expandShrinkImage'
 
-export type ImageToolKind='customScale'|'unifySize'|'findDuplicates'|'fineEdit'
+export type ImageToolKind='customScale'|'unifySize'|'findDuplicates'|'fineEdit'|'expandShrink'
 export type ImageToolParameters={
   customScale:{width:number;height:number;keepAspect:boolean;pixelated:boolean;matteAlgorithm:'contiguous'|'chromaKey'|'chromaKeyAdaptive';nonContiguousTolerance:number};
   unifySize:{columns:number;horizontal:'left'|'center'|'right';vertical:'top'|'center'|'bottom'};
   findDuplicates:{columns:number;rows:number};
   fineEdit:Record<string,never>;
+  expandShrink:ExpandShrinkParameters;
 }
 export type ImageToolDraft<K extends ImageToolKind=ImageToolKind>={tool:K;parameters:ImageToolParameters[K];files:File[];results:File[];reportFile:File|null;editedFile:File|null;taskId:string|null}
 type Resource={versionId:string;name:string;type:string}
 export type StoredImageTool=Omit<ImageToolDraft,'files'|'results'|'reportFile'|'editedFile'> & {formatVersion:1;files:Resource[];results:Resource[];reportFile:Resource|null;editedFile:Resource|null}
 export const imageToolMetadata=new WeakMap<File,ManagedVersion>()
 export const imageToolReports=new WeakMap<File,Record<string,unknown>>()
-export const imageToolOperations={customScale:'image.customScale',unifySize:'sequence.unifySize',findDuplicates:'image.findDuplicates',fineEdit:null} as const
-export const imageToolDocumentKinds={customScale:'ronin-scale',unifySize:'ronin-unify',findDuplicates:'ronin-duplicates',fineEdit:'image-fine'} as const
+export const imageToolOperations={customScale:'image.customScale',unifySize:'sequence.unifySize',findDuplicates:'image.findDuplicates',fineEdit:null,expandShrink:'image.expandShrink'} as const
+export const imageToolDocumentKinds={customScale:'ronin-scale',unifySize:'ronin-unify',findDuplicates:'ronin-duplicates',fineEdit:'image-fine',expandShrink:'image-expand-shrink'} as const
 const defaults:ImageToolParameters={customScale:{width:256,height:256,keepAspect:true,pixelated:true,matteAlgorithm:'contiguous',nonContiguousTolerance:5},
-  unifySize:{columns:4,horizontal:'center',vertical:'bottom'},findDuplicates:{columns:8,rows:4},fineEdit:{}}
+  unifySize:{columns:4,horizontal:'center',vertical:'bottom'},findDuplicates:{columns:8,rows:4},fineEdit:{},expandShrink:{columns:4,rows:4,cellWidth:32,cellHeight:32}}
 export const initialImageToolDraft=<K extends ImageToolKind>(tool:K):ImageToolDraft<K>=>({tool,parameters:{...defaults[tool]},files:[],results:[],reportFile:null,editedFile:null,taskId:null})
 export const imageToolFiles=(drafts:ImageToolDraft[])=>new Set(drafts.flatMap(draft=>[...draft.files,...draft.results,draft.reportFile,draft.editedFile]).filter((file):file is File=>!!file))
 const integer=(value:unknown,min:number,max:number)=>typeof value==='number'&&Number.isSafeInteger(value)&&value>=min&&value<=max
@@ -41,6 +43,8 @@ export function validateImageToolParameters(tool:ImageToolKind,parameters:unknow
   }else if(tool==='findDuplicates'){
     const p=parameters as ImageToolParameters['findDuplicates']
     if(!integer(p.columns,1,64)||!integer(p.rows,1,64))throw new Error('IMAGE_TOOL_PARAMETERS_INVALID')
+  }else if(tool==='expandShrink'){
+    validateExpandShrinkParameters(parameters as ExpandShrinkParameters)
   }
 }
 export function validateStoredImageTool(value:unknown):StoredImageTool{
@@ -87,8 +91,18 @@ export async function imageToolReport(draft:ImageToolDraft):Promise<Record<strin
   imageToolReports.set(draft.reportFile,report);return report
 }
 async function checkTaskReferences(tool:ImageToolKind,taskId:string,inputs:string[],outputs:string[]){
-  const task=await localJson<{state:string;results:string[];payload:{operation:string;inputs:string[]}}>(`/api/tasks/${taskId}`)
+  const task=await localJson<{state:string;results:string[];payload:{operation:string;inputs:string[];parameters?:Record<string,unknown>}}>(`/api/tasks/${taskId}`)
   if(task.state!=='succeeded'||task.payload.operation!==imageToolOperations[tool]||JSON.stringify(inputs)!==JSON.stringify(task.payload.inputs)||JSON.stringify(outputs)!==JSON.stringify(task.results))throw new Error('IMAGE_TOOL_TASK_MISMATCH')
+  return task
+}
+function checkExpandShrinkResources(inputs:ManagedVersion[],results:ManagedVersion[],parameters:Record<string,unknown>|undefined){
+  const source=inputs[0]?.metadata
+  if(inputs.length>1||source&&(source.bytes>20*1024**2||!['PNG','JPEG','WEBP'].includes(source.containerFormat??'')||source.frames&&source.frames!==1))throw new Error('EXPAND_SHRINK_SOURCE_LIMIT')
+  if(!results.length)return
+  if(!source||results.length!==1||!parameters||parameters.renderer!=='browser-worker')throw new Error('EXPAND_SHRINK_TASK_PARAMETERS')
+  const p=parameters as ExpandShrinkParameters;validateExpandShrinkParameters(p)
+  const result=results[0].metadata
+  if(result.containerFormat!=='PNG'||result.extension!=='.png'||(result.orientation??1)!==1||result.width!==p.columns*p.cellWidth||result.height!==p.rows*p.cellHeight)throw new Error('EXPAND_SHRINK_RESULT_DIMENSIONS')
 }
 async function checkDraft(draft:ImageToolDraft){
   for(const file of [...draft.files,...draft.results,...(draft.editedFile?[draft.editedFile]:[])])metadata(file)
@@ -96,6 +110,7 @@ async function checkDraft(draft:ImageToolDraft){
     const source=metadata(draft.files[0]).metadata
     if(source.bytes>20*1024**2||!['.png','.jpg','.jpeg','.webp'].includes(source.extension??''))throw new Error('FINE_EDITOR_SOURCE_LIMIT')
   }
+  if(draft.tool==='expandShrink'&&!draft.taskId)checkExpandShrinkResources(draft.files.map(file=>metadata(file)),[],undefined)
   if(draft.editedFile){
     const actual=metadata(draft.editedFile).metadata,source=metadata(draft.tool==='fineEdit'?draft.files[0]:draft.results[0]).metadata
     if(actual.extension!=='.png'||actual.containerFormat&&actual.containerFormat!=='PNG'||(actual.orientation??1)!==1)throw new Error('IMAGE_TOOL_EDIT_FORMAT')
@@ -103,8 +118,12 @@ async function checkDraft(draft:ImageToolDraft){
     if(actual.width!==base.width||actual.height!==base.height)throw new Error('IMAGE_TOOL_EDIT_DIMENSIONS')
   }
   if(!draft.taskId)return
-  await checkTaskReferences(draft.tool,draft.taskId,draft.files.map(file=>metadata(file).id),[...draft.results.map(file=>metadata(file).id),metadata(draft.reportFile!,true).id])
-  await imageToolReport(draft)
+  const task=await checkTaskReferences(draft.tool,draft.taskId,draft.files.map(file=>metadata(file).id),[...draft.results.map(file=>metadata(file).id),metadata(draft.reportFile!,true).id])
+  const report=await imageToolReport(draft)
+  if(draft.tool==='expandShrink'){
+    checkExpandShrinkResources(draft.files.map(file=>metadata(file)),draft.results.map(file=>metadata(file)),task.payload.parameters)
+    if(!report.parameters||typeof report.parameters!=='object'||Object.entries(task.payload.parameters!).some(([key,value])=>(report.parameters as Record<string,unknown>)[key]!==value))throw new Error('EXPAND_SHRINK_REPORT_PARAMETERS')
+  }
 }
 export async function serializeImageToolDocument(draft:ImageToolDraft):Promise<StoredImageTool>{
   const placeholder={versionId:'00000000-0000-0000-0000-000000000000',name:'selected.png',type:'image/png'}
@@ -122,7 +141,7 @@ async function mapBounded<T,R>(values:T[],work:(value:T)=>Promise<R>):Promise<R[
 export async function restoreImageToolDocument(value:unknown,retained:File[]=[]):Promise<ImageToolDraft>{
   const stored=validateStoredImageTool(value),{project,memoryBudgetBytes}=await localJson<{project:{id:string};memoryBudgetBytes:number}>('/api/project/context')
   if(!integer(memoryBudgetBytes,1,2*1024**3))throw new Error('IMAGE_TOOL_DOCUMENT_BUDGET')
-  if(stored.taskId)await checkTaskReferences(stored.tool,stored.taskId,stored.files.map(ref=>ref.versionId),[...stored.results.map(ref=>ref.versionId),stored.reportFile!.versionId])
+  const task=stored.taskId?await checkTaskReferences(stored.tool,stored.taskId,stored.files.map(ref=>ref.versionId),[...stored.results.map(ref=>ref.versionId),stored.reportFile!.versionId]):null
   const references=[...stored.files,...stored.results,...(stored.reportFile?[stored.reportFile]:[]),...(stored.editedFile?[stored.editedFile]:[])]
   const key=(ref:Resource)=>ref.versionId+'|'+ref.name+'|'+ref.type
   const unique=[...new Map(references.map(ref=>[key(ref),ref])).values()],byVersion=new Map<string,ManagedVersion>()
@@ -137,6 +156,7 @@ export async function restoreImageToolDocument(value:unknown,retained:File[]=[])
     bytes+=meta.bytes*2
   }
   if(bytes>memoryBudgetBytes/4)throw new Error('IMAGE_TOOL_DOCUMENT_RESOURCE_LIMIT')
+  if(stored.tool==='expandShrink')checkExpandShrinkResources(stored.files.map(ref=>byVersion.get(ref.versionId)!),stored.results.map(ref=>byVersion.get(ref.versionId)!),task?.payload.parameters)
   if(stored.tool==='fineEdit'&&stored.files.length){
     const source=byVersion.get(stored.files[0].versionId)!.metadata
     if(source.bytes>20*1024**2||!['.png','.jpg','.jpeg','.webp'].includes(source.extension??''))throw new Error('FINE_EDITOR_SOURCE_LIMIT')

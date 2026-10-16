@@ -81,3 +81,11 @@ Worker 与后台队列之间通过 `/api/tasks/{id}/browser`（GET 就绪状态�
 常规工作台统一使用 browser-worker：源图预览和原图取色也在独立可取消 Worker 完成，主线程只绘制最长边 1024 的预览。裁切、取色及加工仍使用原图坐标与像素；预览尺寸不改变正式输出。JPEG 需要 ImageDecoder，否则明确报 NORMAL_JPEG_DECODER_UNAVAILABLE。源图预检不通过时保留当前文档。
 
 六种配方使用既有任务队列、心跳、执行代次及统一发布；服务端按操作、输入版本和预期尺寸校验实际 PNG。取消先使结果失效并终止 Worker；取消后迟到上传拒绝发布。参数或输入变化后只保留项目结果，不覆盖当前文档；离开工具页后任务继续，关闭浏览器标签会终止其 Worker，失联按任务协议核对。`extendBottom` 实际扩展量为 floor(height/3)，保留原余数行行为；它使用上一张主结果，抠图辅助预览独立保留。普通短图不扩展时，工作台仍输出真实 PNG。
+
+## 网格扩图与缩图
+
+`image.expandShrink` 保留每格中心裁切/透明补边及原 Canvas 小数坐标，不对每格缩放。参数为 `columns/rows`（1–64）、`cellWidth/cellHeight`（1–512）、`renderer=browser-worker` 和 `frontendBytes`；输出一张真实 PNG 与参数报告。输入为已核验的静态 PNG/JPEG/WebP，最大 20 MiB。目标尺寸为列数×格宽、行数×格高；输入/输出边长不超过 30000，并在解码前核对完整内存预算。原算法在源格不足一个像素时输出透明格，此行为保留。
+
+该操作始终需要原宿主 Worker，默认参数也返回 requiresWorkbench=true；CLI 与通用提案执行返回 WORKBENCH_REQUIRED，不创建悬空任务。默认 renderer 在任务接收端按注册表解析，不能仅检查原始 JSON 是否显式包含该字段。JPEG 需要 ImageDecoder；缺少时返回 EXPAND_SHRINK_JPEG_DECODER_UNAVAILABLE，不换解码器。
+
+预算为 256 MiB 运行时余量、源像素×40、目标像素×40、文件字节×8 与前端保留量之和，并由 Worker 再检。服务端验证收到的单帧 PNG 尺寸与原任务一致后，沿用执行代次和统一发布。离开工具页后继续，关闭标签后核对失联；不自动重做。

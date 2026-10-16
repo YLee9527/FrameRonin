@@ -29,10 +29,11 @@ app=application(project,args.port)
 @app.middleware('http')
 async def delayed(request,call_next):
     path=request.url.path
-    flag='delay-upload' if path.endswith('/browser/result') else 'delay-content' if path.startswith('/api/versions/') and path.endswith('/content') else 'delay-worker' if '/normalImage.worker-' in path and path.endswith('.js') else None
+    host_worker=any(name in path for name in ['/normalImage.worker-','/expandShrink.worker-']) and path.endswith('.js')
+    flag='delay-upload' if path.endswith('/browser/result') else 'delay-content' if path.startswith('/api/versions/') and path.endswith('/content') else 'delay-worker' if host_worker else None
     if flag and (gates/flag).is_file():await asyncio.sleep(args.delay)
     response=await call_next(request)
-    if '/normalImage.worker-' in path and path.endswith('.js'):response.headers['Cache-Control']='no-store'
+    if host_worker:response.headers['Cache-Control']='no-store'
     return response
 
 print(json.dumps({'url':f'http://127.0.0.1:{args.port}','delaySeconds':args.delay}),flush=True)

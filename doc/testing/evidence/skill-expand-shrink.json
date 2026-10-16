@@ -1,0 +1,405 @@
+{
+  "date": "2026-10-16",
+  "baselineCommit": "feb5eb9",
+  "scope": "Grid expansion/shrinking preserves original implemented function with managed host Worker, project results and document history; S2/S3/S4 remain incomplete",
+  "originalAlgorithm": {
+    "source": "reference/frontend/src/components/ImageExpandShrink.tsx",
+    "sha256": "90de6e16d6d06ef9bf382f8e5f29cdc9f3f8150449938e8ceabfc2e12ad0caf0",
+    "semantics": "Fractional source-cell coordinates; centered crop or transparent padding; original default Canvas smoothing; zero-size source cells remain transparent"
+  },
+  "browserOracle": {
+    "zipSha256": "5602622d65fe5d3cec216b7a133684d09631ab51de3f38408607beecc0bd473d",
+    "cases": [
+      {
+        "id": "identity",
+        "dimensions": [
+          13,
+          11
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "8f865ea1042d8915680cf5954c65a352cdb98d203cf4d40e41bfd9a52fe9244e"
+      },
+      {
+        "id": "integer-crop",
+        "dimensions": [
+          40,
+          48
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "4610d5499794708139f055dce855dca50cbf071dda8f00c57c7896629791c460"
+      },
+      {
+        "id": "integer-pad",
+        "dimensions": [
+          80,
+          96
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "fc4d760cfe587981e5c7174b75c56cca9547be3e75718872189957c1b3f9b988"
+      },
+      {
+        "id": "fractional-crop",
+        "dimensions": [
+          9,
+          8
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "fe39e85ceb173e97e723200944830982f536ae063e955ebbaec13f7828f58cbc"
+      },
+      {
+        "id": "fractional-pad",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "aabb24d031a33a3dd82e7ae7972b68390f6f97a845868d8aa0fa8b2f9b6a7bc9"
+      },
+      {
+        "id": "mixed-crop-pad",
+        "dimensions": [
+          8,
+          24
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "7a7606ef5190d05cafe603232dc7072c1c34100743e2cf94382cc4513ef0bae1"
+      },
+      {
+        "id": "empty-source-cells",
+        "dimensions": [
+          64,
+          64
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "27e6e829950d2205e4103211ecb2b161d961a7d3a23dc4e8acd9d6601bf2c170"
+      },
+      {
+        "id": "maximum-grid",
+        "dimensions": [
+          128,
+          128
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "70c1838cbe5a05a2c27502791424fbb3bb489b821387259f12d0f7c675112959"
+      },
+      {
+        "id": "maximum-cell",
+        "dimensions": [
+          512,
+          512
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "eab60801ad10a7085dbe77451dc63417e304aaa7c2da28585bf21ae5412cd430"
+      },
+      {
+        "id": "source-jpg",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "8fc0ef8f5412e898dbc826ca3bd98237ece4b443a1ffa22b0453b44a095d893f"
+      },
+      {
+        "id": "source-webp",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "229808b6ab6fa80536b38f89e8763ef1b60fc957947f05a9b1c45facdf3dece8"
+      },
+      {
+        "id": "profiled-png",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "aabb24d031a33a3dd82e7ae7972b68390f6f97a845868d8aa0fa8b2f9b6a7bc9"
+      },
+      {
+        "id": "oriented-jpg",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "727831e504b2a4f1ae4abfd46b95231b386fc9a172f9144cc25fd2af7c96b6cc"
+      },
+      {
+        "id": "oriented-png",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "e732de0adf4601c2f80e3c5687e95037b9c3fb6ab9ae36f0a765c491d8a32af3"
+      },
+      {
+        "id": "oriented-webp",
+        "dimensions": [
+          24,
+          18
+        ],
+        "strictRgbaEqual": true,
+        "originalPngSha256": "229808b6ab6fa80536b38f89e8763ef1b60fc957947f05a9b1c45facdf3dece8"
+      }
+    ]
+  },
+  "ui": {
+    "document": {
+      "id": "203fc864-5843-4dea-87a6-0e8bb0a20cde",
+      "kind": "image-expand-shrink",
+      "revision": 3,
+      "payload": {
+        "tool": "expandShrink",
+        "parameters": {
+          "columns": 3,
+          "rows": 2,
+          "cellWidth": 8,
+          "cellHeight": 9
+        },
+        "files": [
+          {
+            "versionId": "2555d2f8-8079-4b24-acde-ebee627dbb11",
+            "name": "source.png",
+            "type": "image/png"
+          }
+        ],
+        "results": [
+          {
+            "versionId": "d41d01c8-7d57-44ae-8518-6647d1445bae",
+            "name": "image-expandShrink-0.png",
+            "type": "image/png"
+          }
+        ],
+        "reportFile": {
+          "versionId": "539bb08f-fcd4-46cf-9ec4-cc3b0ceaea68",
+          "name": "image-expandShrink-report.json",
+          "type": "application/json"
+        },
+        "editedFile": null,
+        "taskId": "0d45d731-5aeb-434e-a08f-7e32a70102c6",
+        "formatVersion": 1
+      },
+      "updated_at": "2026-10-16T07:18:17.703783+00:00"
+    },
+    "firstDownload": {
+      "format": "PNG",
+      "dimensions": [
+        24,
+        18
+      ],
+      "strictRgbaEqual": true,
+      "sha256": "aabb24d031a33a3dd82e7ae7972b68390f6f97a845868d8aa0fa8b2f9b6a7bc9"
+    },
+    "history": {
+      "before": {
+        "versions": 4620,
+        "tasks": 120
+      },
+      "after": {
+        "versions": 4620,
+        "tasks": 120
+      },
+      "redoStrictRgbaEqual": true,
+      "reopenStrictRgbaEqual": true,
+      "undoResultHidden": true
+    },
+    "savedCopy": {
+      "id": "4bf987c5-e151-4617-b4a0-fda9d62b0b92",
+      "revision": 3
+    },
+    "cancellationBeforeAlgorithmStart": {
+      "delayWorkerSeconds": 2,
+      "task": {
+        "id": "089e0c81-3d28-4923-9507-5a1abe0864b1",
+        "state": "canceled",
+        "generation": 1,
+        "payload": {
+          "operation": "image.expandShrink",
+          "inputs": [
+            "2555d2f8-8079-4b24-acde-ebee627dbb11"
+          ],
+          "parameters": {
+            "columns": 3,
+            "rows": 2,
+            "cellWidth": 8,
+            "cellHeight": 9,
+            "renderer": "browser-worker",
+            "frontendBytes": 100694034
+          }
+        },
+        "progress": 0.1,
+        "pid": 65976,
+        "process_created": 1792135239.300031,
+        "error": null,
+        "results": [],
+        "created_at": "2026-10-16T07:20:39.234200+00:00",
+        "updated_at": "2026-10-16T07:20:39.500771+00:00"
+      },
+      "cancellation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.010516042006202042,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 1
+      },
+      "measurementNote": "Elapsed from clicking Process to cancellation controls disappearing; includes task creation. Source Worker script was deliberately delayed, so this exercises cancellation before algorithm execution.",
+      "clickProcessThroughCancelControlDisappearanceMs": 580
+    },
+    "lateParameters": {
+      "task": {
+        "id": "2d5b9ca9-e584-4c98-8ee6-3b8fda1ca6d5",
+        "state": "succeeded",
+        "generation": 0,
+        "payload": {
+          "operation": "image.expandShrink",
+          "inputs": [
+            "2555d2f8-8079-4b24-acde-ebee627dbb11"
+          ],
+          "parameters": {
+            "columns": 3,
+            "rows": 2,
+            "cellWidth": 8,
+            "cellHeight": 9,
+            "renderer": "browser-worker",
+            "frontendBytes": 100694034
+          }
+        },
+        "progress": 1.0,
+        "pid": 66126,
+        "process_created": 1792135292.556884,
+        "error": null,
+        "results": [
+          "87481e42-6ba5-4f15-9c47-7d8773cbc903",
+          "7736c675-9c77-41c1-9199-1a2a5953f649"
+        ],
+        "created_at": "2026-10-16T07:21:32.492878+00:00",
+        "updated_at": "2026-10-16T07:21:34.875155+00:00"
+      },
+      "document": {
+        "id": "203fc864-5843-4dea-87a6-0e8bb0a20cde",
+        "kind": "image-expand-shrink",
+        "revision": 6,
+        "payload": {
+          "tool": "expandShrink",
+          "parameters": {
+            "columns": 3,
+            "rows": 2,
+            "cellWidth": 12,
+            "cellHeight": 9
+          },
+          "files": [
+            {
+              "versionId": "2555d2f8-8079-4b24-acde-ebee627dbb11",
+              "name": "source.png",
+              "type": "image/png"
+            }
+          ],
+          "results": [
+            {
+              "versionId": "d41d01c8-7d57-44ae-8518-6647d1445bae",
+              "name": "image-expandShrink-0.png",
+              "type": "image/png"
+            }
+          ],
+          "reportFile": {
+            "versionId": "539bb08f-fcd4-46cf-9ec4-cc3b0ceaea68",
+            "name": "image-expandShrink-report.json",
+            "type": "application/json"
+          },
+          "editedFile": null,
+          "taskId": "0d45d731-5aeb-434e-a08f-7e32a70102c6",
+          "formatVersion": 1
+        },
+        "updated_at": "2026-10-16T07:21:35.169268+00:00"
+      },
+      "assertions": {
+        "newParametersKept": true,
+        "existingResultKept": true,
+        "lateResultOnlyInProject": true
+      }
+    },
+    "navigationDuringProcessing": {
+      "task": {
+        "id": "7d40d778-96e0-49b6-8451-e8de80ce41cc",
+        "state": "succeeded",
+        "generation": 0,
+        "payload": {
+          "operation": "image.expandShrink",
+          "inputs": [
+            "2555d2f8-8079-4b24-acde-ebee627dbb11"
+          ],
+          "parameters": {
+            "columns": 3,
+            "rows": 2,
+            "cellWidth": 12,
+            "cellHeight": 9,
+            "renderer": "browser-worker",
+            "frontendBytes": 100694034
+          }
+        },
+        "progress": 1.0,
+        "pid": 66205,
+        "process_created": 1792135309.325614,
+        "error": null,
+        "results": [
+          "fd34e499-1f68-4220-8dae-0971ae22d9bc",
+          "03f23431-bda5-4bff-a4bc-920c30344cd5"
+        ],
+        "created_at": "2026-10-16T07:21:49.251013+00:00",
+        "updated_at": "2026-10-16T07:21:51.662723+00:00"
+      },
+      "continuedAfterInAppNavigation": true
+    },
+    "targetLimit": {
+      "outputDimensions": [
+        32768,
+        18
+      ],
+      "rejected": true,
+      "displayedError": "Input and output sides must be at most 30000 pixels.",
+      "taskCountAfter": 123,
+      "noTaskCreated": true,
+      "previousResultRetained": true
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ]
+  },
+  "regression": {
+    "initialFailure": "Default renderer absent from raw task JSON was incorrectly rejected by browser task location; location now resolves the registry defaults before checking the renderer.",
+    "defaultRendererTestPassed": true,
+    "pythonTests": 34,
+    "javascriptTests": 43,
+    "runtimeBuild": true,
+    "workbenchBuild": true,
+    "changedModulesEslint": true,
+    "skillValidator": true,
+    "project": {
+      "valid": true,
+      "counts": {
+        "versions": 4624,
+        "tasks": 123,
+        "documents": 42
+      },
+      "activeTasks": 0
+    }
+  },
+  "screenshots": [
+    "skill-expand-shrink-workbench.png",
+    "skill-expand-shrink-late-parameters.png"
+  ],
+  "limits": [
+    "Host Canvas Worker is required, including photographic and fractional-coordinate inputs; direct CLI submit/generic proposal execution is explicitly blocked.",
+    "Task preview/Worker check source/output pixels, compressed bytes and retained frontend bytes; joint browser/engine actual peak memory remains pending.",
+    "Cancellation acceptance uses a delayed Worker script and occurs before algorithm execution; further mid-computation stopping measurements remain pending.",
+    "In-app navigation keeps the task owner alive; closing the browser tab terminates its Worker and requires lease reconciliation without automatic retry.",
+    "Only fixed browser/format/orientation cases were accepted; additional combinations, other tools, full AI templates and portable distribution remain in the full scope."
+  ]
+}

@@ -418,7 +418,7 @@ class Project:
         checked_id(document_id)
         if type(expected_revision) is not int or expected_revision < 0:
             raise RoninError('DOCUMENT_REVISION_INVALID', 'Document revisions are non-negative integers.')
-        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request','ronin-scale','ronin-unify','ronin-duplicates','image-fine','image-normal']:
+        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request','ronin-scale','ronin-unify','ronin-duplicates','image-fine','image-normal','image-expand-shrink']:
             raise RoninError('DOCUMENT_KIND_INVALID', 'Unknown editable document kind.')
         serialized = json.dumps(payload, ensure_ascii=False, allow_nan=False)
         if len(serialized.encode()) > 64 * 1024**2:
