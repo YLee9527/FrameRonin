@@ -625,5 +625,6 @@
     "JPEG requires host ImageDecoder support; other browser/EXIF/ICC combinations and animated images need additional acceptance.",
     "Cancellation measures owned local processes separately; joint browser/engine peak RSS remains unverified.",
     "Remaining media/editor modules, complete AI templates/quality and portable distribution remain incomplete."
-  ]
+  ],
+  "codeCommit": "6fcf87e9c8e30b8489afe5e9313399cdad581c97"
 }
