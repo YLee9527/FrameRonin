@@ -45,7 +45,7 @@
 | image.rembg | AI抠图 | reference/frontend/src/components/ImageMatte.tsx | image → transparent PNG | 待逐项验收 |
 | sequence.slice | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | static PNG/JPEG/WebP + reviewed grid/order → ordered PNG ZIP / GIF rows ZIP + report | 34 项原版严格对照、正式任务/文档/统一历史、4096 帧实导出、取消/迟到/冲突及三语通过；联合内存与完整可访问性待完成 |
 | sequence.compose | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | static PNG/JPEG/WebP + reviewed grid/order → ordered PNG ZIP / GIF rows ZIP + report | 34 项原版严格对照、正式任务/文档/统一历史、4096 帧实导出、取消/迟到/冲突及三语通过；联合内存与完整可访问性待完成 |
-| image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
+| image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 合成/偏移/裁边、GIF、固定像素内核 21 项原版对照及正式发布通过；原界面、文档、预处理和完整交互仍待迁移 |
 | 精灵表调整.image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → same-size PNG and parameter report | strict original pixels, actual auto/96/JPEG downloads, formal document/history, conflict/copy/late protection and cancellation/navigation passed; real watermark residue quality and joint RSS/accessibility remain |

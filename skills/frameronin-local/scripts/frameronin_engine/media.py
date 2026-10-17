@@ -14,7 +14,7 @@ def run(preview, directory, progress):
     directory.mkdir(exist_ok=True)
     name = preview['operation']
     parameters = preview['parameters']
-    if name in ['image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and parameters['renderer']=='browser-worker':
+    if name in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and parameters['renderer']=='browser-worker':
         from .browser_tasks import wait_for_result
         return wait_for_result(preview,directory,progress)
     paths = [Path(v['absolutePath']) for v in preview['versions']]

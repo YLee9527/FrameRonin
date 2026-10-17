@@ -581,10 +581,10 @@
     "outputs": "PNG",
     "dependencies": "Canvas",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/SpriteSheetAdjust.tsx",
-    "sample": "fixed-image-grid-adjust",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "sheet-adjust/manifest.json",
+    "evidence": "doc/testing/evidence/skill-sheet-adjust-engine.json",
+    "status": "合成/偏移/裁边、GIF、固定像素内核 21 项原版对照及正式发布通过；原界面、文档、预处理和完整交互仍待迁移",
+    "limits": "Controlled ordered PNG ZIP ≤128 MiB / 4096 frames; complete memory preflight; host Worker only; remaining editor constraints pending"
   },
   {
     "id": "精灵表调整.image.resize",

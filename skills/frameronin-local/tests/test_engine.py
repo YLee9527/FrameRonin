@@ -381,6 +381,55 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(self.project.document(doc)['kind'],'image-visible-watermark')
         self.assertTrue(self.project.verify()['valid'])
 
+    def test_sheet_adjust_archive_layout_outputs_and_cancel_generation(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        from frameronin_engine.sheet_adjust import archive_info,layout as checked_layout,validate_result
+        fixture=Path(__file__).resolve().parents[1]/'assets/fixtures/sheet-adjust'
+        version=self.project.import_file(fixture/'frames.zip')
+        crop={'top':0,'bottom':0,'left':0,'right':0}
+        layout={'columns':2,'rows':2,'frames':[{'sourceIndex':i,'dx':0,'dy':0,'crop':dict(crop)} for i in range(3)]}
+        payload={'operation':'image.sheetCompose','inputs':[version['id']],'parameters':{'layout':layout}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        for mutate in [lambda p:p.update(command='run'),lambda p:p['frames'][0].update(sourceIndex=True),lambda p:p['frames'][0]['crop'].update(command='run'),lambda p:p.update(columns=65)]:
+            invalid=json.loads(json.dumps(payload));mutate(invalid['parameters']['layout'])
+            with self.assertRaises(RoninError):preview(self.project,invalid)
+        with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':{'layout':layout,'frontendBytes':2*1024**3}})
+        sizes,_=archive_info(fixture/'frames.zip',2*1024**3)
+        self.assertEqual(checked_layout(sizes,layout,'compose')['width'],32)
+        gif_layout={**layout,'selected':[0,2],'speedScale':.75}
+        self.assertEqual(checked_layout(sizes,gif_layout,'gif')['durationMs'],130)
+        for change in [{'selected':[0,0]},{'selected':[3]},{'speedScale':0}]:
+            with self.assertRaises(RoninError):checked_layout(sizes,{**gif_layout,**change},'gif')
+        fixed={'selected':[1],'referenceWidth':13,'referenceHeight':11,'fixes':[{'imgX':1,'imgY':1,'range':1,'data':[0,0,255,255]}]}
+        self.assertEqual(checked_layout(sizes,fixed,'fix')['outputFrames'],3)
+        for patch in [{'imgX':13,'imgY':1,'range':1,'data':[0,0,0,0]},{'imgX':1,'imgY':1,'range':1,'data':[0,0,0,256]}]:
+            with self.assertRaises(RoninError):checked_layout(sizes,{**fixed,'fixes':[patch]},'fix')
+        self.assertEqual(validate_result(fixture/'frames.zip',version,{'layout':fixed,'frontendBytes':0},'fix',2*1024**3)['frameSizes'],sizes)
+        bad=self.root/'bad.zip'
+        with zipfile.ZipFile(bad,'w') as z:z.write(fixture/'frame_000.png','../frame_000.png')
+        with self.assertRaises(RoninError):archive_info(bad,2*1024**3)
+        def running(request):
+            created=submit(self.project,request,browser_client=True);deadline=time.monotonic()+10
+            while not ready(self.project,created['id'])['ready']:
+                self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+            return created['id']
+        tid=running(payload);output=self.root/'compose.png';Image.new('RGBA',(1,1),'red').save(output)
+        with self.assertRaises(RoninError):accept(self.project,tid,0,output)
+        Image.new('RGBA',(32,30),'red').save(output);accept(self.project,tid,0,output)
+        result=wait(self.project,tid,15);self.assertEqual(result['state'],'succeeded',result)
+        report=json.loads(Path(self.project.version(result['results'][1])['absolutePath']).read_text());self.assertEqual((report['width'],report['height']),(32,30))
+        gif_payload={**payload,'operation':'image.sheetGif','parameters':{'layout':gif_layout}}
+        tid=running(gif_payload);gif=self.root/'animation.gif'
+        first=Image.new('RGBA',(16,15),'red');second=Image.new('RGBA',(16,15),'blue')
+        first.save(gif,save_all=True,append_images=[second],duration=140,loop=0)
+        with self.assertRaises(RoninError):accept(self.project,tid,0,gif)
+        first.save(gif,save_all=True,append_images=[second],duration=130,loop=0);accept(self.project,tid,0,gif)
+        result=wait(self.project,tid,15);self.assertEqual(result['state'],'succeeded',result)
+        tid=running(gif_payload);cancel(self.project,tid)
+        with self.assertRaises(Cancelled):accept(self.project,tid,0,gif)
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_sprite_row_gifs_validate_layout_zip_frames_timing_and_cancel_generation(self):
         from frameronin_engine.browser_tasks import ready,accept
         layout={'columns':2,'rows':1,'order':[1,0],'framesPerRow':2,'duration':25}

@@ -1,0 +1,2277 @@
+{
+  "codeCommit": null,
+  "date": "2026-10-18",
+  "scope": "Sheet adjustment processing kernel only: compose/crop/offsets, selected-frame GIF and fixed pixels. Original SpriteSheetAdjust UI, preprocessing, split/blank integration and formal editor document remain pending. S2/S3/S4 remain open.",
+  "original": {
+    "source": "reference/frontend/src/components/SpriteSheetAdjust.tsx",
+    "fixtureManifest": "skills/frameronin-local/assets/fixtures/sheet-adjust/manifest.json",
+    "frozenDirectory": "skills/frameronin-local/assets/fixtures/sheet-adjust/original",
+    "verifier": "skills/frameronin-local/tests/compare_sheet_adjust_oracle.py",
+    "criteria": "Strict decoded RGBA, dimensions, frame count and timing; original GIF bytes also identical. All ordered fixed-frame PNG members compared."
+  },
+  "oracle": {
+    "archiveSha256": "2e7d19aa9a114a1610d2c1b60c17ccd350031ac64ca16d4e121a5ea8382ec3e4",
+    "cases": [
+      {
+        "sample": "compose-plain",
+        "action": "compose",
+        "originalSha256": "1609b70dd24a909ee7e319f9faeb653be50d5bf65a85fd467181f7bd6dc3469d",
+        "actualSha256": "1609b70dd24a909ee7e319f9faeb653be50d5bf65a85fd467181f7bd6dc3469d",
+        "equal": true,
+        "width": 32,
+        "height": 30,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-reordered",
+        "action": "compose",
+        "originalSha256": "2da88dd4e08286ab43df3d9e71599484e5a4624b8a841b2f669736c6ee143b8a",
+        "actualSha256": "2da88dd4e08286ab43df3d9e71599484e5a4624b8a841b2f669736c6ee143b8a",
+        "equal": true,
+        "width": 32,
+        "height": 30,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-shifts",
+        "action": "compose",
+        "originalSha256": "f1eb78b309c378361e12ca7aa641dcc8268a2739efc8b1a5825be2bc156b3fc3",
+        "actualSha256": "f1eb78b309c378361e12ca7aa641dcc8268a2739efc8b1a5825be2bc156b3fc3",
+        "equal": true,
+        "width": 32,
+        "height": 30,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-positive-crop",
+        "action": "compose",
+        "originalSha256": "52b79e82039e9eeda70104a7bc3b708e347113c15e2c864c0d41e41e6bbfc823",
+        "actualSha256": "52b79e82039e9eeda70104a7bc3b708e347113c15e2c864c0d41e41e6bbfc823",
+        "equal": true,
+        "width": 32,
+        "height": 26,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-pad",
+        "action": "compose",
+        "originalSha256": "eda5950bcf31f522f93bfefca732353938c98b483a5c4365994dd55c3bb29f83",
+        "actualSha256": "eda5950bcf31f522f93bfefca732353938c98b483a5c4365994dd55c3bb29f83",
+        "equal": true,
+        "width": 32,
+        "height": 32,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-fractional",
+        "action": "compose",
+        "originalSha256": "fa3af396881f4b2d461d83f4a439fe2bfa107f16b0515a06ca15525c1ff69413",
+        "actualSha256": "fa3af396881f4b2d461d83f4a439fe2bfa107f16b0515a06ca15525c1ff69413",
+        "equal": true,
+        "width": 32,
+        "height": 27,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-overcrop",
+        "action": "compose",
+        "originalSha256": "f8f710725c7aa30561ec856f6828a91fc95f1020e7b13d49666017badc29e02e",
+        "actualSha256": "f8f710725c7aa30561ec856f6828a91fc95f1020e7b13d49666017badc29e02e",
+        "equal": true,
+        "width": 2,
+        "height": 2,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "compose-clipped-grid",
+        "action": "compose",
+        "originalSha256": "c138332c846134ed254d917e2b9b6751072613a4e68756d6a1b4d39ee8dfe1ba",
+        "actualSha256": "c138332c846134ed254d917e2b9b6751072613a4e68756d6a1b4d39ee8dfe1ba",
+        "equal": true,
+        "width": 16,
+        "height": 15,
+        "frames": 1,
+        "durationMs": [
+          null
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-plain",
+        "action": "gif",
+        "originalSha256": "ec3ea6458414a4ac48077d704a78525356e3e8c3e0ef1fc503b59e56e6e721e3",
+        "actualSha256": "ec3ea6458414a4ac48077d704a78525356e3e8c3e0ef1fc503b59e56e6e721e3",
+        "equal": true,
+        "width": 16,
+        "height": 15,
+        "frames": 3,
+        "durationMs": [
+          400
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-reordered",
+        "action": "gif",
+        "originalSha256": "7ccf0d22ef3ae3ceb950f082b032319075aa69e03b73d3bbdc4b1dd5b7cd7c41",
+        "actualSha256": "7ccf0d22ef3ae3ceb950f082b032319075aa69e03b73d3bbdc4b1dd5b7cd7c41",
+        "equal": true,
+        "width": 16,
+        "height": 15,
+        "frames": 2,
+        "durationMs": [
+          130
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-shifts",
+        "action": "gif",
+        "originalSha256": "68430e10413924a437a85a7e6a01f19596d45e6ace4476e4b147fdbc61cfa2a6",
+        "actualSha256": "68430e10413924a437a85a7e6a01f19596d45e6ace4476e4b147fdbc61cfa2a6",
+        "equal": true,
+        "width": 16,
+        "height": 15,
+        "frames": 3,
+        "durationMs": [
+          100
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-positive-crop",
+        "action": "gif",
+        "originalSha256": "bb29bb1d51aa5d7f790120d3c1ac17408de0628f1de3e1703c0daa1662e038ce",
+        "actualSha256": "bb29bb1d51aa5d7f790120d3c1ac17408de0628f1de3e1703c0daa1662e038ce",
+        "equal": true,
+        "width": 16,
+        "height": 13,
+        "frames": 2,
+        "durationMs": [
+          80
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-pad",
+        "action": "gif",
+        "originalSha256": "770b7aedbe063cecc0c4d464fc1171e55255ba3f2a3f3e9c3392a972ba5c73b4",
+        "actualSha256": "770b7aedbe063cecc0c4d464fc1171e55255ba3f2a3f3e9c3392a972ba5c73b4",
+        "equal": true,
+        "width": 16,
+        "height": 16,
+        "frames": 3,
+        "durationMs": [
+          50
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-fractional",
+        "action": "gif",
+        "originalSha256": "af62c858a7d6cee1d1ebe24950ebceaceb7707a1edf5a1e089776707501f66b0",
+        "actualSha256": "af62c858a7d6cee1d1ebe24950ebceaceb7707a1edf5a1e089776707501f66b0",
+        "equal": true,
+        "width": 16,
+        "height": 13,
+        "frames": 2,
+        "durationMs": [
+          400
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-overcrop",
+        "action": "gif",
+        "originalSha256": "b3165629f7b2f1a759e3372e0c73241191a77b985697352f605a881dc5801614",
+        "actualSha256": "b3165629f7b2f1a759e3372e0c73241191a77b985697352f605a881dc5801614",
+        "equal": true,
+        "width": 1,
+        "height": 1,
+        "frames": 3,
+        "durationMs": [
+          130
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-clipped-grid",
+        "action": "gif",
+        "originalSha256": "cc88c95fe6d1a70002fec8c5a2997cd5a335b69d510975918a002bf5a16d79f8",
+        "actualSha256": "cc88c95fe6d1a70002fec8c5a2997cd5a335b69d510975918a002bf5a16d79f8",
+        "equal": true,
+        "width": 16,
+        "height": 15,
+        "frames": 2,
+        "durationMs": [
+          100
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "gif-unselected-size",
+        "action": "gif",
+        "originalSha256": "5f1844db1646d296ea399412f0698d1c324bf81f195a9fb0b9deb4d39af284e1",
+        "actualSha256": "5f1844db1646d296ea399412f0698d1c324bf81f195a9fb0b9deb4d39af284e1",
+        "equal": true,
+        "width": 16,
+        "height": 15,
+        "frames": 1,
+        "durationMs": [
+          70
+        ],
+        "encodedBytesEqual": true,
+        "mismatchedFrames": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "fix-overlap",
+        "action": "fix",
+        "originalSha256": "b6e384943e695d1457bf20d5fd1554a99bd0bf47fc9e35b7866c5e2c031b00b4",
+        "actualSha256": "b6e384943e695d1457bf20d5fd1554a99bd0bf47fc9e35b7866c5e2c031b00b4",
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 3,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_002.png",
+        "originalMemberHash": "a80b77fcc13cc9bb6268bf2e02ad5be5e1ac7f88a26547b8e8aa040972ff8c42",
+        "actualMemberHash": "a80b77fcc13cc9bb6268bf2e02ad5be5e1ac7f88a26547b8e8aa040972ff8c42",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 9,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 16,
+            "height": 7,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "fix-unselected",
+        "action": "fix",
+        "originalSha256": "f829fb0c5a8aac58984d484edc32981df70e3dd5e14ebe137b2f5c8e576777cc",
+        "actualSha256": "f829fb0c5a8aac58984d484edc32981df70e3dd5e14ebe137b2f5c8e576777cc",
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 3,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_002.png",
+        "originalMemberHash": "dc0e2a57de42f9edd5659d58420a1b75c52d70d808671f9d99e4bb530b7dd761",
+        "actualMemberHash": "dc0e2a57de42f9edd5659d58420a1b75c52d70d808671f9d99e4bb530b7dd761",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 9,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 16,
+            "height": 7,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "fix-small-reference",
+        "action": "fix",
+        "originalSha256": "b6e384943e695d1457bf20d5fd1554a99bd0bf47fc9e35b7866c5e2c031b00b4",
+        "actualSha256": "b6e384943e695d1457bf20d5fd1554a99bd0bf47fc9e35b7866c5e2c031b00b4",
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 3,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_002.png",
+        "originalMemberHash": "a80b77fcc13cc9bb6268bf2e02ad5be5e1ac7f88a26547b8e8aa040972ff8c42",
+        "actualMemberHash": "a80b77fcc13cc9bb6268bf2e02ad5be5e1ac7f88a26547b8e8aa040972ff8c42",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 9,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 16,
+            "height": 7,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": [],
+        "frozenBaselineEqual": true
+      },
+      {
+        "sample": "fix-larger-reference",
+        "action": "fix",
+        "originalSha256": "133baa109fe8dc276769a11ed1bf6d34d71bf6f68bdc1e62043c9704ab1a2893",
+        "actualSha256": "133baa109fe8dc276769a11ed1bf6d34d71bf6f68bdc1e62043c9704ab1a2893",
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 3,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_002.png",
+        "originalMemberHash": "ed251d48dcd9f4443bddeaf7d0a503cf08d7b517b58a4bfd663a9295333ecdda",
+        "actualMemberHash": "ed251d48dcd9f4443bddeaf7d0a503cf08d7b517b58a4bfd663a9295333ecdda",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 9,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 16,
+            "height": 7,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": [],
+        "frozenBaselineEqual": true
+      }
+    ],
+    "failed": []
+  },
+  "publication": {
+    "projectId": "583cae4d-3863-4367-a868-4d358d2acedb",
+    "tasks": [
+      {
+        "sample": "compose-plain",
+        "action": "compose",
+        "taskId": "d97dd36b-e4ca-4968-b121-9d2fca83b945",
+        "state": "succeeded",
+        "results": [
+          "e482b24c-9921-42b0-b5f7-d87f3d4f0bd5",
+          "4443b4bc-f647-4376-890a-51694eb09111"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11283537501003593,
+          "width": 32,
+          "height": 30,
+          "cellWidth": 16,
+          "cellHeight": 15
+        }
+      },
+      {
+        "sample": "compose-reordered",
+        "action": "compose",
+        "taskId": "6fb7472e-8570-4fd0-8b73-b362b81f7978",
+        "state": "succeeded",
+        "results": [
+          "64673457-f08d-4e4c-abe7-b32713ad9d5b",
+          "22c75a0a-38ba-4af9-a0b2-aed7731ccc9c"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11283070791978389,
+          "width": 32,
+          "height": 30,
+          "cellWidth": 16,
+          "cellHeight": 15
+        }
+      },
+      {
+        "sample": "compose-shifts",
+        "action": "compose",
+        "taskId": "7033f944-07d8-4cc8-99e6-34125d117185",
+        "state": "succeeded",
+        "results": [
+          "368599c7-c1b8-499f-8d25-b6269d590974",
+          "4d89841b-d587-4e70-9a7e-61565e6b1ad3"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 2,
+                  "dy": -3,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": -4,
+                  "dy": 5,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 1,
+                  "dy": 2,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11577970802318305,
+          "width": 32,
+          "height": 30,
+          "cellWidth": 16,
+          "cellHeight": 15
+        }
+      },
+      {
+        "sample": "compose-positive-crop",
+        "action": "compose",
+        "taskId": "6ad612e6-9e46-4b1b-b2ae-c245ec42e8c0",
+        "state": "succeeded",
+        "results": [
+          "602f344d-84ed-47db-b86f-bb283f056a68",
+          "cd026592-2868-4ffb-97e5-622d435146a2"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 1,
+                    "bottom": 2,
+                    "left": 3,
+                    "right": 1
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 2,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10509566601831466,
+          "width": 32,
+          "height": 26,
+          "cellWidth": 16,
+          "cellHeight": 13
+        }
+      },
+      {
+        "sample": "compose-pad",
+        "action": "compose",
+        "taskId": "15896f50-6af3-401a-9a4f-dbad2cd0a628",
+        "state": "succeeded",
+        "results": [
+          "33324887-787e-435d-8b8b-0aafc52a4d03",
+          "9f0936e5-42ee-44f0-b4cb-7fca9563b405"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": -3,
+                    "bottom": 0,
+                    "left": -2,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": -1,
+                    "left": 0,
+                    "right": -4
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10468491690699011,
+          "width": 32,
+          "height": 32,
+          "cellWidth": 16,
+          "cellHeight": 16
+        }
+      },
+      {
+        "sample": "compose-fractional",
+        "action": "compose",
+        "taskId": "ec943d0a-4f8b-45c5-8e41-30b4e66f62c5",
+        "state": "succeeded",
+        "results": [
+          "8e7f551a-e6fe-4620-bf61-f8250435de00",
+          "3d1e3ebf-c47e-49c8-8f84-998425b27e00"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 1,
+                  "dy": -1,
+                  "crop": {
+                    "top": 0.5,
+                    "bottom": 0,
+                    "left": -1.25,
+                    "right": 2.75
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 1.5,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11312516604084522,
+          "width": 32,
+          "height": 27,
+          "cellWidth": 16,
+          "cellHeight": 13.5
+        }
+      },
+      {
+        "sample": "compose-overcrop",
+        "action": "compose",
+        "taskId": "af1326df-aa97-48d4-87de-a8ea12c00dc4",
+        "state": "succeeded",
+        "results": [
+          "8e48e910-f6b0-4065-bc5b-d1ad5a0fd19a",
+          "8033a880-be28-41e8-a4a8-3775f04bc1ac"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 30,
+                    "bottom": 0,
+                    "left": 20,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 25,
+                    "left": 0,
+                    "right": 20
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 30,
+                    "left": 30,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11296362499706447,
+          "width": 2,
+          "height": 2,
+          "cellWidth": 1,
+          "cellHeight": 1
+        }
+      },
+      {
+        "sample": "compose-clipped-grid",
+        "action": "compose",
+        "taskId": "8b413d94-d50e-4308-96fc-c34c8785cdd9",
+        "state": "succeeded",
+        "results": [
+          "3b6fc757-e281-4b2c-b5e9-8814429bce4d",
+          "48932cb4-da58-4e22-bd6e-97e0dd5ed2fa"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetCompose",
+          "parameters": {
+            "layout": {
+              "columns": 1,
+              "rows": 1,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11196170805487782,
+          "width": 16,
+          "height": 15,
+          "cellWidth": 16,
+          "cellHeight": 15
+        }
+      },
+      {
+        "sample": "gif-plain",
+        "action": "gif",
+        "taskId": "c97d5824-05b5-4147-88fa-2da619eadacc",
+        "state": "succeeded",
+        "results": [
+          "9acc7f2a-82d3-4179-8dc3-90703cff5b25",
+          "a7a897b7-b61d-4f15-a483-277b7cd52f86"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                2,
+                1,
+                0
+              ],
+              "speedScale": 0.25
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11564166692551225,
+          "width": 16,
+          "height": 15,
+          "durationMs": 400
+        }
+      },
+      {
+        "sample": "gif-reordered",
+        "action": "gif",
+        "taskId": "93b6ad52-0de5-43c4-b034-7f5530f241b8",
+        "state": "succeeded",
+        "results": [
+          "ca62e72f-9bf7-41a8-b07c-f70a49473c95",
+          "2629da36-50e1-47d3-bba5-a74826692175"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                0,
+                2
+              ],
+              "speedScale": 0.75
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 2,
+          "elapsedSeconds": 0.10368749999906868,
+          "width": 16,
+          "height": 15,
+          "durationMs": 130
+        }
+      },
+      {
+        "sample": "gif-shifts",
+        "action": "gif",
+        "taskId": "57d95fb2-baee-4e2a-bb87-6aebf528cad9",
+        "state": "succeeded",
+        "results": [
+          "bfe04309-45b5-4d87-b090-4f92ec27b2c0",
+          "9d44e923-9183-4c76-91d4-f486d153777b"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 2,
+                  "dy": -3,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": -4,
+                  "dy": 5,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 1,
+                  "dy": 2,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                2,
+                1,
+                0
+              ],
+              "speedScale": 1
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11503266706131399,
+          "width": 16,
+          "height": 15,
+          "durationMs": 100
+        }
+      },
+      {
+        "sample": "gif-positive-crop",
+        "action": "gif",
+        "taskId": "363e591c-0811-4c25-9312-55a2383a14b3",
+        "state": "succeeded",
+        "results": [
+          "9111d499-be7b-4ec6-b179-5c0d9bdd0ba4",
+          "e935c719-8e9a-47fd-bab4-61bdffec443e"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 1,
+                    "bottom": 2,
+                    "left": 3,
+                    "right": 1
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 2,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                0,
+                2
+              ],
+              "speedScale": 1.25
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 2,
+          "elapsedSeconds": 0.1158230840228498,
+          "width": 16,
+          "height": 13,
+          "durationMs": 80
+        }
+      },
+      {
+        "sample": "gif-pad",
+        "action": "gif",
+        "taskId": "cb3fd597-7986-43a8-a677-5fbf5ea5c1d7",
+        "state": "succeeded",
+        "results": [
+          "6f842ab2-0c2d-4513-a378-b85461af1180",
+          "03359c22-1f23-4882-b99b-4ffc68285ab6"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": -3,
+                    "bottom": 0,
+                    "left": -2,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": -1,
+                    "left": 0,
+                    "right": -4
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                2,
+                1,
+                0
+              ],
+              "speedScale": 4
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11382475006394088,
+          "width": 16,
+          "height": 16,
+          "durationMs": 50
+        }
+      },
+      {
+        "sample": "gif-fractional",
+        "action": "gif",
+        "taskId": "37c1194b-e8d2-407b-8dd8-98a55dda1dcc",
+        "state": "succeeded",
+        "results": [
+          "79454f83-4bac-46fc-8ed2-bc3f748263a3",
+          "034916b5-b6a6-43be-a56b-d4e23ec8fff5"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 1,
+                  "dy": -1,
+                  "crop": {
+                    "top": 0.5,
+                    "bottom": 0,
+                    "left": -1.25,
+                    "right": 2.75
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 1.5,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                0,
+                2
+              ],
+              "speedScale": 0.25
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 2,
+          "elapsedSeconds": 0.11250329203903675,
+          "width": 16,
+          "height": 13,
+          "durationMs": 400
+        }
+      },
+      {
+        "sample": "gif-overcrop",
+        "action": "gif",
+        "taskId": "3cd78494-b580-4d2d-b488-85529a2bc3e1",
+        "state": "succeeded",
+        "results": [
+          "9bacb438-0132-4a06-a899-cf70e694d6fc",
+          "0c9c244a-2851-4142-9d12-bd3bb43d7752"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 30,
+                    "bottom": 0,
+                    "left": 20,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 25,
+                    "left": 0,
+                    "right": 20
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 30,
+                    "left": 30,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                2,
+                1,
+                0
+              ],
+              "speedScale": 0.75
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11274329107254744,
+          "width": 1,
+          "height": 1,
+          "durationMs": 130
+        }
+      },
+      {
+        "sample": "gif-clipped-grid",
+        "action": "gif",
+        "taskId": "0f8cc1d2-ed57-4cfa-bde0-78ab91a6397e",
+        "state": "succeeded",
+        "results": [
+          "e71a322e-e5e5-4589-8c59-1cc28023134f",
+          "4c1c2537-44dd-47f5-984b-2556fb0281bf"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 1,
+              "rows": 1,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                0,
+                2
+              ],
+              "speedScale": 1
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 2,
+          "elapsedSeconds": 0.10700049996376038,
+          "width": 16,
+          "height": 15,
+          "durationMs": 100
+        }
+      },
+      {
+        "sample": "gif-unselected-size",
+        "action": "gif",
+        "taskId": "b86d8512-3eae-4f8b-a1a6-b1e757054018",
+        "state": "succeeded",
+        "results": [
+          "0c468c64-738c-474d-82f3-9b98346bec05",
+          "f2f9fed5-30b9-4539-8e5a-476d43459bcc"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetGif",
+          "parameters": {
+            "layout": {
+              "columns": 2,
+              "rows": 2,
+              "frames": [
+                {
+                  "sourceIndex": 0,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 1,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                },
+                {
+                  "sourceIndex": 2,
+                  "dx": 0,
+                  "dy": 0,
+                  "crop": {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0
+                  }
+                }
+              ],
+              "selected": [
+                2
+              ],
+              "speedScale": 1.5
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11554783303290606,
+          "width": 16,
+          "height": 15,
+          "durationMs": 70
+        }
+      },
+      {
+        "sample": "fix-overlap",
+        "action": "fix",
+        "taskId": "630e6c28-e95b-4dcd-82be-2dec7acd4eb8",
+        "state": "succeeded",
+        "results": [
+          "722879a1-4caa-4bf0-9f99-d471bf9832f3",
+          "d9451427-276a-469e-9f78-b4bc23427c24"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetFix",
+          "parameters": {
+            "layout": {
+              "selected": [
+                0,
+                1,
+                2
+              ],
+              "referenceWidth": 13,
+              "referenceHeight": 11,
+              "fixes": [
+                {
+                  "imgX": 1,
+                  "imgY": 1,
+                  "range": 2,
+                  "data": [
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255
+                  ]
+                },
+                {
+                  "imgX": 2,
+                  "imgY": 2,
+                  "range": 2,
+                  "data": [
+                    0,
+                    255,
+                    0,
+                    128,
+                    0,
+                    255,
+                    0,
+                    128,
+                    0,
+                    255,
+                    0,
+                    128,
+                    0,
+                    255,
+                    0,
+                    128
+                  ]
+                },
+                {
+                  "imgX": 2,
+                  "imgY": 2,
+                  "range": 1,
+                  "data": [
+                    0,
+                    0,
+                    255,
+                    0
+                  ]
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11228645802475512,
+          "frameSizes": [
+            {
+              "w": 13,
+              "h": 11
+            },
+            {
+              "w": 9,
+              "h": 15
+            },
+            {
+              "w": 16,
+              "h": 7
+            }
+          ]
+        }
+      },
+      {
+        "sample": "fix-unselected",
+        "action": "fix",
+        "taskId": "8656e78c-1b13-4155-9c87-5aa9b74ef7b1",
+        "state": "succeeded",
+        "results": [
+          "7dfc77e6-9b90-451a-b350-686a33f5802c",
+          "317465fb-85a2-49af-8ebc-e0fd260cdd05"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetFix",
+          "parameters": {
+            "layout": {
+              "selected": [
+                1
+              ],
+              "referenceWidth": 13,
+              "referenceHeight": 11,
+              "fixes": [
+                {
+                  "imgX": 1,
+                  "imgY": 1,
+                  "range": 2,
+                  "data": [
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255
+                  ]
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11347062501590699,
+          "frameSizes": [
+            {
+              "w": 13,
+              "h": 11
+            },
+            {
+              "w": 9,
+              "h": 15
+            },
+            {
+              "w": 16,
+              "h": 7
+            }
+          ]
+        }
+      },
+      {
+        "sample": "fix-small-reference",
+        "action": "fix",
+        "taskId": "86ced8c3-d0a0-4851-8a00-f9fae4dc191f",
+        "state": "succeeded",
+        "results": [
+          "cf529f87-760c-4033-9ee6-7cf7f60ee4ea",
+          "203fcb93-8b45-4fb9-a3fd-576527b74b97"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetFix",
+          "parameters": {
+            "layout": {
+              "selected": [
+                0,
+                1,
+                2
+              ],
+              "referenceWidth": 4,
+              "referenceHeight": 4,
+              "fixes": [
+                {
+                  "imgX": 1,
+                  "imgY": 1,
+                  "range": 2,
+                  "data": [
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255,
+                    255,
+                    0,
+                    0,
+                    255
+                  ]
+                },
+                {
+                  "imgX": 2,
+                  "imgY": 2,
+                  "range": 2,
+                  "data": [
+                    0,
+                    255,
+                    0,
+                    128,
+                    0,
+                    255,
+                    0,
+                    128,
+                    0,
+                    255,
+                    0,
+                    128,
+                    0,
+                    255,
+                    0,
+                    128
+                  ]
+                },
+                {
+                  "imgX": 2,
+                  "imgY": 2,
+                  "range": 1,
+                  "data": [
+                    0,
+                    0,
+                    255,
+                    0
+                  ]
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.1123518330277875,
+          "frameSizes": [
+            {
+              "w": 13,
+              "h": 11
+            },
+            {
+              "w": 9,
+              "h": 15
+            },
+            {
+              "w": 16,
+              "h": 7
+            }
+          ]
+        }
+      },
+      {
+        "sample": "fix-larger-reference",
+        "action": "fix",
+        "taskId": "1fef2767-a29a-4255-b346-3f35ec4b0e2f",
+        "state": "succeeded",
+        "results": [
+          "2039856c-8714-4197-99b9-e7ab692f22bf",
+          "60ab5f30-d2ab-4e2f-9ca0-e72adc3b278b"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.sheetFix",
+          "parameters": {
+            "layout": {
+              "selected": [
+                0,
+                2
+              ],
+              "referenceWidth": 20,
+              "referenceHeight": 20,
+              "fixes": [
+                {
+                  "imgX": 12,
+                  "imgY": 6,
+                  "range": 8,
+                  "data": [
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200,
+                    53,
+                    71,
+                    91,
+                    200
+                  ]
+                }
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.11262437503319234,
+          "frameSizes": [
+            {
+              "w": 13,
+              "h": 11
+            },
+            {
+              "w": 9,
+              "h": 15
+            },
+            {
+              "w": 16,
+              "h": 7
+            }
+          ]
+        }
+      }
+    ],
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 43
+    },
+    "driver": "skills/frameronin-local/tests/accept_sheet_adjust_oracle.py",
+    "boundary": "Actual browser Worker bytes published by an owned test driver, not production UI button acceptance."
+  },
+  "validation": {
+    "pythonTests": 39,
+    "javascriptTests": 69,
+    "workbenchBuild": "passed",
+    "runtimeBuild": "passed",
+    "targetedEslint": "passed",
+    "strictPreflight": [
+      "Unknown nested fields, invalid indices, fractional offsets, invalid selections and resource overflow rejected",
+      "Actual ZIP inflation bounded in Worker; controlled PNG members only",
+      "GIF dimensions include unselected frames as in original",
+      "Per-frame fractional crop/padding and clipping preserve original semantics",
+      "Latest overlapping fixed patch wins; unselected PNG bytes retained",
+      "GIF timing and output-frame validation before publication",
+      "Canceled generation cannot accept late content"
+    ],
+    "selectionSemantics": "Selected indices form a set. Export visits current frame-list positions in ascending order; explicit reordering is represented by frames placements. An unsorted selection regression proves this without mutating the request.",
+    "skillValidator": "passed"
+  },
+  "limits": {
+    "frameCount": 4096,
+    "columns": 64,
+    "rows": 4096,
+    "side": 30000,
+    "offsetRange": [
+      -30000,
+      30000
+    ],
+    "cropRange": [
+      -30000,
+      30000
+    ],
+    "speedScale": [
+      0.25,
+      4
+    ],
+    "fixedPatchRange": [
+      1,
+      8
+    ],
+    "patchCount": 4096,
+    "archiveBytes": 134217728,
+    "outputBytes": 134217728,
+    "renderer": "browser-worker only; CLI/generic proposal submission blocked",
+    "memory": "Physical-memory policy, full encoded archive/member, maximum decode, intermediate/output buffers, patches and front-end retention estimate. Joint RSS remains pending."
+  },
+  "remaining": [
+    "Production UI dispatch, complete state and undo/document integration",
+    "Sheet preprocessing, transparent splitting, row/column selection, animation and blank-frame flows",
+    "Actual UI cancellation, conflicts, races, large samples, languages and accessibility",
+    "Joint process memory and browser-stop measurement",
+    "Remaining complete Skill scope"
+  ],
+  "rejectedEvidence": {
+    "reason": "The first oracle adapter omitted original boolean-selection/index construction and passed selected indices directly to the GIF body. It incorrectly treated a selection set as output order. Both adapter and implementation were corrected before this checkpoint.",
+    "firstArchiveSha256": "3ec09a1bc9272c521ea34d2926fcf35b59c20d1f71630505d824c0acae48a4fb",
+    "localDiagnostics": "Ignored .frameronin-work/sheet-adjust/rejected-selection-adapter-baseline and first acceptance-project preserved. These are excluded from acceptance.",
+    "correctedOriginalFlow": "Original selected flags -> current frame-list index order -> unchanged extracted GIF body. Final 21 samples and fresh 21-task publication passed.",
+    "gifSamplesWhoseOriginalBytesChanged": [
+      "gif-plain",
+      "gif-shifts",
+      "gif-pad"
+    ]
+  },
+  "screenshots": [
+    "doc/testing/evidence/skill-sheet-adjust-engine.png"
+  ]
+}

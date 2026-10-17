@@ -1,6 +1,7 @@
 import {originalScatterDetect,originalScatterExport} from '../.runtime/oracle/original-scatter'
 import {originalVisibleWatermark} from '../.runtime/oracle/original-visible-watermark'
 import {originalSpriteSplit,originalSpriteGifs} from '../.runtime/oracle/original-sprite-sheet'
+import {originalSheetAdjust} from '../.runtime/oracle/original-sheet-adjust'
 import {originalCustomPlan,originalCustomSplit,originalCustomCompose} from '../.runtime/oracle/original-custom-slice'
 import {reviewScatterExport} from '../assets/workbench/src/lib/scatterSlice'
 import {originalExpandShrink} from '../.runtime/oracle/original-expand-shrink'
@@ -382,7 +383,21 @@ async function runSpriteSheet(){
  }
  await publish(zip,'browser-sprite-sheet.zip');status.textContent=`Sprite sheet complete: ${fixture.split.length} splits and ${fixture.gif.length} GIF row exports`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet]] as const) {
+async function runSheetAdjust(){
+ const fixture=await(await fetch('/sheet-adjust/manifest.json')).json(),input=await(await fetch('/sheet-adjust/frames.zip')).blob(),archive=await JSZip.loadAsync(input),files=await Promise.all(Object.keys(archive.files).map(name=>archive.file(name)!.async('blob'))),zip=new JSZip()
+ for(const entry of fixture.cases){
+  const ext=entry.action==='compose'?'png':entry.action==='gif'?'gif':'zip'
+  zip.file(`${entry.id}/original.${ext}`,await originalSheetAdjust(files,entry.action,entry.layout))
+  const worker=new Worker(new URL('../assets/workbench/src/lib/sheetAdjust.worker.ts',import.meta.url),{type:'module'})
+  try{
+   const blob=await new Promise<Blob>((resolve,reject)=>{worker.onmessage=e=>{if(e.data.error)reject(new Error(e.data.error));else if(e.data.blob)resolve(e.data.blob)};worker.onerror=e=>reject(new Error(e.message));worker.postMessage({id:entry.id,generation:0,file:input,operation:entry.action==='compose'?'image.sheetCompose':entry.action==='gif'?'image.sheetGif':'image.sheetFix',parameters:{layout:entry.layout,frontendBytes:0},budgetBytes:2*1024**3})})
+   zip.file(`${entry.id}/actual.${ext}`,blob)
+  }finally{worker.terminate()}
+  status.textContent=`Sheet adjustment: ${entry.id}`
+ }
+ await publish(zip,'browser-sheet-adjust.zip');status.textContent=`Sheet adjustment complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

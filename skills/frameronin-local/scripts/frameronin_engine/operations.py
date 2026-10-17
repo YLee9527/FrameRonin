@@ -92,6 +92,15 @@ REGISTRY = {
     'image.spriteGifs': operation(['image'],{'layout':{'type':'object','default':{}},
         'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
         'zip_report','original_sprite_sheet_row_gifs',overhead=256),
+    'image.sheetCompose': operation(['archive'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'png_report','original_sheet_adjust_compose',overhead=256),
+    'image.sheetGif': operation(['archive'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'gif_report','original_sheet_adjust_gif',overhead=256),
+    'image.sheetFix': operation(['archive'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'zip_report','original_sheet_adjust_pixel_fix',overhead=256),
     'image.scatterDetect': operation(['image'],{'detect':{'type':'object','default':DETECT_DEFAULTS},
         'order':choice('row-major',['row-major','column-major']),'renderer':choice('browser-worker',['browser-worker']),
         'frontendBytes':integer(0,0,2*1024**3)},'json_report','original_connected_components',overhead=256),
@@ -211,6 +220,9 @@ def preview(project, payload):
     if name=='image.spriteGifs':
         from .sprite_gif import estimate as sprite_estimate
         estimate=sprite_estimate(versions[0],values)
+    if name in ['image.sheetCompose','image.sheetGif','image.sheetFix']:
+        from .sheet_adjust import review
+        estimate,_,_=review(versions[0],values,{'image.sheetCompose':'compose','image.sheetGif':'gif','image.sheetFix':'fix'}[name],memory_budget())
     if name=='image.normal':
         source=versions[0]['metadata'];width,height=normal_output_dimensions(source,values)
         if values['renderer']=='native':
@@ -360,7 +372,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,

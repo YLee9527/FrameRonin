@@ -1,5 +1,11 @@
 # CLI 与本地 API
 
+精灵表调整内核新增 `image.sheetCompose`、`image.sheetGif`、`image.sheetFix`，输入受控、连续命名的 PNG 帧 ZIP，参数为 `layout`、`renderer=browser-worker`、`frontendBytes`。这三项已通过测试驱动的真实 Worker/正式发布，原编辑器的按钮及文档接入继续实施，不能视为该入口已交付。
+
+Compose 的 layout 为 `{columns,rows,frames}`，frames 为 `{sourceIndex,dx,dy,crop:{top,bottom,left,right}}` 的有序数组；保留小数裁边与负数透明扩边，偏移限整数，所有帧共同决定格子尺寸。Gif 另加唯一 selected 集合和 speedScale（0.25–4），只输出选中帧，顺序始终按当前 frames 列表，不按 selected 数组的顺序；共同尺寸仍按全部帧计算；原 100ms 基准、50ms 最小间隔及 GIF 舍入行为保留。Fix 为 `{selected,referenceWidth,referenceHeight,fixes}`，每个 fix 为 `{imgX,imgY,range,data}`，range 为 1–8、data 为精确 RGBA 字节；最后覆盖的修补优先，只改选中帧。
+
+ZIP 最多 4096 帧/128 MiB，输出最多 128 MiB、每边最多 30000px，仍须通过完整工作集预算。输出逐帧核对容器、尺寸、数量与时长，取消代次和统一完成事务继续有效。CLI/通用提案直接执行拒绝；输入准备、预处理、空白帧及原编辑器完整状态属于后续接入。
+
 精灵表按行 GIF 使用 `image.spriteGifs`，输入单个正式静态图片版本，参数 `renderer=browser-worker`、`frontendBytes`、`layout={columns,rows,order,framesPerRow,duration}`。行列 1–64，order 为唯一且有效的原网格索引，最多 4096 帧；每行 1–128 帧，时长 20–500ms。沿用原 gifenc 的 10ms 四舍五入、逐帧调色板、透明度阈值和每行最大尺寸左上对齐。输出按顺序 `row_01.gif` 等组成的 ZIP 和报告；接收端逐帧核对尺寸、数量和时长，随后由统一事务登记。CLI/通用提案不能直接提交需要宿主 Worker 的任务，不能以近似后端编码器代替。
 
 精灵表 PNG 拆分复用 `image.customSlice` 网格模式，保留余数分配和最小 1px 的原算法。GIF 预备帧也使用同一路径；正式 GIF 任务从冻结源图和审阅后的索引切取，不把全部解码帧堆在主线程。两种 ZIP 均限制 128 MiB。预览解包除了中央目录预检，还通过锁定 JSZip 的有界流累计实际解压量，接口缺失或超量直接失败；该检查同样用于自定义切图 ZIP 读取。
