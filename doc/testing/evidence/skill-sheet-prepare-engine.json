@@ -1,5 +1,5 @@
 {
-  "codeCommit": null,
+  "codeCommit": "30f7cb4",
   "date": "2026-10-18",
   "scope": "Sheet preprocess, split and raw-frame archive kernel only. Complete SpriteSheetAdjust/SheetPro UI, formal editor documents and interaction acceptance remain pending. S2/S3/S4 remain open.",
   "original": {
