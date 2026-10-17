@@ -1,5 +1,5 @@
 {
-  "codeCommit": null,
+  "codeCommit": "c158a0e",
   "date": "2026-10-18",
   "scope": "Sheet adjustment processing kernel only: compose/crop/offsets, selected-frame GIF and fixed pixels. Original SpriteSheetAdjust UI, preprocessing, split/blank integration and formal editor document remain pending. S2/S3/S4 remain open.",
   "original": {
