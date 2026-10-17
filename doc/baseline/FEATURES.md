@@ -45,9 +45,9 @@
 | image.rembg | AI抠图 | reference/frontend/src/components/ImageMatte.tsx | image → transparent PNG | 待逐项验收 |
 | sequence.slice | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | static PNG/JPEG/WebP + reviewed grid/order → ordered PNG ZIP / GIF rows ZIP + report | 34 项原版严格对照、正式任务/文档/统一历史、4096 帧实导出、取消/迟到/冲突及三语通过；联合内存与完整可访问性待完成 |
 | sequence.compose | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | static PNG/JPEG/WebP + reviewed grid/order → ordered PNG ZIP / GIF rows ZIP + report | 34 项原版严格对照、正式任务/文档/统一历史、4096 帧实导出、取消/迟到/冲突及三语通过；联合内存与完整可访问性待完成 |
-| image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 合成/偏移/裁边、GIF、固定像素内核 21 项原版对照及正式发布通过；原界面、文档、预处理和完整交互仍待迁移 |
-| 精灵表调整.image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
-| image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
+| image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | static PNG/JPEG/WebP + reviewed preprocessing/grid/frame edits → PNG / selected-frame GIF / raw ordered PNG ZIP + reports | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
+| 精灵表调整.image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | static PNG/JPEG/WebP + reviewed preprocessing/grid/frame edits → PNG / selected-frame GIF / raw ordered PNG ZIP + reports | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
+| image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | static PNG/JPEG/WebP + reviewed preprocessing/grid/frame edits → PNG / selected-frame GIF / raw ordered PNG ZIP + reports | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
 | image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → same-size PNG and parameter report | strict original pixels, actual auto/96/JPEG downloads, formal document/history, conflict/copy/late protection and cancellation/navigation passed; real watermark residue quality and joint RSS/accessibility remain |
 | image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → ordered PNG/JPEG/WebP ZIP + detection JSON + reports | original oracle and managed workbench/document checkpoint passed; complete S2/S3/S4 regression pending |
 | image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG frame ZIP, rearranged PNG, parameter TXT and seam preview | 43 original kernel cases; actual auto/regions/L7/polyline, TXT/presets, documents/history, conflicts/late-result protection, cancel/navigation passed; joint RSS and full accessibility remain |
@@ -59,10 +59,10 @@
 | audio.zip | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | sequence.unify-size | 统一尺寸 | reference/frontend/src/components/RoninProUnifySize.tsx | frames → PNG | 原算法、受控任务、正式文档与统一撤销通过；联合内存及完整模块回归待完成 |
 | sequence.duplicate-grid | 切分后寻找重复帧 | reference/frontend/src/components/RoninProDuplicateFrames.tsx | sprite sheet → PNG cells + zero-based duplicate groups | 原算法、受控任务、正式文档与统一撤销通过；联合内存及完整模块回归待完成 |
-| image.preprocess | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
-| image.matte | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
-| image.alpha-repair | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
-| 单图Pro.image.grid | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
+| image.preprocess | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | static PNG/JPEG/WebP + reviewed preprocessing/grid/frame edits → PNG / selected-frame GIF / raw ordered PNG ZIP + reports | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
+| image.matte | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | static PNG/JPEG/WebP + reviewed preprocessing/grid/frame edits → PNG / selected-frame GIF / raw ordered PNG ZIP + reports | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
+| image.alpha-repair | 单图Pro：统一裁边/透明扩边/预处理羽化；独立透明边缘修复见 image.transparent-repair | reference/frontend/src/components/RoninProSheetPro.tsx | image + crop/padding/preprocessing options → PNG / PNG frame ZIP | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
+| 单图Pro.image.grid | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | static PNG/JPEG/WebP + reviewed preprocessing/grid/frame edits → PNG / selected-frame GIF / raw ordered PNG ZIP + reports | 独立及 Pro 工作台、正式文档/统一历史、4096 帧操作与下载、冲突/迟到/取消/导航及三语通过；联合内存与完整可访问性待完成 |
 | image.double-background | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |
 | 高级像素.image.alpha-repair | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |
 | image.frontier-erode | 高级像素 | reference/frontend/src/components/RoninProAdvancedPixel.tsx | images → transparent PNG | 待逐项验收 |

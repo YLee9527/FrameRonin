@@ -30,7 +30,7 @@ export function checkSheetPreprocessBudget(width:number,height:number,fileBytes:
  return estimate
 }
 export function validateSheetPreparation(value:unknown):asserts value is SheetPreparation{
- if(!object(value)||!(value.mode==='transparent'?fields(value,['mode']):['whole','uniform'].includes(String(value.mode))&&fields(value,['mode','columns','rows'])&&integer(value.columns,1,value.mode==='whole'?64:32)&&integer(value.rows,1,value.mode==='whole'?64:32)))throw new Error('SHEET_PREPARATION_LAYOUT')
+ if(!object(value)||!(value.mode==='transparent'?fields(value,['mode']):['whole','uniform'].includes(String(value.mode))&&fields(value,['mode','columns','rows'])&&integer(value.columns,1,value.mode==='whole'?64:32)&&integer(value.rows,1,value.mode==='whole'?4096:32)&&Number(value.columns)*Number(value.rows)<=4096))throw new Error('SHEET_PREPARATION_LAYOUT')
 }
 export function sheetPreparationSizes(width:number,height:number,p:SheetPreparation):FrameSize[]|null{
  validateSheetPreparation(p)
@@ -42,7 +42,9 @@ export function sheetPreparationSizes(width:number,height:number,p:SheetPreparat
 }
 export function checkSheetPrepareBudget(width:number,height:number,fileBytes:number,p:SheetPreparation,budget:number,frontend:number,resolved?:FrameSize[]){
  const declared=sheetPreparationSizes(width,height,p),sizes=resolved??declared
- if(!integer(fileBytes,1,20*1024**2)||!integer(budget,1,2*1024**3)||!integer(frontend,0,2*1024**3)||sizes&&(!sizes.length||sizes.length>4096||sizes.some(s=>!integer(s.w,1,30000)||!integer(s.h,1,30000))))throw new Error('SHEET_PREPARATION_RESOURCES')
+ // The service verifies provenance before dispatch: uploads are <=20 MiB;
+ // controlled preprocessing PNGs may use the existing 128 MiB output limit.
+ if(!integer(fileBytes,1,128*1024**2)||!integer(budget,1,2*1024**3)||!integer(frontend,0,2*1024**3)||sizes&&(!sizes.length||sizes.length>4096||sizes.some(s=>!integer(s.w,1,30000)||!integer(s.h,1,30000))))throw new Error('SHEET_PREPARATION_RESOURCES')
  const estimate=256*1024**2+width*height*48+fileBytes*8+frontend+(sizes?.reduce((sum,s)=>sum+s.w*s.h*16,0)??0)
  if(estimate>budget)throw new Error('SHEET_PREPARATION_RESOURCE_LIMIT')
  return estimate

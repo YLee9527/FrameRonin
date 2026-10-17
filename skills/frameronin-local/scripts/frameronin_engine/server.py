@@ -100,6 +100,26 @@ def application(project, port):
     def create_task(payload: dict):
         return submit(project, payload,browser_client=True)
 
+    @app.post('/api/tasks/manifest')
+    def task_manifest(payload:dict):
+        # Editor lineage needs provenance, not all historical parameters, events,
+        # file buffers or the most recent 200 tasks in the project list.
+        ids=payload.get('tasks')
+        if set(payload)!={'tasks'} or not isinstance(ids,list) or not 1<=len(ids)<=8192 or not all(isinstance(value,str) for value in ids) or len(set(ids))!=len(ids):
+            raise RoninError('TASK_MANIFEST_INVALID','Select up to 8192 unique canonical task IDs.')
+        values=[];retained=0
+        with project.connection() as db:
+            for task_id in ids:
+                checked_id(task_id)
+                row=db.execute('SELECT id,state,payload,results FROM tasks WHERE id=?',(task_id,)).fetchone()
+                if row is None:raise RoninError('TASK_MISSING','The task does not exist in this project.')
+                request=json.loads(row['payload'])
+                public={'id':row['id'],'state':row['state'],'operation':request['operation'],'inputs':request['inputs'],'results':json.loads(row['results'])}
+                retained+=len(json.dumps(public))*2
+                if retained>min(memory_budget()//16,16*1024**2):raise RoninError('TASK_MANIFEST_LIMIT','The lineage metadata exceeds its response budget.')
+                values.append(public)
+        return values
+
     @app.post('/api/proposals')
     def create_proposal(payload: dict):
         from .proposals import save

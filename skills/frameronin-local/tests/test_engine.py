@@ -70,6 +70,29 @@ class ProjectTests(unittest.TestCase):
             with self.assertRaises(RoninError):
                 manifest({'versions': [self.version['id']]})
 
+    def test_task_lineage_manifest_is_ordered_bounded_and_does_not_execute_or_leak_parameters(self):
+        from frameronin_engine.server import application
+        first=submit(self.project,{'operation':'image.resize','inputs':[self.version['id']],'parameters':{'width':8,'height':6}})
+        completed=wait(self.project,first['id'])
+        self.assertEqual(completed['state'],'succeeded')
+        second=submit(self.project,{'operation':'image.resize','inputs':[completed['results'][0]],'parameters':{'width':4,'height':3}})
+        self.assertEqual(wait(self.project,second['id'])['state'],'succeeded')
+        endpoint=next(route.endpoint for route in application(self.project,8765).routes if route.path=='/api/tasks/manifest')
+        with self.project.connection() as db:before=db.execute('SELECT COUNT(*) FROM tasks').fetchone()[0]
+        values=endpoint({'tasks':[second['id'],first['id']]})
+        self.assertEqual([r['id'] for r in values],[second['id'],first['id']])
+        self.assertTrue(all(set(r)=={'id','state','operation','inputs','results'} for r in values))
+        self.assertEqual(values[0]['inputs'],values[1]['results'])
+        for payload in [{},{'tasks':[]},{'tasks':[first['id']]*2},{'tasks':['../outside']},{'tasks':[identifier()]},{'tasks':[True]},{'tasks':[first['id']],'path':'outside'},{'tasks':[identifier() for _ in range(8193)]}]:
+            with self.assertRaises(RoninError):endpoint(payload)
+        with patch('frameronin_engine.server.memory_budget',return_value=16):
+            with self.assertRaises(RoninError):endpoint({'tasks':[first['id']]})
+        with self.project.connection() as db:self.assertEqual(db.execute('SELECT COUNT(*) FROM tasks').fetchone()[0],before)
+        document=identifier()
+        self.project.save_document(document,'sheet-adjust',{'formatVersion':1},0)
+        with self.assertRaises(RoninError):self.project.save_document(document,'sheet-pro',{'formatVersion':1},1)
+        self.project.save_document(identifier(),'sheet-pro',{'formatVersion':1},0)
+
     def test_display_metadata_preserves_exif_source_and_supplements_old_photo_indices(self):
         import base64
         import io
@@ -382,7 +405,12 @@ class ProjectTests(unittest.TestCase):
         self.assertTrue(self.project.verify()['valid'])
 
     def test_sheet_prepare_preserves_grid_transparency_and_preprocess_geometry(self):
-        from frameronin_engine.sheet_prepare import DEFAULTS,preprocess_size,preparation_sizes,review,validate_result
+        from frameronin_engine.sheet_prepare import DEFAULTS,preprocess_size,preparation_sizes,review,validate_result,source
+        controlled={**self.version,'origin':'image.sheetPreprocess','metadata':{**self.version['metadata'],'bytes':27*1024**2}}
+        self.assertEqual(source(controlled,prepared=True),(16,12,27*1024**2))
+        for invalid in [{**controlled,'origin':'import'},{**controlled,'metadata':{**controlled['metadata'],'containerFormat':'JPEG'}}]:
+            with self.assertRaises(RoninError):source(invalid,prepared=True)
+        with self.assertRaises(RoninError):source(controlled)
         from frameronin_engine.browser_tasks import ready,accept
         options={**DEFAULTS,'cropTop':1.5,'cropBottom':20,'cropLeft':1,'cropRight':2,'padTop':2,'padBottom':1,'padLeft':4,'padRight':3,'resizeEnabled':True,'resizeW':9.4,'resizeH':7.5}
         self.assertEqual(preprocess_size(13,11,options),((10,1),(17,4),(9,8)))
@@ -390,6 +418,8 @@ class ProjectTests(unittest.TestCase):
             with self.assertRaises(RoninError):preprocess_size(13,11,{**options,**change})
         with self.assertRaises(RoninError):preprocess_size(13,11,{**DEFAULTS,'cropTop':.1})
         self.assertEqual(preparation_sizes(13,11,{'mode':'whole','columns':3,'rows':2})[-1],{'w':5,'h':6})
+        self.assertEqual(len(preparation_sizes(1,129,{'mode':'whole','columns':1,'rows':65})),65)
+        with self.assertRaises(RoninError):preparation_sizes(13,11,{'mode':'whole','columns':64,'rows':65})
         self.assertEqual(preparation_sizes(13,11,{'mode':'uniform','columns':3,'rows':2}),[{'w':4,'h':5}]*6)
         with self.assertRaises(RoninError):preparation_sizes(2,2,{'mode':'uniform','columns':3,'rows':2})
         with self.assertRaises(RoninError):preparation_sizes(13,11,{'mode':'transparent','columns':4})

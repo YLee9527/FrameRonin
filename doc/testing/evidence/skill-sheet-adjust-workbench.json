@@ -1,0 +1,405 @@
+{
+  "codeCommit": null,
+  "date": "2026-10-18",
+  "scope": "Standalone SpriteSheetAdjust and integrated SheetPro workbench, managed tasks, formal documents and bounded previews; complete Skill S2/S3/S4 remain open",
+  "originalAlgorithmEvidence": [
+    "doc/testing/evidence/skill-sheet-adjust-engine.json",
+    "doc/testing/evidence/skill-sheet-prepare-engine.json"
+  ],
+  "actualWorkbench": {
+    "projectId": "ffd7a559-94e3-48bf-876b-f0c04f16b6e6",
+    "standaloneDocumentId": "f67f5dfb-4395-42ae-88d5-914ab724b6b8",
+    "standalone": {
+      "preparedFrozenBaseline": {
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "1af2c5d539474a1e64c71e22aef61ffd1c6c7413faa2c01b665ceedb10c99873",
+        "actualMemberHash": "1af2c5d539474a1e64c71e22aef61ffd1c6c7413faa2c01b665ceedb10c99873",
+        "shapes": [
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 12,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      "tasks": [
+        {
+          "id": "81f3e409-172e-4ab2-ad06-241b93061e7b",
+          "state": "succeeded",
+          "results": [
+            "69f29d11-e96f-4ca5-9f84-437c7bd67eeb",
+            "a1c8123a-acb4-4e2a-a45b-e4a2cd784b62"
+          ],
+          "operation": "image.sheetPrepare"
+        },
+        {
+          "id": "bbe59dfb-048c-4d45-a325-67993ce57b70",
+          "state": "succeeded",
+          "results": [
+            "b70749bd-56b7-44d1-b84d-9fa18b5fa2de",
+            "5a5e3a06-0a7a-4b7d-821e-d7d44b5374c2"
+          ],
+          "operation": "image.sheetPrepare"
+        },
+        {
+          "id": "337c561b-a8da-4a8d-865f-2450347ca368",
+          "state": "succeeded",
+          "results": [
+            "16e9ab82-f0a1-4f10-b626-ba44caf7897a",
+            "91518870-4931-4ee3-957b-3b7877bcb9e9"
+          ],
+          "operation": "image.sheetCompose"
+        },
+        {
+          "id": "6f8fe0de-3c28-44b8-b4cc-657e7284bfee",
+          "state": "succeeded",
+          "results": [
+            "9e8c6ada-8e7c-4114-93c4-713ede9e904c",
+            "26582112-f16b-48c5-b4b3-67f07161fa23"
+          ],
+          "operation": "image.sheetGif"
+        },
+        {
+          "id": "a886dbe6-e9d8-4edb-a43f-0aef8a5cb66e",
+          "state": "succeeded",
+          "results": [
+            "764e765c-7b81-457d-a209-4c9ee5964a6a",
+            "cc1e07db-7faf-4ee6-9f73-88c797f5b376"
+          ],
+          "operation": "image.sheetFix"
+        },
+        {
+          "id": "ee318767-4d44-4e4a-ba48-45812526d635",
+          "state": "succeeded",
+          "results": [
+            "920ff622-47e2-470b-979e-fec7268e74b7",
+            "6a2b3482-647d-4132-9e14-5c55080101d7"
+          ],
+          "operation": "image.sheetFrames"
+        }
+      ],
+      "selected": [
+        0,
+        3
+      ],
+      "sample": {
+        "imgX": 5,
+        "imgY": 7,
+        "range": 1,
+        "data": [
+          130,
+          30,
+          20,
+          255
+        ]
+      },
+      "rawRetainsOffsetsOutsidePng": true,
+      "downloadsMatchFormalVersions": true,
+      "gif": {
+        "frames": 2,
+        "width": 13,
+        "height": 15,
+        "durationMs": [
+          100,
+          100
+        ]
+      },
+      "noUnexpectedTasksDuringReopenUndoRedo": true
+    },
+    "pro": {
+      "documentId": "8ced0d51-2b83-4cc1-a9ba-cb0752798ff0",
+      "blankTask": "6b07bc32-bcb5-4759-a295-f795b65021d7",
+      "composeTask": "6b00fa8b-6594-4fdb-9e04-a159526054af",
+      "rawTask": "2fe01685-09ce-4ca8-905c-a368d481785d",
+      "dragOrderPrefix": [
+        1,
+        0,
+        2
+      ],
+      "blankSize": {
+        "width": 5,
+        "height": 7
+      },
+      "blankAllZero": true,
+      "frameCountAfterDeletes": 24,
+      "composedSize": [
+        30,
+        45
+      ],
+      "fractionalCrop": {
+        "top": 0.5,
+        "bottom": -1.5,
+        "left": -1.5,
+        "right": 0.5
+      },
+      "downloadsMatchFormalVersions": true,
+      "rawPngBytesPreserved": true
+    },
+    "preprocess": {
+      "taskId": "162c3978-0090-43fc-9a72-9223d95f7aab",
+      "preprocessedSize": [
+        19,
+        23
+      ],
+      "previousFramesRetained": 24,
+      "mode": "transparent",
+      "equalToFrozenPreNearest": {
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "activeTasks": 0
+    },
+    "conflictAndLateRead": {
+      "documentId": "8ced0d51-2b83-4cc1-a9ba-cb0752798ff0",
+      "oldRevision": 10,
+      "tasks": 13,
+      "versions": 28,
+      "externalRevision": 11,
+      "copyId": "af3c8e8c-2208-4a76-8c3f-ef9d84096d32",
+      "copyRevision": 2,
+      "copyTop": 2,
+      "currentOffset": 1,
+      "originalPreserved": true,
+      "navigationBlockedByConflict": true,
+      "lateReadPreservedNewCrop": true,
+      "countsAfter": {
+        "tasks": 13,
+        "versions": 28
+      }
+    },
+    "largeFramesAndCancel": {
+      "prepareTask": "2e1368f6-d8ba-48c6-8722-347515f6dff0",
+      "frameCount": 4096,
+      "frameSize": [
+        16,
+        16
+      ],
+      "allDecodedPixelsEqualSource": true,
+      "defaultSelectedSixInSavedHistory": true,
+      "fixtureSha256": "f8c0860c9041eb07a71f4b5f23689c2f55317c1b9a4639137f25ddda53342c2c",
+      "archiveSha256": "98d89cfe1ba251fa103b6dcc940037834d72f1a21cd415e7926de29d3f87413c",
+      "canceledTask": "ec4e5f26-19e8-405f-9bfd-59258b618c0b",
+      "cancelOperation": "image.sheetGif",
+      "canceledSelectedFrames": 4096,
+      "visiblePhaseBeforeCancel": 20,
+      "observedFeedbackMsIncludingSnapshot": 835,
+      "cancellation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.02682391693815589,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 1
+      },
+      "canceledResults": [],
+      "versionCountBefore": 31,
+      "versionCountAfter": 33,
+      "gridCancelAttempt": "Grid completed before the click; success was retained and verified. Cancellation measured separately during full GIF encoding."
+    },
+    "largeReopenAndKeyboard": {
+      "countsBefore": {
+        "tasks": 16,
+        "versions": 33
+      },
+      "countsAfter": {
+        "tasks": 16,
+        "versions": 33
+      },
+      "frameCount": 4096,
+      "orderPrefix": [
+        4095,
+        4032
+      ],
+      "keyboard": {
+        "movedLargeFrameId": "b2b8ebc2-3865-47a4-bac4-f7c5f2a739c9",
+        "undo": {
+          "focus": "精灵表调整工作区",
+          "frameId": "638bd731-d387-46fd-84a0-8897741f354b"
+        },
+        "redo": {
+          "focus": "精灵表调整工作区",
+          "frameId": "b2b8ebc2-3865-47a4-bac4-f7c5f2a739c9"
+        },
+        "withinViewport": true,
+        "documentWidth": 1280,
+        "viewportWidth": 1280
+      },
+      "reopenDidNotCreateTasksOrVersions": true
+    },
+    "backgroundExport": {
+      "taskId": "c45be681-6cfa-41e6-ad8b-55f65fd27076",
+      "stateAfterLeaving": "running",
+      "operation": "image.sheetFrames",
+      "resultsAtObservation": [],
+      "observedAtUnix": 1792276942.436189,
+      "finalState": "succeeded",
+      "results": [
+        "29c3f073-f9be-4c6c-bd49-46d84448ceaa",
+        "d768916e-9efc-41a0-8de9-35c8061bc31b"
+      ],
+      "controlledTestDelay": "4 seconds before result upload, without changing production code",
+      "downloadSha256": "d3a5a8eaba1175ccb57903e3f87a19b6c4e6ede0c993323776252758155f3e78",
+      "downloadedFrames": 4096,
+      "allPixelsAndEditedOrderVerified": true,
+      "orderPrefix": [
+        4095,
+        4032,
+        0
+      ],
+      "countsAfter": {
+        "tasks": 17,
+        "versions": 35
+      },
+      "canceledGifStillHasNoResults": true
+    },
+    "languages": {
+      "en": [
+        "Frame crop Top",
+        "Frame crop Bottom",
+        "Frame crop Left",
+        "Frame crop Right"
+      ],
+      "ja": [
+        "フレームの切取 上",
+        "フレームの切取 下",
+        "フレームの切取 左",
+        "フレームの切取 右"
+      ],
+      "zh": [
+        "帧裁边 上",
+        "帧裁边 下",
+        "帧裁边 左",
+        "帧裁边 右"
+      ],
+      "preprocessControlsAlsoObservedInThreeLanguages": true
+    },
+    "playback": {
+      "before": "动态预览 · 1 · 16×16",
+      "during": "动态预览 · 8 · 16×16",
+      "paused": "动态预览 · 10 · 16×16",
+      "afterObservation": "动态预览 · 10 · 16×16",
+      "pausedStable": true
+    },
+    "preflightLimit": {
+      "grid": [
+        64,
+        65
+      ],
+      "message": "总帧数最多 4096，请减少行数或列数。",
+      "rejectedBeforeTask": true,
+      "restoredGrid": [
+        64,
+        64
+      ],
+      "countsAfter": {
+        "tasks": 17,
+        "versions": 35
+      }
+    }
+  },
+  "largeFixture": {
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "format": "RGBA8 PNG",
+    "generator": "numpy.default_rng(7919).integers(0,256,(1024,1024,4),dtype=uint8); set alpha=255; Pillow PNG",
+    "sha256": "f8c0860c9041eb07a71f4b5f23689c2f55317c1b9a4639137f25ddda53342c2c",
+    "fileBytes": 3660717,
+    "sourceRetainedLocally": true
+  },
+  "documentAndTaskInvariants": [
+    "Separate sheet-adjust and sheet-pro document kinds; version 1, stable frame IDs, relative formal resource references, revision compare-and-swap",
+    "Preprocessing -> preparation -> fixed-pixel/blank task lineage is verified using scoped task manifests; obsolete archive bodies are not reread",
+    "Undo, redo, document reopening and result selection reuse existing versions and never rerun processing",
+    "Complete-frame gestures share one bounded history; canceled or changed-draft results remain invalid for UI adoption",
+    "Source, archive, page, animation and pixel-sampling work run in cancelable Workers; formal active tasks can continue after leaving the editor"
+  ],
+  "limits": {
+    "input": "Static PNG/JPEG/WebP <=20 MiB; only an origin-verified preprocessing PNG may enter prepare up to 128 MiB",
+    "frames": 4096,
+    "outputBytes": 134217728,
+    "outputSide": 30000,
+    "wholeGrid": "columns 1..64, rows 1..4096, product <=4096; derived transparent rows retained",
+    "pagePreview": "Full rows, <=64 thumbnails; animation batches <=24; previews do not replace export/sample pixels",
+    "previewPngBytes": "<=8 MiB each, <=min(32 MiB,budget/8) per response",
+    "history": "50 states, 256 MiB unique files, 64 MiB serialized state; complete budget required"
+  },
+  "validation": {
+    "python": {
+      "passed": 42,
+      "failed": 0
+    },
+    "javascript": {
+      "passed": 77,
+      "failed": 0
+    },
+    "productionBuild": {
+      "passed": true,
+      "mainBundle": "index-MBeF9MxH.js"
+    },
+    "targetedEslint": true,
+    "skillStructure": true,
+    "project": {
+      "database": "ok",
+      "versions": 35,
+      "validVersions": 35,
+      "tasks": 17,
+      "activeTasks": 0
+    }
+  },
+  "screenshot": "doc/testing/evidence/skill-sheet-adjust-workbench.png",
+  "remainingGates": [
+    "Joint browser/engine process-tree RSS measurement and entire browser Worker stop timing",
+    "Full VoiceOver, minimum macOS 14 and cross-browser/input-format coverage",
+    "Complete Skill remaining modules, full AI template quality and portable distribution"
+  ],
+  "additionalScreenshot": "doc/testing/evidence/skill-sheet-adjust-standalone.png"
+}

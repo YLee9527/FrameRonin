@@ -13,9 +13,12 @@ EDGES=['cropTop','cropBottom','cropLeft','cropRight','padTop','padRight','padBot
 def rounded(v):return math.floor(v+.5)
 
 
-def source(version):
+def source(version,prepared=False):
     m=version['metadata'];w,h=source_size(m)
-    if m.get('kind')!='image' or m.get('containerFormat') not in ['PNG','JPEG','WEBP'] or m.get('frames',1)!=1 or not integer(m['bytes'],1,20*MIB) or not integer(w,1,30000) or not integer(h,1,30000):reject('SHEET_SOURCE_LIMIT','Choose one static PNG, JPEG or WebP up to 20 MiB.')
+    # Uploads retain the original 20 MiB limit. A verified preprocessing result
+    # can legitimately encode larger than its JPEG/WebP source.
+    limit=128*MIB if prepared and version.get('origin')=='image.sheetPreprocess' and m.get('containerFormat')=='PNG' else 20*MIB
+    if m.get('kind')!='image' or m.get('containerFormat') not in ['PNG','JPEG','WEBP'] or m.get('frames',1)!=1 or not integer(m['bytes'],1,limit) or not integer(w,1,30000) or not integer(h,1,30000):reject('SHEET_SOURCE_LIMIT','Choose a static PNG, JPEG or WebP up to 20 MiB, or a controlled preprocessing PNG within its output budget.')
     return w,h,m['bytes']
 
 
@@ -34,7 +37,7 @@ def preparation_sizes(w,h,p,path=None,check=None):
     mode=p.get('mode')
     if mode in ['whole','uniform']:
         limit=64 if mode=='whole' else 32
-        if not fields(p,['mode','columns','rows']) or not integer(p['columns'],1,limit) or not integer(p['rows'],1,limit):reject('SHEET_PREPARATION_LAYOUT','Review the original grid dimensions.')
+        if not fields(p,['mode','columns','rows']) or not integer(p['columns'],1,limit) or not integer(p['rows'],1,4096 if mode=='whole' else limit) or p['columns']*p['rows']>4096:reject('SHEET_PREPARATION_LAYOUT','Use at most 4096 cells; whole-image mode accepts the row count derived from transparent splitting.')
         cw,ch=w//p['columns'],h//p['rows']
         if mode=='uniform' and (cw<1 or ch<1):reject('SHEET_PREPARATION_DENSE_UNIFORM','The uniform grid has an empty cell.')
         return [{'w':cw,'h':ch} if mode=='uniform' else {'w':max(1,(c+1)*w//p['columns']-c*w//p['columns']),'h':max(1,(r+1)*h//p['rows']-r*h//p['rows'])} for r in range(p['rows']) for c in range(p['columns'])]
@@ -65,7 +68,7 @@ def preparation_sizes(w,h,p,path=None,check=None):
 
 
 def review(version,p,action,budget,check=None):
-    w,h,size=source(version);f=p['frontendBytes'];options=p['layout']
+    w,h,size=source(version,action=='prepare');f=p['frontendBytes'];options=p['layout']
     if action=='preprocess':
         cropped,padded,output=preprocess_size(w,h,options);maximum=max(w*h,*(a*b for a,b in [cropped,padded,output]))
         estimate=256*MIB+w*h*16+maximum*192+size*12+f

@@ -50,6 +50,9 @@ export {spriteSheetAssets} from '../../assets/workbench/src/lib/spriteSheetAsset
 export {validateSheetCompose,validateSheetFix,sheetFrameCrop,sheetLayout,checkSheetBudget,composeSheet,gifSheet,fixSheetPixels,fixSheet,sheetFramesSizes,packSheetFrames} from '../../assets/workbench/src/lib/sheetAdjust'
 export {sheetPreprocessDefaults,validateSheetPreprocess,sheetPreprocessHasEffect,sheetPreprocessSize,checkSheetPreprocessBudget,validateSheetPreparation,sheetPreparationSizes,checkSheetPrepareBudget,prepareSheetGrid} from '../../assets/workbench/src/lib/sheetPrepare'
 export {applySheetProPreprocess,sheetProPreprocessIsNoop} from '../../assets/workbench/src/lib/sheetProPreprocess'
+export {initialSheetAdjustDraft,newSheetFrame,preparedSheetFrames,currentSheetRecipe,validateStoredSheetAdjust,verifySheetLineage,serializeSheetAdjust,restoreSheetAdjust,sheetAdjustFiles,sheetComposeLayout,sheetGifLayout} from '../../assets/workbench/src/localProject/sheetAdjustDocument'
+export {createSheetAdjustHistory,sheetAdjustHistoryReducer} from '../../assets/workbench/src/localProject/useSheetAdjustDocument'
+export {sheetAdjustPreview,sheetPreviewGeometry,sheetSampleCoordinates} from '../../assets/workbench/src/lib/sheetAdjustPreview'
 
 export {scatterDetectDefaults,validateScatterDetect,validateScatterBoxes,orderedScatterBoxes,detectScatterPixels,scatterExportEntries,checkScatterBudget,exportScatterZip,exportReviewedScatterZip,reviewScatterExport,validateReviewedScatterExport} from '../../assets/workbench/src/lib/scatterSlice'
 

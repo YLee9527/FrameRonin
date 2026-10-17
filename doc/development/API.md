@@ -1,20 +1,22 @@
 # CLI 与本地 API
 
-精灵表输入内核新增 `image.sheetPreprocess`、`image.sheetPrepare`、`image.sheetFrames`，均要求宿主 `browser-worker`。前两项输入一个正式静态 PNG/JPEG/WebP（≤20 MiB）；Frames 输入受控 PNG 帧 ZIP。当前为处理内核，原 SpriteSheetAdjust 界面及文档接入仍在实施。
+精灵表输入操作 `image.sheetPreprocess`、`image.sheetPrepare`、`image.sheetFrames` 均要求宿主 `browser-worker`。前两项输入一个正式静态 PNG/JPEG/WebP（≤20 MiB）；Frames 输入受控 PNG 帧 ZIP。独立 SpriteSheetAdjust 与集成 SheetPro 已接入同一受控工作台、正式文档和统一历史。
+
+Prepare 对 origin 为 `image.sheetPreprocess` 的正式 PNG 结果允许使用既有 128 MiB 输出上限，仍核对完整解码/输出预算。上传原图继续限制 20 MiB；不能只凭客户端参数放宽。该例外避免 JPEG/WebP 预处理成 PNG 后编码体积增大而打断合法流程。
 
 Preprocess 的 `layout` 使用原 16 项设置：watermark、cropTop/Bottom/Left/Right、padTop/Right/Bottom/Left、resizeEnabled/W/H/KeepAspect、matteMode/Tolerance/Feather。裁切和补边范围 0–4096、目标尺寸 1–8192、容差 0–441、羽化 0–64；有限小数按原算法四舍五入。顺序为水印、内裁、透明补边、最近邻缩放、左上角取色抠图。无实际变化返回 SHEET_PREPROCESS_NO_EFFECT；调用方应保留原版本，不创建伪加工结果。完整预算核对最大中间图，不能靠最终缩小绕过。
 
-Prepare 的 `layout` 为 `{mode:'whole'|'uniform',columns,rows}` 或 `{mode:'transparent'}`。Whole 保留分配余数和最小 1px 格，行列 1–64；Uniform 保留固定向下取整格及末端余数丢弃，行列 1–32，零尺寸拒绝。Transparent 沿用全图透明行列分割和底部/水平居中统一尺寸，最多 4096 帧，透明度非零即有内容；空图拒绝。输出连续命名的 PNG ZIP 及尺寸报告。
+Prepare 的 `layout` 为 `{mode:'whole'|'uniform',columns,rows}` 或 `{mode:'transparent'}`。Whole 保留分配余数和最小 1px 格，列数 1–64、行数 1–4096且总格数≤4096，覆盖透明拆分后自动推导的行数；Uniform 保留固定向下取整格及末端余数丢弃，行列 1–32，零尺寸拒绝。Transparent 沿用全图透明行列分割和底部/水平居中统一尺寸，最多 4096 帧，透明度非零即有内容；空图拒绝。输出连续命名的 PNG ZIP 及尺寸报告。
 
 Frames 的 `layout={order,blank}`，order 是非空唯一源索引数组，blank 为 null 或 `{width,height}`。保留帧必须逐字节复制原 PNG，不能带入偏移或裁边；可在末尾添加全零 RGBA 空白帧，总帧数不超过 4096。接收端逐帧验证尺寸、保留成员的原字节及空白像素；长验证逐帧/分段检查任务取消与代次。全部输出仍经统一完成事务登记。
 
 输入拆分预算包括 256 MiB 余量、源像素×48、源文件字节×8、全部输出像素×16及前端保留量；预处理包括 256 MiB、源像素×16、最大中间像素×192、源文件字节×12及前端保留量。Frames 沿用调整内核的完整 ZIP/解码/输出预算。预算上限、PNG ZIP 及输出 128 MiB、30000px 边长限制仍需同时满足；源解码前先检查，不能静默降采样。
 
-精灵表调整内核新增 `image.sheetCompose`、`image.sheetGif`、`image.sheetFix`，输入受控、连续命名的 PNG 帧 ZIP，参数为 `layout`、`renderer=browser-worker`、`frontendBytes`。这三项已通过测试驱动的真实 Worker/正式发布，原编辑器的按钮及文档接入继续实施，不能视为该入口已交付。
+精灵表调整操作 `image.sheetCompose`、`image.sheetGif`、`image.sheetFix` 输入受控、连续命名的 PNG 帧 ZIP，参数为 `layout`、`renderer=browser-worker`、`frontendBytes`。工作台按钮使用正式队列；撤销、重做和重开只复用结果版本。
 
 Compose 的 layout 为 `{columns,rows,frames}`，frames 为 `{sourceIndex,dx,dy,crop:{top,bottom,left,right}}` 的有序数组；保留小数裁边与负数透明扩边，偏移限整数，所有帧共同决定格子尺寸。Gif 另加唯一 selected 集合和 speedScale（0.25–4），只输出选中帧，顺序始终按当前 frames 列表，不按 selected 数组的顺序；共同尺寸仍按全部帧计算；原 100ms 基准、50ms 最小间隔及 GIF 舍入行为保留。Fix 为 `{selected,referenceWidth,referenceHeight,fixes}`，每个 fix 为 `{imgX,imgY,range,data}`，range 为 1–8、data 为精确 RGBA 字节；最后覆盖的修补优先，只改选中帧。
 
-ZIP 最多 4096 帧/128 MiB，输出最多 128 MiB、每边最多 30000px，仍须通过完整工作集预算。输出逐帧核对容器、尺寸、数量与时长，取消代次和统一完成事务继续有效。CLI/通用提案直接执行拒绝；原编辑器的完整界面状态属于后续接入。
+ZIP 最多 4096 帧/128 MiB，输出最多 128 MiB、每边最多 30000px，仍须通过完整工作集预算。输出逐帧核对容器、尺寸、数量与时长，取消代次和统一完成事务继续有效。CLI/通用提案直接执行拒绝；工作台文档保存原件、来源链、帧状态及各结果自己的输入引用。
 
 精灵表按行 GIF 使用 `image.spriteGifs`，输入单个正式静态图片版本，参数 `renderer=browser-worker`、`frontendBytes`、`layout={columns,rows,order,framesPerRow,duration}`。行列 1–64，order 为唯一且有效的原网格索引，最多 4096 帧；每行 1–128 帧，时长 20–500ms。沿用原 gifenc 的 10ms 四舍五入、逐帧调色板、透明度阈值和每行最大尺寸左上对齐。输出按顺序 `row_01.gif` 等组成的 ZIP 和报告；接收端逐帧核对尺寸、数量和时长，随后由统一事务登记。CLI/通用提案不能直接提交需要宿主 Worker 的任务，不能以近似后端编码器代替。
 
@@ -25,6 +27,8 @@ CLI 返回 JSON 并保留失败退出状态。`doctor`、`init`、`import`、`as
 任务 JSON 字段仅允许 `operation`、`inputs`、`parameters`、可选 `assetId`。输入是正式版本 UUID；参数由操作注册表定义，不允许命令和任意读写路径。执行前重验内容与预算。
 
 HTTP 接口：`GET /api/project`、`POST /api/assets`、`GET /api/versions/{id}` 及 `/content`、`POST /api/tasks/preview`、`POST /api/tasks`、`GET /api/tasks` 及 `/{id}`、`POST /api/tasks/{id}/cancel`、`GET /api/documents` 及 `/{id}`、`POST /api/documents/{id}`、`POST /api/ai/requests`。
+
+`POST /api/tasks/manifest` 接收 `{tasks:[canonical UUID...]}`，按请求顺序返回 id/state/operation/inputs/results；不执行任务，不返回历史参数、事件或路径。最多 8192 个唯一 ID，响应受 min(内存预算/16,16 MiB) 限制，任一 ID 不属于当前项目即失败。用于长编辑来源链，避免重复读取历史文件或仅靠最近 200 项任务列表。
 
 工作台兼容媒体入口为 `/api/jobs`、`/api/watermark`、`/api/matte`，均转为本地正式任务。写入需同源 Origin 和 `X-FrameRonin-Local: 1`；不启用跨域许可。接口错误包含稳定 code 与可理解说明，失败不登记成功版本。
 

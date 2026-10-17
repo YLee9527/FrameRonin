@@ -33,6 +33,10 @@ test('preprocessing uses explicit Worker adapters without a hidden watermark fal
 
 test('whole and uniform sheet preparation preserve their different remainder and dense-grid rules',async()=>{
  const whole={mode:'whole',columns:3,rows:2},uniform={mode:'uniform',columns:3,rows:2}
+ assert.equal(api.sheetPreparationSizes(1,129,{mode:'whole',columns:1,rows:65}).length,65)
+ assert.throws(()=>api.validateSheetPreparation({mode:'whole',columns:64,rows:65}),/LAYOUT/)
+ api.checkSheetPrepareBudget(13,11,27*1024**2,whole,2*1024**3,0)
+ assert.throws(()=>api.checkSheetPrepareBudget(13,11,129*1024**2,whole,2*1024**3,0),/RESOURCES/)
  assert.deepEqual(api.sheetPreparationSizes(13,11,whole),[{w:4,h:5},{w:4,h:5},{w:5,h:5},{w:4,h:6},{w:4,h:6},{w:5,h:6}]);assert.deepEqual(api.sheetPreparationSizes(13,11,uniform),Array(6).fill({w:4,h:5}))
  assert.equal(api.sheetPreparationSizes(2,2,{mode:'whole',columns:64,rows:64}).length,4096)
  assert.throws(()=>api.sheetPreparationSizes(2,2,{mode:'uniform',columns:3,rows:2}),/DENSE/)
