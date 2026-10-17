@@ -1,207 +1,74 @@
-/**
- * 去除 Gemini 可见水印
- * 算法参考: https://github.com/allenk/GeminiWatermarkTool (MIT)
- * 仅去除可见水印，不涉及 SynthID 隐形水印
- */
-import { useEffect, useState } from 'react'
-import { Radio, Space, Typography, Upload } from 'antd'
-import { DownloadOutlined } from '@ant-design/icons'
-import type { UploadFile } from 'antd'
-import { useLanguage } from '../i18n/context'
+/** Visible Gemini mark only; reverse-alpha algorithm from allenk/GeminiWatermarkTool (MIT).
+ * This does not remove invisible SynthID marks. */
+import {useCallback,useEffect,useMemo,useRef,useState} from 'react'
+import {Button,Radio,Space,Typography,Upload} from 'antd'
+import {DownloadOutlined} from '@ant-design/icons'
+import type {UploadFile} from 'antd'
+import {useLanguage} from '../i18n/context'
 import StashDropZone from './StashDropZone'
 import StashableImage from './StashableImage'
-import {
-  getWatermarkSize,
-  getWatermarkParams,
-  removeWatermarkReverseAlpha,
-  getEmbeddedAlphaMask,
-  createApproxAlphaMap,
-  type WatermarkSize,
-} from '../lib/geminiWatermark'
+import {useImageToolDocument} from '../localProject/useImageToolDocument'
+import {ImageToolDocumentSurface} from '../localProject/ImageToolDocumentSurface'
+import {useImageToolUrls,useManagedImageTool} from '../localProject/useManagedImageTool'
+import {prepareFineInput} from '../localProject/fineEditInput'
+import ManagedImageToolStatus from './ManagedImageToolStatus'
 
-const { Dragger } = Upload
-const { Text } = Typography
-
-const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
-const IMAGE_MAX_MB = 20
-
-export default function ImageGeminiWatermark() {
-  const { t } = useLanguage()
-  const [file, setFile] = useState<File | null>(null)
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [resultUrl, setResultUrl] = useState<string | null>(null)
-  const [processing, setProcessing] = useState(false)
-  const [sizeMode, setSizeMode] = useState<'auto' | '48' | '96'>('auto')
-
-  useEffect(() => {
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setImageUrl(url)
-      setResultUrl(null)
-      return () => URL.revokeObjectURL(url)
-    }
-    setImageUrl(null)
-    setResultUrl(null)
-  }, [file])
-
-  useEffect(() => {
-    return () => {
-      if (resultUrl) URL.revokeObjectURL(resultUrl)
-    }
-  }, [resultUrl])
-
-  const processImage = async () => {
-    if (!imageUrl || !file) return
-    setProcessing(true)
-    setResultUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    try {
-      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-        const i = new Image()
-        i.onload = () => resolve(i)
-        i.onerror = reject
-        i.src = imageUrl
-      })
-
-      const w = img.naturalWidth
-      const h = img.naturalHeight
-      const baseSize: WatermarkSize = sizeMode === 'auto' ? getWatermarkSize(w, h) : sizeMode === '48' ? 48 : 96
-      const params = getWatermarkParams(w, h, baseSize)
-
-      let alphaMap: Float32Array
-      let mapW: number
-      let mapH: number
-
-      try {
-        const loaded = await getEmbeddedAlphaMask(baseSize)
-        alphaMap = loaded.alpha
-        mapW = loaded.width
-        mapH = loaded.height
-      } catch {
-        alphaMap = createApproxAlphaMap(baseSize)
-        mapW = mapH = baseSize
-      }
-
-      const canvas = document.createElement('canvas')
-      canvas.width = w
-      canvas.height = h
-      const ctx = canvas.getContext('2d')!
-      ctx.drawImage(img, 0, 0)
-      const imageData = ctx.getImageData(0, 0, w, h)
-
-      const alphaScale = baseSize === 96 ? 0.85 : 1
-      removeWatermarkReverseAlpha(imageData, alphaMap, mapW, mapH, params.x, params.y, 255, alphaScale)
-      ctx.putImageData(imageData, 0, 0)
-
-      const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((b) => resolve(b), 'image/png')
-      })
-      if (blob) {
-        setResultUrl(URL.createObjectURL(blob))
-      }
-    } finally {
-      setProcessing(false)
-    }
-  }
-
-  return (
-    <div style={{ width: '100%', maxWidth: 720 }}>
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <Text type="secondary">{t('geminiWatermarkHint')}</Text>
-        <StashDropZone onStashDrop={(f) => setFile(f)} maxSizeMB={IMAGE_MAX_MB}>
-          <Dragger
-            accept={IMAGE_ACCEPT.join(',')}
-            maxCount={1}
-            fileList={file ? [{ uid: '1', name: file.name } as UploadFile] : []}
-            beforeUpload={(f) => {
-              setFile(f)
-              return false
-            }}
-            onRemove={() => setFile(null)}
-          >
-            <p className="ant-upload-text">{t('imageUploadHint')}</p>
-            <p className="ant-upload-hint">{t('imageFormats')}</p>
-          </Dragger>
-        </StashDropZone>
-
-        {file && imageUrl && (
-          <>
-            <Space wrap align="center">
-              <Text type="secondary">{t('geminiWatermarkSize')}:</Text>
-              <Radio.Group
-                value={sizeMode}
-                onChange={(e) => setSizeMode(e.target.value)}
-                optionType="button"
-                size="small"
-              >
-                <Radio.Button value="auto">{t('geminiWatermarkSizeAuto')}</Radio.Button>
-                <Radio.Button value="48">48×48</Radio.Button>
-                <Radio.Button value="96">96×96</Radio.Button>
-              </Radio.Group>
-            </Space>
-            <Space wrap>
-              <button
-                type="button"
-                onClick={processImage}
-                disabled={processing}
-                style={{
-                  padding: '10px 24px',
-                  border: '1px solid #9a8b78',
-                  borderRadius: 4,
-                  background: '#b55233',
-                  color: '#fff',
-                  cursor: processing ? 'not-allowed' : 'pointer',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  opacity: processing ? 0.7 : 1,
-                }}
-              >
-                {processing ? t('geminiWatermarkProcessing') : t('geminiWatermarkRemove')}
-              </button>
-              {resultUrl && (
-                <a
-                  href={resultUrl}
-                  download={`${file.name.replace(/\.[^.]+$/, '')}-no-watermark.png`}
-                  style={{
-                    padding: '10px 24px',
-                    border: '1px solid #9a8b78',
-                    borderRadius: 4,
-                    background: '#e4dbcf',
-                    color: '#3d3428',
-                    textDecoration: 'none',
-                    fontSize: 14,
-                    fontWeight: 500,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                  }}
-                >
-                  <DownloadOutlined /> {t('geminiWatermarkDownload')}
-                </a>
-              )}
-            </Space>
-
-            <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-              <div>
-                <Text strong style={{ display: 'block', marginBottom: 8 }}>{t('geminiWatermarkOriginal')}</Text>
-                <StashableImage src={imageUrl} alt="" style={{ maxWidth: 360, maxHeight: 360, borderRadius: 8, border: '1px solid #9a8b78' }} />
-              </div>
-              {resultUrl && (
-                <div>
-                  <Text strong style={{ display: 'block', marginBottom: 8 }}>{t('geminiWatermarkResult')}</Text>
-                  <StashableImage src={resultUrl} alt="" style={{ maxWidth: 360, maxHeight: 360, borderRadius: 8, border: '1px solid #9a8b78' }} />
-                </div>
-              )}
-            </div>
-
-            <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>
-              {t('geminiWatermarkDisclaimer')}
-            </Text>
-          </>
-        )}
-      </Space>
-    </div>
-  )
+const {Dragger}=Upload,{Text}=Typography
+export default function ImageGeminiWatermark(){
+ const {t,lang}=useLanguage(),model=useImageToolDocument('visibleWatermark')
+ const {files,parameters}=model.draft,file=files[0]??null
+ const tool=useManagedImageTool(files,parameters,undefined,model)
+ const source=useImageToolUrls(files,tool.versions)[0]
+ const outputs=useMemo(()=>tool.results.map(r=>r.file),[tool.results]),result=useImageToolUrls(outputs,tool.results.map(r=>r.version))[0]
+ const alive=useRef(true),incoming=useRef<{controller:AbortController;promise:Promise<boolean>}|null>(null)
+ const [checking,setChecking]=useState(false),[error,setError]=useState('')
+ const text=(zh:string,en:string,ja:string)=>lang==='zh'?zh:lang==='ja'?ja:en
+ useEffect(()=>{alive.current=true;return()=>{alive.current=false;incoming.current?.controller.abort()}},[])
+ const beforeAction=useCallback(async()=>{await incoming.current?.promise},[])
+ const hasPendingEdits=useCallback(()=>incoming.current!==null,[])
+ const handleFile=(next:File|null)=>{
+  incoming.current?.controller.abort()
+  if(!next){model.setFiles([]);setError('');return Promise.resolve(true)}
+  const request={controller:new AbortController(),promise:Promise.resolve(false)},before=model.current();incoming.current=request;setChecking(true);setError('')
+  const work=(async()=>{
+   const prepared=await prepareFineInput(next,[...model.retained()].reduce((sum,f)=>sum+f.size*2,0),request.controller.signal);request.controller.signal.throwIfAborted()
+   if((prepared.version.metadata.frames??1)!==1)throw new Error('WATERMARK_STATIC_IMAGE_REQUIRED')
+   if(!alive.current||model.current()!==before)throw new Error('WATERMARK_INPUT_EDITS_CHANGED')
+   model.setFiles([next]);return true
+  })().catch(reason=>{if(alive.current&&!request.controller.signal.aborted)setError(String(reason));return false})
+  const canceled=new Promise<boolean>(resolve=>request.controller.signal.addEventListener('abort',()=>resolve(false),{once:true}))
+  request.promise=Promise.race([work,canceled]).finally(()=>{if(incoming.current===request){incoming.current=null;if(alive.current)setChecking(false)}})
+  return request.promise
+ }
+ const processImage=async()=>{await beforeAction();if(!incoming.current)await tool.run('image.visibleWatermark',{renderer:'browser-worker'})}
+ const download=()=>{
+  if(!outputs[0])return
+  const url=URL.createObjectURL(outputs[0]),a=document.createElement('a');a.href=url;a.download=(file?.name.replace(/\.[^.]+$/,'')||'image')+'-no-watermark.png';a.click();URL.revokeObjectURL(url)
+ }
+ return <ImageToolDocumentSurface model={model} beforeAction={beforeAction} pendingEdits={checking} hasPendingEdits={hasPendingEdits}>
+  <Space direction="vertical" size="large" style={{width:'100%',maxWidth:720,marginTop:16}}>
+   <ManagedImageToolStatus tool={tool}/>
+   {checking&&<Space><Text role="status">{text('正在核验选定素材','Checking selected image','素材を検証中')}</Text><Button onClick={()=>incoming.current?.controller.abort()}>{text('取消素材准备','Cancel input preparation','素材の準備を取消')}</Button></Space>}
+   {error&&<Text role="alert">{error}</Text>}
+   <Text type="secondary">{t('geminiWatermarkHint')}</Text>
+   <StashDropZone onStashDrop={handleFile} maxSizeMB={20}>
+    <Dragger accept=".png,.jpg,.jpeg,.webp" maxCount={1} fileList={file?[{uid:'1',name:file.name} as UploadFile]:[]}
+     beforeUpload={async f=>await handleFile(f)?false:Upload.LIST_IGNORE} onRemove={()=>handleFile(null)}>
+     <p className="ant-upload-text">{t('imageUploadHint')}</p><p className="ant-upload-hint">{t('imageFormats')}</p>
+    </Dragger>
+   </StashDropZone>
+   {file&&<>
+    <Space wrap><Text type="secondary">{t('geminiWatermarkSize')}:</Text><Radio.Group value={parameters.sizeMode} aria-label={t('geminiWatermarkSize')} onChange={e=>model.setParameter('sizeMode',e.target.value)} optionType="button" size="small">
+     <Radio.Button value="auto">{t('geminiWatermarkSizeAuto')}</Radio.Button><Radio.Button value="48">48×48</Radio.Button><Radio.Button value="96">96×96</Radio.Button>
+    </Radio.Group></Space>
+    <Space wrap><Button type="primary" onClick={processImage} disabled={!tool.ready||!!tool.busy||checking} loading={!!tool.busy}>{t('geminiWatermarkRemove')}</Button>
+     {outputs.length>0&&<Button icon={<DownloadOutlined/>} onClick={download}>{t('geminiWatermarkDownload')}</Button>}
+    </Space>
+    <Space wrap align="start">
+     {source?.preview&&<div><Text strong>{t('geminiWatermarkOriginal')}</Text><StashableImage src={source.preview} stashSrc={source.raw} alt={t('geminiWatermarkOriginal')} style={{display:'block',maxWidth:320,maxHeight:320,borderRadius:8,border:'1px solid #9a8b78'}}/></div>}
+     {result?.preview&&<div><Text strong>{t('geminiWatermarkResult')}</Text><StashableImage src={result.preview} stashSrc={result.raw} alt={t('geminiWatermarkResult')} style={{display:'block',maxWidth:320,maxHeight:320,borderRadius:8,border:'1px solid #9a8b78'}}/></div>}
+    </Space><Text type="secondary">{t('geminiWatermarkDisclaimer')}</Text>
+   </>}
+  </Space>
+ </ImageToolDocumentSurface>
 }

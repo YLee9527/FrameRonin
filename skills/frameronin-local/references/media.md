@@ -43,3 +43,5 @@ RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、
 零散切图使用工作台 RoninPro → 零散切图。`image.scatterDetect` 保留自动/Alpha/色键、四连通及合框；`image.scatterExport` 按审阅后的画框、顺序和名称输出 PNG/JPEG/WebP ZIP，两者都需要宿主 Worker。输入静态 PNG/JPEG/WebP ≤20 MiB，最多 4096 框；重名、越界、超预算或不支持的实际编码明确失败。不要用固定网格切片代替本入口，也不要通过 CLI 提交没有浏览器执行端的任务。
 
 自定义切片的 `image.customSlicePlan`、`image.customSlice`、`image.customCompose` 已接入工作台、统一取消和正式文档。三者需要浏览器执行端，不能通过 CLI 或通用提案直接提交。保留 L7、行带错位、单行折线、区域裁切及带镜像的重排，不以普通规则切片代替。最多 4096 格；四向补边各 0–149px，包含原八种尺寸预设和向上扩展。完整参数、资源预算及格式范围以注册表及仓库 API 文档为准。
+
+图片右下角可见水印使用工作台的 `image.visibleWatermark`，支持 auto/48/96，保留原逆 Alpha 和独立入口的 96px 强度。静态 PNG/JPEG/WebP 最大 20 MiB，受完整预算和原尺寸限制；结果保存为正式 PNG 与报告。此模式需要宿主 Worker，CLI/通用提案直接执行拒绝。原图经重压缩或缩放后可能有残留，应检查实际素材；不可见水印不在该工具范围内。

@@ -357,6 +357,30 @@ class ProjectTests(unittest.TestCase):
         with self.assertRaises(Cancelled):accept(self.project,tid,0,archive)
         self.assertFalse(task(self.project,tid)['results']);self.assertTrue(self.project.verify()['valid'])
 
+    def test_visible_watermark_uses_original_dimensions_static_input_and_owned_publication(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        payload={'operation':'image.visibleWatermark','inputs':[self.version['id']],'parameters':{'sizeMode':'96'}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        for invalid in [{'sizeMode':True},{'sizeMode':'97'},{'renderer':'native'},{'command':'run'},{'frontendBytes':2*1024**3}]:
+            with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':invalid})
+        animated=self.root/'animated.png'
+        Image.new('RGBA',(16,12),'red').save(animated,save_all=True,append_images=[Image.new('RGBA',(16,12),'blue')],duration=100)
+        with self.assertRaises(RoninError):preview(self.project,{**payload,'inputs':[self.project.import_file(animated)['id']]})
+        record=submit(self.project,payload,browser_client=True)
+        deadline=time.monotonic()+10
+        while not ready(self.project,record['id'])['ready']:
+            if time.monotonic()>deadline:self.fail('No browser request')
+            time.sleep(.05)
+        wrong=self.root/'wrong.png';Image.new('RGBA',(15,12)).save(wrong)
+        with self.assertRaises(RoninError):accept(self.project,record['id'],0,wrong)
+        accept(self.project,record['id'],0,self.source)
+        result=wait(self.project,record['id'],15);self.assertEqual(result['state'],'succeeded',result)
+        self.assertEqual(len(result['results']),2)
+        doc=identifier();self.project.save_document(doc,'image-visible-watermark',{'formatVersion':1},0)
+        self.assertEqual(self.project.document(doc)['kind'],'image-visible-watermark')
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_expand_shrink_requires_workbench_checks_limits_and_reconciles_publication(self):
         from frameronin_engine.browser_tasks import ready,accept
         payload={'operation':'image.expandShrink','inputs':[self.version['id']],

@@ -41,6 +41,7 @@ export {createNormalImageHistory,normalImageHistoryReducer} from '../../assets/w
 export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/localProject/navigationGuard'
 
 export {expandShrinkImage,validateExpandShrinkParameters,checkExpandShrinkBudget} from '../../assets/workbench/src/lib/expandShrinkImage'
+export {removeVisibleWatermark,validateWatermarkParameters,checkWatermarkBudget} from '../../assets/workbench/src/lib/geminiWatermarkOperation'
 
 export {scatterDetectDefaults,validateScatterDetect,validateScatterBoxes,orderedScatterBoxes,detectScatterPixels,scatterExportEntries,checkScatterBudget,exportScatterZip,exportReviewedScatterZip,reviewScatterExport,validateReviewedScatterExport} from '../../assets/workbench/src/lib/scatterSlice'
 

@@ -153,15 +153,16 @@ function scaleAlphaMap(
  * ?????? 48 ??? 96?? 48 ? 1024 ??????
  */
 export async function getEmbeddedAlphaMask(
-  size: WatermarkSize
+  size: WatermarkSize,
+  load: typeof loadAlphaMaskFromUrl = loadAlphaMaskFromUrl
 ): Promise<{ alpha: Float32Array; width: number; height: number }> {
   if (size === 96) {
-    const small = await loadAlphaMaskFromUrl(`data:image/png;base64,${BG_48_BASE64}`)
+    const small = await load(`data:image/png;base64,${BG_48_BASE64}`)
     const scaled = scaleAlphaMap(small.alpha, 48, 96)
     return { alpha: scaled, width: 96, height: 96 }
   }
   const dataUrl = `data:image/png;base64,${BG_48_BASE64}`
-  return loadAlphaMaskFromUrl(dataUrl)
+  return load(dataUrl)
 }
 
 /**

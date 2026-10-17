@@ -25,7 +25,7 @@ def location(project,task_id,generation=None):
             raise RoninError('TASK_MISSING','The task does not exist.')
         payload=json.loads(row['payload'])
         from .operations import parameters as checked_parameters
-        if payload['operation'] not in ['image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
+        if payload['operation'] not in ['image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
             raise RoninError('BROWSER_OPERATION_UNSUPPORTED','This task does not accept browser pixels.')
         if generation is not None:
             if type(generation) is not int:
@@ -67,6 +67,9 @@ def accept(project,task_id,generation,source):
         dimensions=None
     elif payload['operation']=='image.normal':dimensions=normal_output_dimensions(project.version(payload['inputs'][0])['metadata'],parameters)
     elif payload['operation']=='image.expandShrink':dimensions=(parameters['columns']*parameters['cellWidth'],parameters['rows']*parameters['cellHeight'])
+    elif payload['operation']=='image.visibleWatermark':
+        from .scatter import source_size
+        dimensions=source_size(project.version(payload['inputs'][0])['metadata'])
     else:dimensions=(parameters['width'],parameters['height'])
     # Decode and inspect outside the writer lock so cancellation is responsive.
     try:

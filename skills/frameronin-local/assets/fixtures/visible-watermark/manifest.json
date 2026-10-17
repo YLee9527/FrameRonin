@@ -1,0 +1,161 @@
+{
+  "originalSources": {
+    "reference/frontend/src/lib/geminiWatermark.ts": "52e85580efadaaf90df84e5895c2bb06b09fb88c68b5f1c555bbc2db995799db",
+    "reference/frontend/src/components/ImageGeminiWatermark.tsx": "38022ceddefd0a43880476eb9553464b2db6461ec35f2e1a825efbcdd503c3a7"
+  },
+  "sources": {
+    "threshold1024.png": "e1d91ed134108eef2ae1e31cc0853efe5ce6840664bc251461bbb5a5ec0bbafa",
+    "threshold1025.png": "0f14b72130e57d41d7a5279e9f96bf8763c9366f11b8df6aa2c9d534f51886f8",
+    "rgba.png": "3431e144b642f7bcd104cefad1347759f5051978cc58faad381b456624f28c0a",
+    "alpha.webp": "b37e07f9538e64d366742cf01d114989cc103a21a5b22a99ccf298efbad36755",
+    "oriented.webp": "83be4d2b6cfaee0d7814823c0e49fe204e00b554e46069e9587c60f17b17cb88",
+    "jpeg-cmyk.jpg": "8b079967e1820da147294151a6508ef6cd8eaba3d64d1edeaba3b6d7d0d63868",
+    "photo.jpg": "99bc0f06f8ae654e670cd1d200380e56d23541827dccd2d4ac74f78488d91607",
+    "jpeg-422.jpg": "2610345802f5a16c7e6e8c107d4072d4af3b1cc6820eda1ae5ab9784dd3bbec0",
+    "jpeg-progressive.jpg": "f20d0f1e0c71a3bb6e6a984a05eca915faf72f892d611f276c6abf408f8c31af",
+    "one-axis.png": "019fa9516ec06cfff5fe4ee7284680edf07f9a3b32bed97ed5e1c972725ea728",
+    "jpeg-gray.jpg": "2c660f3b3135deb267281955c52829bc25c207e34d9f0143cd493823c9bb4a6d",
+    "single.png": "c2153f77e11087fcb078ae38527fa83bef29791e3700e30cc87fec4405a66d0f",
+    "jpeg-orientation8.jpg": "ff84fe1252b3f511fd0ca4bcbad8f4222a65a2126d5a7b1e4140066445be14a7",
+    "profiled.png": "e78a698f1615f165ba0b14c16176651150e101a15b66980a043a4dd4abb257bf",
+    "jpeg-444.jpg": "1d885af5a98ceaaaa0474787530f93ddaa9af9e30db9742609afae655c19c389",
+    "small.png": "0182d66105178efff0a1cafc0db826a7a087be670c37074483bb80d92ee05bff",
+    "oriented.jpg": "982f820df903b94af60a7847501d4d4e537501873fcb9865f6b3660e7c77f47e"
+  },
+  "cases": [
+    {
+      "id": "rgba-auto",
+      "input": "rgba.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "rgba-48",
+      "input": "rgba.png",
+      "parameters": {
+        "sizeMode": "48"
+      }
+    },
+    {
+      "id": "rgba-96",
+      "input": "rgba.png",
+      "parameters": {
+        "sizeMode": "96"
+      }
+    },
+    {
+      "id": "threshold1024",
+      "input": "threshold1024.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "threshold1025",
+      "input": "threshold1025.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "one-axis",
+      "input": "one-axis.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "small",
+      "input": "small.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "single",
+      "input": "single.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "photo-jpg",
+      "input": "photo.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "jpeg-422-jpg",
+      "input": "jpeg-422.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "jpeg-444-jpg",
+      "input": "jpeg-444.jpg",
+      "parameters": {
+        "sizeMode": "96"
+      }
+    },
+    {
+      "id": "jpeg-progressive-jpg",
+      "input": "jpeg-progressive.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "jpeg-cmyk-jpg",
+      "input": "jpeg-cmyk.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "jpeg-gray-jpg",
+      "input": "jpeg-gray.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "jpeg-orientation8-jpg",
+      "input": "jpeg-orientation8.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "oriented-jpg",
+      "input": "oriented.jpg",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "profiled-png",
+      "input": "profiled.png",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "alpha-webp",
+      "input": "alpha.webp",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    },
+    {
+      "id": "oriented-webp",
+      "input": "oriented.webp",
+      "parameters": {
+        "sizeMode": "auto"
+      }
+    }
+  ],
+  "criteria": "Strict dimensions, PNG format and decoded RGBA equal to the original standalone component; no tolerance."
+}

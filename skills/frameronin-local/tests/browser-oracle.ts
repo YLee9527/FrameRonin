@@ -1,4 +1,5 @@
 import {originalScatterDetect,originalScatterExport} from '../.runtime/oracle/original-scatter'
+import {originalVisibleWatermark} from '../.runtime/oracle/original-visible-watermark'
 import {originalCustomPlan,originalCustomSplit,originalCustomCompose} from '../.runtime/oracle/original-custom-slice'
 import {reviewScatterExport} from '../assets/workbench/src/lib/scatterSlice'
 import {originalExpandShrink} from '../.runtime/oracle/original-expand-shrink'
@@ -344,7 +345,25 @@ async function runCustomSlice(){
  }
  await publish(zip,'browser-custom-slice.zip');status.textContent=`Custom slice complete: ${fixture.plan.length} plans, ${fixture.slice.length} ZIPs, ${fixture.compose.length} compositions`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice]] as const) {
+async function runVisibleWatermark(){
+ const fixture=await(await fetch('/visible-watermark/manifest.json')).json(),zip=new JSZip()
+ for(const entry of fixture.cases){
+  const file=await(await fetch(`/visible-watermark/${entry.input}`)).blob()
+  zip.file(`${entry.id}/original.png`,await originalVisibleWatermark(file,entry.parameters.sizeMode))
+  const worker=new Worker(new URL('../assets/workbench/src/lib/geminiWatermark.worker.ts',import.meta.url),{type:'module'})
+  try{
+   const blob=await new Promise<Blob>((resolve,reject)=>{
+    worker.onmessage=event=>{if(event.data.error)reject(new Error(event.data.error));else if(event.data.blob)resolve(event.data.blob)}
+    worker.onerror=event=>reject(new Error(event.message))
+    worker.postMessage({id:entry.id,generation:0,file,parameters:{...entry.parameters,frontendBytes:0},budgetBytes:2*1024**3})
+   })
+   zip.file(`${entry.id}/actual-worker.png`,blob)
+  }finally{worker.terminate()}
+  status.textContent=`Visible watermark: ${entry.id}`
+ }
+ await publish(zip,'browser-visible-watermark.zip');status.textContent=`Visible watermark complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

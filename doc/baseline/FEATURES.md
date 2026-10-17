@@ -48,7 +48,7 @@
 | image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | 精灵表调整.image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
-| image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → PNG | 待逐项验收 |
+| image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → PNG / 参数报告 | 19 项原版对照、实际下载、正式文档/历史、取消/冲突/迟到保护通过；真实水印残留、联合内存及可访问性待完成 |
 | image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → PNG ZIP | 待逐项验收 |
 | image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP / 重排 PNG / TXT / 切线预览 | 原算法对照、工作台/正式文档/历史、TXT/预设、取消/迟到保护通过；联合内存及完整可访问性待完成 |
 | image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP / 重排 PNG / TXT / 切线预览 | 原算法对照、工作台/正式文档/历史、TXT/预设、取消/迟到保护通过；联合内存及完整可访问性待完成 |

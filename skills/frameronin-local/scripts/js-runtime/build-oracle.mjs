@@ -42,6 +42,12 @@ await fs.cp(path.join(skill,'assets/fixtures/ronin'),path.join(output,'ronin-fix
 await fs.cp(path.join(skill,'assets/fixtures/sequence'),path.join(output,'sequence'),{recursive:true})
 for(const name of ['utils.ts','utilsResizeCanvasLegacy.ts'])await fs.copyFile(path.join(root,'reference/frontend/src/components/ParamsStep',name),path.join(output,name))
 await fs.copyFile(path.join(root,'reference/frontend/src/lib/geminiWatermark.ts'),path.join(output,'original-gemini-watermark.ts'))
+const watermarkSource=await fs.readFile(path.join(root,'reference/frontend/src/components/ImageGeminiWatermark.tsx'),'utf8')
+const watermarkBody=watermarkSource.slice(watermarkSource.indexOf('      const img = await'),watermarkSource.indexOf('      if (blob)'))
+if(!watermarkBody.includes('const alphaScale = baseSize === 96 ? 0.85 : 1'))throw new Error('Original standalone watermark markers changed')
+await fs.writeFile(path.join(output,'original-visible-watermark.ts'),`import {getWatermarkSize,getWatermarkParams,getEmbeddedAlphaMask,createApproxAlphaMap,removeWatermarkReverseAlpha,type WatermarkSize} from './original-gemini-watermark';
+export async function originalVisibleWatermark(file:Blob,sizeMode:string){const imageUrl=URL.createObjectURL(file);try{${watermarkBody}if(!blob)throw new Error('Original PNG encoding failed');return blob;}finally{URL.revokeObjectURL(imageUrl)}}`)
+await fs.cp(path.join(skill,'assets/fixtures/visible-watermark'),path.join(output,'visible-watermark'),{recursive:true})
 const normalSource=await fs.readFile(path.join(root,'reference/frontend/src/components/ImageResizeStroke.tsx'),'utf8')
 const recipes=[['apply','applyPreview'],['mattePreview','runMattePreview'],['extendBottom','handleExtendBottom'],['rpgMaker','handleOneClickProcess'],['allActions','handleOneClickAllActionsProcess'],['ancientCostume','handleAncientCostumeProcess']]
 const originalRecipes=recipes.map(([mode,handler])=>{

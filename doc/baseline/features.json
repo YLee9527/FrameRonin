@@ -617,13 +617,13 @@
     "originalEntry": "图片水印",
     "implementation": "reference/frontend/src/components/ImageGeminiWatermark.tsx",
     "inputs": "image",
-    "outputs": "PNG",
-    "dependencies": "Canvas",
+    "outputs": "same-size PNG and parameter report",
+    "dependencies": "original reverse-alpha + host Canvas Worker + project queue",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/ImageGeminiWatermark.tsx",
-    "sample": "fixed-image-watermark-remove",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "sample": "assets/fixtures/visible-watermark: 19 unique original comparisons and actual workbench downloads",
+    "evidence": "doc/testing/evidence/skill-visible-watermark.json",
+    "status": "strict original pixels, actual auto/96/JPEG downloads, formal document/history, conflict/copy/late protection and cancellation/navigation passed; real watermark residue quality and joint RSS/accessibility remain",
+    "limits": "static PNG/JPEG/WebP <=20 MiB, sides <=30000; host Worker and full resource budget; retain browser tab; fixed-mask failure blocks"
   },
   {
     "id": "image.scatter-slice",

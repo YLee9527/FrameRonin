@@ -1,0 +1,625 @@
+{
+  "date": "2026-10-17",
+  "scope": "Visible image watermark original algorithm, managed Worker, formal documents and history. S2/S3/S4 remain open.",
+  "original": {
+    "source": "reference/frontend/src/components/ImageGeminiWatermark.tsx",
+    "library": "reference/frontend/src/lib/geminiWatermark.ts",
+    "criteria": "Strict decoded RGBA, PNG format and dimensions; no tolerance. Fixed input/source hashes in fixture manifest.",
+    "frozenDirectory": "skills/frameronin-local/assets/fixtures/visible-watermark/original",
+    "verifier": "skills/frameronin-local/tests/compare_watermark_oracle.py"
+  },
+  "oracle": {
+    "archiveSha256": "4b98865b750c63f638b9b575956d2c64ec6459c034402a0313e7af0570fb86d6",
+    "cases": [
+      {
+        "sample": "rgba-auto",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          160,
+          144
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "a0d29b1ef79619774fe66206eaa44bda7683dac209a5e939b3937b2274864668"
+      },
+      {
+        "sample": "rgba-48",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          160,
+          144
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "a0d29b1ef79619774fe66206eaa44bda7683dac209a5e939b3937b2274864668"
+      },
+      {
+        "sample": "rgba-96",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          160,
+          144
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "a1c4c771d9898825dbbb4b2ad2706482a1c4bd2eb917fa3403baa1e2980c63d8"
+      },
+      {
+        "sample": "threshold1024",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "dda292b1c8eb2b157826ca69dded4ffbeb17288823f6b3c73476c10cce3575fa"
+      },
+      {
+        "sample": "threshold1025",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          1025,
+          1025
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "b4dc9d0c33249dc1f9a51b40a279f555369779d9c4a37029f84ff12f331af520"
+      },
+      {
+        "sample": "one-axis",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          1400,
+          512
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "2f98865988ea5943b39e42b801698aba5dc79d318d8b41f913ca4bebf47a689f"
+      },
+      {
+        "sample": "small",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          48,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "5d51490d5e45ce24f0f2e9ef9c131e1c9776d4f144d6642bfad9d1d6601cfe81"
+      },
+      {
+        "sample": "single",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          1,
+          1
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "8059d98804c941bff5bf2cb8ea82b60a20e8f7c6354210ded6046837cd437cd1"
+      },
+      {
+        "sample": "photo-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "3277b1e813644ed4d12c2000b52bc32ff3f56c5f668c58a33854f962062e3864"
+      },
+      {
+        "sample": "jpeg-422-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "f1eb3e007abb4e5964e45a72c170ed2f385b57dab395adf78085b985100d3a30"
+      },
+      {
+        "sample": "jpeg-444-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "165e5d687e0bff365b13dba77f5f59f4daec4847cc78283a3f7c61b5402fa87e"
+      },
+      {
+        "sample": "jpeg-progressive-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "379fb08e338124a76e47211e92f107b42538bf81fc9a5a776c8add9d9b312f30"
+      },
+      {
+        "sample": "jpeg-cmyk-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "8fd37fc84054f0eb35f43b42824174121673b19e5c06e426b28cc8c35900c03e"
+      },
+      {
+        "sample": "jpeg-gray-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "bb0ddb696f6b490321c2654bb70ff14c7c8cc3fbb63bfa225aa96103af3d86d4"
+      },
+      {
+        "sample": "jpeg-orientation8-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          48,
+          64
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "83d38cc9d8d06349876fca796cebf87728e753649e3bab70f5629471b8a30527"
+      },
+      {
+        "sample": "oriented-jpg",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          48,
+          64
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "995cbc8a8bca360326c2823658743f4d875da8847151906e01fbedb468b5bfc4"
+      },
+      {
+        "sample": "profiled-png",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "771bd679f1a221164167e729babff35361cb1227f40e7b84129f7ca678589b6c"
+      },
+      {
+        "sample": "alpha-webp",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "0315ffb85000c1f9669d4b300a5d78bacca8faaada9553d6c6c4a5221c09e697"
+      },
+      {
+        "sample": "oriented-webp",
+        "strictRgbaEqual": true,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "encodedBytesEqual": true,
+        "originalSha256": "0315ffb85000c1f9669d4b300a5d78bacca8faaada9553d6c6c4a5221c09e697"
+      }
+    ],
+    "failed": []
+  },
+  "diagnosis": {
+    "rejectedBitmapCases": [
+      {
+        "sample": "photo",
+        "strictRgbaEqual": false,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          3,
+          2,
+          1,
+          0
+        ],
+        "encodedBytesEqual": false,
+        "originalSha256": "3277b1e813644ed4d12c2000b52bc32ff3f56c5f668c58a33854f962062e3864"
+      },
+      {
+        "sample": "jpeg-422",
+        "strictRgbaEqual": false,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "encodedBytesEqual": false,
+        "originalSha256": "f1eb3e007abb4e5964e45a72c170ed2f385b57dab395adf78085b985100d3a30"
+      },
+      {
+        "sample": "jpeg-progressive",
+        "strictRgbaEqual": false,
+        "dimensions": [
+          64,
+          48
+        ],
+        "maxChannelError": [
+          2,
+          2,
+          2,
+          0
+        ],
+        "encodedBytesEqual": false,
+        "originalSha256": "379fb08e338124a76e47211e92f107b42538bf81fc9a5a776c8add9d9b312f30"
+      },
+      {
+        "sample": "jpeg-orientation8",
+        "strictRgbaEqual": false,
+        "dimensions": [
+          48,
+          64
+        ],
+        "maxChannelError": [
+          2,
+          1,
+          2,
+          0
+        ],
+        "encodedBytesEqual": false,
+        "originalSha256": "83d38cc9d8d06349876fca796cebf87728e753649e3bab70f5629471b8a30527"
+      }
+    ],
+    "acceptedPath": "JPEG ImageDecoder/VideoFrame -> original default Canvas read/modify/write. PNG/WebP retain Bitmap decoding.",
+    "harnessCorrection": "The first fixture manifest used the same ID for oriented.jpg and oriented.webp, so that run covered only 18 unique outputs. That pre-commit baseline was moved to ignored diagnostics. IDs now include extensions, verifier rejects duplicate IDs and ZIP members; all 19 unique cases were rerun and frozen."
+  },
+  "actualWorkbench": {
+    "projectId": "793a4503-ce87-4839-98e5-2c5e28a1e38d",
+    "mainDocumentId": "2616475a-6a15-4fcb-843d-8584ae5953b6",
+    "copyDocumentId": "d1b8a15e-bd74-4da4-8231-d3eb08ce73c1",
+    "downloads": [
+      {
+        "sample": "rgba-auto",
+        "format": "PNG",
+        "dimensions": [
+          160,
+          144
+        ],
+        "strictOriginalRgbaEqual": true,
+        "sha256": "a0d29b1ef79619774fe66206eaa44bda7683dac209a5e939b3937b2274864668"
+      },
+      {
+        "sample": "rgba-96",
+        "format": "PNG",
+        "dimensions": [
+          160,
+          144
+        ],
+        "strictOriginalRgbaEqual": true,
+        "sha256": "a1c4c771d9898825dbbb4b2ad2706482a1c4bd2eb917fa3403baa1e2980c63d8"
+      },
+      {
+        "sample": "photo-jpg",
+        "format": "PNG",
+        "dimensions": [
+          64,
+          48
+        ],
+        "strictOriginalRgbaEqual": true,
+        "sha256": "3277b1e813644ed4d12c2000b52bc32ff3f56c5f668c58a33854f962062e3864"
+      }
+    ],
+    "history": {
+      "undoHidesDownload": true,
+      "redoReopenEncodedBytesEqual": true,
+      "beforeReopen": {
+        "versions": 5,
+        "tasks": 2
+      },
+      "afterReopen": {
+        "versions": 5,
+        "tasks": 2
+      },
+      "note": "Count window covers explicit reopen/resave after the two initial processing calls; source replacement and later race tests intentionally create more tasks and versions."
+    },
+    "conflict": {
+      "backAndBBlocked": true,
+      "copySizeMode": "auto",
+      "copyRetainedTaskId": "5cdae5b8-087e-40f8-aee9-dfe7f717b92a"
+    },
+    "lateProcessing": {
+      "uploadDelaySeconds": 2,
+      "currentSizeMode": "48",
+      "retainedTaskId": "5cdae5b8-087e-40f8-aee9-dfe7f717b92a",
+      "projectOnlyTaskId": "3243573a-b8f0-4655-8d08-6c729cfa32f8",
+      "projectOnlyTaskState": "succeeded"
+    },
+    "lateDocumentRead": {
+      "contentDelaySeconds": 2,
+      "selectedSizeMode": "48",
+      "currentEditsRetained": true,
+      "error": "Document changed while loading; current edits are preserved"
+    },
+    "cancellation": {
+      "inputPreparationFeedbackMs": 281,
+      "sourceBeforeCancelRetained": "rgba.png",
+      "processingFeedbackMs": 326,
+      "inputDimensions": [
+        6000,
+        6000
+      ],
+      "observedProgressBeforeCancel": 20,
+      "taskId": "376a3f4e-3093-44fe-9732-c61f68cc1fa7",
+      "state": "canceled",
+      "generation": 1,
+      "results": [],
+      "outputAbsent": true,
+      "measurementLimit": "Automation click feedback observed; Worker termination is in AbortSignal handler. No independent browser-process stop, all-stage stop or combined-RSS measurement claimed.",
+      "acceptedInputCopyMayRemain": true
+    },
+    "navigation": {
+      "target": "Home",
+      "taskId": "7eb8c2ab-d7d2-4c99-9e80-b8af34fe830b",
+      "state": "succeeded",
+      "dimensions": [
+        6000,
+        6000
+      ],
+      "results": [
+        "0b34e960-2d66-4b07-8fc5-64ab6c010761",
+        "75323115-c3d6-42d9-8404-39e09b830249"
+      ],
+      "closingTabNotCovered": true
+    },
+    "budget": {
+      "rejectedInput": [
+        8192,
+        8192
+      ],
+      "error": "FINE_EDITOR_RESOURCE_LIMIT",
+      "previousInputRetained": [
+        6000,
+        6000
+      ]
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ],
+    "screenshot": "doc/testing/evidence/skill-visible-watermark-workbench.png",
+    "tasks": [
+      {
+        "id": "f5ea08d1-c85e-420b-9deb-50301c321187",
+        "state": "succeeded",
+        "operation": "image.visibleWatermark",
+        "parameters": {
+          "sizeMode": "auto",
+          "renderer": "browser-worker",
+          "frontendBytes": 100679676
+        },
+        "results": [
+          "58b8cc0d-a34b-4058-a85c-c6a8be3bdbd6",
+          "c53c52d5-3f21-4518-8b79-6e6662524899"
+        ]
+      },
+      {
+        "id": "5cdae5b8-087e-40f8-aee9-dfe7f717b92a",
+        "state": "succeeded",
+        "operation": "image.visibleWatermark",
+        "parameters": {
+          "sizeMode": "96",
+          "renderer": "browser-worker",
+          "frontendBytes": 102253094
+        },
+        "results": [
+          "c8ccd6d8-ceaa-4d5b-85d4-ac1c4fb6911b",
+          "e3297748-0bfb-44d8-8eb0-2f9034f7dd9f"
+        ]
+      },
+      {
+        "id": "3243573a-b8f0-4655-8d08-6c729cfa32f8",
+        "state": "succeeded",
+        "operation": "image.visibleWatermark",
+        "parameters": {
+          "sizeMode": "96",
+          "renderer": "browser-worker",
+          "frontendBytes": 102260850
+        },
+        "results": [
+          "fbb3343d-a49b-4ea4-91fa-500f0a3f8642",
+          "fc19e820-12cb-49df-b69d-abe790a56447"
+        ]
+      },
+      {
+        "id": "376a3f4e-3093-44fe-9732-c61f68cc1fa7",
+        "state": "canceled",
+        "operation": "image.visibleWatermark",
+        "parameters": {
+          "sizeMode": "auto",
+          "renderer": "browser-worker",
+          "frontendBytes": 101081640
+        },
+        "results": []
+      },
+      {
+        "id": "7eb8c2ab-d7d2-4c99-9e80-b8af34fe830b",
+        "state": "succeeded",
+        "operation": "image.visibleWatermark",
+        "parameters": {
+          "sizeMode": "auto",
+          "renderer": "browser-worker",
+          "frontendBytes": 101081640
+        },
+        "results": [
+          "0b34e960-2d66-4b07-8fc5-64ab6c010761",
+          "75323115-c3d6-42d9-8404-39e09b830249"
+        ]
+      },
+      {
+        "id": "caacdc4e-fc72-4c7b-bb1d-f62b4a679424",
+        "state": "succeeded",
+        "operation": "image.visibleWatermark",
+        "parameters": {
+          "sizeMode": "auto",
+          "renderer": "browser-worker",
+          "frontendBytes": 100979898
+        },
+        "results": [
+          "b3a705ac-204e-4b3c-b286-ee9ed6a2a884",
+          "663651d5-f7ce-4398-8d4d-e7a2ec63fd7c"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "pythonTests": 37,
+    "jsTests": 59,
+    "failures": 0,
+    "runtimeBuild": "passed",
+    "workbenchBuild": "passed",
+    "focusedEslint": "passed",
+    "skillValidator": "Skill is valid!",
+    "projectVerify": {
+      "valid": true,
+      "database": "ok",
+      "versions": 15,
+      "documents": 2,
+      "tasks": 6,
+      "states": {
+        "canceled": 1,
+        "succeeded": 5
+      }
+    }
+  },
+  "limits": {
+    "staticSourceMiB": 20,
+    "sourceMaxSide": 30000,
+    "historySteps": 50,
+    "historyFilesMiB": 256,
+    "workerRequired": true,
+    "workerBudget": "256 MiB + pixels*40 + fileBytes*8 + frontend retained bytes; maximum 2 GiB."
+  },
+  "intentionalCorrection": "If the fixed embedded mask cannot decode, fail explicitly and preserve the previous document. Do not silently use the original approximate fallback. Legacy blueprint behavior remains unchanged.",
+  "remaining": [
+    "Real watermark removal quality after resizing/recompression; current samples prove algorithm fidelity.",
+    "More browser/format cases and full keyboard/VoiceOver acceptance.",
+    "Independent joint browser/engine peak memory and all-phase cancellation metrics.",
+    "Other media, editor and game modules, all AI quality templates and portable distribution; S2/S3/S4 incomplete."
+  ]
+}
