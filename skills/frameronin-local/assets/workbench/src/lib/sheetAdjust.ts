@@ -8,6 +8,7 @@ export type SheetCompose={columns:number;rows:number;frames:SheetPlacement[]}
 export type SheetGif=SheetCompose&{selected:number[];speedScale:number}
 export type SheetPixelFix={imgX:number;imgY:number;range:number;data:number[]}
 export type SheetFix={selected:number[];referenceWidth:number;referenceHeight:number;fixes:SheetPixelFix[]}
+export type SheetFrames={order:number[];blank:{width:number;height:number}|null}
 export type SheetImage={image:CanvasImageSource;width:number;height:number;close:()=>void}
 export type SheetLoad=(index:number)=>Promise<SheetImage>
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v)
@@ -37,6 +38,15 @@ export function validateSheetFix(value:unknown,sizes:FrameSize[]):asserts value 
   if(!object(fix)||!fields(fix,['imgX','imgY','range','data'])||!integer(fix.range,1,8)||!integer(fix.imgX,0,Number(value.referenceWidth)-Number(fix.range))||!integer(fix.imgY,0,Number(value.referenceHeight)-Number(fix.range))||!Array.isArray(fix.data)||fix.data.length!==Number(fix.range)**2*4||fix.data.some(v=>!integer(v,0,255)))throw new Error('SHEET_PIXEL_PATCH')
  }
 }
+export function sheetFramesSizes(value:unknown,sizes:FrameSize[]):FrameSize[]{
+ sizesChecked(sizes)
+ if(!object(value)||!fields(value,['order','blank']))throw new Error('SHEET_FRAMES_LAYOUT')
+ selection(value.order,sizes.length)
+ const p=value as SheetFrames
+ if(p.blank!==null&&(!object(p.blank)||!fields(p.blank,['width','height'])||!integer(p.blank.width,1,30000)||!integer(p.blank.height,1,30000)))throw new Error('SHEET_BLANK_SIZE')
+ if(p.order.length+(p.blank?1:0)>4096)throw new Error('SHEET_FRAMES_COUNT')
+ return [...p.order.map(i=>sizes[i]),...(p.blank?[{w:p.blank.width,h:p.blank.height}]:[])]
+}
 /** Preserve the original fractional crop and padding coordinates. */
 export function sheetFrameCrop(iw:number,ih:number,cr:SheetCrop){
  const {top:t,bottom:b,left:l,right:r}=cr
@@ -50,12 +60,14 @@ export function sheetLayout(sizes:FrameSize[],p:SheetCompose,output:'compose'|'g
  if(![cellW,cellH,...(output==='compose'?[width,height]:[])].every(v=>Number.isFinite(v)&&v>=1&&v<=30000))throw new Error('SHEET_OUTPUT_DIMENSIONS')
  return {cellW,cellH,width,height,gifWidth:Math.floor(cellW),gifHeight:Math.floor(cellH)}
 }
-export function checkSheetBudget(sizes:FrameSize[],p:SheetCompose|SheetGif|SheetFix,action:'compose'|'gif'|'fix',encodedBytes:number,budget:number,frontendBytes:number){
+export function checkSheetBudget(sizes:FrameSize[],p:SheetCompose|SheetGif|SheetFix|SheetFrames,action:'compose'|'gif'|'fix'|'frames',encodedBytes:number,budget:number,frontendBytes:number){
  sizesChecked(sizes)
  if(!integer(encodedBytes,1,256*MIB)||!integer(budget,1,2*1024**3)||!integer(frontendBytes,0,2*1024**3))throw new Error('SHEET_RESOURCE_PARAMETERS')
  const maxPixels=Math.max(...sizes.map(s=>s.w*s.h)),sourcePixels=sizes.reduce((sum,s)=>sum+s.w*s.h,0)
  let outputPixels=0,totalOutputPixels=sourcePixels,patchBytes=0
- if(action==='fix'){
+ if(action==='frames'){
+  const output=sheetFramesSizes(p,sizes);outputPixels=(p as SheetFrames).blank?Math.max(...output.map(s=>s.w*s.h)):0;totalOutputPixels=output.reduce((sum,s)=>sum+s.w*s.h,0)
+ }else if(action==='fix'){
   validateSheetFix(p,sizes);const fix=p as SheetFix
   outputPixels=fix.referenceWidth*fix.referenceHeight;patchBytes=fix.fixes.reduce((sum,f)=>sum+f.data.length*16,0)
  }else{
@@ -66,6 +78,18 @@ export function checkSheetBudget(sizes:FrameSize[],p:SheetCompose|SheetGif|Sheet
  const estimate=256*MIB+encodedBytes*10+frontendBytes+maxPixels*64+outputPixels*48+totalOutputPixels*8+patchBytes
  if(estimate>budget)throw new Error('SHEET_RESOURCE_LIMIT')
  return estimate
+}
+export async function packSheetFrames(sizes:FrameSize[],p:SheetFrames,original:(index:number)=>Blob){
+ sheetFramesSizes(p,sizes);const zip=new JSZip();let encoded=0
+ for(let i=0;i<p.order.length;i++){
+  const blob=original(p.order[i]);encoded+=blob.size;if(encoded>128*MIB)throw new Error('SHEET_ENCODED_LIMIT')
+  zip.file(`frame_${String(i).padStart(3,'0')}.png`,blob)
+ }
+ if(p.blank){
+  const c=canvas(p.blank.width,p.blank.height)
+  try{c.getContext('2d')!.clearRect(0,0,c.width,c.height);const blob=await png(c);encoded+=blob.size;if(encoded>128*MIB)throw new Error('SHEET_ENCODED_LIMIT');zip.file(`frame_${String(p.order.length).padStart(3,'0')}.png`,blob)}finally{c.width=c.height=1}
+ }
+ const blob=await zip.generateAsync({type:'blob'});if(blob.size>128*MIB)throw new Error('SHEET_ENCODED_LIMIT');return blob
 }
 const canvas=(w:number,h:number)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c}
 const png=(c:HTMLCanvasElement)=>new Promise<Blob>((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('SHEET_PNG_ENCODING')),'image/png'))

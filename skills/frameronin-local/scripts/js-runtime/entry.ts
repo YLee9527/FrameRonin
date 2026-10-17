@@ -47,7 +47,9 @@ export {boundedZipBlob,inspectOrderedZip} from '../../assets/workbench/src/lib/o
 export {initialSpriteSheetDraft,validateStoredSpriteSheet,serializeSpriteSheet,restoreSpriteSheet,spriteSheetFiles,spriteSheetReports} from '../../assets/workbench/src/localProject/spriteSheetDocument'
 export {createSpriteSheetHistory,spriteSheetHistoryReducer} from '../../assets/workbench/src/localProject/useSpriteSheetDocument'
 export {spriteSheetAssets} from '../../assets/workbench/src/lib/spriteSheetAssets'
-export {validateSheetCompose,validateSheetFix,sheetFrameCrop,sheetLayout,checkSheetBudget,composeSheet,gifSheet,fixSheetPixels,fixSheet} from '../../assets/workbench/src/lib/sheetAdjust'
+export {validateSheetCompose,validateSheetFix,sheetFrameCrop,sheetLayout,checkSheetBudget,composeSheet,gifSheet,fixSheetPixels,fixSheet,sheetFramesSizes,packSheetFrames} from '../../assets/workbench/src/lib/sheetAdjust'
+export {sheetPreprocessDefaults,validateSheetPreprocess,sheetPreprocessHasEffect,sheetPreprocessSize,checkSheetPreprocessBudget,validateSheetPreparation,sheetPreparationSizes,checkSheetPrepareBudget,prepareSheetGrid} from '../../assets/workbench/src/lib/sheetPrepare'
+export {applySheetProPreprocess,sheetProPreprocessIsNoop} from '../../assets/workbench/src/lib/sheetProPreprocess'
 
 export {scatterDetectDefaults,validateScatterDetect,validateScatterBoxes,orderedScatterBoxes,detectScatterPixels,scatterExportEntries,checkScatterBudget,exportScatterZip,exportReviewedScatterZip,reviewScatterExport,validateReviewedScatterExport} from '../../assets/workbench/src/lib/scatterSlice'
 

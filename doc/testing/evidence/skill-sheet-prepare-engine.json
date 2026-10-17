@@ -1,0 +1,2237 @@
+{
+  "codeCommit": null,
+  "date": "2026-10-18",
+  "scope": "Sheet preprocess, split and raw-frame archive kernel only. Complete SpriteSheetAdjust/SheetPro UI, formal editor documents and interaction acceptance remain pending. S2/S3/S4 remain open.",
+  "original": {
+    "source": "reference/frontend/src/components/SpriteSheetAdjust.tsx",
+    "fixtureManifest": "skills/frameronin-local/assets/fixtures/sheet-prepare/manifest.json",
+    "frozenDirectory": "skills/frameronin-local/assets/fixtures/sheet-prepare/original",
+    "verifier": "skills/frameronin-local/tests/compare_sheet_prepare_oracle.py",
+    "criteria": "Strict decoded PNG RGBA and dimensions; ordered ZIP members and every decoded frame. Expected rejection text checked independently for original and Worker. Original code and source fixture hashes checked."
+  },
+  "oracle": {
+    "archiveSha256": "ce90ce0060a0ff37d8db923db933f9a36b99bd804f7e2afede201cd26fe59de4",
+    "cases": [
+      {
+        "sample": "pre-crop",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "9f0dcba917614d9f5dc2741a486e7732fdf863f6cdec4fe06dff613c6ff3f010",
+        "actualSha256": "9f0dcba917614d9f5dc2741a486e7732fdf863f6cdec4fe06dff613c6ff3f010",
+        "equal": true,
+        "width": 32,
+        "height": 24,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-rounded-crop",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "e7fe02bd6d0c2b9a0ba6743cb615c38965713fab51d1082f0dcb1706054a9f7b",
+        "actualSha256": "e7fe02bd6d0c2b9a0ba6743cb615c38965713fab51d1082f0dcb1706054a9f7b",
+        "equal": true,
+        "width": 34,
+        "height": 27,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-overcrop",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "8059d98804c941bff5bf2cb8ea82b60a20e8f7c6354210ded6046837cd437cd1",
+        "actualSha256": "8059d98804c941bff5bf2cb8ea82b60a20e8f7c6354210ded6046837cd437cd1",
+        "equal": true,
+        "width": 1,
+        "height": 1,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-pad",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "72cad265747ff5753d2a0f64248b7cec2a927094ffcfe9b43863910dcf7bb792",
+        "actualSha256": "72cad265747ff5753d2a0f64248b7cec2a927094ffcfe9b43863910dcf7bb792",
+        "equal": true,
+        "width": 43,
+        "height": 33,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-nearest",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "7356183267dd3549ec90a810b64291f72c02e80152e196da7534da3557fd8940",
+        "actualSha256": "7356183267dd3549ec90a810b64291f72c02e80152e196da7534da3557fd8940",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-aspect",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "24948642788e3eae64622c9d1792668c3b3b4725de1f3ad4ba51e8cbffb47bca",
+        "actualSha256": "24948642788e3eae64622c9d1792668c3b3b4725de1f3ad4ba51e8cbffb47bca",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-global",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "a7920fdbd312ad229c60f24385993cbcec017ed4acc06b8a05a9c9f5ceb484da",
+        "actualSha256": "a7920fdbd312ad229c60f24385993cbcec017ed4acc06b8a05a9c9f5ceb484da",
+        "equal": true,
+        "width": 37,
+        "height": 29,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-contiguous",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "f6ac73b9476545bed5e369fb2b0f981fc182de714dfe653573bb3fb5c3164841",
+        "actualSha256": "f6ac73b9476545bed5e369fb2b0f981fc182de714dfe653573bb3fb5c3164841",
+        "equal": true,
+        "width": 37,
+        "height": 29,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-chain-global",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "8d778c19f5be2d99cb0e8676b3fc7a000b4954feeb85506a4af01b5966f24dba",
+        "actualSha256": "8d778c19f5be2d99cb0e8676b3fc7a000b4954feeb85506a4af01b5966f24dba",
+        "equal": true,
+        "width": 27,
+        "height": 19,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-chain-contiguous",
+        "action": "preprocess",
+        "input": "source.png",
+        "originalSha256": "ee44d7ef961deb5ca6fe73a8d2fc3e9ceb25d45dc23b0e1af0ab97d48ae6ef92",
+        "actualSha256": "ee44d7ef961deb5ca6fe73a8d2fc3e9ceb25d45dc23b0e1af0ab97d48ae6ef92",
+        "equal": true,
+        "width": 23,
+        "height": 31,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "watermark-threshold1024",
+        "action": "preprocess",
+        "input": "threshold1024.png",
+        "originalSha256": "c4377260f99f395f552d3566f6284e8b299514dd64d8f8b7b267ca90d967d0fd",
+        "actualSha256": "c4377260f99f395f552d3566f6284e8b299514dd64d8f8b7b267ca90d967d0fd",
+        "equal": true,
+        "width": 1024,
+        "height": 1024,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "watermark-threshold1025",
+        "action": "preprocess",
+        "input": "threshold1025.png",
+        "originalSha256": "4b9b9e92b62b6da2e1d6912b72fcc91f26a26dd72345aa66c77dda56d1e92344",
+        "actualSha256": "4b9b9e92b62b6da2e1d6912b72fcc91f26a26dd72345aa66c77dda56d1e92344",
+        "equal": true,
+        "width": 1025,
+        "height": 1025,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-photo-jpg-aspect",
+        "action": "preprocess",
+        "input": "photo.jpg",
+        "originalSha256": "3d0542b100576a6c82945bed5a7be9c7f80d8bba01fcdc245c5b921bf47adad3",
+        "actualSha256": "3d0542b100576a6c82945bed5a7be9c7f80d8bba01fcdc245c5b921bf47adad3",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-photo-jpg-pad",
+        "action": "preprocess",
+        "input": "photo.jpg",
+        "originalSha256": "41e0fbc66cb4f23803ff87ac0ec848a63f2c76b001479b882181d3e53cb3e924",
+        "actualSha256": "41e0fbc66cb4f23803ff87ac0ec848a63f2c76b001479b882181d3e53cb3e924",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-photo-jpg-matte",
+        "action": "preprocess",
+        "input": "photo.jpg",
+        "originalSha256": "1d1259024110d86508b333fef0650ea37bfcdb0ef5b0cda75d5bb2ed6203c4c3",
+        "actualSha256": "1d1259024110d86508b333fef0650ea37bfcdb0ef5b0cda75d5bb2ed6203c4c3",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-422-jpg-aspect",
+        "action": "preprocess",
+        "input": "jpeg-422.jpg",
+        "originalSha256": "4d9e76bb74b565cfa83ccca5625ae148d7edb387eee5e47a1fc3bfb464e1d0c8",
+        "actualSha256": "4d9e76bb74b565cfa83ccca5625ae148d7edb387eee5e47a1fc3bfb464e1d0c8",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-422-jpg-pad",
+        "action": "preprocess",
+        "input": "jpeg-422.jpg",
+        "originalSha256": "3ffda34bb2a3a60bce984dcf13a926993cb06599efb2bc0f700c7f95f97fc89d",
+        "actualSha256": "3ffda34bb2a3a60bce984dcf13a926993cb06599efb2bc0f700c7f95f97fc89d",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-422-jpg-matte",
+        "action": "preprocess",
+        "input": "jpeg-422.jpg",
+        "originalSha256": "1a65a0dab064c20c5a31e50d8fd3f866431944ca58737a322badd5cc42573115",
+        "actualSha256": "1a65a0dab064c20c5a31e50d8fd3f866431944ca58737a322badd5cc42573115",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-444-jpg-aspect",
+        "action": "preprocess",
+        "input": "jpeg-444.jpg",
+        "originalSha256": "add6cc370469ec94520d350e4cd0b1d37144afd13a0e0a8415a4290360308945",
+        "actualSha256": "add6cc370469ec94520d350e4cd0b1d37144afd13a0e0a8415a4290360308945",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-444-jpg-pad",
+        "action": "preprocess",
+        "input": "jpeg-444.jpg",
+        "originalSha256": "c3c81f372346ad2d2abd563bf9cc57925d9541ca2b15eefb3d040c39bbc1ad12",
+        "actualSha256": "c3c81f372346ad2d2abd563bf9cc57925d9541ca2b15eefb3d040c39bbc1ad12",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-444-jpg-matte",
+        "action": "preprocess",
+        "input": "jpeg-444.jpg",
+        "originalSha256": "0c6b3f68bb993d588ae051edfb3757762100b9a846179c8bdd59f74da329829b",
+        "actualSha256": "0c6b3f68bb993d588ae051edfb3757762100b9a846179c8bdd59f74da329829b",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-cmyk-jpg-aspect",
+        "action": "preprocess",
+        "input": "jpeg-cmyk.jpg",
+        "originalSha256": "450ccdbfbd3c502d5f2a1f4f0762e6fedba29ef07561ce58fee830abf591c61a",
+        "actualSha256": "450ccdbfbd3c502d5f2a1f4f0762e6fedba29ef07561ce58fee830abf591c61a",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-cmyk-jpg-pad",
+        "action": "preprocess",
+        "input": "jpeg-cmyk.jpg",
+        "originalSha256": "bfb659c1fc1f62425d3600a492e7442a12556ffe2c10f326a32b1e0c280c46cb",
+        "actualSha256": "bfb659c1fc1f62425d3600a492e7442a12556ffe2c10f326a32b1e0c280c46cb",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-cmyk-jpg-matte",
+        "action": "preprocess",
+        "input": "jpeg-cmyk.jpg",
+        "originalSha256": "c767d698945b1306b1ee682d3d3c534e6abf1a694863b052efe918c5e8effbee",
+        "actualSha256": "c767d698945b1306b1ee682d3d3c534e6abf1a694863b052efe918c5e8effbee",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-gray-jpg-aspect",
+        "action": "preprocess",
+        "input": "jpeg-gray.jpg",
+        "originalSha256": "66b48b72fb3876165df80b4a2194cff390f5f55e1c48f193eb96ebd9bc091611",
+        "actualSha256": "66b48b72fb3876165df80b4a2194cff390f5f55e1c48f193eb96ebd9bc091611",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-gray-jpg-pad",
+        "action": "preprocess",
+        "input": "jpeg-gray.jpg",
+        "originalSha256": "4415c14deb858ef11c020746628ea884b18a22b73f263f49a5a4f10c2a758237",
+        "actualSha256": "4415c14deb858ef11c020746628ea884b18a22b73f263f49a5a4f10c2a758237",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-gray-jpg-matte",
+        "action": "preprocess",
+        "input": "jpeg-gray.jpg",
+        "originalSha256": "c70bf74dde6cb73972e16017f35f720157fceda611c61b66ec83bf890afa5e40",
+        "actualSha256": "c70bf74dde6cb73972e16017f35f720157fceda611c61b66ec83bf890afa5e40",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-progressive-jpg-aspect",
+        "action": "preprocess",
+        "input": "jpeg-progressive.jpg",
+        "originalSha256": "7ff31a8b9a93f54b28fe4310cc633f1128c5bb9261a7931502c1c22fb8c7fa2c",
+        "actualSha256": "7ff31a8b9a93f54b28fe4310cc633f1128c5bb9261a7931502c1c22fb8c7fa2c",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-progressive-jpg-pad",
+        "action": "preprocess",
+        "input": "jpeg-progressive.jpg",
+        "originalSha256": "97b2573cb0c31298b5b686734c168f53367ba0bb0f7fae248f6ffb56390f4936",
+        "actualSha256": "97b2573cb0c31298b5b686734c168f53367ba0bb0f7fae248f6ffb56390f4936",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-progressive-jpg-matte",
+        "action": "preprocess",
+        "input": "jpeg-progressive.jpg",
+        "originalSha256": "c56261963b1d903d3a2ab0c119f85a0a4d49b78be36b13368dc5bde5047e86f2",
+        "actualSha256": "c56261963b1d903d3a2ab0c119f85a0a4d49b78be36b13368dc5bde5047e86f2",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-orientation8-jpg-aspect",
+        "action": "preprocess",
+        "input": "jpeg-orientation8.jpg",
+        "originalSha256": "46c4aa31162da538e3ade6994f67db2d52a73ca541d72695a0fe2d6c2d4a413e",
+        "actualSha256": "46c4aa31162da538e3ade6994f67db2d52a73ca541d72695a0fe2d6c2d4a413e",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-orientation8-jpg-pad",
+        "action": "preprocess",
+        "input": "jpeg-orientation8.jpg",
+        "originalSha256": "3f649529a0206998e9b9310f7bd43812a7f62522b27782c7b72fb966e15cda43",
+        "actualSha256": "3f649529a0206998e9b9310f7bd43812a7f62522b27782c7b72fb966e15cda43",
+        "equal": true,
+        "width": 51,
+        "height": 66,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-jpeg-orientation8-jpg-matte",
+        "action": "preprocess",
+        "input": "jpeg-orientation8.jpg",
+        "originalSha256": "77cc66fb5f48d7cdc7843bacdfeded0b1c623e12e075b514b02df9c3caf57899",
+        "actualSha256": "77cc66fb5f48d7cdc7843bacdfeded0b1c623e12e075b514b02df9c3caf57899",
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-oriented-jpg-aspect",
+        "action": "preprocess",
+        "input": "oriented.jpg",
+        "originalSha256": "93cf157436b200eacf8eeb1bada89dc65131e915855b6b9d12c391c0b6e2023a",
+        "actualSha256": "93cf157436b200eacf8eeb1bada89dc65131e915855b6b9d12c391c0b6e2023a",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-oriented-jpg-pad",
+        "action": "preprocess",
+        "input": "oriented.jpg",
+        "originalSha256": "f2e012cbfa2bf7ff8ac90b736b876d1e6542d6b4e9dd86dc72fae64f16790548",
+        "actualSha256": "f2e012cbfa2bf7ff8ac90b736b876d1e6542d6b4e9dd86dc72fae64f16790548",
+        "equal": true,
+        "width": 51,
+        "height": 66,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-oriented-jpg-matte",
+        "action": "preprocess",
+        "input": "oriented.jpg",
+        "originalSha256": "44e21b08c983e3091fb25d5ca449e841d738ce3a201b0fe16194dedc68f4a543",
+        "actualSha256": "44e21b08c983e3091fb25d5ca449e841d738ce3a201b0fe16194dedc68f4a543",
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-oriented-webp-aspect",
+        "action": "preprocess",
+        "input": "oriented.webp",
+        "originalSha256": "12ab8268e690a5207b773803615b37037fb9f7434bde06b154b170cf5154992e",
+        "actualSha256": "12ab8268e690a5207b773803615b37037fb9f7434bde06b154b170cf5154992e",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-oriented-webp-pad",
+        "action": "preprocess",
+        "input": "oriented.webp",
+        "originalSha256": "4ad799f2caf0880fb32fc5f9cfc30945f9fa3f8720d1e864b56f8d97f570880b",
+        "actualSha256": "4ad799f2caf0880fb32fc5f9cfc30945f9fa3f8720d1e864b56f8d97f570880b",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-oriented-webp-matte",
+        "action": "preprocess",
+        "input": "oriented.webp",
+        "originalSha256": "83a17d3a4bcdc1fbdb8c574508d6f8ba3c14d8a7bdd4c92ef03c0639e4dcd3d7",
+        "actualSha256": "83a17d3a4bcdc1fbdb8c574508d6f8ba3c14d8a7bdd4c92ef03c0639e4dcd3d7",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-alpha-webp-aspect",
+        "action": "preprocess",
+        "input": "alpha.webp",
+        "originalSha256": "12ab8268e690a5207b773803615b37037fb9f7434bde06b154b170cf5154992e",
+        "actualSha256": "12ab8268e690a5207b773803615b37037fb9f7434bde06b154b170cf5154992e",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-alpha-webp-pad",
+        "action": "preprocess",
+        "input": "alpha.webp",
+        "originalSha256": "4ad799f2caf0880fb32fc5f9cfc30945f9fa3f8720d1e864b56f8d97f570880b",
+        "actualSha256": "4ad799f2caf0880fb32fc5f9cfc30945f9fa3f8720d1e864b56f8d97f570880b",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-alpha-webp-matte",
+        "action": "preprocess",
+        "input": "alpha.webp",
+        "originalSha256": "83a17d3a4bcdc1fbdb8c574508d6f8ba3c14d8a7bdd4c92ef03c0639e4dcd3d7",
+        "actualSha256": "83a17d3a4bcdc1fbdb8c574508d6f8ba3c14d8a7bdd4c92ef03c0639e4dcd3d7",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-profiled-png-aspect",
+        "action": "preprocess",
+        "input": "profiled.png",
+        "originalSha256": "12ab8268e690a5207b773803615b37037fb9f7434bde06b154b170cf5154992e",
+        "actualSha256": "12ab8268e690a5207b773803615b37037fb9f7434bde06b154b170cf5154992e",
+        "equal": true,
+        "width": 19,
+        "height": 23,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-profiled-png-pad",
+        "action": "preprocess",
+        "input": "profiled.png",
+        "originalSha256": "21dae0b65268f3e21bc5dfe2fdd33c33a169d00a95b0d6b4c29e46a9011eebcd",
+        "actualSha256": "21dae0b65268f3e21bc5dfe2fdd33c33a169d00a95b0d6b4c29e46a9011eebcd",
+        "equal": true,
+        "width": 67,
+        "height": 50,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "pre-profiled-png-matte",
+        "action": "preprocess",
+        "input": "profiled.png",
+        "originalSha256": "0da1cd3caabd016e0ec885fa622ad0d19c53e0733082d0909176e71ca22b1f26",
+        "actualSha256": "0da1cd3caabd016e0ec885fa622ad0d19c53e0733082d0909176e71ca22b1f26",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "whole-remainder",
+        "action": "prepare",
+        "input": "source.png",
+        "originalSha256": "05f63923a3da0638ae477af94130dc9360f34f11d31da8cf21f0c64c55316670",
+        "actualSha256": "05f63923a3da0638ae477af94130dc9360f34f11d31da8cf21f0c64c55316670",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "1af2c5d539474a1e64c71e22aef61ffd1c6c7413faa2c01b665ceedb10c99873",
+        "actualMemberHash": "1af2c5d539474a1e64c71e22aef61ffd1c6c7413faa2c01b665ceedb10c99873",
+        "shapes": [
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 12,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-dense",
+        "action": "prepare",
+        "input": "tiny.png",
+        "originalSha256": "1846b6255d36f0a22523163c9ca9a67e5bc6042f4b90fb071b62fc9dd0db07fa",
+        "actualSha256": "ce08d50143eac4419c0508fb76184c1870a2a038805da7c9914ed9a626fc602a",
+        "equal": true,
+        "members": 4096,
+        "decodedFrames": 4096,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_4095.png",
+        "originalMemberHash": "a72f172520a19c8262226b7db7f28f5ab04a236cb13d04ed4f4891ad827130cf",
+        "actualMemberHash": "a72f172520a19c8262226b7db7f28f5ab04a236cb13d04ed4f4891ad827130cf",
+        "shapes": [
+          {
+            "width": 1,
+            "height": 1,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4096
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "uniform-remainder",
+        "action": "prepare",
+        "input": "source.png",
+        "originalSha256": "af850e1ea9026e8680cd8970de9a594332706b633d3e7c8ab659f99d6afa9247",
+        "actualSha256": "af850e1ea9026e8680cd8970de9a594332706b633d3e7c8ab659f99d6afa9247",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "4eaf56bc3b761bd142dc0a7f843b2a9c62821a32e63010342e9b12207ed3e9c0",
+        "actualMemberHash": "4eaf56bc3b761bd142dc0a7f843b2a9c62821a32e63010342e9b12207ed3e9c0",
+        "shapes": [
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 6
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "transparent-regions",
+        "action": "prepare",
+        "input": "regions.png",
+        "originalSha256": "5dc2185ade097f269fc2371571a281418ed4b20c738fdce8b315bbad2548587f",
+        "actualSha256": "5dc2185ade097f269fc2371571a281418ed4b20c738fdce8b315bbad2548587f",
+        "equal": true,
+        "members": 5,
+        "decodedFrames": 5,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_004.png",
+        "originalMemberHash": "61d576c348f4547a18ee13d0849b696828a78d51a1260f2ce19622a19f1e387b",
+        "actualMemberHash": "61d576c348f4547a18ee13d0849b696828a78d51a1260f2ce19622a19f1e387b",
+        "shapes": [
+          {
+            "width": 11,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 5
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "transparent-source",
+        "action": "prepare",
+        "input": "source.png",
+        "originalSha256": "176feee5117b0bef07bc4c1ea68f46b32f8d579f7657bbd6ded66be2ad2ee572",
+        "actualSha256": "176feee5117b0bef07bc4c1ea68f46b32f8d579f7657bbd6ded66be2ad2ee572",
+        "equal": true,
+        "members": 1,
+        "decodedFrames": 1,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_000.png",
+        "originalMemberHash": "012fd5eda666806fe3d516758fff75475efcc412bc8eaba1780848255cefcfa4",
+        "actualMemberHash": "012fd5eda666806fe3d516758fff75475efcc412bc8eaba1780848255cefcfa4",
+        "shapes": [
+          {
+            "width": 37,
+            "height": 29,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "transparent-webp",
+        "action": "prepare",
+        "input": "oriented.webp",
+        "originalSha256": "93031908c8fc749e375fa358f4511556eed72efe9e27f71ec432343ed7db9045",
+        "actualSha256": "93031908c8fc749e375fa358f4511556eed72efe9e27f71ec432343ed7db9045",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "79f3c84c7653d49a90a00c5c8dac4bcdf2708d1f753f0d0144eb331e3270b4da",
+        "actualMemberHash": "79f3c84c7653d49a90a00c5c8dac4bcdf2708d1f753f0d0144eb331e3270b4da",
+        "shapes": [
+          {
+            "width": 17,
+            "height": 18,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 6
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-photo-jpg",
+        "action": "prepare",
+        "input": "photo.jpg",
+        "originalSha256": "70fb37981b8c14d7278a141806976d8eb64b3a4df9997f39655be4bce754b261",
+        "actualSha256": "70fb37981b8c14d7278a141806976d8eb64b3a4df9997f39655be4bce754b261",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "0d07aabaa690ee27d04c9efc30d38ecd41406fd23935be17cf3cdf22502a4280",
+        "actualMemberHash": "0d07aabaa690ee27d04c9efc30d38ecd41406fd23935be17cf3cdf22502a4280",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-jpeg-422-jpg",
+        "action": "prepare",
+        "input": "jpeg-422.jpg",
+        "originalSha256": "c26c4b72f7937cb9313b6a2c99275fc5763ed950be1b46877184bbc83ad74e53",
+        "actualSha256": "c26c4b72f7937cb9313b6a2c99275fc5763ed950be1b46877184bbc83ad74e53",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "8687ffd8468e07b26fcef7909cde7423d756c692016c0bd9e9874e3aba1a5eb5",
+        "actualMemberHash": "8687ffd8468e07b26fcef7909cde7423d756c692016c0bd9e9874e3aba1a5eb5",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-jpeg-444-jpg",
+        "action": "prepare",
+        "input": "jpeg-444.jpg",
+        "originalSha256": "59444ff3982fcc187034528d71b89ec8364e0a12985dab560f681858b58650e4",
+        "actualSha256": "59444ff3982fcc187034528d71b89ec8364e0a12985dab560f681858b58650e4",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "2d61d4ef36f2f3042cd111128da1875185cb1371fa4449a440a1b997d85b51a1",
+        "actualMemberHash": "2d61d4ef36f2f3042cd111128da1875185cb1371fa4449a440a1b997d85b51a1",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-jpeg-cmyk-jpg",
+        "action": "prepare",
+        "input": "jpeg-cmyk.jpg",
+        "originalSha256": "336cc42b8822d86ec87fe5a9ad5974517dded9f71c2725f13a6a97b931e5eb43",
+        "actualSha256": "336cc42b8822d86ec87fe5a9ad5974517dded9f71c2725f13a6a97b931e5eb43",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "50d04cbf28ae26b7f1175e9a66a8d8602ae5b5bfb61672f873e30efc44b866f2",
+        "actualMemberHash": "50d04cbf28ae26b7f1175e9a66a8d8602ae5b5bfb61672f873e30efc44b866f2",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-jpeg-gray-jpg",
+        "action": "prepare",
+        "input": "jpeg-gray.jpg",
+        "originalSha256": "007faeb29d3464b18aa0da3a7424f060a3565698e88f68746822a9f2f0f503e8",
+        "actualSha256": "007faeb29d3464b18aa0da3a7424f060a3565698e88f68746822a9f2f0f503e8",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "071a9582fb0d38c94812f0211a3e7dcd2d5a5a0008ef878b156c9d4f6f195d68",
+        "actualMemberHash": "071a9582fb0d38c94812f0211a3e7dcd2d5a5a0008ef878b156c9d4f6f195d68",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-jpeg-progressive-jpg",
+        "action": "prepare",
+        "input": "jpeg-progressive.jpg",
+        "originalSha256": "7ab54914ea885afff89232dcd6435ab865680e5b6227c747ea5d4467c40bf457",
+        "actualSha256": "7ab54914ea885afff89232dcd6435ab865680e5b6227c747ea5d4467c40bf457",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "b5e2c41d096fb4aaa9974f4522315db89731ecddbf968a3cf2bd6266a9a70b24",
+        "actualMemberHash": "b5e2c41d096fb4aaa9974f4522315db89731ecddbf968a3cf2bd6266a9a70b24",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-jpeg-orientation8-jpg",
+        "action": "prepare",
+        "input": "jpeg-orientation8.jpg",
+        "originalSha256": "aeb4c58411c97efa45b174dfc3a772bc168dc0fb47bc892190442f74d44a13de",
+        "actualSha256": "aeb4c58411c97efa45b174dfc3a772bc168dc0fb47bc892190442f74d44a13de",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "5aec30dc225d4edd2357d3df2e2f5a9e9253ccc9c1526ef1ac220c254f35a5a8",
+        "actualMemberHash": "5aec30dc225d4edd2357d3df2e2f5a9e9253ccc9c1526ef1ac220c254f35a5a8",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 6
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-oriented-jpg",
+        "action": "prepare",
+        "input": "oriented.jpg",
+        "originalSha256": "bb09d88a629f1f23f0ce3313f41f0aa983fbac178ee5875d27fff66e3aa25dff",
+        "actualSha256": "bb09d88a629f1f23f0ce3313f41f0aa983fbac178ee5875d27fff66e3aa25dff",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "072bb6283ff2f2c3fcb776f652663fb79bfd2023d7f2ad181f7d07473b724f33",
+        "actualMemberHash": "072bb6283ff2f2c3fcb776f652663fb79bfd2023d7f2ad181f7d07473b724f33",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 6
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-oriented-webp",
+        "action": "prepare",
+        "input": "oriented.webp",
+        "originalSha256": "e9433ff832bcd0d05421e586d2a3d8879f6ba5882953c72eeea29dbd155b5145",
+        "actualSha256": "e9433ff832bcd0d05421e586d2a3d8879f6ba5882953c72eeea29dbd155b5145",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "actualMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-alpha-webp",
+        "action": "prepare",
+        "input": "alpha.webp",
+        "originalSha256": "e9433ff832bcd0d05421e586d2a3d8879f6ba5882953c72eeea29dbd155b5145",
+        "actualSha256": "e9433ff832bcd0d05421e586d2a3d8879f6ba5882953c72eeea29dbd155b5145",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "actualMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "whole-profiled-png",
+        "action": "prepare",
+        "input": "profiled.png",
+        "originalSha256": "fa842cfeaf5142a6e7138117cecd1c5ae7bc59e9a52d0b7a780c16615dcaeefb",
+        "actualSha256": "fa842cfeaf5142a6e7138117cecd1c5ae7bc59e9a52d0b7a780c16615dcaeefb",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "d6aa6a72c52e6fa741ee445d8aa267a89056f32b019cccca8396dc873dc4a3d6",
+        "actualMemberHash": "d6aa6a72c52e6fa741ee445d8aa267a89056f32b019cccca8396dc873dc4a3d6",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "frames-reorder",
+        "action": "frames",
+        "input": "frames.zip",
+        "originalSha256": "f4a296a40a0057142ecc3975d15bed87133f201c97a3f53d0a6c48fa41313136",
+        "actualSha256": "f4a296a40a0057142ecc3975d15bed87133f201c97a3f53d0a6c48fa41313136",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 2,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_001.png",
+        "originalMemberHash": "9306a44b0ba6f2b60421f7d871b4177d74adcb56546a306c56840a8005d8eba9",
+        "actualMemberHash": "9306a44b0ba6f2b60421f7d871b4177d74adcb56546a306c56840a8005d8eba9",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 7,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 13,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "frames-blank",
+        "action": "frames",
+        "input": "frames.zip",
+        "originalSha256": "a8a0f3c8afa3e0ad8fdc1faa2b2abcd56fbb0216d00403542dc3c54a3546c404",
+        "actualSha256": "a8a0f3c8afa3e0ad8fdc1faa2b2abcd56fbb0216d00403542dc3c54a3546c404",
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 3,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_002.png",
+        "originalMemberHash": "34a70b6854b2c710b88721d75509117b38f66836d81eec8e704ca4f535e0d6a0",
+        "actualMemberHash": "34a70b6854b2c710b88721d75509117b38f66836d81eec8e704ca4f535e0d6a0",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 7,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 11,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "frames-single",
+        "action": "frames",
+        "input": "frames.zip",
+        "originalSha256": "08556f35b5a56c1fdb213e8697ad2fbd54acd0e6122bfa405b002c28dbea778e",
+        "actualSha256": "08556f35b5a56c1fdb213e8697ad2fbd54acd0e6122bfa405b002c28dbea778e",
+        "equal": true,
+        "members": 1,
+        "decodedFrames": 1,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_000.png",
+        "originalMemberHash": "6c9a298d54e2c9fe6ab956861e5af996d3491046e71cbdd2afea9087f64c8f00",
+        "actualMemberHash": "6c9a298d54e2c9fe6ab956861e5af996d3491046e71cbdd2afea9087f64c8f00",
+        "shapes": [
+          {
+            "width": 9,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "sample": "empty-transparent",
+        "action": "prepare",
+        "input": "empty.png",
+        "originalSha256": "f696389c1cf080b999ad2603739749199722680019b24e505b18edf436338aa3",
+        "actualSha256": "9765ee7a716a16837953eb67f3ff8a1c223cfdd515c043b8df1debf0f18e4e82",
+        "equal": true,
+        "originalRejection": {
+          "rejected": true,
+          "error": "Error: 未找到可拆分区域"
+        },
+        "workerRejection": {
+          "rejected": true,
+          "error": "Error: Error: 未找到可拆分区域"
+        }
+      },
+      {
+        "sample": "dense-uniform-rejected",
+        "action": "prepare",
+        "input": "tiny.png",
+        "originalSha256": "f5f7853971376fa0d877abf868c8afa23d75047fe88e4e128907f82ed506d518",
+        "actualSha256": "4dfd29a997355408d5b5b7667a2533d46b54766ecfb1d7be6e92c9e786f94671",
+        "equal": true,
+        "originalRejection": {
+          "rejected": true,
+          "error": "Error: split"
+        },
+        "workerRejection": {
+          "rejected": true,
+          "error": "Error: Error: SHEET_PREPARATION_DENSE_UNIFORM"
+        }
+      }
+    ],
+    "failed": []
+  },
+  "publication": {
+    "driver": "skills/frameronin-local/tests/accept_sheet_prepare_oracle.py",
+    "projectId": "c8a9ff4c-10c1-48ca-8755-31b74d6efc3a",
+    "tasks": [
+      {
+        "sample": "pre-crop",
+        "taskId": "5e4c0180-6f85-46aa-b415-5339b32e63a8",
+        "state": "succeeded",
+        "results": [
+          "62231815-f962-4c95-a511-c564763d8eb9",
+          "a08e1c3d-ecbb-4c2e-8225-1e3ddaaedbad"
+        ]
+      },
+      {
+        "sample": "pre-rounded-crop",
+        "taskId": "00279c7a-6a9d-40a1-8775-0c50b0ac4740",
+        "state": "succeeded",
+        "results": [
+          "a57710fa-fad3-45b8-b4e2-85f2f0441887",
+          "d8df53f4-274c-4b77-9fca-e9b56def3375"
+        ]
+      },
+      {
+        "sample": "pre-overcrop",
+        "taskId": "6f293330-d093-4471-937f-36466701fab3",
+        "state": "succeeded",
+        "results": [
+          "360d4f31-9c77-4ee2-a11d-7e5be6a0095a",
+          "a81fb1b3-5fb2-4f51-97fa-90b01650bcd3"
+        ]
+      },
+      {
+        "sample": "pre-pad",
+        "taskId": "5b69e62f-e0de-4bf8-9c2e-5c52d3cac7fa",
+        "state": "succeeded",
+        "results": [
+          "f0aac426-0adb-470b-b8f3-0a4ed5d71fa2",
+          "ee54fc7b-d0ea-47af-8336-7faebba3654a"
+        ]
+      },
+      {
+        "sample": "pre-nearest",
+        "taskId": "94dbc6c4-53dd-4df7-8852-ec5e4f3cd8b6",
+        "state": "succeeded",
+        "results": [
+          "5daebe2f-cf76-41bf-a39a-92377043b9b3",
+          "59110758-be5b-4064-90bb-f179441b9e95"
+        ]
+      },
+      {
+        "sample": "pre-aspect",
+        "taskId": "211034b2-7ddf-4967-940a-fce38bfa46d3",
+        "state": "succeeded",
+        "results": [
+          "59feb7bf-5dec-4733-9240-12353c760737",
+          "3e5dc139-f36f-485a-8b92-61c869efcf12"
+        ]
+      },
+      {
+        "sample": "pre-global",
+        "taskId": "8dc6de68-c7fd-4097-96e9-6cd7d36af099",
+        "state": "succeeded",
+        "results": [
+          "60f5454d-8bc2-4d60-951d-bd9664193f3e",
+          "f892c5e5-909f-4122-af38-39b1e5fd9466"
+        ]
+      },
+      {
+        "sample": "pre-contiguous",
+        "taskId": "f4854ee0-680a-4633-8de3-12b6fff8200e",
+        "state": "succeeded",
+        "results": [
+          "9970c259-e3b4-42a1-a198-099a42e8aafe",
+          "e4ba29b7-239c-42ab-8cc6-9139624840a9"
+        ]
+      },
+      {
+        "sample": "pre-chain-global",
+        "taskId": "b348031d-6e37-4aec-9b84-031cb6659560",
+        "state": "succeeded",
+        "results": [
+          "3a204d3d-f3dd-4de9-91e2-a8bfb90b0ab7",
+          "0a5e51f1-1c00-4d04-b870-febd952445ca"
+        ]
+      },
+      {
+        "sample": "pre-chain-contiguous",
+        "taskId": "44faeddc-719e-43ed-a9fa-1125fbb0f7ec",
+        "state": "succeeded",
+        "results": [
+          "c9e44382-b923-4662-a087-86b91b567e4c",
+          "53bb9667-9c19-4d60-8337-c49c8bec5b78"
+        ]
+      },
+      {
+        "sample": "watermark-threshold1024",
+        "taskId": "3b7e3cfc-c120-4dbd-9dec-3c5e27c0f369",
+        "state": "succeeded",
+        "results": [
+          "e7a6c845-0c94-493d-95a0-8d1c9c111944",
+          "cf4f61f6-0cc4-4f61-89e1-cab5bf944242"
+        ]
+      },
+      {
+        "sample": "watermark-threshold1025",
+        "taskId": "d3f313a1-71fd-4cfe-87ab-5b9dcd7deed3",
+        "state": "succeeded",
+        "results": [
+          "8e113ee3-3fcc-4e47-8aa0-5f658c4cbf84",
+          "aca973a1-07fa-45a7-973c-e11086485919"
+        ]
+      },
+      {
+        "sample": "pre-photo-jpg-aspect",
+        "taskId": "04e50717-6284-4986-a428-5cddcee9b9a5",
+        "state": "succeeded",
+        "results": [
+          "eb806487-e810-47f5-bffe-d04683eb6fa3",
+          "add389fa-b579-49f3-81e9-9df8658528e2"
+        ]
+      },
+      {
+        "sample": "pre-photo-jpg-pad",
+        "taskId": "660da788-7c11-4915-a231-ddf72e25d467",
+        "state": "succeeded",
+        "results": [
+          "c5de04a6-23a0-48c8-be27-712783199baa",
+          "621e205b-ff50-4dbb-aec2-8dda937770e1"
+        ]
+      },
+      {
+        "sample": "pre-photo-jpg-matte",
+        "taskId": "470d8be3-d2eb-4912-925f-55a1aaef9349",
+        "state": "succeeded",
+        "results": [
+          "22801811-8e0c-4ec1-8dad-ca2edfdef995",
+          "3769fecc-01ed-415c-8b81-1578e852eb1a"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-422-jpg-aspect",
+        "taskId": "9e935210-383b-4718-b340-90e3828516e3",
+        "state": "succeeded",
+        "results": [
+          "974ac43c-63e9-4181-b8c1-5034921613db",
+          "70ce3507-3098-499d-a4ca-7d5d3a805c15"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-422-jpg-pad",
+        "taskId": "dccfecd2-6311-4173-9be0-af53333f3aec",
+        "state": "succeeded",
+        "results": [
+          "a1eadb1c-3ff3-4f6a-8d42-f5e6b025b242",
+          "2afbb527-3103-4b5a-be49-3a655c9545cf"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-422-jpg-matte",
+        "taskId": "03d20ed4-f1cb-4824-9fd8-2990f213b721",
+        "state": "succeeded",
+        "results": [
+          "9e19188a-77fa-4928-98a5-21ddfac2bf7a",
+          "c944af3d-cdaf-45b1-b522-f206a0f85900"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-444-jpg-aspect",
+        "taskId": "255f1cc8-4f05-496e-a3eb-139a73d029a0",
+        "state": "succeeded",
+        "results": [
+          "f92ebeff-d83c-46a2-9ab4-5389f31b597b",
+          "944d5548-0df9-478f-b76d-77840de1ddbf"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-444-jpg-pad",
+        "taskId": "449191bc-a47f-4f37-9fac-25c9cecaa5a4",
+        "state": "succeeded",
+        "results": [
+          "48e762aa-9136-4b0d-818c-a2607453e8f2",
+          "968e2f2a-6f93-4647-8bb0-4a81edad6154"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-444-jpg-matte",
+        "taskId": "833ed367-e996-47cb-9cdf-82c5d999f0f7",
+        "state": "succeeded",
+        "results": [
+          "f5e6b113-6ce7-4d30-955b-5c27fb025484",
+          "2ff5fbb3-87c5-414a-8a7f-47eafa1a71db"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-cmyk-jpg-aspect",
+        "taskId": "6cca2b52-9cb6-48d5-a9e8-676f44bf436c",
+        "state": "succeeded",
+        "results": [
+          "eba01110-c7db-4b4d-bcc7-ef055b6c4073",
+          "daa37eac-e0f6-40b6-9ce4-b1d20be76dc0"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-cmyk-jpg-pad",
+        "taskId": "729f087e-f3fb-4d29-bd45-ab18f717eaf5",
+        "state": "succeeded",
+        "results": [
+          "7fa36abf-aeee-49e5-9773-8f468b619d3b",
+          "d0ddfa34-87c4-4932-a062-454c2f8bd9ca"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-cmyk-jpg-matte",
+        "taskId": "a2c96b7a-20b4-430b-8ef1-89332e77e8d5",
+        "state": "succeeded",
+        "results": [
+          "c4795707-eda9-4d82-9f07-da8c77574700",
+          "23fcea64-368a-439f-baa8-dc081a842b7b"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-gray-jpg-aspect",
+        "taskId": "0ee1e397-b18d-4e2a-95c3-c4cd85ad35bb",
+        "state": "succeeded",
+        "results": [
+          "b21f3657-adb5-4d0d-be71-7c51be95e401",
+          "b651e9f1-f776-4bd3-82fb-f130e1fb629a"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-gray-jpg-pad",
+        "taskId": "804d7cd4-965c-4527-a48b-e6d65214dfc9",
+        "state": "succeeded",
+        "results": [
+          "df224cb6-58c2-44fa-a40c-30dc2ca35fac",
+          "b69baecf-7123-456c-9c15-e29fccfcc118"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-gray-jpg-matte",
+        "taskId": "9e20cb1c-97d5-40ac-92c1-3b92d7595d2f",
+        "state": "succeeded",
+        "results": [
+          "e3f2c34b-4436-42b8-b696-d85e2f74c9af",
+          "796a79ed-34c8-4088-8a14-9d2b4ec7c75b"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-progressive-jpg-aspect",
+        "taskId": "d3a62ffb-5595-46f8-94b9-628bd0dbe88e",
+        "state": "succeeded",
+        "results": [
+          "96632335-d333-456f-a504-058c819a627f",
+          "78df57ba-7d2a-46e8-b48a-59b5c855becb"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-progressive-jpg-pad",
+        "taskId": "c7c7e433-8b72-4576-803c-ff731f6b1bc2",
+        "state": "succeeded",
+        "results": [
+          "4903b3a6-2b9a-4fb1-bb88-9d5a03e017e3",
+          "ef58a8c7-23f5-4434-b947-bb443d50f498"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-progressive-jpg-matte",
+        "taskId": "a497ebc6-60c6-4a79-bf16-2174f6546a5b",
+        "state": "succeeded",
+        "results": [
+          "001e9b83-8bd2-456e-8484-83f8453e0c7c",
+          "86a65d4c-ec4c-41cd-a27d-717b3d9151dc"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-orientation8-jpg-aspect",
+        "taskId": "fa43cd57-1a72-4689-9f9f-d0d35ed816f6",
+        "state": "succeeded",
+        "results": [
+          "d896531a-660e-43e5-9c8e-359ea5f0afd1",
+          "cc13266e-d254-4c32-9b02-7c491a9222e4"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-orientation8-jpg-pad",
+        "taskId": "77a9782a-71f0-497f-a526-a62c43add49e",
+        "state": "succeeded",
+        "results": [
+          "c5e75a0f-c48d-4020-8038-99ebe5c2cc2b",
+          "109830ba-6618-4460-b97e-52fc73a9d6e1"
+        ]
+      },
+      {
+        "sample": "pre-jpeg-orientation8-jpg-matte",
+        "taskId": "2fbbddf0-5ccc-41bf-accc-8b9f2d3f7248",
+        "state": "succeeded",
+        "results": [
+          "85bf6375-876b-4fd7-ae64-71e4925ac92e",
+          "d888de3e-7802-4634-904e-53ecd0763ce0"
+        ]
+      },
+      {
+        "sample": "pre-oriented-jpg-aspect",
+        "taskId": "8afceddf-6f5b-4923-9206-a39006668b85",
+        "state": "succeeded",
+        "results": [
+          "6ffda03a-fb4a-40a1-bfba-eb26ecf9a0d6",
+          "b045abb7-78f9-4023-86fa-8e98f90371c2"
+        ]
+      },
+      {
+        "sample": "pre-oriented-jpg-pad",
+        "taskId": "6712cfb9-df67-47cf-bd59-e871e102529e",
+        "state": "succeeded",
+        "results": [
+          "c921a6e9-8a20-4e67-8ca2-f11cea0ad3e6",
+          "9cd40f2e-6b05-4263-9552-f357b2fa5202"
+        ]
+      },
+      {
+        "sample": "pre-oriented-jpg-matte",
+        "taskId": "71cf2150-ea8d-4843-bd75-a7deccab206f",
+        "state": "succeeded",
+        "results": [
+          "50fd6a6d-d343-4224-b491-d700d8fce514",
+          "0a903b84-1f87-48bc-9c4b-004e4f1533bb"
+        ]
+      },
+      {
+        "sample": "pre-oriented-webp-aspect",
+        "taskId": "1b884fb8-367c-4df8-b804-c59b22e8fad7",
+        "state": "succeeded",
+        "results": [
+          "ab516a42-a5f6-4fa0-8ccb-d258737c30c1",
+          "49e696db-1014-42f6-80af-6d158e189c7a"
+        ]
+      },
+      {
+        "sample": "pre-oriented-webp-pad",
+        "taskId": "9c3d1c2a-278e-4478-acf7-03d291552f1e",
+        "state": "succeeded",
+        "results": [
+          "9bcbc17a-dd89-42d0-8857-c7e2cd474ab7",
+          "145cd621-512b-40fc-bed9-4cfbf30af452"
+        ]
+      },
+      {
+        "sample": "pre-oriented-webp-matte",
+        "taskId": "44197540-358a-483a-9975-46da7a51e471",
+        "state": "succeeded",
+        "results": [
+          "1dabf9ed-5c61-4df2-916a-7b7ea79ce4ac",
+          "852a0c33-bab4-4f41-a353-b6e230b11a55"
+        ]
+      },
+      {
+        "sample": "pre-alpha-webp-aspect",
+        "taskId": "565ec487-9afa-4e0c-9680-d606ebe656a5",
+        "state": "succeeded",
+        "results": [
+          "38412baa-e04e-4891-bc2c-0f65f2bf658a",
+          "029dae25-9f80-441e-aed6-68082e4a6140"
+        ]
+      },
+      {
+        "sample": "pre-alpha-webp-pad",
+        "taskId": "1a0e0046-3a2d-43d8-96b7-05de6c8c5ee9",
+        "state": "succeeded",
+        "results": [
+          "fbe890ef-fd4d-401f-8908-0b70ab547323",
+          "d6ce605b-09cf-43b2-a1b1-fdfe95231b6b"
+        ]
+      },
+      {
+        "sample": "pre-alpha-webp-matte",
+        "taskId": "3052fbbe-eaa2-497f-8af2-afc051cac32e",
+        "state": "succeeded",
+        "results": [
+          "fb2810db-e22d-4d89-8994-4440291eb159",
+          "008eda8a-1119-42fa-a41c-3cd99374126a"
+        ]
+      },
+      {
+        "sample": "pre-profiled-png-aspect",
+        "taskId": "17d09d10-a32e-4a64-b1f3-e2d254a6beed",
+        "state": "succeeded",
+        "results": [
+          "a2961f69-88ee-4cf5-a246-bf081125ea80",
+          "ca5f25cd-ac8a-4b87-b176-d300fb88d19e"
+        ]
+      },
+      {
+        "sample": "pre-profiled-png-pad",
+        "taskId": "6d91a1e9-8d46-42e8-ab97-ac6b18b07f85",
+        "state": "succeeded",
+        "results": [
+          "7bd4c1cc-5c7b-4cbb-9157-359887b3733a",
+          "e2cf3401-5395-4d9b-934a-9edbf93e8ded"
+        ]
+      },
+      {
+        "sample": "pre-profiled-png-matte",
+        "taskId": "651aeac8-2352-49cc-b75c-a3fd7655656d",
+        "state": "succeeded",
+        "results": [
+          "e2ee3448-a1b0-4b40-8a61-89777c51cc4c",
+          "cdd3a674-30c1-4411-b877-48859bddfcac"
+        ]
+      },
+      {
+        "sample": "whole-remainder",
+        "taskId": "8f4297bc-4e43-449f-b84e-52df347e6805",
+        "state": "succeeded",
+        "results": [
+          "470987c3-d4fc-429c-a3b1-435a30f7c232",
+          "2d3e43ee-12c9-480f-ac75-3f467c39a5db"
+        ]
+      },
+      {
+        "sample": "whole-dense",
+        "taskId": "cde3d436-670f-4467-9f49-29345bcdfcbf",
+        "state": "succeeded",
+        "results": [
+          "98bab952-c1ba-4ae3-bb1f-3e0da362e2f4",
+          "d90ffb01-55fb-41c0-a43b-0f12b30a2e8f"
+        ]
+      },
+      {
+        "sample": "uniform-remainder",
+        "taskId": "5a4a28d0-bacc-4068-afbc-3e57067e3c8b",
+        "state": "succeeded",
+        "results": [
+          "8246f7bf-81e0-4310-bf40-f1d2e8a95104",
+          "fdeaaae2-d100-4ee7-ab98-4064826b5c66"
+        ]
+      },
+      {
+        "sample": "transparent-regions",
+        "taskId": "2002b7f0-7634-4712-8b7f-cd4831753a01",
+        "state": "succeeded",
+        "results": [
+          "1a095f5b-927d-4255-8bfe-852a2529d4f2",
+          "3abb8e15-417c-4dd7-8b04-bf4187d59737"
+        ]
+      },
+      {
+        "sample": "transparent-source",
+        "taskId": "b317b4e8-45f7-4d3f-89e6-38de5f12b61b",
+        "state": "succeeded",
+        "results": [
+          "dfa5989c-8ad0-4a29-bf7a-28f9f2247017",
+          "11ff0801-fc45-464d-8857-908f49ed9ebd"
+        ]
+      },
+      {
+        "sample": "transparent-webp",
+        "taskId": "6f389ad7-4240-4e2b-a8f7-9943080fb655",
+        "state": "succeeded",
+        "results": [
+          "fadc57bb-0bdf-4202-97bf-028b4fa17f5b",
+          "5c1cc265-5e6e-4c0d-8aed-4c16781c09f9"
+        ]
+      },
+      {
+        "sample": "whole-photo-jpg",
+        "taskId": "e1f8e8d0-6b36-4e86-a699-bc8d72e815bd",
+        "state": "succeeded",
+        "results": [
+          "58406d45-9445-4bad-badf-738a0488bf48",
+          "1ed6ee94-4a97-4301-a5f5-2ddf5611072e"
+        ]
+      },
+      {
+        "sample": "whole-jpeg-422-jpg",
+        "taskId": "7302e0ab-6995-42ff-b105-a352c27f7058",
+        "state": "succeeded",
+        "results": [
+          "3426e14f-aa8f-4de1-8c56-abbf6d4248b2",
+          "5a13ee4c-9ffa-4f3b-ae2a-4c61aa0869af"
+        ]
+      },
+      {
+        "sample": "whole-jpeg-444-jpg",
+        "taskId": "5d833132-6c5f-41f8-9918-b18a1d02a4f0",
+        "state": "succeeded",
+        "results": [
+          "07849669-2b53-4345-b0f0-b31fedffedcf",
+          "be9abada-f0dd-470d-9827-86fd607b2f1a"
+        ]
+      },
+      {
+        "sample": "whole-jpeg-cmyk-jpg",
+        "taskId": "603683d5-8378-4e49-a6c2-f7a4bf0a24fb",
+        "state": "succeeded",
+        "results": [
+          "f8aa1c47-3723-48df-b734-1287bf74062e",
+          "c3636629-5079-4460-a566-c7eb73c11421"
+        ]
+      },
+      {
+        "sample": "whole-jpeg-gray-jpg",
+        "taskId": "f210ef95-2473-45ab-b8a0-69822b87f6ba",
+        "state": "succeeded",
+        "results": [
+          "b36199cc-98f0-4f88-96fa-e8b5dfb17fb4",
+          "79438e0d-042a-4d1d-9ba1-0b7999ea5a72"
+        ]
+      },
+      {
+        "sample": "whole-jpeg-progressive-jpg",
+        "taskId": "5e38580a-437b-4931-955f-a56305b7f7c2",
+        "state": "succeeded",
+        "results": [
+          "edf20890-0cd8-4d7c-830c-56108e68470e",
+          "bd8ebee1-538b-48bc-b60f-e4d1202115da"
+        ]
+      },
+      {
+        "sample": "whole-jpeg-orientation8-jpg",
+        "taskId": "57935ebd-9f70-4af5-afcb-221c50cd7710",
+        "state": "succeeded",
+        "results": [
+          "a558746a-6f75-4442-9e01-aefb9b346c4b",
+          "e82179d7-9101-46dc-9772-bce6b3bf3a41"
+        ]
+      },
+      {
+        "sample": "whole-oriented-jpg",
+        "taskId": "8d24f013-50b6-4ef8-82d7-4168e12de872",
+        "state": "succeeded",
+        "results": [
+          "8516929d-00bc-4655-8846-ea216e839307",
+          "bf76bc0a-8ddc-439b-b1f9-e5072aea30c5"
+        ]
+      },
+      {
+        "sample": "whole-oriented-webp",
+        "taskId": "58767ea7-f285-4ec0-bde7-e17c5f07f8e5",
+        "state": "succeeded",
+        "results": [
+          "162da8ae-8cf8-4c53-969c-b9eae64868c2",
+          "4f7d2db6-bf46-489b-9b16-1190ce2b8698"
+        ]
+      },
+      {
+        "sample": "whole-alpha-webp",
+        "taskId": "d73d1dfa-9952-4029-979b-802c4fdb6358",
+        "state": "succeeded",
+        "results": [
+          "2ef37f0c-4020-43cb-b755-3e2a2f5e24be",
+          "13214477-be79-4b55-a965-50dc1d9c3906"
+        ]
+      },
+      {
+        "sample": "whole-profiled-png",
+        "taskId": "9eeb72f7-8513-4d65-ab8b-faf13b60d04f",
+        "state": "succeeded",
+        "results": [
+          "caaaa7d0-7409-4cc2-ba9e-47fa89eb9333",
+          "75ca7a01-d1bc-47fd-87ce-bc8ba61b357d"
+        ]
+      },
+      {
+        "sample": "frames-reorder",
+        "taskId": "b70eb133-68ac-40a4-9878-b44328eb9b9b",
+        "state": "succeeded",
+        "results": [
+          "f520afdf-7ecd-4037-8817-d936c4785fef",
+          "81541232-00c5-4b77-a4e7-1e55727121db"
+        ]
+      },
+      {
+        "sample": "frames-blank",
+        "taskId": "a69a43ca-0bab-4ea7-8bd2-5719b486946a",
+        "state": "succeeded",
+        "results": [
+          "9fb55783-40a5-4f3d-bc59-592e57ab6fa3",
+          "2f1cd16a-22f3-4761-a7bd-28135bce8c27"
+        ]
+      },
+      {
+        "sample": "frames-single",
+        "taskId": "a8a8c98c-edca-4a72-b682-a7d405c283f1",
+        "state": "succeeded",
+        "results": [
+          "51d24b1f-d23b-46bb-bc7c-9780cd6d3202",
+          "cf4a8d59-a29a-4e6b-8e41-1b5b1ba90193"
+        ]
+      }
+    ],
+    "rejections": [
+      {
+        "sample": "empty-transparent",
+        "code": "SHEET_PREPARATION_EMPTY",
+        "noTaskCreated": true
+      },
+      {
+        "sample": "dense-uniform-rejected",
+        "code": "SHEET_PREPARATION_DENSE_UNIFORM",
+        "noTaskCreated": true
+      }
+    ],
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 148
+    },
+    "boundary": "Actual browser Worker output published by an owned test driver; not production editor button acceptance."
+  },
+  "sharedRegression": {
+    "cases": 21,
+    "failed": [],
+    "archiveSha256": "1a000f11bb18e4204bbb92af93f1ee4a12839c8c549d5aa5d8c8dece153d0f6b",
+    "verifier": "skills/frameronin-local/tests/compare_sheet_adjust_oracle.py",
+    "screenshot": "doc/testing/evidence/skill-sheet-prepare-regression.png"
+  },
+  "validation": {
+    "pythonTests": 41,
+    "javascriptTests": 73,
+    "workbenchBuild": "passed",
+    "runtimeBuild": "passed",
+    "targetedEslint": "passed",
+    "skillValidator": "passed",
+    "strictNegativeChecks": [
+      "Exact nested fields, finite original ranges and no-effect preprocessing",
+      "Maximum intermediate surface budget even when final image is small",
+      "Transparent empty source and dense zero-size uniform cells reject before task creation",
+      "Retained PNG bytes must match their reviewed input member",
+      "Appended blank must have zero values in all four RGBA channels",
+      "Cancel guard invoked during archive validation; canceled generation cannot accept late output"
+    ]
+  },
+  "limits": {
+    "sourceBytes": 20971520,
+    "archiveBytes": 134217728,
+    "outputBytes": 134217728,
+    "frameCount": 4096,
+    "wholeGridSide": 64,
+    "uniformGridSide": 32,
+    "preprocessCropPad": [
+      0,
+      4096
+    ],
+    "preprocessResize": [
+      1,
+      8192
+    ],
+    "side": 30000,
+    "renderer": "browser-worker only; CLI/generic proposal execution blocked",
+    "memory": "Full encoded sources, decode surfaces, maximum intermediate surface, output caching and front-end retention. Joint RSS remains pending."
+  },
+  "compatibility": [
+    "Whole grid distributes floor boundaries with minimum 1px cells; uniform grid discards remainders.",
+    "Transparent split uses any nonzero alpha and original bottom/horizontal-center normalization.",
+    "Preprocess numeric geometry rounds as the original. Effective no-op retains the original version.",
+    "Preprocess watermark uses original workflow strength 1, distinct from standalone watermark settings; embedded mask failures reject.",
+    "JPEG HTML-image emulation and native bitmap paths verified on chroma, progressive, grayscale, CMYK, EXIF, WebP and ICC fixtures.",
+    "Raw frame archives preserve PNG bytes and do not bake crop or offsets."
+  ],
+  "remaining": [
+    "Complete original standalone and Pro editor UI integration",
+    "Formal document lineage and undo/redo without rerunning processing",
+    "Real UI cancellation, save conflicts, late-result and input gesture races",
+    "Bounded previews, full interactions, languages and accessibility",
+    "Joint memory measurement and remaining complete Skill scope"
+  ]
+}

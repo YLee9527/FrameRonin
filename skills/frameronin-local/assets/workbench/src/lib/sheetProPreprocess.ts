@@ -32,6 +32,9 @@ export type SheetProPreprocessOptions = {
   matteFeather: number
 }
 
+type SheetMatteAdapter=(blob:Blob,r:number,g:number,b:number,tolerance:number,feather:number)=>Promise<Blob>
+export type SheetPreprocessAdapters={watermark:(blob:Blob)=>Promise<Blob>;global:SheetMatteAdapter;contiguous:SheetMatteAdapter}
+
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const r = new FileReader()
@@ -55,12 +58,13 @@ export function sheetProPreprocessIsNoop(o: SheetProPreprocessOptions): boolean 
  */
 export async function applySheetProPreprocess(
   blob: Blob,
-  o: SheetProPreprocessOptions
+  o: SheetProPreprocessOptions,
+  adapters?:SheetPreprocessAdapters
 ): Promise<Blob> {
   if (sheetProPreprocessIsNoop(o)) return blob
   let b = blob
   if (o.watermark) {
-    b = await removeGeminiWatermarkFromBlob(b)
+    b = await (adapters?adapters.watermark(b):removeGeminiWatermarkFromBlob(b))
   }
   const ct = Math.max(0, Math.round(o.cropTop))
   const cb = Math.max(0, Math.round(o.cropBottom))
@@ -83,9 +87,10 @@ export async function applySheetProPreprocess(
   }
   if (o.matteMode === 'contiguous' || o.matteMode === 'global') {
     const { r, g, b: bb } = await getTopLeftPixelColor(b)
-    const dataUrl = await blobToDataUrl(b)
     const tol = Math.max(0, o.matteTolerance)
     const fea = Math.max(0, o.matteFeather)
+    if(adapters)return adapters[o.matteMode](b,r,g,bb,tol,fea)
+    const dataUrl = await blobToDataUrl(b)
     const res =
       o.matteMode === 'contiguous'
         ? await applyChromaKeyContiguousFromTopLeft(dataUrl, r, g, bb, tol, fea)

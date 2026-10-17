@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=['image.sheetCompose','image.sheetGif','image.sheetFix'].includes(options.operation)?new Worker(new URL('../lib/sheetAdjust.worker.ts',import.meta.url),{type:'module'}):
+    worker=['image.sheetPreprocess','image.sheetPrepare'].includes(options.operation)?new Worker(new URL('../lib/sheetPrepare.worker.ts',import.meta.url),{type:'module'}):
+      ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames'].includes(options.operation)?new Worker(new URL('../lib/sheetAdjust.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.spriteGifs'?new Worker(new URL('../lib/spriteGifRows.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.visibleWatermark'?new Worker(new URL('../lib/geminiWatermark.worker.ts',import.meta.url),{type:'module'}):
       ['image.customSlicePlan','image.customSlice','image.customCompose'].includes(options.operation)?new Worker(new URL('../lib/customSlice.worker.ts',import.meta.url),{type:'module'}):

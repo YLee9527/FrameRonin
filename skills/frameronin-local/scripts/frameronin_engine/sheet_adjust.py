@@ -15,7 +15,7 @@ def selection(v,count):
     if not isinstance(v,list) or not 1<=len(v)<=count or any(not integer(i,0,count-1) for i in v) or len(set(v))!=len(v):reject('SHEET_SELECTION','Choose unique existing frame indices.')
 
 
-def archive_info(path,budget,decode=False,expected=None):
+def archive_info(path,budget,decode=False,expected=None,check=None):
     path=Path(path)
     if path.stat().st_size>128*MIB:reject('SHEET_ARCHIVE_LIMIT','Use a frame ZIP up to 128 MiB.')
     sizes=[]
@@ -24,6 +24,7 @@ def archive_info(path,budget,decode=False,expected=None):
             entries=archive.infolist();encoded=sum(e.file_size for e in entries)
             if not 1<=len(entries)<=4096 or encoded>min(128*MIB,budget//8):reject('SHEET_ARCHIVE_LIMIT','The frame ZIP exceeds its count or encoded budget.')
             for i,e in enumerate(entries):
+                if check:check()
                 if e.filename!=f'frame_{i:03d}.png' or e.is_dir() or e.flag_bits&1 or e.compress_type not in [zipfile.ZIP_STORED,zipfile.ZIP_DEFLATED] or stat.S_IFMT(e.external_attr>>16) not in [0,stat.S_IFREG]:reject('SHEET_ARCHIVE_ENTRY','Use only ordered PNG frames without paths, links or encryption.')
                 with archive.open(e) as content,Image.open(content) as image:
                     size={'w':image.width,'h':image.height}
@@ -38,6 +39,13 @@ def archive_info(path,budget,decode=False,expected=None):
 
 
 def layout(sizes,p,action):
+    if action=='frames':
+        if not fields(p,['order','blank']):reject('SHEET_FRAMES_LAYOUT','Review the retained frame order and optional blank frame.')
+        selection(p['order'],len(sizes));blank=p['blank']
+        if blank is not None and (not fields(blank,['width','height']) or not integer(blank['width'],1,30000) or not integer(blank['height'],1,30000)):reject('SHEET_BLANK_SIZE','Use positive blank-frame dimensions within the limit.')
+        output=[sizes[i] for i in p['order']]+([{'w':blank['width'],'h':blank['height']}] if blank else [])
+        if len(output)>4096:reject('SHEET_FRAMES_COUNT','Use at most 4096 output frames.')
+        return {'outputFrames':len(output),'frameSizes':output}
     if action=='fix':
         if not fields(p,['selected','referenceWidth','referenceHeight','fixes']) or not integer(p['referenceWidth'],1,30000) or not integer(p['referenceHeight'],1,30000) or not isinstance(p['fixes'],list) or not 1<=len(p['fixes'])<=4096:reject('SHEET_PIXEL_FIX','Review the reference dimensions and pixel fixes.')
         selection(p['selected'],len(sizes))
@@ -59,26 +67,45 @@ def layout(sizes,p,action):
     return {'width':w,'height':h,'cellWidth':cw,'cellHeight':ch,'outputFrames':1}
 
 
-def review(version,p,action,budget):
-    sizes,encoded=archive_info(version['absolutePath'],budget)
+def review(version,p,action,budget,check=None):
+    sizes,encoded=archive_info(version['absolutePath'],budget,check=check)
     report=layout(sizes,p['layout'],action);s=p['layout'];maximum=max(i['w']*i['h'] for i in sizes);source=sum(i['w']*i['h'] for i in sizes)
-    if action=='fix':pixels=s['referenceWidth']*s['referenceHeight'];total=source;patches=sum(len(f['data'])*16 for f in s['fixes'])
+    if action=='frames':pixels=max(i['w']*i['h'] for i in report['frameSizes']) if s['blank'] else 0;total=sum(i['w']*i['h'] for i in report['frameSizes']);patches=0
+    elif action=='fix':pixels=s['referenceWidth']*s['referenceHeight'];total=source;patches=sum(len(f['data'])*16 for f in s['fixes'])
     else:pixels=report['width']*report['height'];total=pixels*(report['outputFrames'] if action=='gif' else 1);patches=0
     estimate=256*MIB+encoded*10+p['frontendBytes']+maximum*64+pixels*48+total*8+patches
     return estimate,report,sizes
 
 
-def validate_result(path,version,p,action,budget):
-    estimate,report,sizes=review(version,p,action,budget)
+def validate_result(path,version,p,action,budget,check=None):
+    estimate,report,sizes=review(version,p,action,budget,check)
     if estimate>budget:reject('SHEET_RESOURCE_LIMIT','The reviewed adjustment exceeds the complete memory budget.')
-    if action=='fix':archive_info(path,budget,decode=True,expected=sizes);return report
+    if action in ['fix','frames']:
+        archive_info(path,budget,decode=True,expected=report['frameSizes'],check=check)
+        if action=='frames':
+            with zipfile.ZipFile(version['absolutePath']) as original,zipfile.ZipFile(path) as output:
+                for index,source_index in enumerate(p['layout']['order']):
+                    with original.open(f'frame_{source_index:03d}.png') as a,output.open(f'frame_{index:03d}.png') as b:
+                        while True:
+                            if check:check()
+                            x=a.read(MIB);y=b.read(MIB)
+                            if x!=y:reject('SHEET_FRAMES_COPY','Retained frame bytes changed during archive materialization.')
+                            if not x:break
+                if p['layout']['blank']:
+                    if check:check()
+                    with output.open(f"frame_{len(p['layout']['order']):03d}.png") as content,Image.open(content) as blank:
+                        with blank.convert('RGBA') as rgba:
+                            if rgba.getextrema()!=((0,0),)*4:reject('SHEET_BLANK_PIXELS','The appended blank frame must contain only transparent zero pixels.')
+        return report
     if Path(path).stat().st_size>128*MIB:reject('SHEET_RESULT_LIMIT','The encoded output exceeds 128 MiB.')
     try:
         with Image.open(path) as image:
             if image.format!=('GIF' if action=='gif' else 'PNG') or image.size!=(report['width'],report['height']) or getattr(image,'n_frames',1)!=report['outputFrames']:reject('SHEET_RESULT_LAYOUT','The output differs from the reviewed format, dimensions or frame count.')
             for i in range(report['outputFrames']):
+                if check:check()
                 image.seek(i);image.load()
                 if image.size!=(report['width'],report['height']) or action=='gif' and image.info.get('duration')!=report['durationMs']:reject('SHEET_RESULT_FRAME','An output frame differs from the reviewed dimensions or duration.')
     except (OSError,ValueError,Image.DecompressionBombError) as error:
         raise RoninError('SHEET_RESULT_INVALID','The adjustment output cannot be decoded.') from error
+    if check:check()
     return report

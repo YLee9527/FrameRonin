@@ -2,6 +2,8 @@ import {originalScatterDetect,originalScatterExport} from '../.runtime/oracle/or
 import {originalVisibleWatermark} from '../.runtime/oracle/original-visible-watermark'
 import {originalSpriteSplit,originalSpriteGifs} from '../.runtime/oracle/original-sprite-sheet'
 import {originalSheetAdjust} from '../.runtime/oracle/original-sheet-adjust'
+import {applySheetProPreprocess as originalSheetPreprocess} from '../.runtime/oracle/original-sheet-preprocess'
+import {originalSheetPrepare,originalSheetFrames} from '../.runtime/oracle/original-sheet-prepare'
 import {originalCustomPlan,originalCustomSplit,originalCustomCompose} from '../.runtime/oracle/original-custom-slice'
 import {reviewScatterExport} from '../assets/workbench/src/lib/scatterSlice'
 import {originalExpandShrink} from '../.runtime/oracle/original-expand-shrink'
@@ -397,7 +399,29 @@ async function runSheetAdjust(){
  }
  await publish(zip,'browser-sheet-adjust.zip');status.textContent=`Sheet adjustment complete: ${fixture.cases.length} original comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust]] as const) {
+async function runSheetPrepare(){
+ const fixture=await(await fetch('/sheet-prepare/manifest.json')).json(),zip=new JSZip(),cache=new Map<string,Blob>()
+ for(const entry of fixture.cases){
+  status.textContent=`Sheet preparation: ${entry.id}`
+  if(!cache.has(entry.input))cache.set(entry.input,await(await fetch(`/sheet-prepare/${entry.input}`)).blob())
+  const input=cache.get(entry.input)!,ext=entry.expectFailure?'json':entry.action==='preprocess'?'png':'zip'
+  const original=async()=>{
+   if(entry.action==='preprocess')return originalSheetPreprocess(input,entry.layout)
+   if(entry.action==='prepare')return originalSheetPrepare(input,entry.layout)
+   const frames=await JSZip.loadAsync(input),files=await Promise.all(Object.keys(frames.files).map(name=>frames.file(name)!.async('blob')))
+   return originalSheetFrames(files,entry.layout)
+  }
+  const actual=async()=>{
+   const worker=entry.action==='frames'?new Worker(new URL('../assets/workbench/src/lib/sheetAdjust.worker.ts',import.meta.url),{type:'module'}):new Worker(new URL('../assets/workbench/src/lib/sheetPrepare.worker.ts',import.meta.url),{type:'module'})
+   try{return await new Promise<Blob>((resolve,reject)=>{worker.onmessage=e=>{if(e.data.error)reject(new Error(e.data.error));else if(e.data.blob)resolve(e.data.blob)};worker.onerror=e=>reject(new Error(e.message));worker.postMessage({id:entry.id,generation:0,file:input,operation:entry.action==='frames'?'image.sheetFrames':entry.action==='preprocess'?'image.sheetPreprocess':'image.sheetPrepare',parameters:{layout:entry.layout,frontendBytes:0},budgetBytes:2*1024**3})})}finally{worker.terminate()}
+  }
+  const capture=async(fn:()=>Promise<Blob>)=>{try{await fn();return {rejected:false,error:''}}catch(error){return {rejected:true,error:String(error)}}}
+  zip.file(`${entry.id}/original.${ext}`,entry.expectFailure?JSON.stringify(await capture(original)):await original())
+  zip.file(`${entry.id}/actual.${ext}`,entry.expectFailure?JSON.stringify(await capture(actual)):await actual())
+ }
+ await publish(zip,'browser-sheet-prepare.zip');status.textContent=`Sheet preparation complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

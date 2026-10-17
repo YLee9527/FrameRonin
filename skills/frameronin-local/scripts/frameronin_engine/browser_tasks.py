@@ -9,13 +9,13 @@ import time
 from pathlib import Path
 from PIL import Image
 from .errors import RoninError
-from .project import Project, checked_id
+from .project import Project, checked_id, memory_budget
 
 LEASE_SECONDS=15
 
 def result_filename(operation):
     if operation=='image.sheetGif':return 'browser-result.gif'
-    if operation=='image.sheetFix':return 'browser-result.zip'
+    if operation in ['image.sheetFix','image.sheetFrames','image.sheetPrepare']:return 'browser-result.zip'
     return 'browser-result.json' if operation in ['image.scatterDetect','image.customSlicePlan'] else 'browser-result.zip' if operation in ['image.scatterExport','image.customSlice','image.spriteGifs'] else 'browser-result.png'
 
 
@@ -27,7 +27,7 @@ def location(project,task_id,generation=None):
             raise RoninError('TASK_MISSING','The task does not exist.')
         payload=json.loads(row['payload'])
         from .operations import parameters as checked_parameters
-        if payload['operation'] not in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
+        if payload['operation'] not in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
             raise RoninError('BROWSER_OPERATION_UNSUPPORTED','This task does not accept browser pixels.')
         if generation is not None:
             if type(generation) is not int:
@@ -57,10 +57,13 @@ def accept(project,task_id,generation,source):
     from .operations import parameters as checked_parameters,normal_output_dimensions
     payload=json.loads(row['payload']);parameters=checked_parameters(payload['operation'],payload['parameters'])
     stats={}
-    if payload['operation'] in ['image.sheetCompose','image.sheetGif','image.sheetFix']:
+    if payload['operation'] in ['image.sheetPreprocess','image.sheetPrepare']:
+        from .sheet_prepare import validate_result
+        stats=validate_result(source,project.version(payload['inputs'][0]),parameters,'preprocess' if payload['operation']=='image.sheetPreprocess' else 'prepare',memory_budget(),check=lambda:location(project,task_id,generation))
+        dimensions=None
+    elif payload['operation'] in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames']:
         from .sheet_adjust import validate_result
-        from .operations import preview
-        stats=validate_result(source,project.version(payload['inputs'][0]),parameters,{'image.sheetCompose':'compose','image.sheetGif':'gif','image.sheetFix':'fix'}[payload['operation']],preview(project,payload)['budgetBytes'])
+        stats=validate_result(source,project.version(payload['inputs'][0]),parameters,{'image.sheetCompose':'compose','image.sheetGif':'gif','image.sheetFix':'fix','image.sheetFrames':'frames'}[payload['operation']],memory_budget(),check=lambda:location(project,task_id,generation))
         dimensions=None
     elif payload['operation']=='image.spriteGifs':
         from .sprite_gif import validate_result

@@ -381,6 +381,82 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(self.project.document(doc)['kind'],'image-visible-watermark')
         self.assertTrue(self.project.verify()['valid'])
 
+    def test_sheet_prepare_preserves_grid_transparency_and_preprocess_geometry(self):
+        from frameronin_engine.sheet_prepare import DEFAULTS,preprocess_size,preparation_sizes,review,validate_result
+        from frameronin_engine.browser_tasks import ready,accept
+        options={**DEFAULTS,'cropTop':1.5,'cropBottom':20,'cropLeft':1,'cropRight':2,'padTop':2,'padBottom':1,'padLeft':4,'padRight':3,'resizeEnabled':True,'resizeW':9.4,'resizeH':7.5}
+        self.assertEqual(preprocess_size(13,11,options),((10,1),(17,4),(9,8)))
+        for change in [{'command':'run'},{'watermark':1},{'cropLeft':-1},{'padTop':4097},{'resizeW':8193},{'matteTolerance':442},{'matteFeather':65}]:
+            with self.assertRaises(RoninError):preprocess_size(13,11,{**options,**change})
+        with self.assertRaises(RoninError):preprocess_size(13,11,{**DEFAULTS,'cropTop':.1})
+        self.assertEqual(preparation_sizes(13,11,{'mode':'whole','columns':3,'rows':2})[-1],{'w':5,'h':6})
+        self.assertEqual(preparation_sizes(13,11,{'mode':'uniform','columns':3,'rows':2}),[{'w':4,'h':5}]*6)
+        with self.assertRaises(RoninError):preparation_sizes(2,2,{'mode':'uniform','columns':3,'rows':2})
+        with self.assertRaises(RoninError):preparation_sizes(13,11,{'mode':'transparent','columns':4})
+        self.assertEqual(preparation_sizes(16,12,{'mode':'transparent'},self.source),[{'w':1,'h':1}])
+        transparent=self.root/'transparent.png';Image.new('RGBA',(4,4),(0,0,0,0)).save(transparent)
+        with self.assertRaises(RoninError):preparation_sizes(4,4,{'mode':'transparent'},transparent)
+        sample=Image.new('RGBA',(24,22),(0,0,0,0))
+        for x0,y0,x1,y1 in [(2,1,7,5),(12,2,19,5),(4,10,9,17),(17,12,21,14)]:
+            for y in range(y0,y1):
+                for x in range(x0,x1):sample.putpixel((x,y),(30,90,150,128))
+        sample.putpixel((22,20),(10,20,30,1));multi=self.root/'regions.png';sample.save(multi)
+        self.assertEqual(preparation_sizes(24,22,{'mode':'transparent'},multi),[{'w':7,'h':7}]*5)
+        payload={'operation':'image.sheetPrepare','inputs':[self.version['id']],'parameters':{'layout':{'mode':'transparent'}}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        preprocessing={'operation':'image.sheetPreprocess','inputs':[self.version['id']],'parameters':{'layout':options}}
+        self.assertTrue(preview(self.project,preprocessing)['requiresWorkbench'])
+        with self.assertRaises(RoninError):preview(self.project,{**preprocessing,'parameters':{'layout':options,'frontendBytes':2*1024**3}})
+        tid=submit(self.project,payload,browser_client=True)['id'];deadline=time.monotonic()+10
+        while not ready(self.project,tid)['ready']:
+            self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+        frame=self.root/'frame.png';archive=self.root/'prepared.zip';Image.new('RGBA',(2,1),'red').save(frame)
+        with zipfile.ZipFile(archive,'w') as z:z.write(frame,'frame_000.png')
+        with self.assertRaises(RoninError):accept(self.project,tid,0,archive)
+        Image.new('RGBA',(1,1),'red').save(frame)
+        with zipfile.ZipFile(archive,'w') as z:z.write(frame,'frame_000.png')
+        accept(self.project,tid,0,archive);completed=wait(self.project,tid,15);self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text());self.assertEqual(report['frameSizes'],[{'w':1,'h':1}])
+        tid=submit(self.project,payload,browser_client=True)['id'];cancel(self.project,tid)
+        with self.assertRaises(Cancelled):accept(self.project,tid,0,archive)
+        output=self.root/'preprocessed.png';Image.new('RGBA',(9,8),'red').save(output)
+        self.assertEqual(validate_result(output,self.version,{'layout':options,'frontendBytes':0},'preprocess',2*1024**3)['processingDimensions'],{'width':9,'height':8})
+        with self.assertRaises(RoninError):review(self.version,{'layout':{'mode':'whole','columns':65,'rows':1},'frontendBytes':0},'prepare',2*1024**3)
+
+    def test_sheet_frame_materialization_checks_raw_copies_blank_pixels_and_cancel_guard(self):
+        from frameronin_engine.sheet_adjust import layout,review,validate_result
+        fixture=Path(__file__).resolve().parents[1]/'assets/fixtures/sheet-adjust';version=self.project.import_file(fixture/'frames.zip')
+        options={'order':[2,0],'blank':{'width':4,'height':6}};parameters={'layout':options,'renderer':'browser-worker','frontendBytes':0}
+        request={'operation':'image.sheetFrames','inputs':[version['id']],'parameters':parameters}
+        self.assertTrue(preview(self.project,request)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,request)
+        _,report,_=review(version,parameters,'frames',2*1024**3);self.assertEqual(report['frameSizes'],[{'w':16,'h':7},{'w':13,'h':11},{'w':4,'h':6}])
+        for change in [{'order':[0,0]},{'order':[]},{'blank':{'width':4.5,'height':6}},{'command':'run'}]:
+            with self.assertRaises(RoninError):preview(self.project,{**request,'parameters':{**parameters,'layout':{**options,**change}}})
+        blank=self.root/'blank.png';archive=self.root/'packed.zip'
+        def write(color=(0,0,0,0),changed=False):
+            Image.new('RGBA',(4,6),color).save(blank)
+            with zipfile.ZipFile(archive,'w') as z:
+                for i,index in enumerate(options['order']):
+                    if changed and i==0:
+                        different=self.root/'different.png';Image.new('RGBA',(16,7),'red').save(different);z.write(different,f'frame_{i:03d}.png')
+                    else:z.write(fixture/f'frame_{index:03d}.png',f'frame_{i:03d}.png')
+                z.write(blank,'frame_002.png')
+        write();self.assertEqual(validate_result(archive,version,parameters,'frames',2*1024**3)['outputFrames'],3)
+        write(color=(255,0,0,255))
+        with self.assertRaises(RoninError) as error:validate_result(archive,version,parameters,'frames',2*1024**3)
+        self.assertEqual(error.exception.code,'SHEET_BLANK_PIXELS')
+        write(changed=True)
+        with self.assertRaises(RoninError) as error:validate_result(archive,version,parameters,'frames',2*1024**3)
+        self.assertEqual(error.exception.code,'SHEET_FRAMES_COPY')
+        write();count=0
+        def guard():
+            nonlocal count
+            count+=1
+            if count==5:raise Cancelled()
+        with self.assertRaises(Cancelled):validate_result(archive,version,parameters,'frames',2*1024**3,check=guard)
+
     def test_sheet_adjust_archive_layout_outputs_and_cancel_generation(self):
         from frameronin_engine.browser_tasks import ready,accept
         from frameronin_engine.sheet_adjust import archive_info,layout as checked_layout,validate_result
