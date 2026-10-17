@@ -49,3 +49,7 @@ export {createScatterHistory,scatterHistoryReducer} from '../../assets/workbench
 export {scatterSourceWorker} from '../../assets/workbench/src/lib/scatterSourceWorker'
 
 export {computeCustomPlan,validateCustomPlan,validateCustomPlanParameters,validateCustomLayout,customSliceSizes,checkCustomSliceBudget,exportCustomSlices,validateCustomCompose,customComposeSize,checkCustomComposeBudget,inspectCustomZip,composeCustomSlices} from '../../assets/workbench/src/lib/customSlice'
+export {initialCustomSliceDraft,validateStoredCustomSlice,serializeCustomSlice,restoreCustomSlice,customComposition,currentCustomLayout,customPlanSettings} from '../../assets/workbench/src/localProject/customSliceDocument'
+export {createCustomSliceHistory,customSliceHistoryReducer} from '../../assets/workbench/src/localProject/useCustomSliceDocument'
+export {customSliceAssetWorker} from '../../assets/workbench/src/lib/customSliceAssetWorker'
+export {parseRearrangeText} from '../../assets/workbench/src/lib/customSliceRearrange'

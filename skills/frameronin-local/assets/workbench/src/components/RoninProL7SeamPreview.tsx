@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState,type RefObject } from 'react'
 
 const HIT_PX = 14
 const LINE_WIDTH = 2
@@ -16,6 +16,9 @@ export interface RoninProL7SeamPreviewProps {
   singleRowPolyline?: { bendY: number; deltaX: number }
   onRowBoundaryChange: (boundaryIndex: number, yPx: number) => void
   onColBoundaryChange: (boundaryIndex: number, xPx: number) => void
+  controlRef?:RefObject<(()=>void)|null>
+  onInteractionChange?:(active:boolean)=>void
+  label?:string
 }
 
 /**
@@ -31,11 +34,15 @@ export default function RoninProL7SeamPreview({
   singleRowPolyline,
   onRowBoundaryChange,
   onColBoundaryChange,
+  controlRef,
+  onInteractionChange,
+  label='L7 seam preview',
 }: RoninProL7SeamPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
   const dragRef = useRef<null | { kind: 'h' | 'v'; idx: number }>(null)
+  const pointerId=useRef<number|null>(null)
   const [cursor, setCursor] = useState('crosshair')
 
   const drawRef = useRef<() => void>(() => {})
@@ -52,8 +59,9 @@ export default function RoninProL7SeamPreview({
     const img = imgRef.current
     if (!canvas || !container || !img?.complete || imageW < 1 || imageH < 1) return
 
-    const cw = Math.max(1, container.clientWidth)
-    const ch = (cw / imageW) * imageH
+    const fit=Math.min(container.clientWidth/imageW,920/imageW,640/imageH)
+    const cw = Math.max(1,Math.round(imageW*fit))
+    const ch = Math.max(1,Math.round(imageH*fit))
     const dpr = Math.min(2, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1)
 
     canvas.width = Math.floor(cw * dpr)
@@ -193,7 +201,7 @@ export default function RoninProL7SeamPreview({
     }
   }, [imageW, imageH, rowStarts, colStarts, band, rowsNum, singleRowPolyline])
 
-  drawRef.current = draw
+  useLayoutEffect(()=>{drawRef.current=draw},[draw])
 
   useEffect(() => {
     const img = new Image()
@@ -262,6 +270,8 @@ export default function RoninProL7SeamPreview({
     const hit = pickDrag(e.clientX, e.clientY)
     if (!hit) return
     dragRef.current = hit
+    pointerId.current=e.pointerId
+    onInteractionChange?.(true)
     e.currentTarget.setPointerCapture(e.pointerId)
     e.preventDefault()
   }
@@ -296,6 +306,8 @@ export default function RoninProL7SeamPreview({
   const onPointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (dragRef.current) {
       dragRef.current = null
+      pointerId.current=null
+      onInteractionChange?.(false)
       try {
         e.currentTarget.releasePointerCapture(e.pointerId)
       } catch {
@@ -307,6 +319,17 @@ export default function RoninProL7SeamPreview({
   const onPointerLeave = () => {
     if (!dragRef.current) setCursor('crosshair')
   }
+
+  useLayoutEffect(()=>{
+    if(!controlRef)return
+    const finish=()=>{
+      const id=pointerId.current,canvas=canvasRef.current
+      if(id!==null&&canvas?.hasPointerCapture(id))canvas.releasePointerCapture(id)
+      pointerId.current=null;dragRef.current=null;onInteractionChange?.(false)
+    }
+    controlRef.current=finish
+    return()=>{if(controlRef.current===finish)controlRef.current=null}
+  },[controlRef,onInteractionChange])
 
   return (
     <div
@@ -323,6 +346,8 @@ export default function RoninProL7SeamPreview({
       }}
     >
       <canvas
+        aria-label={label}
+        tabIndex={0}
         ref={canvasRef}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

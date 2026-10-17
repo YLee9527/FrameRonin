@@ -50,8 +50,8 @@
 | image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → PNG | 待逐项验收 |
 | image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → PNG ZIP | 待逐项验收 |
-| image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP | 待逐项验收 |
-| image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP | 待逐项验收 |
+| image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP / 重排 PNG / TXT / 切线预览 | 原算法对照、工作台/正式文档/历史、TXT/预设、取消/迟到保护通过；联合内存及完整可访问性待完成 |
+| image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP / 重排 PNG / TXT / 切线预览 | 原算法对照、工作台/正式文档/历史、TXT/预设、取消/迟到保护通过；联合内存及完整可访问性待完成 |
 | image.resize-hard | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控任务、绘制文档与撤销/取消通过；完整交互和联合内存待完成 |
 | 自定义缩放.image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控任务、绘制文档与撤销/取消通过；完整交互和联合内存待完成 |
 | audio.wav-to-mp3 | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |

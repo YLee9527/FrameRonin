@@ -9,7 +9,7 @@ Object.defineProperty(self,'document',{value:{createElement(name:string){
  const canvas=new OffscreenCanvas(1,1);canvases.push(canvas)
  return Object.assign(canvas,{toBlob(callback:(blob:Blob|null)=>void,type='image/png',quality?:number){void canvas.convertToBlob({type,quality}).then(callback).catch(()=>callback(null))}})
 }}})
-type Request={id:string;generation:number;operation:'image.customSlicePlan'|'image.customSlice'|'image.customCompose';file:Blob;budgetBytes:number;parameters:CustomPlanParameters&{layout:CustomLayout;composition:CustomCompose;frontendBytes:number};action?:'preview'}
+type Request={id:string;generation:number;operation:'image.customSlicePlan'|'image.customSlice'|'image.customCompose';file:Blob;budgetBytes:number;parameters:CustomPlanParameters&{layout:CustomLayout;composition:CustomCompose;frontendBytes:number};action?:'preview'|'archive'}
 self.onmessage=async(event:MessageEvent<Request>)=>{
  const {id,generation,file,operation,budgetBytes,parameters:p,action}=event.data
  let bitmap:ImageBitmap|undefined,frame:VideoFrame|undefined,decoder:ImageDecoder|undefined
@@ -26,6 +26,20 @@ self.onmessage=async(event:MessageEvent<Request>)=>{
     const file=await archive.file(name)!.async('blob'),size=await fineEditorImageSize(file),signature=new Uint8Array(await file.slice(0,8).arrayBuffer())
     if(signature.join(',')!=='137,80,78,71,13,10,26,10')throw new Error('CUSTOM_ARCHIVE_PNG')
     files.push(file);sizes.push({w:size.width,h:size.height})
+   }
+   if(action==='archive'){
+    const estimate=256*1024**2+file.size*4+encodedBytes*4+Math.max(...sizes.map(s=>s.w*s.h))*40+p.frontendBytes
+    if(estimate>budgetBytes)throw new Error('CUSTOM_RESOURCE_LIMIT')
+    const previews:Blob[]=[]
+    for(let i=0;i<Math.min(24,files.length);i++){
+     const image=await createImageBitmap(files[i])
+     try{
+      if(image.width!==sizes[i].w||image.height!==sizes[i].h)throw new Error('CUSTOM_FRAME_SIZE_CHANGED')
+      const scale=Math.min(1,128/Math.max(image.width,image.height)),canvas=new OffscreenCanvas(Math.max(1,Math.round(image.width*scale)),Math.max(1,Math.round(image.height*scale)));canvases.push(canvas)
+      const ctx=canvas.getContext('2d')!;ctx.imageSmoothingEnabled=false;ctx.drawImage(image,0,0,canvas.width,canvas.height);previews.push(await canvas.convertToBlob({type:'image/png'}));canvas.width=1;canvas.height=1
+     }finally{image.close()}
+    }
+    self.postMessage({id,generation,files,previews,sizes});return
    }
    checkCustomComposeBudget(sizes,p.composition,file.size,encodedBytes,budgetBytes,p.frontendBytes)
    self.postMessage({id,generation,phase:'processing'})
@@ -47,7 +61,7 @@ self.onmessage=async(event:MessageEvent<Request>)=>{
    if(action==='preview'){
     const scale=Math.min(1,1024/Math.max(width,height)),canvas=new OffscreenCanvas(Math.max(1,Math.round(width*scale)),Math.max(1,Math.round(height*scale)));canvases.push(canvas)
     const ctx=canvas.getContext('2d')!;ctx.drawImage(native,0,0,canvas.width,canvas.height)
-    const preview=canvas.transferToImageBitmap();self.postMessage({id,generation,bitmap:preview,width,height},[preview]);return
+    const preview=await canvas.convertToBlob({type:'image/png'});self.postMessage({id,generation,preview,width,height});return
    }
    self.postMessage({id,generation,phase:'processing'})
    if(operation==='image.customSlicePlan'){

@@ -303,7 +303,7 @@ class ProjectTests(unittest.TestCase):
         report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text());self.assertEqual(report['outputFrames'],4);self.assertEqual(report['frameSizes'],[{'w':8,'h':6}]*4)
         composition={'rows':2,'columns':2,'grid':[[1,-2],[4,0]],'expandUp':1,'expandDown':2,'expandLeft':1,'expandRight':2}
         compose={'operation':'image.customCompose','inputs':[completed['results'][0]],'parameters':{'composition':composition}}
-        for change in [{'grid':[[1,5],[0,0]]},{'grid':[[1,True],[0,0]]},{'rows':10**800},{'expandUp':129},{'command':'run'}]:
+        for change in [{'grid':[[1,5],[0,0]]},{'grid':[[1,True],[0,0]]},{'rows':10**800},{'expandUp':150},{'command':'run'}]:
             with self.assertRaises(RoninError):preview(self.project,{**compose,'parameters':{'composition':{**composition,**change}}})
         self.assertTrue(preview(self.project,compose)['requiresWorkbench']);tid=running(compose);png=self.root/'composed.png';Image.new('RGBA',(22,18)).save(png);accept(self.project,tid,0,png)
         completed=wait(self.project,tid,10);self.assertEqual(completed['state'],'succeeded',completed)

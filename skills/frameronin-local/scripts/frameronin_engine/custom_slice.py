@@ -117,7 +117,7 @@ def archive_sizes(path,budget,expected=None,decode=False):
 def composition_size(sizes,p):
     if not isinstance(p,dict) or set(p)!={'rows','columns','grid','expandUp','expandDown','expandLeft','expandRight'} \
         or not integer(p['rows'],1,MAX_CELLS) or not integer(p['columns'],1,MAX_CELLS) or p['rows']*p['columns']>MAX_CELLS \
-        or not all(integer(p[key],0,128) for key in ['expandUp','expandDown','expandLeft','expandRight']) \
+        or not all(integer(p[key],0,149) for key in ['expandUp','expandDown','expandLeft','expandRight']) \
         or not isinstance(p['grid'],list) or len(p['grid'])!=p['rows'] or any(not isinstance(row,list) or len(row)!=p['columns'] or any(not integer(v,-len(sizes),len(sizes)) for v in row) for row in p['grid']):
         reject('CUSTOM_COMPOSE_LAYOUT','Review the composition grid, frame indices and padding.')
     cell_w=max(s['w'] for s in sizes);cell_h=max(s['h'] for s in sizes)

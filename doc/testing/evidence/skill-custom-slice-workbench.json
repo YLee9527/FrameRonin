@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-17",
+  "scope": "Custom slice workbench, formal documents, history and managed processing; complete Skill S2/S3/S4 remain open",
+  "originalAlgorithmEvidence": "doc/testing/evidence/skill-custom-slice-engine.json",
+  "actualWorkbench": {
+    "projectId": "9742a254-7d89-4e68-8e82-dc2103dcc8e8",
+    "mainDocumentId": "1ae3e8e7-1186-4dcb-a8f3-4c20bb625afe",
+    "copyDocumentId": "d6e5afde-ae4b-4aaa-ae36-5dc0b9101096",
+    "sourceDimensions": [
+      37,
+      29
+    ],
+    "auto": {
+      "detectedColumns": 3,
+      "detectedRows": 2,
+      "frameCount": 6,
+      "strictOriginalComparison": {
+        "equal": true,
+        "members": [
+          {
+            "name": "frame_000.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              14
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_001.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              14
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_002.png",
+            "format": "PNG",
+            "dimensions": [
+              13,
+              14
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_003.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_004.png",
+            "format": "PNG",
+            "dimensions": [
+              12,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_005.png",
+            "format": "PNG",
+            "dimensions": [
+              13,
+              15
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      "initialCounts": {
+        "versions": 5,
+        "tasks": 2
+      },
+      "reopenDidNotGenerateAgain": true
+    },
+    "regions": [
+      {
+        "id": "686cbd39-eafd-459b-a8e3-b97f066827aa",
+        "x": 1,
+        "y": 1,
+        "w": 11,
+        "h": 13
+      },
+      {
+        "id": "acfc61c6-76fc-41df-99c7-c382dc2d3247",
+        "x": 20,
+        "y": 4,
+        "w": 16,
+        "h": 7
+      },
+      {
+        "id": "184d470a-496a-4229-8d23-20c8cbafe5b4",
+        "x": 15,
+        "y": 18,
+        "w": 8,
+        "h": 10
+      }
+    ],
+    "composition": {
+      "grid": [
+        [
+          1,
+          -2,
+          -3
+        ]
+      ],
+      "dimensions": [
+        48,
+        13
+      ],
+      "strictOriginalRgbaEqual": true,
+      "undoHidesResult": true,
+      "redoEncodedBytesEqual": true,
+      "sha256": "5fd25c74e42455332f27b85e9cd249606078b97fe0f0b3bd452af5529c0791fb",
+      "countsAtHistoryCheckpoint": {
+        "versions": 9,
+        "tasks": 4
+      }
+    },
+    "seams": {
+      "horizontalDrag": [
+        14,
+        16
+      ],
+      "oneUndoReturns": 14,
+      "redoReturns": 16,
+      "tabSwitchPreservesManualSeams": true,
+      "firstTwoBandOffsets": [
+        1,
+        1
+      ],
+      "processingUndoRestoresPreviousZipAndComposition": true,
+      "strictOriginalL7PlanEqual": true
+    },
+    "polyline": {
+      "columns": [
+        0,
+        11,
+        24,
+        37
+      ],
+      "bendY": 14,
+      "deltaX": -3,
+      "strictOriginalComparison": {
+        "equal": true,
+        "members": [
+          {
+            "name": "frame_000.png",
+            "format": "PNG",
+            "dimensions": [
+              11,
+              29
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_001.png",
+            "format": "PNG",
+            "dimensions": [
+              16,
+              29
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "name": "frame_002.png",
+            "format": "PNG",
+            "dimensions": [
+              16,
+              29
+            ],
+            "strictRgbaEqual": true,
+            "encodedBytesEqual": true
+          }
+        ]
+      }
+    },
+    "presets": [
+      {
+        "name": "32×32",
+        "padding": [
+          {
+            "label": "上",
+            "value": "8"
+          },
+          {
+            "label": "下",
+            "value": "8"
+          },
+          {
+            "label": "左",
+            "value": "10"
+          },
+          {
+            "label": "右",
+            "value": "9"
+          }
+        ]
+      },
+      {
+        "name": "48×48",
+        "padding": [
+          {
+            "label": "上",
+            "value": "16"
+          },
+          {
+            "label": "下",
+            "value": "16"
+          },
+          {
+            "label": "左",
+            "value": "18"
+          },
+          {
+            "label": "右",
+            "value": "17"
+          }
+        ]
+      },
+      {
+        "name": "64×64",
+        "padding": [
+          {
+            "label": "上",
+            "value": "24"
+          },
+          {
+            "label": "下",
+            "value": "24"
+          },
+          {
+            "label": "左",
+            "value": "26"
+          },
+          {
+            "label": "右",
+            "value": "25"
+          }
+        ]
+      },
+      {
+        "name": "96×96",
+        "padding": [
+          {
+            "label": "上",
+            "value": "40"
+          },
+          {
+            "label": "下",
+            "value": "40"
+          },
+          {
+            "label": "左",
+            "value": "42"
+          },
+          {
+            "label": "右",
+            "value": "41"
+          }
+        ]
+      },
+      {
+        "name": "128×128",
+        "padding": [
+          {
+            "label": "上",
+            "value": "56"
+          },
+          {
+            "label": "下",
+            "value": "56"
+          },
+          {
+            "label": "左",
+            "value": "58"
+          },
+          {
+            "label": "右",
+            "value": "57"
+          }
+        ]
+      },
+      {
+        "name": "144×144",
+        "padding": [
+          {
+            "label": "上",
+            "value": "64"
+          },
+          {
+            "label": "下",
+            "value": "64"
+          },
+          {
+            "label": "左",
+            "value": "66"
+          },
+          {
+            "label": "右",
+            "value": "65"
+          }
+        ]
+      },
+      {
+        "name": "150×150",
+        "padding": [
+          {
+            "label": "上",
+            "value": "67"
+          },
+          {
+            "label": "下",
+            "value": "67"
+          },
+          {
+            "label": "左",
+            "value": "69"
+          },
+          {
+            "label": "右",
+            "value": "68"
+          }
+        ]
+      },
+      {
+        "name": "32×64",
+        "padding": [
+          {
+            "label": "上",
+            "value": "24"
+          },
+          {
+            "label": "下",
+            "value": "24"
+          },
+          {
+            "label": "左",
+            "value": "10"
+          },
+          {
+            "label": "右",
+            "value": "9"
+          }
+        ]
+      }
+    ],
+    "upward150Preset": {
+      "padding": {
+        "up": 134,
+        "down": 0,
+        "left": 69,
+        "right": 68
+      },
+      "outputDimensions": [
+        450,
+        300
+      ],
+      "original128LimitWouldReject": true
+    },
+    "txt": {
+      "validSignedGridRetained": true,
+      "exportedAndReimported": {
+        "rows": 1,
+        "cols": 3,
+        "grid": [
+          [
+            1,
+            -2,
+            0
+          ]
+        ]
+      },
+      "correctionInput": {
+        "rows": 1,
+        "cols": 3,
+        "grid": [
+          [
+            1,
+            -2,
+            999,
+            4
+          ]
+        ],
+        "extra": "removed"
+      },
+      "visibleCorrectionNotice": "已修正无效帧编号：1; 已移除布局外的格子; 已忽略未知字段：extra",
+      "invalidJsonRetainsCurrentGrid": true,
+      "sameFileMayBeSelectedAgain": true,
+      "mountedInputFix": "A detached temporary chooser intermittently lost its DOM node; replaced with a mounted input before final revalidation."
+    },
+    "conflict": {
+      "backAndBBlocked": true,
+      "copyRetainsFirstGridCell": -1
+    },
+    "heldRestore": {
+      "delayContentSeconds": 2,
+      "pointerHeldWithoutMovement": true,
+      "rejectedBeforePointerRelease": true,
+      "error": "Document changed while loading; current edits are preserved",
+      "afterReleaseSavedHorizontalBoundary": 15
+    },
+    "lateResults": {
+      "delayUploadSeconds": 2,
+      "currentSeamBoundary": 16,
+      "currentPaddingUp": 133,
+      "retainedSplitTask": "43c2ea58-ea13-40bf-aa7a-3ab022bb2cbc",
+      "retainedComposedResult": null,
+      "projectOnlyTasks": [
+        {
+          "taskId": "aae45008-a200-4f7e-8962-28e088e97c85",
+          "operation": "image.customCompose",
+          "state": "succeeded",
+          "results": [
+            "868345e4-777b-42c5-8a4b-1453c1d5a9ef",
+            "4ad8c43b-6c55-46e0-b3b5-e046d4681bca"
+          ]
+        },
+        {
+          "taskId": "21eb5352-670a-4fe7-9761-503bb40ad213",
+          "operation": "image.customSlice",
+          "state": "succeeded",
+          "results": [
+            "e8398ff1-4d1b-49ad-bf87-9b1dae8db6b7",
+            "842bf679-6d7c-4c91-9398-5e901ac45f17"
+          ]
+        }
+      ]
+    },
+    "cancellation": {
+      "processingTaskId": "7d84f141-9391-4807-b74e-9dba016a50f0",
+      "layout": [
+        64,
+        64
+      ],
+      "observedProcessingBeforeClick": true,
+      "feedbackMs": 439,
+      "state": "canceled",
+      "generation": 1,
+      "results": [],
+      "browserResultFileAbsent": true,
+      "sourcePreparationFeedbackMs": 288,
+      "sourcePreparationRetainsOldSource": true,
+      "sourcePreviewCanceledAndRetried": true,
+      "stopEvidenceLimit": "UI feedback measured; Worker termination occurs in AbortSignal handler. No independent browser-process stop or combined-RSS claim."
+    },
+    "navigation": {
+      "target": "RoninPro tool list",
+      "taskId": "25d44861-5f62-4552-9200-eb4db2c055a1",
+      "state": "succeeded",
+      "outputFrames": 4096,
+      "results": [
+        "caba0534-2ea1-48a8-b2c1-64639e7d14c8",
+        "5b266096-dd46-4ec8-a845-dee98434e66f"
+      ],
+      "closingTabNotCovered": true
+    },
+    "sourceClearUndoRestoresOriginalAndResults": true,
+    "tallPreview": {
+      "sourceDimensions": [
+        1,
+        20000
+      ],
+      "height": "640",
+      "rect": {
+        "bottom": 898.203125,
+        "height": 640,
+        "left": 224,
+        "right": 225,
+        "top": 258.203125,
+        "width": 1,
+        "x": 224,
+        "y": 258.203125
+      },
+      "width": "1"
+    },
+    "budget": {
+      "rejectedSourceDimensions": [
+        8192,
+        8192
+      ],
+      "error": "FINE_EDITOR_RESOURCE_LIMIT",
+      "previousSourceRetained": "sheet.png",
+      "acceptedImmutableImportMayRemain": true
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ],
+    "saveAndReopenNoNewVersionsOrTasks": {
+      "before": {
+        "valid": true,
+        "database": "ok",
+        "versions": 34,
+        "documents": 2,
+        "tasks": 16,
+        "states": {
+          "canceled": 1,
+          "succeeded": 15
+        }
+      },
+      "after": {
+        "valid": true,
+        "database": "ok",
+        "versions": 34,
+        "documents": 2,
+        "tasks": 16,
+        "states": {
+          "canceled": 1,
+          "succeeded": 15
+        }
+      }
+    },
+    "screenshots": [
+      "doc/testing/evidence/skill-custom-slice-workbench.png",
+      "doc/testing/evidence/skill-custom-slice-seams.png"
+    ]
+  },
+  "validation": {
+    "pythonTests": 36,
+    "jsTests": 56,
+    "failures": 0,
+    "runtimeBuild": "passed",
+    "workbenchBuild": "passed after mounted TXT input and preview UI correction",
+    "focusedEslint": "passed",
+    "skillValidator": "Skill is valid!",
+    "projectVerify": {
+      "valid": true,
+      "database": "ok",
+      "versions": 34,
+      "documents": 2,
+      "tasks": 16,
+      "states": {
+        "canceled": 1,
+        "succeeded": 15
+      }
+    }
+  },
+  "limits": {
+    "sourceFileMiB": 20,
+    "cells": 4096,
+    "paddingPerSidePx": 149,
+    "previewMaxSide": 1024,
+    "framePreviews": 24,
+    "framePreviewMaxSide": 128,
+    "seamCanvasCss": [
+      920,
+      640
+    ],
+    "historySteps": 50,
+    "historyFileMiB": 256,
+    "historyJsonMiB": 64,
+    "encodedResultMiB": 128
+  },
+  "intentionalCorrections": [
+    "Rearrangement defaults use detected dimensions rather than stale auto parameters.",
+    "Padding cap covers the existing upward-only 150px preset.",
+    "Manual seam changes clamp dependent band offsets and polyline delta to valid ranges.",
+    "Extremely tall source uses a bounded display canvas while coordinates remain original."
+  ],
+  "remaining": [
+    "Independent combined browser and engine peak-memory monitoring and resource acceptance.",
+    "More cross-module decoder/browser/animated-input regressions.",
+    "Full keyboard-only and VoiceOver acceptance.",
+    "Other media/editing/game modules, complete AI quality templates and portable distribution; S2/S3/S4 incomplete."
+  ]
+}

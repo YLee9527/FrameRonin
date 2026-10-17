@@ -1,1154 +1,189 @@
-import { useEffect, useState } from 'react'
-import { Button, Checkbox, InputNumber, message, Slider, Space, Tabs, Typography, Upload } from 'antd'
-import {
-  DeleteOutlined,
-  DownloadOutlined,
-  FolderOpenOutlined,
-  PlusOutlined,
-  SaveOutlined,
-  ScissorOutlined,
-  ThunderboltOutlined,
-} from '@ant-design/icons'
-import type { UploadFile } from 'antd'
-import JSZip from 'jszip'
-import { useLanguage } from '../i18n/context'
+import {useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type SetStateAction} from 'react'
+import {flushSync} from 'react-dom'
+import {Button,Checkbox,InputNumber,message,Progress,Slider,Space,Tabs,Typography,Upload} from 'antd'
+import {DeleteOutlined,DownloadOutlined,FolderOpenOutlined,PlusOutlined,SaveOutlined,ScissorOutlined,ThunderboltOutlined} from '@ant-design/icons'
+import type {UploadFile} from 'antd'
+import {useLanguage} from '../i18n/context'
 import StashableImage from './StashableImage'
 import StashDropZone from './StashDropZone'
 import RoninProL7SeamPreview from './RoninProL7SeamPreview'
+import {bandColOffsetBounds,maxPolyDeltaX} from '../lib/customSliceAlgorithms'
+import {customSliceAssetWorker} from '../lib/customSliceAssetWorker'
+import {validateCustomPlan,validateCustomLayout,validateCustomCompose,type CustomLayout,type CustomPlan,type FrameSize} from '../lib/customSlice'
+import {clearedCustomSeams,currentCustomLayout,customComposition,customPlanSettings,customReports,type CustomResult,type CustomSliceDraft} from '../localProject/customSliceDocument'
+import {useCustomSliceDocument} from '../localProject/useCustomSliceDocument'
+import {CustomSliceDocumentSurface} from '../localProject/CustomSliceDocumentSurface'
+import {useCustomSliceView} from '../localProject/useCustomSliceView'
+import {prepareFineInput} from '../localProject/fineEditInput'
+import {cacheManagedInput,runManagedTask} from '../localProject/managedTasks'
+import {imageToolMetadata} from '../localProject/imageToolDocument'
+import {useImageToolUrls} from '../localProject/useManagedImageTool'
+import {parseRearrangeText} from '../lib/customSliceRearrange'
+import {fineEditorDimensions} from '../lib/fineEditorPixels'
+const {Dragger}=Upload,{Text}=Typography
+const IMAGE_ACCEPT=['.png','.jpg','.jpeg','.webp']
+const REARRANGE_STORAGE_KEY='roninpro-customslice-rearrange'
 
-const { Dragger } = Upload
-const { Text } = Typography
-
-const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
-const REARRANGE_STORAGE_KEY = 'roninpro-customslice-rearrange'
-
-/** 找出完全透明的行索引 */
-function findTransparentRows(data: Uint8ClampedArray, width: number, height: number): number[] {
-  const rows: number[] = []
-  for (let y = 0; y < height; y++) {
-    let allTransparent = true
-    for (let x = 0; x < width; x++) {
-      if (data[(y * width + x) * 4 + 3] !== 0) {
-        allTransparent = false
-        break
-      }
+export default function RoninProCustomSlice(){
+ const {t,lang}=useLanguage(),model=useCustomSliceDocument(),d=model.draft
+ const {spriteFile,activeTab,columns,rows,regions,rearrangeRows,rearrangeCols,rearrangeGrid,expandUp,expandDown,expandLeft,expandRight,expandMode,sliceL7,previewRowStarts,previewColStarts,previewMeta,l7BandPercent,l7BandColOffset,l7PolyBendY,l7PolyDeltaX}=d
+ const setting=<K extends keyof CustomSliceDraft>(key:K)=>(value:SetStateAction<CustomSliceDraft[K]>)=>model.set(key,value)
+ const setL7BandPercent=setting('l7BandPercent'),setL7PolyBendY=setting('l7PolyBendY'),setL7PolyDeltaX=setting('l7PolyDeltaX'),setExpandMode=setting('expandMode')
+ const setExpandUp=setting('expandUp'),setExpandDown=setting('expandDown'),setExpandLeft=setting('expandLeft'),setExpandRight=setting('expandRight')
+ const [busy,setBusy]=useState<'plan'|'split'|'compose'|null>(null),[progress,setProgress]=useState(0),[preparing,setPreparing]=useState(false),[canceling,setCanceling]=useState(false),[status,setStatus]=useState(''),[autoTicket,setAutoTicket]=useState(0)
+ const alive=useRef(true),controller=useRef<AbortController|null>(null),incoming=useRef<{controller:AbortController;promise:Promise<void>}|null>(null),textRead=useRef<Promise<void>|null>(null),finishSeam=useRef<(()=>void)|null>(null),pendingGesture=useRef(false),extraBytes=useRef(0),pendingAuto=useRef<CustomSliceDraft|null>(null)
+ const rearrangeInput=useRef<HTMLInputElement>(null)
+ const retainedFiles=model.retained
+ const retainedBytes=useCallback(()=>96*1024**2+extraBytes.current+[...retainedFiles()].reduce((sum,file)=>sum+file.size*2,0),[retainedFiles])
+ const sourceView=useCustomSliceView(spriteFile,'source',retainedBytes),archiveView=useCustomSliceView(d.splitResult?.data??null,'archive',retainedBytes)
+ const sourceSizeChanged=!!(sourceView.view&&d.info&&(sourceView.view.width!==d.info.w||sourceView.view.height!==d.info.h))
+ const sourcePreview=sourceSizeChanged?null:sourceView.view,spritePreviewUrl=sourcePreview?.preview??null,framePreviewUrls=archiveView.view?.thumbnails??[],frameBlobUrls=archiveView.view?.frames??[]
+ const splitReport=d.splitResult?customReports.get(d.splitResult.report):undefined,frameSizes=archiveView.view?.sizes??(splitReport?.frameSizes as FrameSize[]|undefined)??[]
+ const archiveFiles=useMemo(()=>d.splitResult?[d.splitResult.data]:[],[d.splitResult]),composedFiles=useMemo(()=>d.composedResult?[d.composedResult.data]:[],[d.composedResult])
+ const archiveUrls=useImageToolUrls(archiveFiles,[]),composedUrls=useImageToolUrls(composedFiles,composedFiles.map(f=>imageToolMetadata.get(f)))
+ const zipUrl=archiveUrls[0]?.raw??null,composedUrl=composedUrls[0]?.raw??null,composedPreviewUrl=composedUrls[0]?.preview??''
+ const loading=busy!==null
+ useLayoutEffect(()=>{extraBytes.current=(sourceView.view?.bytes??0)+(archiveView.view?.bytes??0)},[sourceView.view,archiveView.view])
+ useEffect(()=>{alive.current=true;return()=>{alive.current=false;incoming.current?.controller.abort()}},[])
+ const interactionChange=useCallback((active:boolean)=>{pendingGesture.current=active},[])
+ const dispatch=model.dispatch
+ const beforeAction=useCallback(async()=>{flushSync(()=>{finishSeam.current?.();dispatch({type:'end'})});await incoming.current?.promise;await textRead.current},[dispatch])
+ const hasPendingEdits=useCallback(()=>pendingGesture.current||incoming.current!==null||textRead.current!==null,[])
+ const notice=(zh:string,en:string,ja:string)=>lang==='zh'?zh:lang==='ja'?ja:en
+ const changed=()=>notice('编辑已改变，结果保留在项目中','Edits changed; results remain in Project assets','編集が変わりました。結果はプロジェクトに保存されています')
+ const splitOutdated=useMemo(()=>{
+  if(!d.splitResult)return false
+  // Draft parameters may be incomplete; execution reports the concrete error.
+  try{return JSON.stringify(currentCustomLayout(d))!==JSON.stringify((customReports.get(d.splitResult.report)?.parameters as {layout?:unknown}|undefined)?.layout)}catch{return true}
+ },[d])
+ const composedOutdated=!!d.composedResult&&JSON.stringify(customComposition(d))!==JSON.stringify((customReports.get(d.composedResult.report)?.parameters as {composition?:unknown}|undefined)?.composition)
+ const acceptResult=(completed:Awaited<ReturnType<typeof runManagedTask>>,kind:'plan'|'split'|'compose'):CustomResult=>{
+  if(completed.outputs.length!==2)throw new Error('CUSTOM_RESULT_COUNT')
+  const files=completed.outputs.map((o,i)=>{const file=new File([o.blob],i===1?'custom-slice-report.json':kind==='plan'?'custom-seams.json':kind==='split'?'custom-slices.zip':'custom-composed.png',{type:i===1||kind==='plan'?'application/json':kind==='split'?'application/zip':'image/png'});imageToolMetadata.set(file,o.version);cacheManagedInput(file,completed.project.id,o.version.id);return file})
+  return {data:files[0],report:files[1],taskId:completed.taskId}
+ }
+ const execute=async(kind:'plan'|'split'|'compose',refine:'l7'|'uniform'='l7')=>{
+  if(controller.current){if(kind==='split'&&model.current().activeTab==='auto')pendingAuto.current=model.current();return}
+  const abort=new AbortController();controller.current=abort;setBusy(kind);setProgress(0);setCanceling(false)
+  try{
+   await beforeAction();abort.signal.throwIfAborted()
+   const before=model.current();if(!before.spriteFile||!before.info)return
+   const options={signal:abort.signal,onProgress:(n:number)=>{if(alive.current)setProgress(v=>Math.max(v,n))}}
+   let plan:CustomPlan|undefined,planResult:CustomResult|undefined
+   if(kind==='plan'||kind==='split'&&before.activeTab==='auto'&&!before.sliceL7){
+    const parameters={mode:before.activeTab==='auto'?'auto':'grid',columns:Math.min(64,before.columns),rows:Math.min(64,before.rows),refine:kind==='plan'?refine:'uniform',bandPercent:before.l7BandPercent,renderer:'browser-worker',frontendBytes:retainedBytes()}
+    const complete=await runManagedTask('image.customSlicePlan',[before.spriteFile],parameters,options)
+    planResult=acceptResult(complete,'plan');plan=JSON.parse(await planResult.data.text());validateCustomPlan(plan,before.info.w,before.info.h)
+    customReports.set(planResult.report,JSON.parse(await planResult.report.text()))
+    abort.signal.throwIfAborted()
+    if(kind==='plan'){
+     if(alive.current&&(model.current()!==before||hasPendingEdits())){message.warning(changed());return}
+     if(alive.current){model.change(prev=>({...prev,...customPlanSettings(plan!),planResult:planResult!}));setStatus(t('roninProCustomSliceL7PreviewDone'))}
+     return
     }
-    if (allTransparent) rows.push(y)
+   }
+   let result:CustomResult
+   if(kind==='compose'){
+    if(!before.splitResult)throw new Error('CUSTOM_SPLIT_REQUIRED')
+    const composition=customComposition(before),report=customReports.get(before.splitResult.report),count=(report?.frameSizes as FrameSize[]|undefined)?.length??0
+    validateCustomCompose(composition,count)
+    const complete=await runManagedTask('image.customCompose',[before.splitResult.data],{composition,renderer:'browser-worker',frontendBytes:retainedBytes()},{...options,outputFilter:()=>alive.current})
+    if(!alive.current)return
+    result=acceptResult(complete,'compose')
+   }else{
+    const layout:CustomLayout=plan?{mode:'bands',colStarts:plan.colStarts,rowStarts:plan.rowStarts,bandColOffset:plan.bandColOffset}:currentCustomLayout(before)
+    validateCustomLayout(layout,before.info.w,before.info.h)
+    const complete=await runManagedTask('image.customSlice',[before.spriteFile],{layout,renderer:'browser-worker',frontendBytes:retainedBytes()},{...options,outputFilter:()=>alive.current})
+    if(!alive.current)return
+    result=acceptResult(complete,'split')
+   }
+   const report=JSON.parse(await result.report.text());customReports.set(result.report,report);abort.signal.throwIfAborted()
+   if(model.current()!==before||hasPendingEdits()){message.warning(changed());return}
+   if(kind==='compose'){model.change(prev=>({...prev,composedResult:{...result,input:before.splitResult!.data}}));setStatus(t('roninProCustomSliceComposed'))}
+   else{
+    const count=(report.frameSizes as FrameSize[]).length,r=before.activeTab==='custom'?Math.max(1,Math.ceil(Math.sqrt(count))):plan?.rows??(before.sliceL7?before.previewMeta?.rows:undefined)??before.rows,c=before.activeTab==='custom'?Math.ceil(count/r):plan?.columns??(before.sliceL7?before.previewMeta?.cols:undefined)??before.columns
+    const grid=Array.from({length:r},(_,row)=>Array.from({length:c},(_,col)=>row*c+col<count?row*c+col+1:0))
+    model.change(prev=>({...prev,...(plan?{columns:plan.columns,rows:plan.rows,planResult:planResult!}:{}),splitResult:result,composedResult:null,rearrangeRows:r,rearrangeCols:c,rearrangeGrid:grid}))
+    setStatus(t('spriteSplitSuccess',{n:count}))
+   }
+  }catch(error){if(alive.current){const label=error instanceof DOMException&&error.name==='AbortError'?notice('加工已取消','Processing canceled','処理を取り消しました'):String(error);setStatus(label);if(!(error instanceof DOMException&&error.name==='AbortError'))message.error(label)}}
+  finally{
+   controller.current=null
+   if(alive.current){setBusy(null);setCanceling(false);const next=pendingAuto.current;pendingAuto.current=null;if(next&&model.current()===next)setAutoTicket(v=>v+1)}
   }
-  return rows
-}
-
-/** 找出完全透明的列索引（在 y0..y1 范围内） */
-function findTransparentCols(
-  data: Uint8ClampedArray,
-  width: number,
-  y0: number,
-  y1: number
-): number[] {
-  const cols: number[] = []
-  for (let x = 0; x < width; x++) {
-    let allTransparent = true
-    for (let y = y0; y < y1; y++) {
-      if (data[(y * width + x) * 4 + 3] !== 0) {
-        allTransparent = false
-        break
-      }
-    }
-    if (allTransparent) cols.push(x)
-  }
-  return cols
-}
-
-function getRuns(arr: number[]): [number, number][] {
-  if (arr.length === 0) return []
-  const runs: [number, number][] = []
-  let runStart = arr[0]!
-  let runEnd = runStart
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] === runEnd + 1) {
-      runEnd = arr[i]!
-    } else {
-      runs.push([runStart, runEnd])
-      runStart = arr[i]!
-      runEnd = runStart
-    }
-  }
-  runs.push([runStart, runEnd])
-  return runs
-}
-
-function gapsFromRuns(runs: [number, number][], total: number): [number, number][] {
-  if (runs.length === 0) return [[0, total - 1]]
-  const regions: [number, number][] = []
-  regions.push([0, runs[0]![0] - 1])
-  for (let i = 0; i < runs.length - 1; i++) {
-    regions.push([runs[i]![1] + 1, runs[i + 1]![0] - 1])
-  }
-  regions.push([runs[runs.length - 1]![1] + 1, total - 1])
-  return regions.filter(([a, b]) => a <= b)
-}
-
-/** 基于透明行列检测，返回建议的 cols × rows（用于均匀切分） */
-function detectAutoSplit(imageData: ImageData): { cols: number; rows: number } {
-  const { data, width, height } = imageData
-  const transparentRows = findTransparentRows(data, width, height)
-  const rowRuns = getRuns(transparentRows)
-  const rowRegions = gapsFromRuns(rowRuns, height)
-  const transparentCols = findTransparentCols(data, width, 0, height)
-  const colRuns = getRuns(transparentCols)
-  const colRegions = gapsFromRuns(colRuns, width)
-  const rows = Math.max(1, rowRegions.length)
-  const cols = Math.max(1, colRegions.length)
-  return { cols, rows }
-}
-
-interface Region {
-  id: string
-  x: number
-  y: number
-  w: number
-  h: number
-}
-
-/** 一行像素 Alpha 之和；越小表示该横线越像「缝」、越不容易切断肢体 */
-function rowAlphaSum(data: Uint8ClampedArray, width: number, y: number): number {
-  let s = 0
-  const o = y * width * 4
-  for (let x = 0; x < width; x++) {
-    s += data[o + x * 4 + 3]!
-  }
-  return s
-}
-
-function colAlphaSum(data: Uint8ClampedArray, width: number, height: number, x: number): number {
-  let s = 0
-  for (let y = 0; y < height; y++) {
-    s += data[(y * width + x) * 4 + 3]!
-  }
-  return s
-}
-
-/**
- * L7：在相邻两格名义分界附近做小范围搜索，取整行/整列 Alpha 和最小的切线，
- * 常用于手/尾巴伸入邻格时，避免均分线正好劈在笔画中间。
- */
-function uniformRowStarts(fullH: number, rowsNum: number): number[] {
-  return Array.from({ length: rowsNum + 1 }, (_, i) =>
-    i === rowsNum ? fullH : Math.floor((i * fullH) / rowsNum)
-  )
-}
-
-function uniformColStarts(fullW: number, colsNum: number): number[] {
-  return Array.from({ length: colsNum + 1 }, (_, j) =>
-    j === colsNum ? fullW : Math.floor((j * fullW) / colsNum)
-  )
-}
-
-function adjustRowBoundariesL7(
-  data: Uint8ClampedArray,
-  width: number,
-  height: number,
-  rowsNum: number,
-  bandRatio = 0.25
-): number[] {
-  const starts: number[] = []
-  for (let i = 0; i <= rowsNum; i++) {
-    starts.push(Math.floor((i * height) / rowsNum))
-  }
-  starts[0] = 0
-  starts[rowsNum] = height
-
-  for (let i = 1; i < rowsNum; i++) {
-    const yNom = starts[i]!
-    const prev = starts[i - 1]!
-    const next = starts[i + 1]!
-    const span = next - prev
-    const band = Math.max(4, Math.min(64, Math.floor(span * bandRatio)))
-    const yMin = Math.max(prev + 1, yNom - band)
-    const yMax = Math.min(next - 1, yNom + band)
-    if (yMin >= yMax) continue
-    let bestY = yNom
-    let bestCost = Infinity
-    for (let y = yMin; y <= yMax; y++) {
-      const c = rowAlphaSum(data, width, y)
-      if (c < bestCost || (c === bestCost && Math.abs(y - yNom) < Math.abs(bestY - yNom))) {
-        bestCost = c
-        bestY = y
-      }
-    }
-    starts[i] = bestY
-  }
-  return starts
-}
-
-function adjustColBoundariesL7(
-  data: Uint8ClampedArray,
-  width: number,
-  height: number,
-  colsNum: number,
-  bandRatio = 0.25
-): number[] {
-  const starts: number[] = []
-  for (let j = 0; j <= colsNum; j++) {
-    starts.push(Math.floor((j * width) / colsNum))
-  }
-  starts[0] = 0
-  starts[colsNum] = width
-
-  for (let j = 1; j < colsNum; j++) {
-    const xNom = starts[j]!
-    const prev = starts[j - 1]!
-    const next = starts[j + 1]!
-    const span = next - prev
-    const band = Math.max(2, Math.min(64, Math.floor(span * bandRatio)))
-    const xMin = Math.max(prev + 1, xNom - band)
-    const xMax = Math.min(next - 1, xNom + band)
-    if (xMin >= xMax) continue
-    let bestX = xNom
-    let bestCost = Infinity
-    for (let x = xMin; x <= xMax; x++) {
-      const c = colAlphaSum(data, width, height, x)
-      if (c < bestCost || (c === bestCost && Math.abs(x - xNom) < Math.abs(bestX - xNom))) {
-        bestCost = c
-        bestX = x
-      }
-    }
-    starts[j] = bestX
-  }
-  return starts
-}
-
-/** 按已算好的横纵切线切分 */
-function splitSpriteSheetWithStarts(
-  img: HTMLImageElement,
-  colStarts: number[],
-  rowStarts: number[]
-): HTMLCanvasElement[] {
-  const colsNum = colStarts.length - 1
-  const rowsNum = rowStarts.length - 1
-  const results: HTMLCanvasElement[] = []
-  for (let row = 0; row < rowsNum; row++) {
-    for (let col = 0; col < colsNum; col++) {
-      const sx = colStarts[col]!
-      const ex = colStarts[col + 1]!
-      const sy = rowStarts[row]!
-      const ey = rowStarts[row + 1]!
-      const w = Math.max(1, ex - sx)
-      const h = Math.max(1, ey - sy)
-      const c = document.createElement('canvas')
-      c.width = w
-      c.height = h
-      c.getContext('2d')!.drawImage(img, sx, sy, w, h, 0, 0, w, h)
-      results.push(c)
-    }
-  }
-  return results
-}
-
-/** 同一行带内所有竖线同时加同一 offset 时，offset 的可行区间（像素，整数） */
-function bandColOffsetBounds(colStarts: number[]): { min: number; max: number } {
-  const n = colStarts.length
-  if (n < 2) return { min: 0, max: 0 }
-  let lo = -Infinity
-  let hi = Infinity
-  for (let j = 1; j < n - 1; j++) {
-    lo = Math.max(lo, colStarts[j - 1]! + 1 - colStarts[j]!)
-    hi = Math.min(hi, colStarts[j + 1]! - 1 - colStarts[j]!)
-  }
-  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo > hi) return { min: 0, max: 0 }
-  return { min: Math.ceil(lo), max: Math.floor(hi) }
-}
-
-function segColXWithBandOff(
-  bandOff: number,
-  j: number,
-  colStarts: number[],
-  fullW: number
-): number {
-  if (j <= 0) return 0
-  if (j >= colStarts.length - 1) return fullW
-  return colStarts[j]! + bandOff
-}
-
-/**
- * 按行带竖线整体偏移（锯齿）：第 r 行带内竖线 x = colStarts[j] + bandColOffset[r]，
- * 行带之间可在横缝处形成阶梯错位。
- */
-function splitSpriteSheetWithBandOffsets(
-  img: HTMLImageElement,
-  colStarts: number[],
-  rowStarts: number[],
-  bandColOffset: number[]
-): HTMLCanvasElement[] {
-  const colsNum = colStarts.length - 1
-  const rowsNum = rowStarts.length - 1
-  if (bandColOffset.length !== rowsNum) {
-    throw new Error('bandColOffset length must equal row count')
-  }
-  const fullW = img.naturalWidth
-  const results: HTMLCanvasElement[] = []
-  for (let row = 0; row < rowsNum; row++) {
-    const off = bandColOffset[row] ?? 0
-    for (let col = 0; col < colsNum; col++) {
-      const sx = segColXWithBandOff(off, col, colStarts, fullW)
-      const ex = segColXWithBandOff(off, col + 1, colStarts, fullW)
-      const sy = rowStarts[row]!
-      const ey = rowStarts[row + 1]!
-      const w = Math.max(1, ex - sx)
-      const h = Math.max(1, ey - sy)
-      const c = document.createElement('canvas')
-      c.width = w
-      c.height = h
-      c.getContext('2d')!.drawImage(img, sx, sy, w, h, 0, 0, w, h)
-      results.push(c)
-    }
-  }
-  return results
-}
-
-/** 单行条带：竖线先沿名义 x 下到拐点 y=L，再水平偏移 dx，再垂直到底；每格为七边形/梯形裁切 */
-function buildStripCellVertices(
-  xL: number,
-  xR: number,
-  L: number,
-  H: number,
-  dx: number
-): [number, number][] {
-  const Lc = Math.max(0, Math.min(H, Math.floor(L)))
-  const d = Math.round(dx)
-  if (Lc <= 0) {
-    return [
-      [xL, 0],
-      [xR, 0],
-      [xR + d, H],
-      [xL + d, H],
-    ]
-  }
-  if (Lc >= H) {
-    return [
-      [xL, 0],
-      [xR, 0],
-      [xR, H],
-      [xL, H],
-    ]
-  }
-  return [
-    [xL, 0],
-    [xR, 0],
-    [xR, Lc],
-    [xR + d, Lc],
-    [xR + d, H],
-    [xL + d, H],
-    [xL, Lc],
-  ]
-}
-
-/** 单行折线：水平偏移上限（避免格宽被挤没） */
-function maxPolyDeltaX(colStarts: number[], fullW: number): number {
-  const n = colStarts.length
-  if (n < 2) return 1
-  let minW = Infinity
-  for (let c = 0; c < n - 1; c++) {
-    minW = Math.min(minW, colStarts[c + 1]! - colStarts[c]!)
-  }
-  if (!Number.isFinite(minW) || minW < 1) return 1
-  return Math.max(1, Math.min(Math.floor(fullW / 2) - 1, Math.floor(minW) - 1))
-}
-
-function extractPolygonFromImage(img: HTMLImageElement, verts: [number, number][]): HTMLCanvasElement {
-  const xs = verts.map((v) => v[0])
-  const ys = verts.map((v) => v[1])
-  const minX = Math.max(0, Math.floor(Math.min(...xs)))
-  const maxX = Math.min(img.naturalWidth, Math.ceil(Math.max(...xs)))
-  const minY = Math.max(0, Math.floor(Math.min(...ys)))
-  const maxY = Math.min(img.naturalHeight, Math.ceil(Math.max(...ys)))
-  const w = Math.max(1, maxX - minX)
-  const h = Math.max(1, maxY - minY)
-  const c = document.createElement('canvas')
-  c.width = w
-  c.height = h
-  const ctx = c.getContext('2d')!
-  ctx.imageSmoothingEnabled = false
-  ctx.save()
-  ctx.beginPath()
-  ctx.moveTo(verts[0]![0] - minX, verts[0]![1] - minY)
-  for (let i = 1; i < verts.length; i++) {
-    ctx.lineTo(verts[i]![0] - minX, verts[i]![1] - minY)
-  }
-  ctx.closePath()
-  ctx.clip()
-  ctx.drawImage(img, -minX, -minY)
-  ctx.restore()
-  return c
-}
-
-/**
- * L7 折线格裁切：拐点在条带内部时，格 = 上下两个轴对齐矩形，用两次 drawImage 1:1 拷贝，
- * 避免 polygon clip 在斜边上的抗锯齿导致拐点下方像素发糊。
- */
-function extractStripCellCrisp(
-  img: HTMLImageElement,
-  xL: number,
-  xR: number,
-  bendY: number,
-  fullH: number,
-  deltaX: number
-): HTMLCanvasElement {
-  const H = fullH
-  const Lc = Math.max(0, Math.min(H, Math.floor(bendY)))
-  const d = Math.round(deltaX)
-  const sw = xR - xL
-  if (sw < 1) {
-    const c = document.createElement('canvas')
-    c.width = 1
-    c.height = Math.max(1, H)
-    return c
-  }
-
-  if (Lc >= H) {
-    const minX = Math.max(0, xL)
-    const w = Math.max(1, Math.min(img.naturalWidth, xR) - minX)
-    const c = document.createElement('canvas')
-    c.width = w
-    c.height = H
-    const ctx = c.getContext('2d')!
-    ctx.imageSmoothingEnabled = false
-    ctx.drawImage(img, xL, 0, sw, H, xL - minX, 0, sw, H)
-    return c
-  }
-
-  if (Lc <= 0) {
-    const verts = buildStripCellVertices(xL, xR, bendY, H, deltaX)
-    return extractPolygonFromImage(img, verts)
-  }
-
-  const minX = Math.max(0, Math.min(xL, xL + d, xR, xR + d))
-  const maxX = Math.min(img.naturalWidth, Math.max(xL, xL + d, xR, xR + d))
-  const w = Math.max(1, maxX - minX)
-  const c = document.createElement('canvas')
-  c.width = w
-  c.height = H
-  const ctx = c.getContext('2d')!
-  ctx.imageSmoothingEnabled = false
-  const sh1 = Lc
-  const sh2 = H - Lc
-  ctx.drawImage(img, xL, 0, sw, sh1, xL - minX, 0, sw, sh1)
-  ctx.drawImage(img, xL + d, Lc, sw, sh2, xL + d - minX, Lc, sw, sh2)
-  return c
-}
-
-function splitSpriteSheetSingleRowPolyline(
-  img: HTMLImageElement,
-  colStarts: number[],
-  fullH: number,
-  bendY: number,
-  deltaX: number
-): HTMLCanvasElement[] {
-  const colsNum = colStarts.length - 1
-  const H = fullH
-  const results: HTMLCanvasElement[] = []
-  for (let col = 0; col < colsNum; col++) {
-    const xL = colStarts[col]!
-    const xR = colStarts[col + 1]!
-    results.push(extractStripCellCrisp(img, xL, xR, bendY, H, deltaX))
-  }
-  return results
-}
-
-/** 网格均匀切分；可选 L7 在名义接缝附近优化横纵切线 */
-function splitSpriteSheet(
-  img: HTMLImageElement,
-  cols: number,
-  rows: number,
-  l7?: ImageData | null,
-  bandRatio = 0.25
-): HTMLCanvasElement[] {
-  const fullW = img.naturalWidth
-  const fullH = img.naturalHeight
-  const colsNum = Math.max(1, Math.floor(cols))
-  const rowsNum = Math.max(1, Math.floor(rows))
-
-  let colStarts: number[]
-  let rowStarts: number[]
-  if (
-    l7 &&
-    l7.width === fullW &&
-    l7.height === fullH &&
-    (rowsNum > 1 || colsNum > 1)
-  ) {
-    rowStarts = adjustRowBoundariesL7(l7.data, fullW, fullH, rowsNum, bandRatio)
-    colStarts = adjustColBoundariesL7(l7.data, fullW, fullH, colsNum, bandRatio)
-  } else {
-    rowStarts = uniformRowStarts(fullH, rowsNum)
-    colStarts = uniformColStarts(fullW, colsNum)
-  }
-  return splitSpriteSheetWithStarts(img, colStarts, rowStarts)
-}
-
-/** 按自定义区域切分 */
-function splitByRegions(img: HTMLImageElement, regions: Region[]): HTMLCanvasElement[] {
-  const results: HTMLCanvasElement[] = []
-  const fullW = img.naturalWidth
-  const fullH = img.naturalHeight
-
-  for (const r of regions) {
-    const x = Math.max(0, Math.floor(r.x))
-    const y = Math.max(0, Math.floor(r.y))
-    const w = Math.max(1, Math.min(Math.floor(r.w), fullW - x))
-    const h = Math.max(1, Math.min(Math.floor(r.h), fullH - y))
-
-    const c = document.createElement('canvas')
-    c.width = w
-    c.height = h
-    c.getContext('2d')!.drawImage(img, x, y, w, h, 0, 0, w, h)
-    results.push(c)
-  }
-  return results
-}
-
-export default function RoninProCustomSlice() {
-  const { t } = useLanguage()
-  const [activeTab, setActiveTab] = useState<'grid' | 'custom' | 'auto'>('auto')
-  const [spriteFile, setSpriteFile] = useState<File | null>(null)
-  const [spritePreviewUrl, setSpritePreviewUrl] = useState<string | null>(null)
-  const [columns, setColumns] = useState(8)
-  const [rows, setRows] = useState(4)
-  const [regions, setRegions] = useState<Region[]>([])
-  const [loading, setLoading] = useState(false)
-  const [zipUrl, setZipUrl] = useState<string | null>(null)
-  const [framePreviewUrls, setFramePreviewUrls] = useState<string[]>([])
-  const [frameBlobUrls, setFrameBlobUrls] = useState<string[]>([])
-  const [frameSizes, setFrameSizes] = useState<{ w: number; h: number }[]>([])
-  const [rearrangeRows, setRearrangeRows] = useState(() => {
-    try {
-      const s = localStorage.getItem(REARRANGE_STORAGE_KEY)
-      if (!s) return 2
-      const parsed = JSON.parse(s) as { rows?: number; cols?: number; grid?: number[][] }
-      return typeof parsed.rows === 'number' && parsed.rows >= 1 && parsed.rows <= 64 ? parsed.rows : 2
-    } catch {
-      return 2
-    }
-  })
-  const [rearrangeCols, setRearrangeCols] = useState(() => {
-    try {
-      const s = localStorage.getItem(REARRANGE_STORAGE_KEY)
-      if (!s) return 4
-      const parsed = JSON.parse(s) as { rows?: number; cols?: number; grid?: number[][] }
-      return typeof parsed.cols === 'number' && parsed.cols >= 1 && parsed.cols <= 64 ? parsed.cols : 4
-    } catch {
-      return 4
-    }
-  })
-  const [rearrangeGrid, setRearrangeGrid] = useState<number[][]>(() => {
-    try {
-      const s = localStorage.getItem(REARRANGE_STORAGE_KEY)
-      if (!s) return [[]]
-      const parsed = JSON.parse(s) as { rows?: number; cols?: number; grid?: number[][] }
-      const g = parsed.grid
-      if (!Array.isArray(g) || g.length === 0) return [[]]
-      const next = g.map((row: unknown) =>
-        Array.isArray(row)
-          ? row.map((v) => (typeof v === 'number' ? Math.floor(v) : 0))
-          : []
-      )
-      return next.length > 0 ? next : [[]]
-    } catch {
-      return [[]]
-    }
-  })
-  const [composedUrl, setComposedUrl] = useState<string | null>(null)
-  const [expandUp, setExpandUp] = useState(0)
-  const [expandDown, setExpandDown] = useState(0)
-  const [expandLeft, setExpandLeft] = useState(0)
-  const [expandRight, setExpandRight] = useState(0)
-  const [expandMode, setExpandMode] = useState<'all' | 'heightUpOnly'>('all')
-  /** L7：接缝附近沿 Alpha 低谷微调切线（网格 + 智能检测） */
-  const [sliceL7, setSliceL7] = useState(false)
-  /** L7 预览：用户可调切线后再 `splitSpriteSheetWithStarts` */
-  const [previewRowStarts, setPreviewRowStarts] = useState<number[] | null>(null)
-  const [previewColStarts, setPreviewColStarts] = useState<number[] | null>(null)
-  const [previewMeta, setPreviewMeta] = useState<{
-    w: number
-    h: number
-    cols: number
-    rows: number
-  } | null>(null)
-  /** L7 搜索带宽度，占相邻两格合并跨度比例（%） */
-  const [l7BandPercent, setL7BandPercent] = useState(25)
-  /** 每行带内竖线整体 X 偏移（锯齿）；长度 = 行带数；第 0、1 带由同一控件同步 */
-  const [l7BandColOffset, setL7BandColOffset] = useState<number[]>([])
-  /** 单行 L7 折线：从顶到拐点的高度、拐点处水平偏移（像素，可负） */
-  const [l7PolyBendY, setL7PolyBendY] = useState(32)
-  const [l7PolyDeltaX, setL7PolyDeltaX] = useState(0)
-
-  const clearL7Preview = () => {
-    setPreviewRowStarts(null)
-    setPreviewColStarts(null)
-    setPreviewMeta(null)
-    setL7BandColOffset([])
-    setL7PolyBendY(32)
-    setL7PolyDeltaX(0)
-  }
-
-  useEffect(() => {
-    clearL7Preview()
-    if (spriteFile) {
-      const url = URL.createObjectURL(spriteFile)
-      setSpritePreviewUrl(url)
-      return () => URL.revokeObjectURL(url)
-    }
-    setSpritePreviewUrl(null)
-  }, [spriteFile])
-
-  const revokePreviews = () => {
-    setFramePreviewUrls((urls) => {
-      urls.forEach(URL.revokeObjectURL)
-      return []
-    })
-    setFrameBlobUrls((urls) => {
-      urls.forEach(URL.revokeObjectURL)
-      return []
-    })
-    setZipUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    setComposedUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-  }
-
-  useEffect(() => () => revokePreviews(), [])
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        REARRANGE_STORAGE_KEY,
-        JSON.stringify({
-          rows: rearrangeRows,
-          cols: rearrangeCols,
-          grid: rearrangeGrid,
-        })
-      )
-    } catch {
-      /* ignore */
-    }
-  }, [rearrangeRows, rearrangeCols, rearrangeGrid])
-
-  useEffect(() => {
-    if (!spriteFile || activeTab !== 'auto') return
-    if (sliceL7) return
-    void runSplit()
-  }, [spriteFile, activeTab, sliceL7])
-
-  useEffect(() => {
-    if (!sliceL7) clearL7Preview()
-  }, [sliceL7])
-
-  useEffect(() => {
-    if (!previewMeta || !sliceL7) return
-    if (activeTab === 'grid' && (columns !== previewMeta.cols || rows !== previewMeta.rows)) {
-      clearL7Preview()
-    }
-  }, [columns, rows, activeTab, previewMeta, sliceL7])
-
-  const setPreviewRowBoundary = (i: number, y: number) => {
-    setPreviewRowStarts((prev) => {
-      if (!prev) return prev
-      const next = [...prev]
-      const lo = next[i - 1]! + 1
-      const hi = next[i + 1]! - 1
-      if (lo >= hi) return prev
-      next[i] = Math.max(lo, Math.min(hi, Math.floor(y)))
-      return next
-    })
-  }
-
-  const setPreviewColBoundary = (j: number, x: number) => {
-    setPreviewColStarts((prev) => {
-      if (!prev) return prev
-      const next = [...prev]
-      const lo = next[j - 1]! + 1
-      const hi = next[j + 1]! - 1
-      if (lo >= hi) return prev
-      next[j] = Math.max(lo, Math.min(hi, Math.floor(x)))
-      return next
-    })
-  }
-
-  const setL7BandColOffsetBand = (bandIndex: number, value: number) => {
-    if (!previewColStarts || !previewMeta) return
-    const { min, max } = bandColOffsetBounds(previewColStarts)
-    const v = Math.max(min, Math.min(max, Math.floor(value)))
-    const rowsN = previewMeta.rows
-    setL7BandColOffset((prev) => {
-      const next = Array.from({ length: rowsN }, (_, i) => prev[i] ?? 0)
-      if (rowsN >= 2 && (bandIndex === 0 || bandIndex === 1)) {
-        next[0] = v
-        next[1] = v
-      } else {
-        next[bandIndex] = v
-      }
-      return next
-    })
-  }
-
-  const computeL7Preview = async (mode: 'l7' | 'uniform') => {
-    if (!spriteFile) return
-    setLoading(true)
-    try {
-      const buf = await spriteFile.arrayBuffer()
-      const url = URL.createObjectURL(new Blob([buf]))
-      const img = await new Promise<HTMLImageElement>((res, rej) => {
-        const i = new Image()
-        i.onload = () => res(i)
-        i.onerror = () => rej(new Error('load'))
-        i.src = url
-      })
-      URL.revokeObjectURL(url)
-
-      const canvas = document.createElement('canvas')
-      canvas.width = img.naturalWidth
-      canvas.height = img.naturalHeight
-      const ctx = canvas.getContext('2d')!
-      ctx.drawImage(img, 0, 0)
-      const srcData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-
-      let colsC = columns
-      let rowsC = rows
-      if (activeTab === 'auto') {
-        const d = detectAutoSplit(srcData)
-        colsC = d.cols
-        rowsC = d.rows
-        setColumns(d.cols)
-        setRows(d.rows)
-      }
-
-      const br = l7BandPercent / 100
-      let rowStarts: number[]
-      let colStarts: number[]
-      if (rowsC === 1) {
-        rowStarts = [0, img.naturalHeight]
-        colStarts = uniformColStarts(img.naturalWidth, colsC)
-        setL7PolyBendY(Math.floor(img.naturalHeight / 2))
-        setL7PolyDeltaX(0)
-      } else if (mode === 'uniform') {
-        rowStarts = uniformRowStarts(img.naturalHeight, rowsC)
-        colStarts = uniformColStarts(img.naturalWidth, colsC)
-      } else {
-        rowStarts = adjustRowBoundariesL7(srcData.data, img.naturalWidth, img.naturalHeight, rowsC, br)
-        colStarts = adjustColBoundariesL7(srcData.data, img.naturalWidth, img.naturalHeight, colsC, br)
-      }
-
-      setPreviewRowStarts(rowStarts)
-      setPreviewColStarts(colStarts)
-      setPreviewMeta({
-        w: img.naturalWidth,
-        h: img.naturalHeight,
-        cols: colsC,
-        rows: rowsC,
-      })
-      setL7BandColOffset(Array.from({ length: rowsC }, () => 0))
-      message.success(t('roninProCustomSliceL7PreviewDone'))
-    } catch (e) {
-      message.error(String(e))
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const addRegion = () => {
-    setRegions((prev) => [
-      ...prev,
-      { id: `r-${Date.now()}`, x: 0, y: 0, w: 32, h: 32 },
-    ])
-  }
-
-  const updateRegion = (id: string, field: keyof Region, value: number) => {
-    if (field === 'id') return
-    setRegions((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, [field]: value } : r))
-    )
-  }
-
-  const removeRegion = (id: string) => {
-    setRegions((prev) => prev.filter((r) => r.id !== id))
-  }
-
-  const runSplit = async () => {
-    if (!spriteFile) return
-    setLoading(true)
-    revokePreviews()
-    try {
-      const buf = await spriteFile.arrayBuffer()
-      const url = URL.createObjectURL(new Blob([buf]))
-      const img = await new Promise<HTMLImageElement>((res, rej) => {
-        const i = new Image()
-        i.onload = () => res(i)
-        i.onerror = () => rej(new Error('load'))
-        i.src = url
-      })
-      URL.revokeObjectURL(url)
-
-      let frames: HTMLCanvasElement[]
-      if (activeTab === 'custom') {
-        frames = splitByRegions(img, regions)
-      } else if (sliceL7) {
-        if (
-          !previewRowStarts ||
-          !previewColStarts ||
-          !previewMeta ||
-          previewMeta.w !== img.naturalWidth ||
-          previewMeta.h !== img.naturalHeight
-        ) {
-          message.warning(t('roninProCustomSliceL7NeedPreview'))
-          setLoading(false)
-          return
-        }
-        if (activeTab === 'grid' && (previewMeta.cols !== columns || previewMeta.rows !== rows)) {
-          message.warning(t('roninProCustomSliceL7PreviewStale'))
-          setLoading(false)
-          return
-        }
-        if (previewMeta.rows === 1) {
-          frames = splitSpriteSheetSingleRowPolyline(
-            img,
-            previewColStarts,
-            previewMeta.h,
-            l7PolyBendY,
-            l7PolyDeltaX
-          )
-        } else {
-          if (
-            l7BandColOffset.length !== previewMeta.rows ||
-            l7BandColOffset.length !== previewRowStarts.length - 1
-          ) {
-            message.warning(t('roninProCustomSliceL7NeedPreview'))
-            setLoading(false)
-            return
-          }
-          frames = splitSpriteSheetWithBandOffsets(
-            img,
-            previewColStarts,
-            previewRowStarts,
-            l7BandColOffset
-          )
-        }
-        if (activeTab === 'auto') {
-          message.success(
-            t('roninProCustomSliceAutoDetected', {
-              cols: previewMeta.cols,
-              rows: previewMeta.rows,
-              n: frames.length,
-            })
-          )
-        }
-      } else if (activeTab === 'auto') {
-        const canvas = document.createElement('canvas')
-        canvas.width = img.naturalWidth
-        canvas.height = img.naturalHeight
-        const ctx = canvas.getContext('2d')!
-        ctx.drawImage(img, 0, 0)
-        const srcData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const { cols, rows: r0 } = detectAutoSplit(srcData)
-        setColumns(cols)
-        setRows(r0)
-        frames = splitSpriteSheet(img, cols, r0, null)
-        message.success(t('roninProCustomSliceAutoDetected', { cols, rows: r0, n: frames.length }))
-      } else {
-        frames = splitSpriteSheet(img, columns, rows, null)
-      }
-
-      if (frames.length === 0) {
-        message.warning(t('roninProCustomSliceNoFrames'))
-        setLoading(false)
-        return
-      }
-
-      const zip = new JSZip()
-      const allBlobUrls: string[] = []
-      const sizes: { w: number; h: number }[] = []
-      const previewUrls: string[] = []
-      const maxPreview = 24
-      for (let i = 0; i < frames.length; i++) {
-        const blob = await new Promise<Blob>((resolve, reject) => {
-          frames[i].toBlob((b) => (b ? resolve(b) : reject(new Error('blob'))), 'image/png')
-        })
-        zip.file(`frame_${String(i).padStart(3, '0')}.png`, blob)
-        const url = URL.createObjectURL(blob)
-        allBlobUrls.push(url)
-        sizes.push({ w: frames[i].width, h: frames[i].height })
-        if (previewUrls.length < maxPreview) {
-          previewUrls.push(url)
-        }
-      }
-      setFrameBlobUrls(allBlobUrls)
-      setFrameSizes(sizes)
-      setFramePreviewUrls(previewUrls)
-      const zipBlob = await zip.generateAsync({ type: 'blob' })
-      setZipUrl(URL.createObjectURL(zipBlob))
-      const r =
-        activeTab === 'custom'
-          ? Math.max(1, Math.ceil(Math.sqrt(frames.length)))
-          : sliceL7 && previewMeta
-            ? previewMeta.rows
-            : rows
-      const c =
-        activeTab === 'custom'
-          ? Math.ceil(frames.length / r)
-          : sliceL7 && previewMeta
-            ? previewMeta.cols
-            : columns
-      setRearrangeRows(r)
-      setRearrangeCols(c)
-      const grid: number[][] = []
-      let idx = 1
-      for (let row = 0; row < r; row++) {
-        const rowData: number[] = []
-        for (let col = 0; col < c; col++) {
-          rowData.push(idx <= frames.length ? idx : 0)
-          idx++
-        }
-        grid.push(rowData)
-      }
-      setRearrangeGrid(grid)
-      if (activeTab !== 'auto') {
-        message.success(t('spriteSplitSuccess', { n: frames.length }))
-      }
-    } catch (e) {
-      message.error(t('spriteSplitFailed') + ': ' + String(e))
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const downloadZip = () => {
-    if (!zipUrl) return
-    const a = document.createElement('a')
-    a.href = zipUrl
-    a.download = (spriteFile?.name?.replace(/\.[^.]+$/, '') || 'slices') + '_frames.zip'
-    a.click()
-  }
-
-  const updateRearrangeGridSize = (newRows: number, newCols: number) => {
-    setRearrangeGrid((prev) => {
-      const next: number[][] = []
-      const maxVal = frameBlobUrls.length
-      for (let row = 0; row < newRows; row++) {
-        const rowData: number[] = []
-        for (let col = 0; col < newCols; col++) {
-          const v = prev[row]?.[col]
-          const valid = v !== undefined && v >= -maxVal && v <= maxVal && v !== 0
-          rowData.push(valid ? v! : 0)
-        }
-        next.push(rowData)
-      }
-      return next
-    })
-  }
-
-  const setRearrangeRowsAndResize = (v: number) => {
-    const r = Math.max(1, Math.min(64, v))
-    setRearrangeRows(r)
-    updateRearrangeGridSize(r, rearrangeCols)
-  }
-
-  const setRearrangeColsAndResize = (v: number) => {
-    const c = Math.max(1, Math.min(64, v))
-    setRearrangeCols(c)
-    updateRearrangeGridSize(rearrangeRows, c)
-  }
-
-  const saveRearrangeToTxt = () => {
-    const data = JSON.stringify(
-      { rows: rearrangeRows, cols: rearrangeCols, grid: rearrangeGrid },
-      null,
-      2
-    )
-    const blob = new Blob([data], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'rearrange_params.txt'
-    a.click()
-    URL.revokeObjectURL(url)
-    message.success(t('roninProCustomSliceRearrangeSaveSuccess'))
-  }
-
-  const loadRearrangeFromTxt = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.txt,text/plain'
-    input.onchange = async () => {
-      const file = input.files?.[0]
-      if (!file) return
-      try {
-        const text = await file.text()
-        const parsed = JSON.parse(text) as {
-          rows?: number
-          cols?: number
-          grid?: number[][]
-        }
-        const r = Math.max(1, Math.min(64, parsed.rows ?? 2))
-        const c = Math.max(1, Math.min(64, parsed.cols ?? 4))
-        const raw = Array.isArray(parsed.grid)
-          ? parsed.grid.map((row: unknown) =>
-              Array.isArray(row)
-                ? row.map((v) => (typeof v === 'number' ? Math.floor(v) : 0))
-                : []
-            )
-          : []
-        const trimmed: number[][] = []
-        for (let row = 0; row < r; row++) {
-          const rowData: number[] = []
-          for (let col = 0; col < c; col++) {
-            const v = raw[row]?.[col]
-            rowData.push(v !== undefined ? v : 0)
-          }
-          trimmed.push(rowData)
-        }
-        setRearrangeRows(r)
-        setRearrangeCols(c)
-        setRearrangeGrid(trimmed.length > 0 ? trimmed : [[]])
-        message.success(t('roninProCustomSliceRearrangeLoadSuccess'))
-      } catch {
-        message.error(t('roninProCustomSliceRearrangeLoadFailed'))
-      }
-    }
-    input.click()
-  }
-
-  const setGridCell = (row: number, col: number, value: number) => {
-    const maxVal = frameBlobUrls.length
-    setRearrangeGrid((prev) => {
-      const next = prev.map((r) => [...r])
-      if (!next[row]) next[row] = []
-      const v = Math.floor(value)
-      const clamped = Math.max(-maxVal, Math.min(maxVal, v))
-      next[row]![col] = clamped === 0 ? 0 : clamped
-      return next
-    })
-  }
-
-  const runCompose = async () => {
-    if (frameBlobUrls.length === 0 || frameSizes.length === 0) return
-    setComposedUrl((old) => {
-      if (old) URL.revokeObjectURL(old)
-      return null
-    })
-    const cellW = Math.max(...frameSizes.map((s) => s.w))
-    const cellH = Math.max(...frameSizes.map((s) => s.h))
-    const paddedCellW = cellW + expandLeft + expandRight
-    const paddedCellH = cellH + expandUp + expandDown
-    const outW = rearrangeCols * paddedCellW
-    const outH = rearrangeRows * paddedCellH
-    const canvas = document.createElement('canvas')
-    canvas.width = outW
-    canvas.height = outH
-    const ctx = canvas.getContext('2d')!
-    ctx.imageSmoothingEnabled = false
-
-    const loadImage = (url: string) =>
-      new Promise<HTMLImageElement>((res, rej) => {
-        const img = new Image()
-        img.onload = () => res(img)
-        img.onerror = () => rej(new Error('load'))
-        img.src = url
-      })
-
-    const cellBuf = document.createElement('canvas')
-    cellBuf.width = cellW
-    cellBuf.height = cellH
-    const cctx = cellBuf.getContext('2d')!
-    cctx.imageSmoothingEnabled = false
-
-    try {
-      for (let row = 0; row < rearrangeRows; row++) {
-        for (let col = 0; col < rearrangeCols; col++) {
-          const val = rearrangeGrid[row]?.[col] ?? 0
-          const absVal = Math.abs(val)
-          if (absVal === 0 || absVal > frameBlobUrls.length) continue
-          const img = await loadImage(frameBlobUrls[absVal - 1]!)
-          const dx = col * paddedCellW + expandLeft
-          const dy = row * paddedCellH + expandUp
-          const flipH = val < 0
-          const w = img.naturalWidth
-          const h = img.naturalHeight
-          cctx.clearRect(0, 0, cellW, cellH)
-          const px = Math.max(0, cellW - w)
-          const py = Math.max(0, Math.floor((cellH - h) / 2))
-          cctx.drawImage(img, 0, 0, w, h, px, py, w, h)
-          if (flipH) {
-            ctx.save()
-            ctx.translate(dx + cellW, dy)
-            ctx.scale(-1, 1)
-            ctx.drawImage(cellBuf, 0, 0, cellW, cellH, 0, 0, cellW, cellH)
-            ctx.restore()
-          } else {
-            ctx.drawImage(cellBuf, dx, dy)
-          }
-        }
-      }
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('blob'))), 'image/png', 0.95)
-      })
-      setComposedUrl(URL.createObjectURL(blob))
-      message.success(t('roninProCustomSliceComposed'))
-    } catch (e) {
-      message.error(t('roninProCustomSliceComposeFailed') + ': ' + String(e))
-    }
-  }
-
-  const downloadComposed = () => {
-    if (!composedUrl) return
-    const a = document.createElement('a')
-    a.href = composedUrl
-    a.download = (spriteFile?.name?.replace(/\.[^.]+$/, '') || 'slices') + '_composed.png'
-    a.click()
-    message.success(t('downloadStarted'))
-  }
-
-  const applyExpandPreset = (targetW: number, targetH?: number) => {
-    if (frameSizes.length === 0) return
-    const cellW = Math.max(...frameSizes.map((s) => s.w))
-    const cellH = Math.max(...frameSizes.map((s) => s.h))
-    const w = targetH === undefined ? targetW : targetW
-    const h = targetH === undefined ? targetW : targetH
-    const addW = Math.max(0, w - cellW)
-    const addH = Math.max(0, h - cellH)
-    setExpandLeft(Math.ceil(addW / 2))
-    setExpandRight(Math.floor(addW / 2))
-    if (expandMode === 'heightUpOnly') {
-      setExpandUp(addH)
-      setExpandDown(0)
-    } else {
-      setExpandUp(Math.ceil(addH / 2))
-      setExpandDown(Math.floor(addH / 2))
-    }
-  }
-
-  const cellW = frameSizes.length > 0 ? Math.max(...frameSizes.map((s) => s.w)) : 0
-  const cellH = frameSizes.length > 0 ? Math.max(...frameSizes.map((s) => s.h)) : 0
-  const paddedCellW = cellW + expandLeft + expandRight
-  const paddedCellH = cellH + expandUp + expandDown
-  const composedOutW = rearrangeCols * paddedCellW
-  const composedOutH = rearrangeRows * paddedCellH
-
-  const showL7SeamCanvas =
-    Boolean(
-      spriteFile &&
-        sliceL7 &&
-        activeTab !== 'custom' &&
-        previewMeta &&
-        previewRowStarts &&
-        previewColStarts &&
-        spritePreviewUrl
-    )
+ }
+ const executeRef=useRef(execute)
+ useLayoutEffect(()=>{executeRef.current=execute})
+ useEffect(()=>{if(autoTicket)void executeRef.current('split')},[autoTicket])
+ const applyImage=(file:File)=>{
+  incoming.current?.controller.abort();const operation={controller:new AbortController(),promise:Promise.resolve()};incoming.current=operation;setPreparing(true)
+  const work=(async()=>{
+   const before=model.current(),prepared=await prepareFineInput(file,retainedBytes());operation.controller.signal.throwIfAborted()
+   const asset=await customSliceAssetWorker(file,'source',prepared.memoryBudgetBytes,retainedBytes(),operation.controller.signal)
+   if(!alive.current||operation.controller.signal.aborted||model.current()!==before){if(alive.current&&!operation.controller.signal.aborted)message.warning(changed());return}
+   if(asset.kind!=='source')throw new Error('CUSTOM_SOURCE_RESPONSE')
+   const size=fineEditorDimensions(prepared.version.metadata)
+   if(size.width!==asset.width||size.height!==asset.height)throw new Error('CUSTOM_SOURCE_SIZE_CHANGED')
+   flushSync(()=>{sourceView.accept(file,asset);model.change(prev=>({...prev,spriteFile:file,info:{w:asset.width,h:asset.height},...clearedCustomSeams(),planResult:null,splitResult:null,composedResult:null}))})
+   if(before.activeTab==='auto'&&!before.sliceL7)setAutoTicket(v=>v+1)
+  })().catch(error=>{if(alive.current&&!operation.controller.signal.aborted){setStatus(String(error));message.error(String(error))}})
+  const canceled=new Promise<void>(resolve=>operation.controller.signal.addEventListener('abort',()=>resolve(),{once:true}))
+  operation.promise=Promise.race([work,canceled]).finally(()=>{if(incoming.current===operation){incoming.current=null;if(alive.current)setPreparing(false)}});return operation.promise
+ }
+ const clearImage=()=>{incoming.current?.controller.abort();pendingAuto.current=null;model.change(prev=>({...prev,spriteFile:null,info:null,...clearedCustomSeams(),planResult:null,splitResult:null,composedResult:null}))}
+ const setActiveTab=(activeTab:CustomSliceDraft['activeTab'])=>{model.change(prev=>({...prev,activeTab,...(activeTab==='grid'&&prev.previewMeta&&(prev.columns!==prev.previewMeta.cols||prev.rows!==prev.previewMeta.rows)?clearedCustomSeams():{})}));if(activeTab==='auto'&&!sliceL7&&spriteFile)setAutoTicket(v=>v+1)}
+ const setSliceL7=(sliceL7:boolean)=>{model.change(prev=>({...prev,sliceL7,...clearedCustomSeams()}));if(!sliceL7&&activeTab==='auto'&&spriteFile)setAutoTicket(v=>v+1)}
+ const setColumns=(n:number)=>model.change(prev=>{const columns=Math.max(1,Math.min(64,Math.floor(n)));return columns===prev.columns?prev:{...prev,columns,...clearedCustomSeams()}})
+ const setRows=(n:number)=>model.change(prev=>{const rows=Math.max(1,Math.min(64,Math.floor(n)));return rows===prev.rows?prev:{...prev,rows,...clearedCustomSeams()}})
+ const setPreviewRowBoundary=(i:number,y:number)=>model.change(prev=>{if(!prev.previewRowStarts)return prev;const next=[...prev.previewRowStarts],lo=next[i-1]+1,hi=next[i+1]-1;if(lo>=hi)return prev;next[i]=Math.max(lo,Math.min(hi,Math.floor(y)));return {...prev,previewRowStarts:next}})
+ const setPreviewColBoundary=(j:number,x:number)=>model.change(prev=>{if(!prev.previewColStarts||!prev.info)return prev;const next=[...prev.previewColStarts],lo=next[j-1]+1,hi=next[j+1]-1;if(lo>=hi)return prev;next[j]=Math.max(lo,Math.min(hi,Math.floor(x)));const bounds=bandColOffsetBounds(next),limit=maxPolyDeltaX(next,prev.info.w);return {...prev,previewColStarts:next,l7BandColOffset:prev.l7BandColOffset.map(v=>Math.max(bounds.min,Math.min(bounds.max,v))),l7PolyDeltaX:Math.max(-limit,Math.min(limit,prev.l7PolyDeltaX))}})
+ const setL7BandColOffsetBand=(index:number,value:number)=>model.change(prev=>{if(!prev.previewColStarts||!prev.previewMeta)return prev;const bounds=bandColOffsetBounds(prev.previewColStarts),v=Math.max(bounds.min,Math.min(bounds.max,Math.floor(value))),next=Array.from({length:prev.previewMeta.rows},(_,i)=>prev.l7BandColOffset[i]??0);if(next.length>=2&&index<2){next[0]=v;next[1]=v}else next[index]=v;return {...prev,l7BandColOffset:next}})
+ const computeL7Preview=(mode:'l7'|'uniform')=>execute('plan',mode),runSplit=()=>execute('split'),runCompose=()=>execute('compose')
+ const addRegion=()=>{if(regions.length>=4096){message.error('CUSTOM_CELL_LIMIT');return}model.change(prev=>({...prev,regions:[...prev.regions,{id:crypto.randomUUID(),x:0,y:0,w:32,h:32}]}))}
+ const updateRegion=(id:string,key:'id'|'x'|'y'|'w'|'h',value:number)=>{if(key!=='id')model.change(prev=>({...prev,regions:prev.regions.map(r=>r.id===id?{...r,[key]:value}:r)}))}
+ const removeRegion=(id:string)=>model.change(prev=>({...prev,regions:prev.regions.filter(r=>r.id!==id)}))
+ const download=(file:File,name:string)=>{const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+ const downloadZip=()=>{if(d.splitResult)download(d.splitResult.data,(spriteFile?.name.replace(/\.[^.]+$/,'')||'slices')+'_slices.zip')}
+ const downloadComposed=()=>{if(d.composedResult)download(d.composedResult.data,(spriteFile?.name.replace(/\.[^.]+$/,'')||'slices')+'_composed.png')}
+ const resizeGrid=(grid:number[][],r:number,c:number)=>Array.from({length:r},(_,y)=>Array.from({length:c},(_,x)=>{const v=grid[y]?.[x]??0;return Math.abs(v)<=frameSizes.length?v:0}))
+ const setRearrangeRowsAndResize=(n:number)=>{const r=Math.max(1,Math.min(64,Math.floor(n)));model.change(prev=>({...prev,rearrangeRows:r,rearrangeGrid:resizeGrid(prev.rearrangeGrid,r,prev.rearrangeCols)}))}
+ const setRearrangeColsAndResize=(n:number)=>{const c=Math.max(1,Math.min(64,Math.floor(n)));model.change(prev=>({...prev,rearrangeCols:c,rearrangeGrid:resizeGrid(prev.rearrangeGrid,prev.rearrangeRows,c)}))}
+ const setGridCell=(row:number,col:number,value:number)=>model.change(prev=>{const grid=prev.rearrangeGrid.map(r=>[...r]);grid[row][col]=Math.max(-frameSizes.length,Math.min(frameSizes.length,Math.floor(value)));return {...prev,rearrangeGrid:grid}})
+ const saveRearrangeToTxt=()=>download(new File([JSON.stringify({rows:rearrangeRows,cols:rearrangeCols,grid:rearrangeGrid},null,2)],'rearrange_params.txt',{type:'text/plain;charset=utf-8'}),'rearrange_params.txt')
+ const loadRearrangeFromTxt=(file:File)=>{
+   void beforeAction().then(()=>{
+    const before=model.current()
+    const work=(async()=>{
+     if(file.size>256*1024)throw new Error('CUSTOM_REARRANGE_TEXT_LIMIT')
+     const value=await file.text();if(!alive.current||model.current()!==before||pendingGesture.current||incoming.current)throw new Error('CUSTOM_REARRANGE_EDITS_CHANGED')
+     const parsed=parseRearrangeText(value,frameSizes.length)
+     flushSync(()=>model.change(prev=>({...prev,rearrangeRows:parsed.rows,rearrangeCols:parsed.cols,rearrangeGrid:parsed.grid})))
+     message.success(t('roninProCustomSliceRearrangeLoadSuccess'))
+     if(parsed.corrections.length)message.warning(parsed.corrections.map(code=>code.startsWith('CUSTOM_REARRANGE_AXES')?notice('行列已调整为 1–64 的整数','Rows and columns normalized to integers from 1 to 64','行列を 1～64 の整数に調整しました'):code.startsWith('CUSTOM_REARRANGE_EXTRA')?notice('已移除布局外的格子','Cells outside the layout removed','配置外のセルを削除しました'):code.startsWith('CUSTOM_REARRANGE_UNKNOWN')?notice('已忽略未知字段：','Unknown fields ignored: ','未対応の項目を無視：')+code.split(': ').slice(1).join(': '):notice('已修正无效帧编号：','Invalid frame indices corrected: ','無効なフレーム番号を修正：')+code.split(': ').at(-1)).join('; '))
+    })()
+    textRead.current=work
+    return work.finally(()=>{if(textRead.current===work)textRead.current=null})
+   }).catch(e=>{if(alive.current)message.error(String(e))})
+ }
+ const applyExpandPreset=(w:number,h=w)=>{
+  if(!frameSizes.length)return
+  const cellW=Math.max(...frameSizes.map(s=>s.w)),cellH=Math.max(...frameSizes.map(s=>s.h)),dw=Math.max(0,w-cellW),dh=Math.max(0,h-cellH)
+  model.change(prev=>({...prev,expandLeft:Math.ceil(dw/2),expandRight:Math.floor(dw/2),expandUp:prev.expandMode==='heightUpOnly'?dh:Math.ceil(dh/2),expandDown:prev.expandMode==='heightUpOnly'?0:Math.floor(dh/2)}))
+ }
+ useEffect(()=>{try{localStorage.setItem(REARRANGE_STORAGE_KEY,JSON.stringify({rows:rearrangeRows,cols:rearrangeCols,grid:rearrangeGrid}))}catch{/* The formal project remains authoritative if browser storage is unavailable. */}},[rearrangeRows,rearrangeCols,rearrangeGrid])
+ const cellW=frameSizes.length?Math.max(...frameSizes.map(s=>s.w)):0,cellH=frameSizes.length?Math.max(...frameSizes.map(s=>s.h)):0,paddedCellW=cellW+expandLeft+expandRight,paddedCellH=cellH+expandUp+expandDown,composedOutW=rearrangeCols*paddedCellW,composedOutH=rearrangeRows*paddedCellH
+ const showL7SeamCanvas=!!(spriteFile&&sliceL7&&activeTab!=='custom'&&previewMeta&&previewRowStarts&&previewColStarts&&spritePreviewUrl)
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <CustomSliceDocumentSurface model={model} beforeAction={beforeAction} hasPendingEdits={hasPendingEdits}><Space direction="vertical" size="large" style={{ width: '100%' }}>
+      <input ref={rearrangeInput} type="file" accept=".txt,text/plain" hidden onChange={event=>{const file=event.currentTarget.files?.[0];event.currentTarget.value='';if(file)loadRearrangeFromTxt(file)}}/>
       <Text type="secondary">{t('roninProCustomSliceHint')}</Text>
+      {(loading||preparing||sourceView.loading||archiveView.loading)&&<Space>{loading?<Progress percent={Math.round(progress*100)} style={{width:180}}/>:<Text>{notice('准备预览…','Preparing previews…','プレビューを準備中…')}</Text>}<Button loading={canceling} onClick={()=>{if(controller.current){setCanceling(true);controller.current.abort()}else if(incoming.current){incoming.current.controller.abort();setStatus(notice('素材准备已取消','Input preparation canceled','素材の準備を取り消しました'))}else if(sourceView.loading)sourceView.cancel();else archiveView.cancel()}}>{notice('取消加工','Cancel processing','処理を取消')}</Button></Space>}
+      {status&&<Text role="status">{status}</Text>}
+      {sourceSizeChanged&&<Text role="alert">CUSTOM_SOURCE_SIZE_CHANGED</Text>}
+      {(splitOutdated||composedOutdated)&&<Text type="secondary">{notice('当前显示上次结果；重新执行才会应用新参数。','Showing saved results; run again to apply changed parameters.','前回の結果を表示中です。変更を適用するには再実行してください。')}</Text>}
+      {(sourceView.error||archiveView.error)&&<Space><Text role="alert">{(sourceView.error||archiveView.error)==='CUSTOM_PREVIEW_CANCELED'?notice('预览已取消；原文件和结果仍保留','Preview canceled; original files and results are retained','プレビューを取り消しました。元ファイルと結果は保持されています'):sourceView.error||archiveView.error}</Text><Button onClick={()=>{if(sourceView.error)sourceView.retry();if(archiveView.error)archiveView.retry()}}>{notice('重试预览','Retry previews','プレビューを再試行')}</Button></Space>}
+
 
       <Tabs
         activeKey={activeTab}
@@ -1187,6 +222,8 @@ export default function RoninProCustomSlice() {
                     <InputNumber
                       min={1}
                       max={64}
+                      aria-label={t('spriteColumns')}
+                      precision={0}
                       value={columns}
                       onChange={(v) => setColumns(v ?? 8)}
                       style={{ width: 80, marginLeft: 8 }}
@@ -1197,6 +234,8 @@ export default function RoninProCustomSlice() {
                     <InputNumber
                       min={1}
                       max={64}
+                      aria-label={t('spriteRows')}
+                      precision={0}
                       value={rows}
                       onChange={(v) => setRows(v ?? 4)}
                       style={{ width: 80, marginLeft: 8 }}
@@ -1224,7 +263,7 @@ export default function RoninProCustomSlice() {
                   </Text>
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {regions.map((r) => (
+                  {regions.map((r,index) => (
                     <div
                       key={r.id}
                       style={{
@@ -1240,6 +279,8 @@ export default function RoninProCustomSlice() {
                       <InputNumber
                         size="small"
                         addonBefore="X"
+                        aria-label={`${t('roninProCustomSliceRegions')} ${index+1} X`}
+                        max={30000}
                         value={r.x}
                         min={0}
                         onChange={(v) => updateRegion(r.id, 'x', v ?? 0)}
@@ -1248,6 +289,8 @@ export default function RoninProCustomSlice() {
                       <InputNumber
                         size="small"
                         addonBefore="Y"
+                        aria-label={`${t('roninProCustomSliceRegions')} ${index+1} Y`}
+                        max={30000}
                         value={r.y}
                         min={0}
                         onChange={(v) => updateRegion(r.id, 'y', v ?? 0)}
@@ -1256,6 +299,8 @@ export default function RoninProCustomSlice() {
                       <InputNumber
                         size="small"
                         addonBefore="W"
+                        aria-label={`${t('roninProCustomSliceRegions')} ${index+1} W`}
+                        max={30000}
                         value={r.w}
                         min={1}
                         onChange={(v) => updateRegion(r.id, 'w', v ?? 32)}
@@ -1264,6 +309,8 @@ export default function RoninProCustomSlice() {
                       <InputNumber
                         size="small"
                         addonBefore="H"
+                        aria-label={`${t('roninProCustomSliceRegions')} ${index+1} H`}
+                        max={30000}
                         value={r.h}
                         min={1}
                         onChange={(v) => updateRegion(r.id, 'h', v ?? 32)}
@@ -1286,23 +333,19 @@ export default function RoninProCustomSlice() {
       />
 
       <StashDropZone
-        onStashDrop={(f) => {
-          setSpriteFile(f)
-          revokePreviews()
-        }}
+        onStashDrop={(f) => {void applyImage(f)}}
       >
         <Dragger
           accept={IMAGE_ACCEPT.join(',')}
           maxCount={1}
           fileList={spriteFile ? [{ uid: '1', name: spriteFile.name } as UploadFile] : []}
           beforeUpload={(f) => {
-            setSpriteFile(f)
-            revokePreviews()
+            void applyImage(f)
             return false
           }}
-          onRemove={() => setSpriteFile(null)}
+          onRemove={clearImage}
         >
-          <p className="ant-upload-text">{t('spriteUploadHint')}</p>
+          <p className="ant-upload-text">{notice('点击或拖入 PNG / JPEG / WebP','Click or drop PNG / JPEG / WebP','PNG / JPEG / WebP を選択・ドロップ')}</p>
         </Dragger>
       </StashDropZone>
 
@@ -1331,6 +374,7 @@ export default function RoninProCustomSlice() {
           >
             <StashableImage
               src={spritePreviewUrl}
+              stashSrc={sourcePreview?.raw}
               alt=""
               style={{ maxWidth: 320, maxHeight: 240, display: 'block', imageRendering: 'pixelated' }}
             />
@@ -1358,10 +402,10 @@ export default function RoninProCustomSlice() {
             </div>
           )}
           <Space wrap>
-            <Button loading={loading} onClick={() => void computeL7Preview('l7')}>
+            <Button disabled={loading||preparing||!sourcePreview} loading={busy==='plan'} onClick={() => void computeL7Preview('l7')}>
               {t('roninProCustomSliceL7PreviewL7')}
             </Button>
-            <Button loading={loading} onClick={() => void computeL7Preview('uniform')}>
+            <Button disabled={loading||preparing||!sourcePreview} loading={busy==='plan'} onClick={() => void computeL7Preview('uniform')}>
               {t('roninProCustomSliceL7PreviewUniform')}
             </Button>
           </Space>
@@ -1389,7 +433,10 @@ export default function RoninProCustomSlice() {
                   : t('roninProCustomSliceL7DragHint')}
               </Text>
               <RoninProL7SeamPreview
-                imageUrl={spritePreviewUrl}
+                imageUrl={spritePreviewUrl!}
+                controlRef={finishSeam}
+                onInteractionChange={interactionChange}
+                label={notice('L7 切线预览','L7 seam preview','L7 切り線プレビュー')}
                 imageW={previewMeta.w}
                 imageH={previewMeta.h}
                 rowStarts={previewRowStarts}
@@ -1435,7 +482,8 @@ export default function RoninProCustomSlice() {
                               size="small"
                               min={0}
                               max={previewMeta.h}
-                              value={bendY}
+                              aria-label={t('roninProCustomSliceL7PolyBendY')}
+                          value={bendY}
                               onChange={(v) => v != null && setL7PolyBendY(Math.round(v))}
                               style={{ width: 96 }}
                             />
@@ -1447,7 +495,8 @@ export default function RoninProCustomSlice() {
                             min={0}
                             max={previewMeta.h}
                             step={1}
-                            value={bendY}
+                            aria-label={t('roninProCustomSliceL7PolyBendY')}
+                          value={bendY}
                             onChange={(v) => setL7PolyBendY(v)}
                             tooltip={{ formatter: (n) => `${n}px` }}
                           />
@@ -1469,7 +518,8 @@ export default function RoninProCustomSlice() {
                               size="small"
                               min={-dxMax}
                               max={dxMax}
-                              value={deltaX}
+                              aria-label={t('roninProCustomSliceL7PolyDeltaX')}
+                          value={deltaX}
                               onChange={(v) =>
                                 v != null &&
                                 setL7PolyDeltaX(
@@ -1486,7 +536,8 @@ export default function RoninProCustomSlice() {
                             min={-dxMax}
                             max={dxMax}
                             step={1}
-                            value={deltaX}
+                            aria-label={t('roninProCustomSliceL7PolyDeltaX')}
+                          value={deltaX}
                             onChange={(v) =>
                               setL7PolyDeltaX(
                                 Math.max(-dxMax, Math.min(dxMax, Math.round(v)))
@@ -1517,6 +568,7 @@ export default function RoninProCustomSlice() {
                           size="small"
                           min={lo}
                           max={hi}
+                          aria-label={t('roninProCustomSliceL7HLine',{i:i+1})}
                           value={y}
                           onChange={(v) => v != null && setPreviewRowBoundary(i, v)}
                           style={{ width: 88 }}
@@ -1529,6 +581,7 @@ export default function RoninProCustomSlice() {
                         <Slider
                           min={lo}
                           max={hi}
+                          aria-label={t('roninProCustomSliceL7HLine',{i:i+1})}
                           value={y}
                           onChange={(v) => setPreviewRowBoundary(i, v)}
                           tooltip={{ formatter: (n) => `${n}` }}
@@ -1556,6 +609,7 @@ export default function RoninProCustomSlice() {
                           size="small"
                           min={lo}
                           max={hi}
+                          aria-label={t('roninProCustomSliceL7VLine',{j:j+1})}
                           value={x}
                           onChange={(v) => v != null && setPreviewColBoundary(j, v)}
                           style={{ width: 88 }}
@@ -1568,6 +622,7 @@ export default function RoninProCustomSlice() {
                         <Slider
                           min={lo}
                           max={hi}
+                          aria-label={t('roninProCustomSliceL7VLine',{j:j+1})}
                           value={x}
                           onChange={(v) => setPreviewColBoundary(j, v)}
                           tooltip={{ formatter: (n) => `${n}` }}
@@ -1595,7 +650,8 @@ export default function RoninProCustomSlice() {
                             <Slider
                               min={b.min}
                               max={b.max}
-                              value={l7BandColOffset[0] ?? 0}
+                              aria-label={t('roninProCustomSliceL7Band01Sync')}
+                          value={l7BandColOffset[0] ?? 0}
                               onChange={(v) => setL7BandColOffsetBand(0, v)}
                               tooltip={{ formatter: (n) => `${n}px` }}
                             />
@@ -1609,7 +665,8 @@ export default function RoninProCustomSlice() {
                             <Slider
                               min={b.min}
                               max={b.max}
-                              value={l7BandColOffset[0] ?? 0}
+                              aria-label={t('roninProCustomSliceL7Band01Sync')}
+                          value={l7BandColOffset[0] ?? 0}
                               onChange={(v) => setL7BandColOffsetBand(0, v)}
                               tooltip={{ formatter: (n) => `${n}px` }}
                             />
@@ -1621,7 +678,8 @@ export default function RoninProCustomSlice() {
                                 <Slider
                                   min={b.min}
                                   max={b.max}
-                                  value={l7BandColOffset[bandIdx] ?? 0}
+                                  aria-label={t('roninProCustomSliceL7BandSegOffset',{n:bandIdx+1})}
+                          value={l7BandColOffset[bandIdx] ?? 0}
                                   onChange={(v) => setL7BandColOffsetBand(bandIdx, v)}
                                   tooltip={{ formatter: (n) => `${n}px` }}
                                 />
@@ -1645,7 +703,8 @@ export default function RoninProCustomSlice() {
           loading={loading}
           onClick={runSplit}
           disabled={
-            !spriteFile ||
+            !spriteFile || preparing || loading || !sourcePreview ||
+
             (activeTab === 'custom' && regions.length === 0)
           }
         >
@@ -1689,6 +748,7 @@ export default function RoninProCustomSlice() {
                 <div key={i} style={{ position: 'relative', display: 'inline-block' }}>
                   <StashableImage
                     src={url}
+                    stashSrc={frameBlobUrls[i]}
                     alt={`frame ${i}`}
                     style={{
                       width: 48,
@@ -1728,7 +788,9 @@ export default function RoninProCustomSlice() {
                 <InputNumber
                   min={1}
                   max={64}
-                  value={rearrangeRows}
+                  aria-label={t('roninProCustomSliceRearrangeRows')}
+                      precision={0}
+                      value={rearrangeRows}
                   onChange={(v) => setRearrangeRowsAndResize(v ?? 1)}
                   style={{ width: 64, marginLeft: 8 }}
                 />
@@ -1738,7 +800,9 @@ export default function RoninProCustomSlice() {
                 <InputNumber
                   min={1}
                   max={64}
-                  value={rearrangeCols}
+                  aria-label={t('roninProCustomSliceRearrangeCols')}
+                      precision={0}
+                      value={rearrangeCols}
                   onChange={(v) => setRearrangeColsAndResize(v ?? 1)}
                   style={{ width: 64, marginLeft: 8 }}
                 />
@@ -1746,10 +810,10 @@ export default function RoninProCustomSlice() {
               <Button icon={<SaveOutlined />} onClick={saveRearrangeToTxt}>
                 {t('roninProCustomSliceRearrangeSaveToTxt')}
               </Button>
-              <Button icon={<FolderOpenOutlined />} onClick={loadRearrangeFromTxt}>
+              <Button icon={<FolderOpenOutlined />} onClick={()=>rearrangeInput.current?.click()}>
                 {t('roninProCustomSliceRearrangeLoadFromTxt')}
               </Button>
-              <Button type="primary" onClick={runCompose}>
+              <Button type="primary" loading={busy==='compose'} disabled={loading||preparing} onClick={runCompose}>
                 {t('roninProCustomSliceCompose')}
               </Button>
               {composedUrl && (
@@ -1782,6 +846,8 @@ export default function RoninProCustomSlice() {
                             size="small"
                             min={-frameBlobUrls.length}
                             max={frameBlobUrls.length}
+                            aria-label={notice(`重排第 ${row+1} 行第 ${col+1} 列`,`Grid row ${row+1} column ${col+1}`,`配置 ${row+1} 行 ${col+1} 列`)}
+                            precision={0}
                             value={val}
                             onChange={(v) => setGridCell(row, col, v ?? 0)}
                             style={{ width: 52 }}
@@ -1813,8 +879,10 @@ export default function RoninProCustomSlice() {
                   <Text type="secondary">{t('roninProCustomSliceExpandUp')}:</Text>
                   <InputNumber
                     min={0}
-                    max={128}
-                    value={expandUp}
+                    max={149}
+                    aria-label={t('roninProCustomSliceExpandUp')}
+                      precision={0}
+                      value={expandUp}
                     onChange={(v) => setExpandUp(v ?? 0)}
                     style={{ width: 56, marginLeft: 6 }}
                   />
@@ -1823,8 +891,10 @@ export default function RoninProCustomSlice() {
                   <Text type="secondary">{t('roninProCustomSliceExpandDown')}:</Text>
                   <InputNumber
                     min={0}
-                    max={128}
-                    value={expandDown}
+                    max={149}
+                    aria-label={t('roninProCustomSliceExpandDown')}
+                      precision={0}
+                      value={expandDown}
                     onChange={(v) => setExpandDown(v ?? 0)}
                     style={{ width: 56, marginLeft: 6 }}
                   />
@@ -1833,8 +903,10 @@ export default function RoninProCustomSlice() {
                   <Text type="secondary">{t('roninProCustomSliceExpandLeft')}:</Text>
                   <InputNumber
                     min={0}
-                    max={128}
-                    value={expandLeft}
+                    max={149}
+                    aria-label={t('roninProCustomSliceExpandLeft')}
+                      precision={0}
+                      value={expandLeft}
                     onChange={(v) => setExpandLeft(v ?? 0)}
                     style={{ width: 56, marginLeft: 6 }}
                   />
@@ -1843,8 +915,10 @@ export default function RoninProCustomSlice() {
                   <Text type="secondary">{t('roninProCustomSliceExpandRight')}:</Text>
                   <InputNumber
                     min={0}
-                    max={128}
-                    value={expandRight}
+                    max={149}
+                    aria-label={t('roninProCustomSliceExpandRight')}
+                      precision={0}
+                      value={expandRight}
                     onChange={(v) => setExpandRight(v ?? 0)}
                     style={{ width: 56, marginLeft: 6 }}
                   />
@@ -1885,7 +959,8 @@ export default function RoninProCustomSlice() {
                   }}
                 >
                   <StashableImage
-                    src={composedUrl}
+                    src={composedPreviewUrl}
+                    stashSrc={composedUrl}
                     alt="composed"
                     style={{ maxWidth: 320, maxHeight: 240, display: 'block', imageRendering: 'pixelated' }}
                   />
@@ -1895,6 +970,6 @@ export default function RoninProCustomSlice() {
           </div>
         </>
       )}
-    </Space>
+    </Space></CustomSliceDocumentSurface>
   )
 }

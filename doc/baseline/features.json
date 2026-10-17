@@ -643,26 +643,26 @@
     "originalEntry": "自定义切片",
     "implementation": "reference/frontend/src/components/RoninProCustomSlice.tsx",
     "inputs": "image",
-    "outputs": "PNG frame ZIP, rearranged PNG, parameter TXT",
-    "dependencies": "host Canvas Worker/JSZip + local queue; legacy UI migration pending",
+    "outputs": "PNG frame ZIP, rearranged PNG, parameter TXT and seam preview",
+    "dependencies": "host Canvas Worker/JSZip + local queue + formal custom-slice document",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomSlice.tsx",
     "sample": "assets/fixtures/custom-slice: 10 plans + 26 ZIPs + 7 compositions",
-    "evidence": "doc/testing/evidence/skill-custom-slice-engine.json",
-    "status": "processing kernel and 43 original-oracle/publication cases passed; complete workbench/document/interaction acceptance pending",
-    "limits": "static image ≤20 MiB; host Worker required; 4096 cells; 128 MiB ZIP/encoded caps and full operation budget; GUI still awaits managed integration"
+    "evidence": "doc/testing/evidence/skill-custom-slice-workbench.json",
+    "status": "43 original kernel cases; actual auto/regions/L7/polyline, TXT/presets, documents/history, conflicts/late-result protection, cancel/navigation passed; joint RSS and full accessibility remain",
+    "limits": "static image <=20 MiB; host Worker required; 4096 cells; 0-149px padding; 128 MiB encoded cap and operation budget; retain browser tab"
   },
   {
     "id": "image.seam-preview",
     "originalEntry": "自定义切片",
     "implementation": "reference/frontend/src/components/RoninProCustomSlice.tsx",
     "inputs": "image",
-    "outputs": "interactive seam layout; PNG ZIP via custom slice",
-    "dependencies": "host Canvas Worker/JSZip + local queue; legacy UI migration pending",
+    "outputs": "PNG frame ZIP, rearranged PNG, parameter TXT and seam preview",
+    "dependencies": "host Canvas Worker/JSZip + local queue + formal custom-slice document",
     "targetModule": "skills/frameronin-local/assets/workbench/src/components/RoninProCustomSlice.tsx",
     "sample": "assets/fixtures/custom-slice: 10 plans + 26 ZIPs + 7 compositions",
-    "evidence": "doc/testing/evidence/skill-custom-slice-engine.json",
-    "status": "processing kernel and 43 original-oracle/publication cases passed; complete workbench/document/interaction acceptance pending",
-    "limits": "static image ≤20 MiB; host Worker required; 4096 cells; 128 MiB ZIP/encoded caps and full operation budget; GUI still awaits managed integration"
+    "evidence": "doc/testing/evidence/skill-custom-slice-workbench.json",
+    "status": "43 original kernel cases; actual auto/regions/L7/polyline, TXT/presets, documents/history, conflicts/late-result protection, cancel/navigation passed; joint RSS and full accessibility remain",
+    "limits": "static image <=20 MiB; host Worker required; 4096 cells; 0-149px padding; 128 MiB encoded cap and operation budget; retain browser tab"
   },
   {
     "id": "image.resize-hard",

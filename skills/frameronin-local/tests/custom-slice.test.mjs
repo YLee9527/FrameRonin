@@ -37,7 +37,8 @@ test('reviewed custom slices retain remainder cells, fractional-region floors, j
 test('composition validates signed frame indices, exact grids, full output dimensions and decoded budgets',()=>{
  const sizes=[{w:4,h:5},{w:7,h:3}],p={rows:2,columns:3,grid:[[1,-2,0],[2,0,-1]],expandUp:1,expandDown:2,expandLeft:3,expandRight:4}
  assert.deepEqual(api.customComposeSize(sizes,p),{width:42,height:16,cellW:7,cellH:5})
- for(const invalid of [{...p,grid:[[1,2],[2,1]]},{...p,grid:[[1,3,0],[0,0,0]]},{...p,grid:[[1,1.5,0],[0,0,0]]},{...p,command:'run'},{...p,expandLeft:129}])assert.throws(()=>api.customComposeSize(sizes,invalid))
+ for(const invalid of [{...p,grid:[[1,2],[2,1]]},{...p,grid:[[1,3,0],[0,0,0]]},{...p,grid:[[1,1.5,0],[0,0,0]]},{...p,command:'run'},{...p,expandLeft:150}])assert.throws(()=>api.customComposeSize(sizes,invalid))
+ assert.equal(api.customComposeSize([{w:1,h:1}],{...p,rows:1,columns:1,grid:[[1]],expandLeft:0,expandRight:0,expandUp:149,expandDown:0}).height,150)
  assert.throws(()=>api.checkCustomComposeBudget(sizes,p,10,20,2*1024**3,2*1024**3),/RESOURCE_LIMIT/)
 })
 

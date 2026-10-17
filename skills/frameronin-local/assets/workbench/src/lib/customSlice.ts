@@ -92,7 +92,9 @@ export async function exportCustomSlices(image:SliceImage,layout:CustomLayout):P
  }finally{for(const frame of frames){frame.width=1;frame.height=1}}
 }
 export function validateCustomCompose(value:unknown,count:number):asserts value is CustomCompose{
- if(!object(value)||!fields(value,['rows','columns','grid','expandUp','expandDown','expandLeft','expandRight'])||!integer(count,1,MAX_CUSTOM_CELLS)||!integer(value.rows,1,MAX_CUSTOM_CELLS)||!integer(value.columns,1,MAX_CUSTOM_CELLS)||Number(value.rows)*Number(value.columns)>MAX_CUSTOM_CELLS||!['expandUp','expandDown','expandLeft','expandRight'].every(key=>integer(value[key],0,128))||!Array.isArray(value.grid)||value.grid.length!==value.rows||value.grid.some(row=>!Array.isArray(row)||row.length!==value.columns||row.some(v=>!integer(v,-count,count))))throw new Error('CUSTOM_COMPOSE_LAYOUT')
+ // The original 150px upward-only preset can require 149px padding even
+ // though its manual number inputs stop at 128.
+ if(!object(value)||!fields(value,['rows','columns','grid','expandUp','expandDown','expandLeft','expandRight'])||!integer(count,1,MAX_CUSTOM_CELLS)||!integer(value.rows,1,MAX_CUSTOM_CELLS)||!integer(value.columns,1,MAX_CUSTOM_CELLS)||Number(value.rows)*Number(value.columns)>MAX_CUSTOM_CELLS||!['expandUp','expandDown','expandLeft','expandRight'].every(key=>integer(value[key],0,149))||!Array.isArray(value.grid)||value.grid.length!==value.rows||value.grid.some(row=>!Array.isArray(row)||row.length!==value.columns||row.some(v=>!integer(v,-count,count))))throw new Error('CUSTOM_COMPOSE_LAYOUT')
 }
 export function customComposeSize(sizes:FrameSize[],p:CustomCompose){
  validateCustomCompose(p,sizes.length)
