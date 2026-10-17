@@ -89,6 +89,9 @@ REGISTRY = {
     'image.visibleWatermark': operation(['image'],{'sizeMode':choice('auto',['auto','48','96']),
         'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
         'png_report','original_reverse_alpha_standalone',overhead=256),
+    'image.spriteGifs': operation(['image'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'zip_report','original_sprite_sheet_row_gifs',overhead=256),
     'image.scatterDetect': operation(['image'],{'detect':{'type':'object','default':DETECT_DEFAULTS},
         'order':choice('row-major',['row-major','column-major']),'renderer':choice('browser-worker',['browser-worker']),
         'frontendBytes':integer(0,0,2*1024**3)},'json_report','original_connected_components',overhead=256),
@@ -205,6 +208,9 @@ def preview(project, payload):
         if source['bytes']>20*1024**2 or source.get('containerFormat') not in ['PNG','JPEG','WEBP'] or source.get('frames',1)!=1 or max(source['width'],source['height'])>30000:
             raise RoninError('WATERMARK_SOURCE_LIMIT','Select one static PNG, JPEG or WebP up to 20 MiB and 30000 pixels per side.')
         estimate=256*1024**2+max(pixels)*40+source['bytes']*8+values['frontendBytes']
+    if name=='image.spriteGifs':
+        from .sprite_gif import estimate as sprite_estimate
+        estimate=sprite_estimate(versions[0],values)
     if name=='image.normal':
         source=versions[0]['metadata'];width,height=normal_output_dimensions(source,values)
         if values['renderer']=='native':
@@ -354,7 +360,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,

@@ -14,7 +14,7 @@ from .project import Project, checked_id
 LEASE_SECONDS=15
 
 def result_filename(operation):
-    return 'browser-result.json' if operation in ['image.scatterDetect','image.customSlicePlan'] else 'browser-result.zip' if operation in ['image.scatterExport','image.customSlice'] else 'browser-result.png'
+    return 'browser-result.json' if operation in ['image.scatterDetect','image.customSlicePlan'] else 'browser-result.zip' if operation in ['image.scatterExport','image.customSlice','image.spriteGifs'] else 'browser-result.png'
 
 
 def location(project,task_id,generation=None):
@@ -25,7 +25,7 @@ def location(project,task_id,generation=None):
             raise RoninError('TASK_MISSING','The task does not exist.')
         payload=json.loads(row['payload'])
         from .operations import parameters as checked_parameters
-        if payload['operation'] not in ['image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
+        if payload['operation'] not in ['image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] or checked_parameters(payload['operation'],payload.get('parameters',{})).get('renderer')!='browser-worker':
             raise RoninError('BROWSER_OPERATION_UNSUPPORTED','This task does not accept browser pixels.')
         if generation is not None:
             if type(generation) is not int:
@@ -55,7 +55,12 @@ def accept(project,task_id,generation,source):
     from .operations import parameters as checked_parameters,normal_output_dimensions
     payload=json.loads(row['payload']);parameters=checked_parameters(payload['operation'],payload['parameters'])
     stats={}
-    if payload['operation'] in ['image.customSlicePlan','image.customSlice','image.customCompose']:
+    if payload['operation']=='image.spriteGifs':
+        from .sprite_gif import validate_result
+        from .operations import preview
+        stats=validate_result(source,project.version(payload['inputs'][0]),parameters,preview(project,payload)['budgetBytes'])
+        dimensions=None
+    elif payload['operation'] in ['image.customSlicePlan','image.customSlice','image.customCompose']:
         from .custom_slice import validate_result
         from .operations import preview
         stats=validate_result(source,payload['operation'],project.version(payload['inputs'][0]),parameters,preview(project,payload)['budgetBytes'])

@@ -1,7 +1,7 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState} from 'react'
 import {customSliceAssetWorker,type CustomAsset} from '../lib/customSliceAssetWorker'
 import {localJson} from './api'
-type View={file:File;raw:string;preview:string;width:number;height:number;frames:string[];thumbnails:string[];sizes:{w:number;h:number}[];bytes:number;urls:string[]}
+type View={file:File;raw:string;preview:string;width:number;height:number;frames:string[];assets:Blob[];thumbnails:string[];sizes:{w:number;h:number}[];bytes:number;urls:string[]}
 export function useCustomSliceView(file:File|null,kind:'source'|'archive',retained:()=>number){
  const alive=useRef(true),slot=useRef<View|null>(null),controller=useRef<AbortController|null>(null),retainedRef=useRef(retained)
  useLayoutEffect(()=>{retainedRef.current=retained},[retained])
@@ -9,7 +9,7 @@ export function useCustomSliceView(file:File|null,kind:'source'|'archive',retain
  const accept=useCallback((file:File,asset:CustomAsset)=>{
   controller.current?.abort();slot.current?.urls.forEach(URL.revokeObjectURL)
   const urls:string[]=[],url=(blob:Blob)=>{const u=URL.createObjectURL(blob);urls.push(u);return u}
-  const next:View={file,raw:url(file),preview:asset.kind==='source'?url(asset.preview):'',width:asset.kind==='source'?asset.width:0,height:asset.kind==='source'?asset.height:0,frames:asset.kind==='archive'?asset.files.map(url):[],thumbnails:asset.kind==='archive'?asset.previews.map(url):[],sizes:asset.kind==='archive'?asset.sizes:[],bytes:asset.kind==='source'?asset.preview.size*2:asset.files.reduce((s,f)=>s+f.size*2,0)+asset.previews.reduce((s,f)=>s+f.size*2,0),urls}
+  const next:View={file,raw:url(file),preview:asset.kind==='source'?url(asset.preview):'',width:asset.kind==='source'?asset.width:0,height:asset.kind==='source'?asset.height:0,frames:asset.kind==='archive'?asset.files.map(url):[],assets:asset.kind==='archive'?asset.files:[],thumbnails:asset.kind==='archive'?asset.previews.map(url):[],sizes:asset.kind==='archive'?asset.sizes:[],bytes:asset.kind==='source'?asset.preview.size*2:asset.files.reduce((s,f)=>s+f.size*2,0)+asset.previews.reduce((s,f)=>s+f.size*2,0),urls}
   slot.current=next;if(alive.current){setView(next);setError('');setLoading(false)}
  },[])
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;controller.current?.abort();slot.current?.urls.forEach(URL.revokeObjectURL);slot.current=null}},[])

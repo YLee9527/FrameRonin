@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=options.operation==='image.visibleWatermark'?new Worker(new URL('../lib/geminiWatermark.worker.ts',import.meta.url),{type:'module'}):
+    worker=options.operation==='image.spriteGifs'?new Worker(new URL('../lib/spriteGifRows.worker.ts',import.meta.url),{type:'module'}):
+      options.operation==='image.visibleWatermark'?new Worker(new URL('../lib/geminiWatermark.worker.ts',import.meta.url),{type:'module'}):
       ['image.customSlicePlan','image.customSlice','image.customCompose'].includes(options.operation)?new Worker(new URL('../lib/customSlice.worker.ts',import.meta.url),{type:'module'}):
       options.operation.startsWith('image.scatter')?new Worker(new URL('../lib/scatterSlice.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.expandShrink'?new Worker(new URL('../lib/expandShrink.worker.ts',import.meta.url),{type:'module'}):

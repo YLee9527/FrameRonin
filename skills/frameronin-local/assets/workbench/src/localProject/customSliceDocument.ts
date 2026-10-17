@@ -23,6 +23,7 @@ const uuid=(v:unknown)=>typeof v==='string'&&/^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-
 function resource(v:unknown):asserts v is Resource{
  if(!object(v)||!fields(v,['versionId','name','type'])||!uuid(v.versionId)||typeof v.name!=='string'||!v.name.length||v.name.length>255||['.','..'].includes(v.name)||/[\\/]/.test(v.name)||[...v.name].some(c=>c.charCodeAt(0)<32)||typeof v.type!=='string'||v.type.length>100||[...v.type].some(c=>c.charCodeAt(0)<32))throw new Error('CUSTOM_DOCUMENT_RESOURCE')
 }
+export {resource as validateMediaResource}
 export function customComposition(d:CustomSettings):CustomCompose{return {rows:d.rearrangeRows,columns:d.rearrangeCols,grid:d.rearrangeGrid,expandUp:d.expandUp,expandDown:d.expandDown,expandLeft:d.expandLeft,expandRight:d.expandRight}}
 export function currentCustomLayout(d:CustomSliceDraft):CustomLayout{
  if(!d.info)throw new Error('CUSTOM_SOURCE_REQUIRED')

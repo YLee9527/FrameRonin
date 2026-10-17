@@ -2,6 +2,7 @@
 import JSZip from 'jszip'
 import {checkCustomComposeBudget,checkCustomSliceBudget,composeCustomSlices,computeCustomPlan,exportCustomSlices,inspectCustomZip,type CustomCompose,type CustomLayout,type CustomPlanParameters,type FrameSize} from './customSlice'
 import {fineEditorImageSize} from './fineEditorPixels'
+import {boundedZipBlob} from './orderedZip'
 
 const canvases:OffscreenCanvas[]=[]
 Object.defineProperty(self,'document',{value:{createElement(name:string){
@@ -21,9 +22,9 @@ self.onmessage=async(event:MessageEvent<Request>)=>{
    if(!Number.isSafeInteger(budgetBytes)||budgetBytes<=0||budgetBytes>2*1024**3||!Number.isSafeInteger(p.frontendBytes)||p.frontendBytes<0||256*1024**2+file.size*4+p.frontendBytes>budgetBytes)throw new Error('CUSTOM_RESOURCE_LIMIT')
    const bytes=await file.arrayBuffer(),{names,encodedBytes}=inspectCustomZip(bytes,budgetBytes)
    if(256*1024**2+file.size*4+encodedBytes*4+p.frontendBytes>budgetBytes)throw new Error('CUSTOM_RESOURCE_LIMIT')
-   const archive=await JSZip.loadAsync(bytes),files:Blob[]=[],sizes:FrameSize[]=[]
+   const archive=await JSZip.loadAsync(bytes),files:Blob[]=[],sizes:FrameSize[]=[];let inflatedBytes=0
    for(const name of names){
-    const file=await archive.file(name)!.async('blob'),size=await fineEditorImageSize(file),signature=new Uint8Array(await file.slice(0,8).arrayBuffer())
+    const file=await boundedZipBlob(archive.file(name)!,encodedBytes-inflatedBytes),size=await fineEditorImageSize(file),signature=new Uint8Array(await file.slice(0,8).arrayBuffer());inflatedBytes+=file.size
     if(signature.join(',')!=='137,80,78,71,13,10,26,10')throw new Error('CUSTOM_ARCHIVE_PNG')
     files.push(file);sizes.push({w:size.width,h:size.height})
    }

@@ -45,3 +45,5 @@ RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、
 自定义切片的 `image.customSlicePlan`、`image.customSlice`、`image.customCompose` 已接入工作台、统一取消和正式文档。三者需要浏览器执行端，不能通过 CLI 或通用提案直接提交。保留 L7、行带错位、单行折线、区域裁切及带镜像的重排，不以普通规则切片代替。最多 4096 格；四向补边各 0–149px，包含原八种尺寸预设和向上扩展。完整参数、资源预算及格式范围以注册表及仓库 API 文档为准。
 
 图片右下角可见水印使用工作台的 `image.visibleWatermark`，支持 auto/48/96，保留原逆 Alpha 和独立入口的 96px 强度。静态 PNG/JPEG/WebP 最大 20 MiB，受完整预算和原尺寸限制；结果保存为正式 PNG 与报告。此模式需要宿主 Worker，CLI/通用提案直接执行拒绝。原图经重压缩或缩放后可能有残留，应检查实际素材；不可见水印不在该工具范围内。
+
+精灵表按行 GIF 使用工作台的 `image.spriteGifs`，严格布局为 columns、rows、唯一 order、framesPerRow、duration，输出有序 GIF ZIP 与报告。保留原每行最大尺寸左上补透明、独立调色板和 GIF 10ms 时长舍入。原网格切分使用 `image.customSlice`，行列最大 64、总帧数最大 4096；每行 GIF 最多 128 帧、时长 20–500ms、ZIP 最大 128 MiB。静态 PNG/JPEG/WebP 最大 20 MiB，仍受完整工作集预算约束；必须保留宿主浏览器执行端，不使用近似的后端编码替代。

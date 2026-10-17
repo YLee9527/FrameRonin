@@ -22,43 +22,43 @@
 | sequence.dedupe | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
 | sequence.optical-flow | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 后台与 RoninPro 工作台固定样本通过；GIF 入口交互待验收 |
 | sequence.png-zip | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | GIF 拆帧 ZIP 实际下载及四帧像素/顺序通过；其他序列 ZIP 入口待验收 |
-| image.crop | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.resize | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.stroke | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.paint | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.erase | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.flip | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| image.transparent-repair | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 待逐项验收 |
-| fine.image.paint | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| fine.image.erase | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| fine.image.crop | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| image.grid | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| image.palette | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
-| image.alpha | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineProcess.tsx | image → PNG | 待逐项验收 |
+| image.crop | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收 |
+| image.resize | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收 |
+| image.stroke | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收 |
+| image.paint | 图片常规转入精细处理 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | image → PNG | 常规结果转入精细画布；绘制/擦除、正式文档、撤销和 PNG 下载已验收 |
+| image.erase | 图片常规转入精细处理 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | image → PNG | 常规结果转入精细画布；绘制/擦除、正式文档、撤销和 PNG 下载已验收 |
+| image.flip | 图片常规：底部扩展中的复制行水平翻转 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG，按三行重排并扩展 floor(height/3) | 受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收 |
+| image.transparent-repair | 抠图去背：去背景后修复 | reference/frontend/src/components/ImageMatte.tsx | image → PNG | 待逐项验收 |
+| fine.image.paint | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | 静态 PNG/JPEG/WebP；保留原件版本 → 真实 PNG、正式编辑版本与 image-fine 文档 | 正式文档、绘制/撤销/重开/冲突与 22 组对照通过；完整格式/视图交互继续验收 |
+| fine.image.erase | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | 静态 PNG/JPEG/WebP；保留原件版本 → 真实 PNG、正式编辑版本与 image-fine 文档 | 正式文档、绘制/撤销/重开/冲突与 22 组对照通过；完整格式/视图交互继续验收 |
+| fine.image.crop | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | 静态 PNG/JPEG/WebP；保留原件版本 → 真实 PNG、正式编辑版本与 image-fine 文档 | 正式文档、绘制/撤销/重开/冲突与 22 组对照通过；完整格式/视图交互继续验收 |
+| image.grid | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | 静态 PNG/JPEG/WebP；保留原件版本 → 真实 PNG、正式编辑版本与 image-fine 文档 | 正式文档、绘制/撤销/重开/冲突与 22 组对照通过；完整格式/视图交互继续验收 |
+| image.palette | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | 静态 PNG/JPEG/WebP；保留原件版本 → 真实 PNG、正式编辑版本与 image-fine 文档 | 正式文档、绘制/撤销/重开/冲突与 22 组对照通过；完整格式/视图交互继续验收 |
+| image.alpha | 图片精细 | reference/frontend/src/components/ImageResizeStroke/ImageFineEditor.tsx | 静态 PNG/JPEG/WebP；保留原件版本 → 真实 PNG、正式编辑版本与 image-fine 文档 | 正式文档、绘制/撤销/重开/冲突与 22 组对照通过；完整格式/视图交互继续验收 |
 | image.perfect-pixel | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 后台/工作台固定样本、真实选区与 8192→2048 尺寸通过；像素文档保存/重开/撤销/冲突/迟到读取通过，更多采样待验收 |
 | image.pixelate | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 1/4/8 像素块原对照及工作台下载通过，像素文档参数重开/统一撤销通过；更多格式待验收 |
 | image.merge-colors | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 三种强度严格原像素对照与工作台下载通过；文档合色 60 重开、统一撤销与保存冲突通过 |
 | image.palette16 | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | RGB/Lab × 抖动四组原对照、工作台下载/取消/保护通过；文档 RGB/关闭抖动重开及撤销通过，大图超预算拒绝 |
 | image.pixellise | 像素还原 | reference/frontend/src/components/ImagePixelate.tsx | image → PNG | 原全局网格两组、工作台下载/后台继续通过；网格参数及结果正式文档/统一撤销通过，联合内存与更多输入待验收 |
-| image.expand | 扩展收缩 | reference/frontend/src/components/ImageExpandShrink.tsx | image → PNG | 待逐项验收 |
-| image.shrink | 扩展收缩 | reference/frontend/src/components/ImageExpandShrink.tsx | image → PNG | 待逐项验收 |
+| image.expand | 扩展收缩 | reference/frontend/src/components/ImageExpandShrink.tsx | image → PNG | 15 组原算法严格对照；受控 Worker、正式文档/历史/下载、取消与迟到保护通过；联合内存及更多取消样本继续验收 |
+| image.shrink | 扩展收缩 | reference/frontend/src/components/ImageExpandShrink.tsx | image → PNG | 15 组原算法严格对照；受控 Worker、正式文档/历史/下载、取消与迟到保护通过；联合内存及更多取消样本继续验收 |
 | image.rembg | AI抠图 | reference/frontend/src/components/ImageMatte.tsx | image → transparent PNG | 待逐项验收 |
-| sequence.slice | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | image/frames → PNG/ZIP | 待逐项验收 |
-| sequence.compose | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | image/frames → PNG/ZIP | 待逐项验收 |
+| sequence.slice | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | static PNG/JPEG/WebP + reviewed grid/order → ordered PNG ZIP / GIF rows ZIP + report | 34 项原版严格对照、正式任务/文档/统一历史、4096 帧实导出、取消/迟到/冲突及三语通过；联合内存与完整可访问性待完成 |
+| sequence.compose | 精灵表 | reference/frontend/src/components/SpriteSheetTool.tsx | static PNG/JPEG/WebP + reviewed grid/order → ordered PNG ZIP / GIF rows ZIP + report | 34 项原版严格对照、正式任务/文档/统一历史、4096 帧实导出、取消/迟到/冲突及三语通过；联合内存与完整可访问性待完成 |
 | image.grid-adjust | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | 精灵表调整.image.resize | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
 | image.preview | 精灵表调整 | reference/frontend/src/components/SpriteSheetAdjust.tsx | sprite sheet → PNG | 待逐项验收 |
-| image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → PNG / 参数报告 | 19 项原版对照、实际下载、正式文档/历史、取消/冲突/迟到保护通过；真实水印残留、联合内存及可访问性待完成 |
-| image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → PNG ZIP | 待逐项验收 |
-| image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP / 重排 PNG / TXT / 切线预览 | 原算法对照、工作台/正式文档/历史、TXT/预设、取消/迟到保护通过；联合内存及完整可访问性待完成 |
-| image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG ZIP / 重排 PNG / TXT / 切线预览 | 原算法对照、工作台/正式文档/历史、TXT/预设、取消/迟到保护通过；联合内存及完整可访问性待完成 |
-| image.resize-hard | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控任务、绘制文档与撤销/取消通过；完整交互和联合内存待完成 |
-| 自定义缩放.image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控任务、绘制文档与撤销/取消通过；完整交互和联合内存待完成 |
+| image.watermark-remove | 图片水印 | reference/frontend/src/components/ImageGeminiWatermark.tsx | image → same-size PNG and parameter report | strict original pixels, actual auto/96/JPEG downloads, formal document/history, conflict/copy/late protection and cancellation/navigation passed; real watermark residue quality and joint RSS/accessibility remain |
+| image.scatter-slice | 散图切片 | reference/frontend/src/components/RoninProScatterSlice.tsx | image → ordered PNG/JPEG/WebP ZIP + detection JSON + reports | original oracle and managed workbench/document checkpoint passed; complete S2/S3/S4 regression pending |
+| image.custom-slice | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG frame ZIP, rearranged PNG, parameter TXT and seam preview | 43 original kernel cases; actual auto/regions/L7/polyline, TXT/presets, documents/history, conflicts/late-result protection, cancel/navigation passed; joint RSS and full accessibility remain |
+| image.seam-preview | 自定义切片 | reference/frontend/src/components/RoninProCustomSlice.tsx | image → PNG frame ZIP, rearranged PNG, parameter TXT and seam preview | 43 original kernel cases; actual auto/regions/L7/polyline, TXT/presets, documents/history, conflicts/late-result protection, cancel/navigation passed; joint RSS and full accessibility remain |
+| image.resize-hard | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控加工、绘制文档与撤销/取消通过；完整格式/交互及联合内存待完成 |
+| 自定义缩放.image.resize | 自定义缩放 | reference/frontend/src/components/RoninProCustomScale.tsx | image → PNG | 原算法、受控加工、绘制文档与撤销/取消通过；完整格式/交互及联合内存待完成 |
 | audio.wav-to-mp3 | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.batch | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
 | audio.zip | 音频压缩 | reference/frontend/src/components/RoninProAudioCompress.tsx | WAV files → MP3 ZIP | 待逐项验收 |
-| sequence.unify-size | 统一尺寸 | reference/frontend/src/components/RoninProUnifySize.tsx | frames → PNG | 原算法、受控任务、文档与统一撤销通过；联合内存及完整回归待完成 |
-| sequence.duplicate-grid | 切分后寻找重复帧 | reference/frontend/src/components/RoninProDuplicateFrames.tsx | sprite sheet → PNG cells + duplicate groups | 原算法、受控任务、文档与统一撤销通过；联合内存及完整回归待完成 |
+| sequence.unify-size | 统一尺寸 | reference/frontend/src/components/RoninProUnifySize.tsx | frames → PNG | 原算法、受控任务、正式文档与统一撤销通过；联合内存及完整模块回归待完成 |
+| sequence.duplicate-grid | 切分后寻找重复帧 | reference/frontend/src/components/RoninProDuplicateFrames.tsx | sprite sheet → PNG cells + zero-based duplicate groups | 原算法、受控任务、正式文档与统一撤销通过；联合内存及完整模块回归待完成 |
 | image.preprocess | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.matte | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
 | image.alpha-repair | 单图Pro | reference/frontend/src/components/RoninProSheetPro.tsx | image → PNG | 待逐项验收 |
@@ -86,7 +86,7 @@
 | map.adjacency | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 左侧透明模板严格像素对照、4/8/12 分割及方向约束通过；全部方向交互待验收 |
 | map.feather | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 三组四边羽化 Worker/PNG/PSD 严格像素对照通过；联合实测内存待验收 |
 | map.seam-preview | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 64px 羽化预览严格像素相等；隐藏/边框与完整接缝交互待验收 |
-| map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 后台 PSD 对照与取消通过；正式结果在 Krita 打开两层、透明度及独立合成验收通过 |
+| map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 后台 PSD 对照与取消、正式结果的 Krita 两层/透明度及独立合成验收通过 |
 | map.godot-scene | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 新后台场景在固定可信无脚本 Godot 4.7.2 工程导入及三帧运行通过 |
 | map.godot-pack | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 工作台后台 ZIP/正式版本一致、解包及可信工程导入运行通过 |
 | game.topdown | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |
@@ -125,3 +125,4 @@
 | node.customGridRearrange | RoninPro 蓝图节点 | reference/frontend/src/lib/roninProWorkflow.ts | typed image ports → PNG blob | awaiting strict validation and pixel acceptance |
 
 JSON 清单还记录依赖、目标模块、固定样本、限制和证据。原仓库未实现的 Rseprite 导出列入 excluded-roadmap.json，不计入复刻基线。复制源码不代表验收通过。
+部分早期条目仍需回填已有模块证据，当前不能按待验收条目数量计算完成百分比；剩余工作见 [待完成清单](../management/REMAINING_WORK.md)。

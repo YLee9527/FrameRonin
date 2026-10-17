@@ -1,5 +1,9 @@
 # CLI 与本地 API
 
+精灵表按行 GIF 使用 `image.spriteGifs`，输入单个正式静态图片版本，参数 `renderer=browser-worker`、`frontendBytes`、`layout={columns,rows,order,framesPerRow,duration}`。行列 1–64，order 为唯一且有效的原网格索引，最多 4096 帧；每行 1–128 帧，时长 20–500ms。沿用原 gifenc 的 10ms 四舍五入、逐帧调色板、透明度阈值和每行最大尺寸左上对齐。输出按顺序 `row_01.gif` 等组成的 ZIP 和报告；接收端逐帧核对尺寸、数量和时长，随后由统一事务登记。CLI/通用提案不能直接提交需要宿主 Worker 的任务，不能以近似后端编码器代替。
+
+精灵表 PNG 拆分复用 `image.customSlice` 网格模式，保留余数分配和最小 1px 的原算法。GIF 预备帧也使用同一路径；正式 GIF 任务从冻结源图和审阅后的索引切取，不把全部解码帧堆在主线程。两种 ZIP 均限制 128 MiB。预览解包除了中央目录预检，还通过锁定 JSZip 的有界流累计实际解压量，接口缺失或超量直接失败；该检查同样用于自定义切图 ZIP 读取。
+
 CLI 返回 JSON 并保留失败退出状态。`doctor`、`init`、`import`、`assets`、`version`、`checkout`、`verify`、`recover` 管理运行时和项目。`operations`、`preview`、`submit`、`status`、`wait`、`cancel` 管理加工。`ai-begin`、`ai-mark` 记录宿主生成尝试；`document-save/get/restore` 保存文档修订；`serve` 提供工作台。
 
 任务 JSON 字段仅允许 `operation`、`inputs`、`parameters`、可选 `assetId`。输入是正式版本 UUID；参数由操作注册表定义，不允许命令和任意读写路径。执行前重验内容与预算。

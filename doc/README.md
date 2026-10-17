@@ -15,6 +15,7 @@
 | [排障](troubleshooting/LOCAL.md) | 错误、恢复、AI 状态和原生检查 |
 | [变更](management/CHANGELOG.md) | 已实现改变与剩余验收 |
 | [Skill 里程碑](management/SKILL_MILESTONES.md) | 当前阶段、检查点与提交 |
+| [待完成清单](management/REMAINING_WORK.md) | 剩余开发、迁移及验收的六类工作 |
 | [当前实施基线](SKILL_IMPLEMENTATION.md) | 完整范围、宿主边界、阶段与提交条件 |
 | [功能对照](baseline/FEATURES.md) | 逐项来源、输入输出与验收状态 |
 | [归档](baseline/ARCHIVE.md) | 冻结提交、校验、运行产物去向 |

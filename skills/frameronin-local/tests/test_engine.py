@@ -381,6 +381,36 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(self.project.document(doc)['kind'],'image-visible-watermark')
         self.assertTrue(self.project.verify()['valid'])
 
+    def test_sprite_row_gifs_validate_layout_zip_frames_timing_and_cancel_generation(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        layout={'columns':2,'rows':1,'order':[1,0],'framesPerRow':2,'duration':25}
+        payload={'operation':'image.spriteGifs','inputs':[self.version['id']],'parameters':{'layout':layout}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        for changed in [{'order':[0,0]},{'order':[True]},{'order':[2]},{'order':[]},{'duration':501},{'framesPerRow':129},{'command':'run'}]:
+            with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':{'layout':{**layout,**changed}}})
+        def running():
+            created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+10
+            while not ready(self.project,created['id'])['ready']:
+                self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+            return created['id']
+        tid=running();gif=self.root/'row.gif';archive=self.root/'rows.zip'
+        def write(duration=30,count=2,name='row_01.gif'):
+            frames=[Image.new('RGBA',(8,12),color) for color in ['red','blue']]
+            frames[0].save(gif,save_all=True,append_images=frames[1:count],duration=duration,loop=0,disposal=2)
+            with zipfile.ZipFile(archive,'w') as output:output.write(gif,name)
+        for kwargs in [{'duration':40},{'count':1},{'name':'../row_01.gif'}]:
+            write(**kwargs)
+            with self.assertRaises(RoninError):accept(self.project,tid,0,archive)
+        write();accept(self.project,tid,0,archive);completed=wait(self.project,tid,15)
+        self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text())
+        self.assertEqual((report['outputRows'],report['outputFrames']),(1,2))
+        self.assertEqual(report['gifRows'],[{'width':8,'height':12,'frames':2,'durationMs':30}])
+        tid=running();cancel(self.project,tid)
+        with self.assertRaises(Cancelled):accept(self.project,tid,0,archive)
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_expand_shrink_requires_workbench_checks_limits_and_reconciles_publication(self):
         from frameronin_engine.browser_tasks import ready,accept
         payload={'operation':'image.expandShrink','inputs':[self.version['id']],

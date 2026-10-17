@@ -1,0 +1,3309 @@
+{
+  "codeCommit": null,
+  "date": "2026-10-17",
+  "scope": "SpriteSheetTool original PNG splitting and editable row GIF export, formal documents, history, managed host Workers. S2/S3/S4 remain open.",
+  "original": {
+    "source": "reference/frontend/src/components/SpriteSheetTool.tsx",
+    "fixtureManifest": "skills/frameronin-local/assets/fixtures/sprite-sheet/manifest.json",
+    "frozenDirectory": "skills/frameronin-local/assets/fixtures/sprite-sheet/original",
+    "verifier": "skills/frameronin-local/tests/compare_sprite_oracle.py",
+    "criteria": "Every ordered PNG RGBA and every GIF frame RGBA/count/duration; GIF member bytes must also match. Source hashes are frozen."
+  },
+  "oracle": {
+    "archiveSha256": "bf54d2aa2fc16a443a0c71bc7c259f96dea94b644a30b04ab2489c49a74b75d5",
+    "cases": [
+      {
+        "kind": "split",
+        "sample": "grid-remainders",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "a6925a193e5da31dcf1e198368c8be59d93ffd082965ac8562c3ed0251367d03",
+        "actualMemberHash": "a6925a193e5da31dcf1e198368c8be59d93ffd082965ac8562c3ed0251367d03",
+        "shapes": [
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 12,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "single-cell",
+        "equal": true,
+        "members": 1,
+        "decodedFrames": 1,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_000.png",
+        "originalMemberHash": "fb34e22318027adb779d498b8d4943500a4ed24572930e7aa19da1512c500282",
+        "actualMemberHash": "fb34e22318027adb779d498b8d4943500a4ed24572930e7aa19da1512c500282",
+        "shapes": [
+          {
+            "width": 37,
+            "height": 29,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "dense-grid",
+        "equal": true,
+        "members": 16,
+        "decodedFrames": 16,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_015.png",
+        "originalMemberHash": "1d8fe263d3043e58226a6ea08d26fed72054629fda444df7bb7e39ab21395f78",
+        "actualMemberHash": "1d8fe263d3043e58226a6ea08d26fed72054629fda444df7bb7e39ab21395f78",
+        "shapes": [
+          {
+            "width": 1,
+            "height": 1,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 16
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "limit-4096",
+        "equal": true,
+        "members": 4096,
+        "decodedFrames": 4096,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_4095.png",
+        "originalMemberHash": "a72f172520a19c8262226b7db7f28f5ab04a236cb13d04ed4f4891ad827130cf",
+        "actualMemberHash": "a72f172520a19c8262226b7db7f28f5ab04a236cb13d04ed4f4891ad827130cf",
+        "shapes": [
+          {
+            "width": 1,
+            "height": 1,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4096
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "photo-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "0d07aabaa690ee27d04c9efc30d38ecd41406fd23935be17cf3cdf22502a4280",
+        "actualMemberHash": "0d07aabaa690ee27d04c9efc30d38ecd41406fd23935be17cf3cdf22502a4280",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "jpeg-422-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "8687ffd8468e07b26fcef7909cde7423d756c692016c0bd9e9874e3aba1a5eb5",
+        "actualMemberHash": "8687ffd8468e07b26fcef7909cde7423d756c692016c0bd9e9874e3aba1a5eb5",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "jpeg-444-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "2d61d4ef36f2f3042cd111128da1875185cb1371fa4449a440a1b997d85b51a1",
+        "actualMemberHash": "2d61d4ef36f2f3042cd111128da1875185cb1371fa4449a440a1b997d85b51a1",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "jpeg-progressive-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "b5e2c41d096fb4aaa9974f4522315db89731ecddbf968a3cf2bd6266a9a70b24",
+        "actualMemberHash": "b5e2c41d096fb4aaa9974f4522315db89731ecddbf968a3cf2bd6266a9a70b24",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "jpeg-cmyk-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "50d04cbf28ae26b7f1175e9a66a8d8602ae5b5bfb61672f873e30efc44b866f2",
+        "actualMemberHash": "50d04cbf28ae26b7f1175e9a66a8d8602ae5b5bfb61672f873e30efc44b866f2",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "jpeg-gray-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "071a9582fb0d38c94812f0211a3e7dcd2d5a5a0008ef878b156c9d4f6f195d68",
+        "actualMemberHash": "071a9582fb0d38c94812f0211a3e7dcd2d5a5a0008ef878b156c9d4f6f195d68",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "jpeg-orientation8-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "5aec30dc225d4edd2357d3df2e2f5a9e9253ccc9c1526ef1ac220c254f35a5a8",
+        "actualMemberHash": "5aec30dc225d4edd2357d3df2e2f5a9e9253ccc9c1526ef1ac220c254f35a5a8",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 6
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "oriented-jpg",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "072bb6283ff2f2c3fcb776f652663fb79bfd2023d7f2ad181f7d07473b724f33",
+        "actualMemberHash": "072bb6283ff2f2c3fcb776f652663fb79bfd2023d7f2ad181f7d07473b724f33",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 6
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "profiled-png",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "d6aa6a72c52e6fa741ee445d8aa267a89056f32b019cccca8396dc873dc4a3d6",
+        "actualMemberHash": "d6aa6a72c52e6fa741ee445d8aa267a89056f32b019cccca8396dc873dc4a3d6",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "alpha-webp",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "actualMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "split",
+        "sample": "oriented-webp",
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "actualMemberHash": "7679161bffe6087bf7a991c4120fab0704e2dda818d6be7d0e23d6c98e1ab0fa",
+        "shapes": [
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 4
+          },
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "ragged-rows",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "fa48f62c706adde598f75575359b1a44b4afda874fe3533efda6b547fcc167f9",
+        "actualMemberHash": "fa48f62c706adde598f75575359b1a44b4afda874fe3533efda6b547fcc167f9",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 4,
+            "durations": [
+              100
+            ],
+            "members": 1
+          },
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 2,
+            "durations": [
+              100
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "reversed-25ms",
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_03.gif",
+        "originalMemberHash": "4772396fa6139c047a05e0ca3add40e6e77d4c45d1b716ef6c733a912a888e44",
+        "actualMemberHash": "4772396fa6139c047a05e0ca3add40e6e77d4c45d1b716ef6c733a912a888e44",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 2,
+            "durations": [
+              30
+            ],
+            "members": 2
+          },
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 2,
+            "durations": [
+              30
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "deleted-21ms",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 3,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "823dedb7067cb113cb7b189eda41aad5caa9abb3ad0054fcf4582f4eccf4429d",
+        "actualMemberHash": "823dedb7067cb113cb7b189eda41aad5caa9abb3ad0054fcf4582f4eccf4429d",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 14,
+            "frames": 2,
+            "durations": [
+              20
+            ],
+            "members": 1
+          },
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              20
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "one-per-row",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 2,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "caa550856fe65d5e415d7e46eb30bcf9b37f5f892931e055ffafe5d99a855a2a",
+        "actualMemberHash": "caa550856fe65d5e415d7e46eb30bcf9b37f5f892931e055ffafe5d99a855a2a",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              500
+            ],
+            "members": 1
+          },
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              500
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "one-frame",
+        "equal": true,
+        "members": 1,
+        "decodedFrames": 1,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_01.gif",
+        "originalMemberHash": "b31531ae5972142db59310be40c1512297cb275e0869bfc30b5c32dc4656668f",
+        "actualMemberHash": "b31531ae5972142db59310be40c1512297cb275e0869bfc30b5c32dc4656668f",
+        "shapes": [
+          {
+            "width": 12,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              20
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "dense-grid",
+        "equal": true,
+        "members": 4,
+        "decodedFrames": 16,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_04.gif",
+        "originalMemberHash": "c241fb95a902a809dc034b96cd852b2ae8fc9fb0f686cff1183684e6bc9e8548",
+        "actualMemberHash": "c241fb95a902a809dc034b96cd852b2ae8fc9fb0f686cff1183684e6bc9e8548",
+        "shapes": [
+          {
+            "width": 1,
+            "height": 1,
+            "frames": 5,
+            "durations": [
+              30
+            ],
+            "members": 3
+          },
+          {
+            "width": 1,
+            "height": 1,
+            "frames": 1,
+            "durations": [
+              30
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "limit-4096",
+        "equal": true,
+        "members": 32,
+        "decodedFrames": 4096,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_32.gif",
+        "originalMemberHash": "bc1cba25d4b0a6ff93c8e205f4473a599bcaaf17979e5573c399af804e34b635",
+        "actualMemberHash": "bc1cba25d4b0a6ff93c8e205f4473a599bcaaf17979e5573c399af804e34b635",
+        "shapes": [
+          {
+            "width": 1,
+            "height": 1,
+            "frames": 128,
+            "durations": [
+              20
+            ],
+            "members": 32
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "alpha-threshold",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "208b333b7f5a4dc0edbd5360af2324fb987575746aa6693759e8660084b1ade4",
+        "actualMemberHash": "208b333b7f5a4dc0edbd5360af2324fb987575746aa6693759e8660084b1ade4",
+        "shapes": [
+          {
+            "width": 54,
+            "height": 72,
+            "frames": 4,
+            "durations": [
+              130
+            ],
+            "members": 1
+          },
+          {
+            "width": 54,
+            "height": 72,
+            "frames": 2,
+            "durations": [
+              130
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "photo-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "78709e73a0b1b7a67023fc41bd3b5915d74666a8460cb2985c41720e06844eea",
+        "actualMemberHash": "78709e73a0b1b7a67023fc41bd3b5915d74666a8460cb2985c41720e06844eea",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "jpeg-422-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "76dd4d18029f5c302f7936ef87540df94fdc19f49bb6ff5ee631e5c08b1e9f7f",
+        "actualMemberHash": "76dd4d18029f5c302f7936ef87540df94fdc19f49bb6ff5ee631e5c08b1e9f7f",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "jpeg-444-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "6e36823999a31f8969aefb0163ea544b634c1655561ebda15345c5bba859f694",
+        "actualMemberHash": "6e36823999a31f8969aefb0163ea544b634c1655561ebda15345c5bba859f694",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "jpeg-progressive-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "6d2e36f3226d53d2215c63a686a0bdb69eda0d10b24f484fa82d1db8e288f4ea",
+        "actualMemberHash": "6d2e36f3226d53d2215c63a686a0bdb69eda0d10b24f484fa82d1db8e288f4ea",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "jpeg-cmyk-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "bb44cc0c0b2cab26e1ceaec19b574b2003821f42280881378ed0c3f81c704e8e",
+        "actualMemberHash": "bb44cc0c0b2cab26e1ceaec19b574b2003821f42280881378ed0c3f81c704e8e",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "jpeg-gray-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "b1d671b84dc903600acb00aa36d1f4b1ba1c59f6ccf35d6b7e6dc8ab68347b39",
+        "actualMemberHash": "b1d671b84dc903600acb00aa36d1f4b1ba1c59f6ccf35d6b7e6dc8ab68347b39",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "jpeg-orientation8-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "d00127de5b58731e186d0fd798db85e9b8526586c68a607a1aacd0c8a3847d39",
+        "actualMemberHash": "d00127de5b58731e186d0fd798db85e9b8526586c68a607a1aacd0c8a3847d39",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "oriented-jpg",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "ea5823181539e5caa26bc7a1ce6aeef2487ef036e3af406e5256a45965fdeaf1",
+        "actualMemberHash": "ea5823181539e5caa26bc7a1ce6aeef2487ef036e3af406e5256a45965fdeaf1",
+        "shapes": [
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 16,
+            "height": 32,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "profiled-png",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "30c92c5adbff4888f9f8db0155d3a579a65b7fdbbcfea4d18cf3d4b0b509cbb5",
+        "actualMemberHash": "30c92c5adbff4888f9f8db0155d3a579a65b7fdbbcfea4d18cf3d4b0b509cbb5",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "alpha-webp",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "30c92c5adbff4888f9f8db0155d3a579a65b7fdbbcfea4d18cf3d4b0b509cbb5",
+        "actualMemberHash": "30c92c5adbff4888f9f8db0155d3a579a65b7fdbbcfea4d18cf3d4b0b509cbb5",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      },
+      {
+        "kind": "gif",
+        "sample": "oriented-webp",
+        "equal": true,
+        "members": 2,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_02.gif",
+        "originalMemberHash": "30c92c5adbff4888f9f8db0155d3a579a65b7fdbbcfea4d18cf3d4b0b509cbb5",
+        "actualMemberHash": "30c92c5adbff4888f9f8db0155d3a579a65b7fdbbcfea4d18cf3d4b0b509cbb5",
+        "shapes": [
+          {
+            "width": 22,
+            "height": 24,
+            "frames": 4,
+            "durations": [
+              80
+            ],
+            "members": 1
+          },
+          {
+            "width": 21,
+            "height": 24,
+            "frames": 2,
+            "durations": [
+              80
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      }
+    ],
+    "failed": []
+  },
+  "publication": {
+    "projectId": "9157ce50-804d-4e7c-a23d-638e99c953ef",
+    "tasks": 34,
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 82
+    },
+    "encodedOutputsPreserved": true
+  },
+  "actualWorkbench": {
+    "projectId": "495a6307-5b36-48df-8661-6d388fd6f156",
+    "png": {
+      "documentId": "8c0418c5-030d-4105-85d3-e58e05c3a5dc",
+      "countsAfterReopen": {
+        "versions": 3,
+        "tasks": 1
+      },
+      "downloadSha256": "b104e556ab3efdc20712b2acbcd2939dcc9f085d485003f43b2ddb10461e802e",
+      "reopenBytesEqual": true,
+      "comparison": {
+        "equal": true,
+        "members": 6,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "frame_000.png",
+        "lastName": "frame_005.png",
+        "originalMemberHash": "a6925a193e5da31dcf1e198368c8be59d93ffd082965ac8562c3ed0251367d03",
+        "actualMemberHash": "a6925a193e5da31dcf1e198368c8be59d93ffd082965ac8562c3ed0251367d03",
+        "shapes": [
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 14,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          },
+          {
+            "width": 12,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 2
+          },
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 1,
+            "durations": [
+              null
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      }
+    },
+    "gif": {
+      "documentId": "8c0418c5-030d-4105-85d3-e58e05c3a5dc",
+      "order": [
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ],
+      "requestedDurationMs": 25,
+      "framesPerRow": 2,
+      "countsAfterReopen": {
+        "versions": 7,
+        "tasks": 3
+      },
+      "zipSha256": "7c04aee2bcf1d488b8eb16bff387d76061be56a06a5251ebff107558264de2b5",
+      "individualRowMatches": true,
+      "comparison": {
+        "equal": true,
+        "members": 3,
+        "decodedFrames": 6,
+        "encodedMembersEqual": true,
+        "firstName": "row_01.gif",
+        "lastName": "row_03.gif",
+        "originalMemberHash": "4772396fa6139c047a05e0ca3add40e6e77d4c45d1b716ef6c733a912a888e44",
+        "actualMemberHash": "4772396fa6139c047a05e0ca3add40e6e77d4c45d1b716ef6c733a912a888e44",
+        "shapes": [
+          {
+            "width": 13,
+            "height": 15,
+            "frames": 2,
+            "durations": [
+              30
+            ],
+            "members": 2
+          },
+          {
+            "width": 12,
+            "height": 14,
+            "frames": 2,
+            "durations": [
+              30
+            ],
+            "members": 1
+          }
+        ],
+        "mismatchedMembers": []
+      }
+    },
+    "history": {
+      "gifUndoHidesResult": true,
+      "redoReusesResult": true,
+      "preparedFramesUndoRedo": [
+        0,
+        6
+      ],
+      "nativeDragOrder": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        0
+      ],
+      "nativeDragSingleUndoRedo": true,
+      "deleteFrame2Order": [
+        5,
+        3,
+        2,
+        1,
+        0
+      ],
+      "deleteRow2Order": [
+        5,
+        4,
+        1,
+        0
+      ],
+      "deleteUndoRestoresOrder": true,
+      "gridChangeClearsFramesAndGifs": true,
+      "gridUndoRestoresFramesAndGifs": true
+    },
+    "dense": {
+      "documentId": "0a47dec1-a1f9-41d5-884f-74802c3146cc",
+      "grid": [
+        64,
+        64
+      ],
+      "sourceSize": [
+        2,
+        2
+      ],
+      "frames": 4096,
+      "pageFrameCounts": [
+        24,
+        128
+      ],
+      "keyboardEndThenHome": true,
+      "rowDeleteFirstPhysicalIndex": 128,
+      "rowDeleteUndo": true,
+      "reopenVisibleFrameCount": 128,
+      "outputRows": 32,
+      "decodedFrames": 4096,
+      "durationMs": 30,
+      "rgbaEqualsFrozenOriginal": true,
+      "baselineDurationMs": 20,
+      "zipSha256": "7ba5c945b335f6b932a87c6b11a18736857d0bd7cfbcaf4c90d87afab77388f3"
+    },
+    "saveAndRaces": {
+      "revisionConflictBlocksBackAndB": true,
+      "saveCopyRetainsEdits": true,
+      "copyIdPrefix": "54b83155",
+      "lateTaskOnlyInProject": "f848f459-50e9-4955-8a5a-636ac5e699c3",
+      "changedGroupingRetainsPreviousGif": true,
+      "motionlessHeldFrameRejectsLateResult": true,
+      "motionlessHeldFrameRejectsDocumentRead": true,
+      "readGateDelaySecondsPerFile": 2,
+      "readRejectedError": "Document changed while loading; current edits are preserved"
+    },
+    "cancel": {
+      "taskId": "9f487edc-768d-484e-9608-c1ad912e4f3a",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "input": "high-color noise PNG",
+      "progressAtCancel": 20,
+      "feedbackMs": 293,
+      "state": "canceled",
+      "generation": 1,
+      "results": [],
+      "noBrowserResultFile": true,
+      "localProcessConfirmation": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.010881415917538106,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 1
+      },
+      "limits": "UI after processing notification; independent browser stop/RSS not measured"
+    },
+    "navigation": {
+      "taskId": "4ce08677-7173-4716-80a7-abd35b4e54dc",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "state": "succeeded",
+      "results": [
+        "ed464686-e62e-4a58-8082-8266ef27e37d",
+        "6cd3f772-688e-4431-98e5-716b85fd7c69"
+      ],
+      "returnHomeBeforeCompletion": true
+    },
+    "previews": {
+      "delayedWorkerLoadCanceled": true,
+      "fullZipStillDownloadable": true,
+      "retryRestoresFramesAndRows": true,
+      "maximumPreviewEdge": 128,
+      "maximumVisibleFrameCount": 128,
+      "gifRowsPerPage": 12,
+      "largeGifStaticPreviewThresholdBytes": 33554432
+    },
+    "budget": {
+      "rejectedSourceDimensions": [
+        8192,
+        8192
+      ],
+      "error": "FINE_EDITOR_RESOURCE_LIMIT",
+      "retainedSource": "noise-2048.png",
+      "retainedPreparedFrames": 16
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ],
+    "finalProject": {
+      "versions": 29,
+      "tasks": 14,
+      "valid": true,
+      "database": "ok"
+    },
+    "labeledDurationSliderDomChecked": true
+  },
+  "zipInflation": {
+    "actualBytesBounded": true,
+    "library": "locked JSZip 3.10.1 internalStream typed adapter; fail closed if absent",
+    "tamperedDeclaredSizeRegression": true,
+    "customSliceFrozenRegression": {
+      "archiveSha256": "a8f53ec6a565d37012425ec719cd9e31e8e108efcc1172daa80cb11527157681",
+      "cases": [
+        {
+          "kind": "plan",
+          "id": "grid-uniform-1",
+          "originalSha256": "10c2bacfa6112c8701571590d8db752381a731e39d13c1cd347f03aa24fc1f88",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 1,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              29
+            ],
+            "bandColOffset": [
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "grid-uniform-2",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "grid-l7-1",
+          "originalSha256": "10c2bacfa6112c8701571590d8db752381a731e39d13c1cd347f03aa24fc1f88",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 1,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              29
+            ],
+            "bandColOffset": [
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "grid-l7-2",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "auto-uniform-1",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "auto-uniform-2",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "auto-l7-1",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "auto-l7-2",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "band-10",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "plan",
+          "id": "band-50",
+          "originalSha256": "fb6d3b9485974fff2636f22bf993c74ef4cded8e610aefa0b7ddb612d1486ba9",
+          "equal": true,
+          "plan": {
+            "formatVersion": 1,
+            "width": 37,
+            "height": 29,
+            "columns": 3,
+            "rows": 2,
+            "colStarts": [
+              0,
+              12,
+              24,
+              37
+            ],
+            "rowStarts": [
+              0,
+              14,
+              29
+            ],
+            "bandColOffset": [
+              0,
+              0
+            ],
+            "bendY": 14,
+            "deltaX": 0
+          },
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "grid-remainders",
+          "originalSha256": "c82181570fd6cd924a765942465763f46d7bf159a7997c470be4ed5dcf83ebbf",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                12,
+                14
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                12,
+                14
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                14
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                12,
+                15
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                12,
+                15
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                15
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "grid-identity",
+          "originalSha256": "98db6cd507c930b6dfb5c070bb5f1951602821b499e2ab54dbf68e6279c3b3d9",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                37,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "custom-fractional",
+          "originalSha256": "2f97ea312cf88afd4a05b6a26b45bcf8b5b759a73f4ddbd5e12925107495fdde",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                19,
+                12
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                6,
+                4
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "bands-jagged",
+          "originalSha256": "3bf07e4558e7369da929eb77181fb22ee134274430185196fb2855312314ef56",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                14
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                14
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                14
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                9,
+                15
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                15
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                15,
+                15
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-0--3",
+          "originalSha256": "369769c9e67c8044e677f5a4751174f06fac70dbbaca169c9aa7169f0625a45c",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-0-0",
+          "originalSha256": "b42fc40a0ff6bbfca08c811aad25d8fbd0e8383f43b5b11b07de74bc3f29767f",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-0-3",
+          "originalSha256": "d2202b563cf2c27881ef6be4af1a07e6bcd15d7b2016b7d7e416ab514a08d7c6",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                14,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-14--3",
+          "originalSha256": "0e7c93d1c74000af53583ebcf452319b02486b8e1820f73561f0b172c25bca47",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-14-0",
+          "originalSha256": "b42fc40a0ff6bbfca08c811aad25d8fbd0e8383f43b5b11b07de74bc3f29767f",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-14-3",
+          "originalSha256": "9e0bd2a74b93a6ec8903280bdabea735b57620f867c7ca7da3fb8efbb9d2df6d",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                14,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-29--3",
+          "originalSha256": "b42fc40a0ff6bbfca08c811aad25d8fbd0e8383f43b5b11b07de74bc3f29767f",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-29-0",
+          "originalSha256": "b42fc40a0ff6bbfca08c811aad25d8fbd0e8383f43b5b11b07de74bc3f29767f",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "poly-29-3",
+          "originalSha256": "b42fc40a0ff6bbfca08c811aad25d8fbd0e8383f43b5b11b07de74bc3f29767f",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                11,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                13,
+                29
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "subpixel-grid",
+          "originalSha256": "9beb3d308b2d80d6b24bb4b365c4c1dba0f1e459a23e1a3d0315777e5e349bad",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_006.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_007.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_008.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_009.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_010.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_011.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_012.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_013.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_014.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_015.png",
+              "format": "PNG",
+              "dimensions": [
+                1,
+                1
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-photo-jpg",
+          "originalSha256": "2d442d2ea2d95a49f47a773dac2ebb5573b171e22cb152af2ae629faef0f9870",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-jpeg-444-jpg",
+          "originalSha256": "b4f0080127c6ef51eec80575e9bae9c16a3fcd070b65c2137dcef58b8e6669f5",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-jpeg-422-jpg",
+          "originalSha256": "58483cfa47257e563f4a7e606dfffc0c9902294f27a4d6864b6e75a4cef57b8e",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-jpeg-progressive-jpg",
+          "originalSha256": "dea4893595b220b45a479899cd2ca4b5df41ffc66d8441a80c5f93169a2b33bb",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-jpeg-gray-jpg",
+          "originalSha256": "a06cb04d2c1b8d363be7ac46fcabd390778a6313da7236caae2038934cf36a21",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-jpeg-cmyk-jpg",
+          "originalSha256": "8477059143acb537259b831568a162c19e35b3fbfcb28f4c3ffa7bc7d06a4c21",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-jpeg-orientation8-jpg",
+          "originalSha256": "5275cce9b61d5671df0a93b777e8aa3a976a54f1a7bf30b65d37e3c46c00343c",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-oriented-jpg",
+          "originalSha256": "06fc0b062cbd31151538eb1ea4e2dead29f789e9a5d871adfbfb7b4ccf1a7ed6",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-oriented-png",
+          "originalSha256": "65b675c73293ce38aeeb2d2ac2ecba4af0aae7e9dfebf321cedbafb8f940f8bc",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                16,
+                32
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-oriented-webp",
+          "originalSha256": "3817e72e8a653c499b5c06f6380708373bb0b0c352b1769b3b0734d22faafcdf",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-profiled-png",
+          "originalSha256": "2d4fe3c57c10e9da3bfb7d15dda0da0de750128503046474f6a064919c37a146",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "slice",
+          "id": "source-alpha-webp",
+          "originalSha256": "32bb42846d2daa2204f28640fc1978f10dd4483c4c419c136e68154933879b9d",
+          "equal": true,
+          "members": [
+            {
+              "name": "frame_000.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_001.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_002.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_003.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_004.png",
+              "format": "PNG",
+              "dimensions": [
+                21,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            },
+            {
+              "name": "frame_005.png",
+              "format": "PNG",
+              "dimensions": [
+                22,
+                24
+              ],
+              "strictRgbaEqual": true,
+              "encodedBytesEqual": true
+            }
+          ],
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "identity",
+          "originalSha256": "3f4512975ed5b66938a9af2f620baa0416a236f72e01092af6b6aa8630264ef4",
+          "equal": true,
+          "dimensions": [
+            48,
+            13
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "flip",
+          "originalSha256": "5fd25c74e42455332f27b85e9cd249606078b97fe0f0b3bd452af5529c0791fb",
+          "equal": true,
+          "dimensions": [
+            48,
+            13
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "repeat-empty",
+          "originalSha256": "3bbd9f951457d0e3d90a0f991cbc1b1bae0c17128624a5010d16730b1c3de16e",
+          "equal": true,
+          "dimensions": [
+            48,
+            26
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "padding",
+          "originalSha256": "b65a18c5555b5af7506818b4b6762b7b67c20d7ca7bda5ce7228090a89ddd116",
+          "equal": true,
+          "dimensions": [
+            50,
+            36
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "up-only",
+          "originalSha256": "8bc7c104d83f9f7753ae9746adf02306d36ea4667e058f37479d7da2cb2a339c",
+          "equal": true,
+          "dimensions": [
+            48,
+            43
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "maximum-padding",
+          "originalSha256": "2ce2fa9b59e2e7b56b64c9bc1c74f00ebade5a76a7aa8ffc621e35386d63da74",
+          "equal": true,
+          "dimensions": [
+            272,
+            269
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        },
+        {
+          "kind": "compose",
+          "id": "all-empty",
+          "originalSha256": "c616c77cdfc792477d3272e83030cff65cf9cc2b8a80533279f1545017ff8d07",
+          "equal": true,
+          "dimensions": [
+            32,
+            26
+          ],
+          "encodedBytesEqual": true,
+          "frozenBaselineEqual": true
+        }
+      ]
+    }
+  },
+  "automated": {
+    "pythonTests": 38,
+    "javascriptTests": 65,
+    "runtimeBuild": "passed",
+    "workbenchBuild": "passed",
+    "targetedEslint": "passed",
+    "skillValidator": "passed"
+  },
+  "remaining": [
+    "Joint real browser/engine/runtime RSS and independent browser stop timing",
+    "Complete VoiceOver, macOS 14, Retina/IME/focus coverage",
+    "Other browsers and remaining full Skill modules/AI/distribution",
+    "SpriteSheetAdjust is a separate pending module"
+  ],
+  "testNotes": [
+    "A first noise upload attempt was edited before input preparation completed; it retained the tiny source by design and was excluded from the noise cancellation claim. The final noise case checks authoritative 2048x2048 metadata.",
+    "Motionless pointer-load proof uses an on-screen handle; earlier offscreen coordinates were excluded.",
+    "Dense actual GIF duration is 30ms; frozen 4096-frame baseline uses 20ms. All frame RGBA matches, and every actual duration is checked separately."
+  ],
+  "screenshots": [
+    "doc/testing/evidence/skill-sprite-sheet-workbench.png",
+    "doc/testing/evidence/skill-sprite-sheet-gifs.png"
+  ]
+}

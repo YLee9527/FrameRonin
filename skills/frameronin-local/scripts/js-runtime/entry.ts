@@ -42,6 +42,11 @@ export {registerSaveGuard,navigateWithSave} from '../../assets/workbench/src/loc
 
 export {expandShrinkImage,validateExpandShrinkParameters,checkExpandShrinkBudget} from '../../assets/workbench/src/lib/expandShrinkImage'
 export {removeVisibleWatermark,validateWatermarkParameters,checkWatermarkBudget} from '../../assets/workbench/src/lib/geminiWatermarkOperation'
+export {validateSpriteGifLayout,spriteGifRows,checkSpriteGifBudget,encodeSpriteGifRows,spriteGifName} from '../../assets/workbench/src/lib/spriteGifRows'
+export {boundedZipBlob,inspectOrderedZip} from '../../assets/workbench/src/lib/orderedZip'
+export {initialSpriteSheetDraft,validateStoredSpriteSheet,serializeSpriteSheet,restoreSpriteSheet,spriteSheetFiles,spriteSheetReports} from '../../assets/workbench/src/localProject/spriteSheetDocument'
+export {createSpriteSheetHistory,spriteSheetHistoryReducer} from '../../assets/workbench/src/localProject/useSpriteSheetDocument'
+export {spriteSheetAssets} from '../../assets/workbench/src/lib/spriteSheetAssets'
 
 export {scatterDetectDefaults,validateScatterDetect,validateScatterBoxes,orderedScatterBoxes,detectScatterPixels,scatterExportEntries,checkScatterBudget,exportScatterZip,exportReviewedScatterZip,reviewScatterExport,validateReviewedScatterExport} from '../../assets/workbench/src/lib/scatterSlice'
 
