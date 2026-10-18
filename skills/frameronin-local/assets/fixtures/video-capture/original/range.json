@@ -1,0 +1,16 @@
+{
+  "info": {
+    "width": 64,
+    "height": 48,
+    "duration": 1.333333
+  },
+  "width": 64,
+  "height": 48,
+  "cropWidth": 64,
+  "cropHeight": 48,
+  "timestamps": [
+    0.125,
+    0.375,
+    0.625
+  ]
+}

@@ -1,0 +1,361 @@
+{
+  "formatVersion": 1,
+  "sources": {
+    "vp9.webm": "b55a391a3b51cacb17c5cc8ad04e5ca7c9d217a05c6eb3ec33f79778f1ace7c7",
+    "aspect.mp4": "87e80dd33ad7441da73f4cdb655022f45e39b65f307baee85eda791375ebb209",
+    "h264.mp4": "4d40cc14d32b11746cf6a8f6b0fe10f9495616ac43c620494eb0982d62175635",
+    "mpeg4.avi": "dcd1ae4ea2426513c62ed5c2fa5a1969ca5ab930e1fa8fa094b251af2ed7ecfe",
+    "bt709-full.mp4": "6bc475850cceab53641489bd2d69702a5ed3c38a1cdb04510c7bab310f01643a",
+    "h264.mkv": "00b5477b5d1bf04bb9760bc1f0dc8b88fd7e343384944110cff0591c1a251f07",
+    "rotated.mp4": "88d621ba657c21240758e13ad428ae8814704edd6a6fdc6ef90fca28e10bd6a6",
+    "h264.mov": "c3438ac1c9052ea643535e658a6d91736673d9152f7751464e51f1ca206957f9",
+    "gray.mp4": "43f1607fc88453855c9471b757da7996f9f1493920acf6f9372aecbc60ce6d4e"
+  },
+  "probe": {
+    "vp9.webm": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "vp9",
+      "sample_aspect_ratio": "1:1",
+      "color_range": "tv",
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333
+    },
+    "aspect.mp4": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": "2:1",
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333333
+    },
+    "h264.mp4": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": null,
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333333
+    },
+    "mpeg4.avi": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "mpeg4",
+      "sample_aspect_ratio": "1:1",
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333333
+    },
+    "bt709-full.mp4": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuvj420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": null,
+      "color_range": "pc",
+      "color_space": "bt709",
+      "side_data_list": null,
+      "duration": 1.333333
+    },
+    "h264.mkv": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": null,
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333
+    },
+    "rotated.mp4": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": null,
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333333
+    },
+    "h264.mov": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": null,
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333333
+    },
+    "gray.mp4": {
+      "width": 64,
+      "height": 48,
+      "pix_fmt": "yuv420p",
+      "codec_name": "h264",
+      "sample_aspect_ratio": null,
+      "color_range": null,
+      "color_space": null,
+      "side_data_list": null,
+      "duration": 1.333333
+    }
+  },
+  "originals": {
+    "reference/frontend/src/components/ParamsStep.tsx": "040cd27b630b91895204db866035b6544b3fb15e21a4166e9849c7f78de9250a"
+  },
+  "cases": [
+    {
+      "id": "vp9-webm",
+      "source": "vp9.webm",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "aspect-mp4",
+      "source": "aspect.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "h264-mp4",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "mpeg4-avi",
+      "source": "mpeg4.avi",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "bt709-full-mp4",
+      "source": "bt709-full.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "h264-mkv",
+      "source": "h264.mkv",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "rotated-mp4",
+      "source": "rotated.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "h264-mov",
+      "source": "h264.mov",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "gray-mp4",
+      "source": "gray.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "crop",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 3,
+          "top": 5,
+          "right": 7,
+          "bottom": 9
+        }
+      }
+    },
+    {
+      "id": "fractional-crop",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 1.5,
+          "top": 2.25,
+          "right": 3.75,
+          "bottom": 4.5
+        }
+      }
+    },
+    {
+      "id": "overlapping-crop",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 10,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 40,
+          "top": 30,
+          "right": 40,
+          "bottom": 30
+        }
+      }
+    },
+    {
+      "id": "fractional-fps",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0.03,
+        "end": 0.8,
+        "fps": 7.5,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "range",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0.125,
+        "end": 0.875,
+        "fps": 4,
+        "maxFrames": 2000,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    },
+    {
+      "id": "max-frames",
+      "source": "h264.mp4",
+      "parameters": {
+        "start": 0,
+        "end": 1,
+        "fps": 24,
+        "maxFrames": 3,
+        "crop": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      }
+    }
+  ],
+  "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers"
+}

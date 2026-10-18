@@ -162,6 +162,26 @@ const pushHistory=()=>{};let rect:any=p.rect??null;const setSelectionRect=(v:any
 ${fineCallbacks}\nif(action==='move')commitSelectMove(p.rect,p.dx,p.dy);else if(action==='erase')superEraserAt(p.x,p.y);else if(action!=='none')drawAt(p.x,p.y);return rect;}`)
 await fs.cp(path.join(skill,'assets/fixtures/fine-editor'),path.join(output,'fine-editor'),{recursive:true})
 await fs.cp(path.join(skill,'assets/fixtures/video-frames'),path.join(output,'video-frames'),{recursive:true})
+await fs.cp(path.join(skill,'assets/fixtures/video-capture'),path.join(output,'video-capture'),{recursive:true})
+const originalCaptureSource=await fs.readFile(path.join(root,'reference/frontend/src/components/ParamsStep.tsx'),'utf8')
+const captureFunction=originalCaptureSource.indexOf('  const extractFrames = async () => {')
+const captureSetupStart=originalCaptureSource.indexOf('    const interval = 1 / fps',captureFunction)
+const captureSetupEnd=originalCaptureSource.indexOf('    try {\n      video.pause()',captureSetupStart)
+const captureLoopStart=originalCaptureSource.indexOf('      for (let i = 0; i < timestamps.length; i++) {',captureSetupEnd)
+const captureLoopEnd=originalCaptureSource.indexOf('      setExtractedFrames(frames)',captureLoopStart)
+if([captureFunction,captureSetupStart,captureSetupEnd,captureLoopStart,captureLoopEnd].some(n=>n<0))throw new Error('Original video capture markers changed')
+await fs.writeFile(path.join(output,'original-video-capture.ts'),`
+export async function originalVideoCapture(file:Blob,p:any){
+ const video=document.createElement('video'),url=URL.createObjectURL(file);video.muted=true;video.playsInline=true;video.preload='auto';document.body.append(video);video.style.display='none';
+ try{
+  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('ORIGINAL_METADATA_TIMEOUT')),15000);video.onloadeddata=()=>{clearTimeout(timer);resolve()};video.onerror=()=>{clearTimeout(timer);reject(new Error('ORIGINAL_MEDIA_CODE:'+video.error?.code))};video.src=url;video.load()});
+  const info={width:video.videoWidth,height:video.videoHeight,duration:video.duration},range=[p.start,p.end],{fps,maxFrames}=p,cropRegion=p.crop,setExtractProgress=()=>{},setExtracting=()=>{},message={error:(text:string)=>{throw new Error(text)}},t=(key:string)=>key;
+  ${originalCaptureSource.slice(captureSetupStart,captureSetupEnd)}
+  video.pause();
+  ${originalCaptureSource.slice(captureLoopStart,captureLoopEnd)}
+  return {frames,info,width:canvas.width,height:canvas.height,cropWidth:cropW,cropHeight:cropH};
+ }finally{video.pause();video.removeAttribute('src');video.load();video.remove();URL.revokeObjectURL(url)}
+}`)
 const config = path.join(skill, '.runtime/oracle-vite.config.mjs')
 // Keep the original browser's Rollup CommonJS handling. An esbuild-only browser
 // bundle exposes Emscripten's self-returning `then` during dynamic import.

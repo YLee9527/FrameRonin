@@ -1,5 +1,11 @@
 # CLI 与本地 API
 
+`video.capture` 接收一份正式视频版本，参数为 `renderer=browser-worker`、`frontendBytes` 和精确 `layout={sourceWidth,sourceHeight,start,end,fps,maxFrames,crop:{left,top,right,bottom}}`。显示尺寸为 1–30000 整数，起止秒为 0–86400 且 end>start，FPS 为 1–60 有限数，最多 2000 帧。裁边允许有限小数和原版重叠裁边，PNG 画布向下取整并至少 1px；时间戳按原版反复累加间隔。输入 ≤200 MiB，不支持的原生编解码器明确失败，不静默改用 FFmpeg。CLI/通用提案不能直接执行该宿主操作。
+
+宿主在任务 ready 后使用 `GET /api/tasks/{id}/browser/input?generation=N` 读取该任务唯一的已登记视频；不接收客户端路径或素材 ID，逐 MiB 校验内容并复查状态/代次，响应 `Cache-Control: no-store`。其他操作、未 ready、取消或过期代次拒绝。原生媒体元素仅协调解码及异步快照；最多一个可转移帧进入专用 Worker，后者负责裁切、PNG 与 ZIP 编码，不依赖动画回调。任务取消清理解码器、对象 URL 和 Worker，迟到快照关闭而不使用；最终上传仍由后台核对 PNG 成员、尺寸、数量及取消代次后发布 ZIP/报告。
+
+取帧预算为 256 MiB + 视频字节×2 + max(显示像素,真实编码像素)×96 + 编码缓存上限×8 + frontendBytes。缓存上限取 min(128 MiB,帧数×(输出像素×5+输出高度+1024))，同时检查最终 ZIP 和所有 PNG 字节总和。原生显示尺寸与时长在解码后再次核验。实际测试页验证原版对照与正式队列，不代表完整视频编辑器、保存/重开或联合 RSS 已通过。
+
 视频逐帧内核 `video.frameTools` 接收一份连续命名 `frame_000.png` 等的 PNG ZIP，以及 matte 模式可选的第二份画笔 PNG。参数为严格 layout、renderer=browser-worker、frontendBytes；CLI/通用提案不能直接执行。它保留原 ParamsStep 的逐帧算法，尚不能替代视频解码、裁切、选帧和完整工作台验收。
 
 layout 按模式使用精确字段：analyze 只有 mode；archive 为 mode/selected/kind（extracted 或 matted）；matte 为 mode/selected/background/tolerance/feather/mask；compose 为 mode/width/height/padding/spacing/columns/timestamps/strokeWidth/strokeColor。selected 为升序唯一源索引，最多 2000 帧。色度键容差 1–100、羽化 0–30，边距/间距 0–64、列数 1–64、描边 0–16；有限小数保留。timestamps 与全部输入帧一一对应，范围 0–86400 秒。目标边长 1–30000，最终画布边长取整且不超过 30000；原索引的 sheet_size 保留计算得到的小数值。

@@ -34,6 +34,9 @@ import {originalNormal} from '../.runtime/oracle/original-normal'
 import {processNormalImage} from '../assets/workbench/src/lib/normalImageTools'
 import * as originalVideoFrames from '../.runtime/oracle/utils'
 import type {VideoFrameLayout} from '../assets/workbench/src/lib/videoFrameTools'
+import {originalVideoCapture} from '../.runtime/oracle/original-video-capture'
+import {captureSelectedVideo,inspectSelectedVideo} from '../assets/workbench/src/lib/browserVideoCapture'
+import {videoCapturePlan} from '../assets/workbench/src/lib/videoCapture'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -488,7 +491,30 @@ async function runVideoFrames(){
  }
  await publish(zip,'browser-video-frames.zip');status.textContent=`Video frame tools complete: ${fixture.cases.length} original comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain],['#video-frames',runVideoFrames]] as const) {
+async function runVideoCapture(){
+ const fixture=await(await fetch('/video-capture/manifest.json')).json(),zip=new JSZip(),cache=new Map<string,Blob>()
+ for(const entry of fixture.cases){
+  status.textContent=`Video capture: ${entry.id}`
+  if(!cache.has(entry.source))cache.set(entry.source,await(await fetch(`/video-capture/${entry.source}`)).blob())
+  const file=cache.get(entry.source)!,physical=fixture.probe[entry.source],limits={budget:2*1024**3,frontendBytes:0,physical:{width:physical.width,height:physical.height}},signal=new AbortController().signal
+  let original:Awaited<ReturnType<typeof originalVideoCapture>>
+  try{original=await originalVideoCapture(file,entry.parameters)}catch(error){
+   const code=String(error).match(/ORIGINAL_MEDIA_CODE:([34])/)
+   if(!code)throw error
+   zip.file(`${entry.id}/original.json`,JSON.stringify({rejected:true,mediaCode:Number(code[1])}))
+   let actualError:unknown;try{await inspectSelectedVideo(file,limits,signal)}catch(e){actualError=e}
+   if(!String(actualError).includes(`VIDEO_DECODE_FAILED: ${code[1]}`))throw new Error(`${entry.id}: original rejected but managed metadata result changed: ${String(actualError)}`)
+   zip.file(`${entry.id}/actual.json`,JSON.stringify({rejected:true,mediaCode:Number(code[1])}));continue
+  }
+  const old=new JSZip();for(const [index,frame] of original.frames.entries())old.file(`frame_${String(index).padStart(3,'0')}.png`,frame.blob)
+  zip.file(`${entry.id}/original.zip`,await old.generateAsync({type:'blob'}));zip.file(`${entry.id}/original.json`,JSON.stringify({info:original.info,width:original.width,height:original.height,cropWidth:original.cropWidth,cropHeight:original.cropHeight,timestamps:original.frames.map(f=>f.timestamp)}))
+  const info=await inspectSelectedVideo(file,limits,signal),layout={...entry.parameters,sourceWidth:info.width,sourceHeight:info.height},plan=videoCapturePlan(layout,file.size,limits.budget,0,limits.physical)
+  const actual=await captureSelectedVideo(file,layout,limits,signal,{id:entry.id,generation:0})
+  zip.file(`${entry.id}/actual.zip`,actual);zip.file(`${entry.id}/actual.json`,JSON.stringify({info,width:plan.width,height:plan.height,cropWidth:plan.cropWidth,cropHeight:plan.cropHeight,timestamps:plan.timestamps}))
+ }
+ await publish(zip,'browser-video-capture.zip');status.textContent=`Video capture complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain],['#video-frames',runVideoFrames],['#video-capture',runVideoCapture]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

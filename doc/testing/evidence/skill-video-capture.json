@@ -1,0 +1,1403 @@
+{
+  "date": "2026-10-18",
+  "scope": "Native browser video capture + dedicated crop/PNG/ZIP Worker; actual production task APIs through separate same-origin test page, not the complete video editor",
+  "fixture": "skills/frameronin-local/assets/fixtures/video-capture/manifest.json",
+  "baseline": "skills/frameronin-local/assets/fixtures/video-capture/original",
+  "downloadHashes": {
+    "oracle": "f15bb2bf8008d2e6c9da24e0d3a2d25c23696038411a3d467b914eebdf7debf7",
+    "managed": "25c268fb39505b1c5d04dede692afe3bc9b3d30c15604572e5f747aeb153b717"
+  },
+  "originalComparison": {
+    "cases": 15,
+    "successful": 14,
+    "negativeCodecSamples": 1,
+    "decodedFrames": 133,
+    "failed": [],
+    "samples": [
+      {
+        "sample": "vp9-webm",
+        "source": "vp9.webm",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "aspect-mp4",
+        "source": "aspect.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 128,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 128,
+          "height": 48,
+          "cropWidth": 128,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "h264-mp4",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "mpeg4-avi",
+        "source": "mpeg4.avi",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": true,
+        "mediaCode": 4,
+        "frameCount": 0,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": null
+      },
+      {
+        "sample": "bt709-full-mp4",
+        "source": "bt709-full.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "h264-mkv",
+        "source": "h264.mkv",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "rotated-mp4",
+        "source": "rotated.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "h264-mov",
+        "source": "h264.mov",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "gray-mp4",
+        "source": "gray.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "crop",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 54,
+          "height": 34,
+          "cropWidth": 54,
+          "cropHeight": 34,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "fractional-crop",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 58,
+          "height": 41,
+          "cropWidth": 58.75,
+          "cropHeight": 41.25,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "overlapping-crop",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 11,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 1,
+          "height": 1,
+          "cropWidth": 1,
+          "cropHeight": 1,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ]
+        }
+      },
+      {
+        "sample": "fractional-fps",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 6,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0.03,
+            0.16333333333333333,
+            0.29666666666666663,
+            0.42999999999999994,
+            0.5633333333333332,
+            0.6966666666666665
+          ]
+        }
+      },
+      {
+        "sample": "range",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 3,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0.125,
+            0.375,
+            0.625
+          ]
+        }
+      },
+      {
+        "sample": "max-frames",
+        "source": "h264.mp4",
+        "equal": true,
+        "metadataEqual": true,
+        "rejected": false,
+        "mediaCode": null,
+        "frameCount": 3,
+        "pngBytesEqual": true,
+        "managedMetadataEqual": true,
+        "managedPixelsEqual": true,
+        "managedPngBytesEqual": true,
+        "metadata": {
+          "info": {
+            "width": 64,
+            "height": 48,
+            "duration": 1.333333
+          },
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "timestamps": [
+            0,
+            0.041666666666666664,
+            0.08333333333333333
+          ]
+        }
+      }
+    ]
+  },
+  "publication": {
+    "projectId": "b7d52823-6848-4a91-b412-8b6e2a8def1c",
+    "samples": [
+      {
+        "sample": "vp9-webm",
+        "source": "vp9.webm",
+        "taskId": "5424cc20-4e5c-4d74-997a-390716d08ee6",
+        "results": [
+          "5afd88f3-3945-436a-9860-6106b2831811",
+          "33fe5fb0-385b-42d5-9f75-afc00e700a8e"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "ae1f5cd3-c4c1-4eb0-89b3-d3e34e94f19c",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 47632
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.22241975006181747,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270271648
+        }
+      },
+      {
+        "sample": "aspect-mp4",
+        "source": "aspect.mp4",
+        "taskId": "6dc0aa82-790a-41f4-8ee7-12c05e6514fb",
+        "results": [
+          "e268177f-239d-4d7e-a768-f101c4cf0fb8",
+          "a993d314-97b2-4291-b3c7-4a90110c94b8"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "6410219a-8886-4be0-911d-6b101f708a5e",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 128,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23302
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.2210119579685852,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 128,
+          "height": 48,
+          "cropWidth": 128,
+          "cropHeight": 48,
+          "encodedCacheBytes": 349712,
+          "estimatedBytes": 271869580
+        }
+      },
+      {
+        "sample": "h264-mp4",
+        "source": "h264.mp4",
+        "taskId": "6e40c186-5b9a-440c-a8c1-5d12ae27649a",
+        "results": [
+          "22d57b41-5710-45ad-aac3-41fb955e68d6",
+          "df023aa6-5865-4230-bd7d-6a5fdabaec2d"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.22406325000338256,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270222920
+        }
+      },
+      {
+        "sample": "mpeg4-avi",
+        "source": "mpeg4.avi",
+        "rejected": true,
+        "mediaCode": 4,
+        "sourceVersion": "577c8d49-419a-4b1d-ba8d-37c2308549c6",
+        "taskCreated": false
+      },
+      {
+        "sample": "bt709-full-mp4",
+        "source": "bt709-full.mp4",
+        "taskId": "90e62922-5c52-4b74-8abf-e410b472a179",
+        "results": [
+          "07f5d411-d7e6-4643-b79a-7151d2fc7344",
+          "aa970020-5bcf-4027-87b3-20f70c74c4ab"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "6950a548-42fa-4695-ad8e-c6dc33893cd5",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 22592
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.21749412501230836,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270221568
+        }
+      },
+      {
+        "sample": "h264-mkv",
+        "source": "h264.mkv",
+        "taskId": "959a2228-331d-4cf0-96ce-b7c1dac60338",
+        "results": [
+          "314ccea8-f376-484c-b4b6-17358e31821f",
+          "9f14c6f1-22b7-4afc-b980-774ef667f9ed"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "c547da68-9195-442e-87a5-b22bacd943e1",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 22904
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.22698441601824015,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270222192
+        }
+      },
+      {
+        "sample": "rotated-mp4",
+        "source": "rotated.mp4",
+        "taskId": "27d7993a-b273-495b-a611-27fd80838f00",
+        "results": [
+          "961e7973-d242-4595-937f-dacd6d6b3ea9",
+          "656d87a1-124b-4fdd-bf2b-6da12aa1cf3c"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "a147552c-2425-4a0e-a489-4c5294b3dc69",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.20892650005407631,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270222920
+        }
+      },
+      {
+        "sample": "h264-mov",
+        "source": "h264.mov",
+        "taskId": "fee0847f-deb9-4a50-8b7e-a83ed97963a0",
+        "results": [
+          "5dc0c57c-505a-4d0d-8aaf-8a2e18f3c003",
+          "df43588b-496f-470b-8ad7-c9f4c75a0d96"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "fdab6883-b585-40a5-9815-97fdc50e2a67",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23162
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.22055987501516938,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270222708
+        }
+      },
+      {
+        "sample": "gray-mp4",
+        "source": "gray.mp4",
+        "taskId": "4086ed56-ee7e-496e-82e7-d4f3063f4673",
+        "results": [
+          "dd994e5e-17c3-4cf3-9bdd-5a0b39b09fe2",
+          "34060bdc-02af-4671-9da5-56282f7b9353"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "6f551226-e793-416f-85ae-d95f16c74359",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 16218
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.22158058395143598,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 180752,
+          "estimatedBytes": 270208820
+        }
+      },
+      {
+        "sample": "crop",
+        "source": "h264.mp4",
+        "taskId": "8544cdd6-fb91-4957-90f6-0f890c88180e",
+        "results": [
+          "15be3d4b-5400-4864-9529-d62269b9b580",
+          "ef4ce660-1581-4f2c-9d30-a8173db202ae"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 3,
+                "top": 5,
+                "right": 7,
+                "bottom": 9
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.21518783399369568,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 54,
+          "height": 34,
+          "cropWidth": 54,
+          "cropHeight": 34,
+          "encodedCacheBytes": 112618,
+          "estimatedBytes": 269677848
+        }
+      },
+      {
+        "sample": "fractional-crop",
+        "source": "h264.mp4",
+        "taskId": "cb0be7ab-0bc0-4a98-89d1-8b4fe6b07166",
+        "results": [
+          "44924d49-c630-450d-81ed-feaca96811b2",
+          "2af9e8d8-76fe-4001-a3fa-c5290de04e79"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 1.5,
+                "top": 2.25,
+                "right": 3.75,
+                "bottom": 4.5
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.2097813329892233,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 58,
+          "height": 41,
+          "cropWidth": 58.75,
+          "cropHeight": 41.25,
+          "encodedCacheBytes": 142505,
+          "estimatedBytes": 269916944
+        }
+      },
+      {
+        "sample": "overlapping-crop",
+        "source": "h264.mp4",
+        "taskId": "387d3451-a5cf-4443-9fae-1d5b73349369",
+        "results": [
+          "43be21c5-e9f1-4337-8e23-6d5e34f4ce99",
+          "b1885c3c-470d-4773-91d3-d92d0fb0e815"
+        ],
+        "frames": 11,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 10,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 40,
+                "top": 30,
+                "right": 40,
+                "bottom": 30
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 11,
+          "elapsedSeconds": 0.21725120802875608,
+          "timestamps": [
+            0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.7999999999999999,
+            0.8999999999999999,
+            0.9999999999999999
+          ],
+          "width": 1,
+          "height": 1,
+          "cropWidth": 1,
+          "cropHeight": 1,
+          "encodedCacheBytes": 11330,
+          "estimatedBytes": 268867544
+        }
+      },
+      {
+        "sample": "fractional-fps",
+        "source": "h264.mp4",
+        "taskId": "40ec3e95-0f99-41b7-a89d-722640e083ae",
+        "results": [
+          "5af4a965-0a0e-4770-8d17-62ebbe047152",
+          "2ded6eee-cd59-46e0-8ce6-664d0d12f011"
+        ],
+        "frames": 6,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0.03,
+              "end": 0.8,
+              "fps": 7.5,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.21464770892634988,
+          "timestamps": [
+            0.03,
+            0.16333333333333333,
+            0.29666666666666663,
+            0.42999999999999994,
+            0.5633333333333332,
+            0.6966666666666665
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 98592,
+          "estimatedBytes": 269565640
+        }
+      },
+      {
+        "sample": "range",
+        "source": "h264.mp4",
+        "taskId": "66080512-1e9f-462b-93b1-188bf0deeba5",
+        "results": [
+          "739f47ad-0de6-4539-b0ce-ee9664a28b9b",
+          "2a62c009-97fe-4416-8ce9-666707d517b4"
+        ],
+        "frames": 3,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0.125,
+              "end": 0.875,
+              "fps": 4,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.23069695802405477,
+          "timestamps": [
+            0.125,
+            0.375,
+            0.625
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 49296,
+          "estimatedBytes": 269171272
+        }
+      },
+      {
+        "sample": "max-frames",
+        "source": "h264.mp4",
+        "taskId": "21ae1880-3841-4abd-914b-06fc7bb94578",
+        "results": [
+          "b7c600cc-a25d-4d3b-bc6f-9d5f3afe7e3a",
+          "d21e3628-8815-45cb-967f-81710dea402a"
+        ],
+        "frames": 3,
+        "state": "succeeded",
+        "input": "bb53d175-ad5a-4de7-bbf4-378b0150c119",
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.capture",
+          "parameters": {
+            "layout": {
+              "start": 0,
+              "end": 1,
+              "fps": 24,
+              "maxFrames": 3,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 23268
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.21344012499321252,
+          "timestamps": [
+            0,
+            0.041666666666666664,
+            0.08333333333333333
+          ],
+          "width": 64,
+          "height": 48,
+          "cropWidth": 64,
+          "cropHeight": 48,
+          "encodedCacheBytes": 49296,
+          "estimatedBytes": 269171272
+        }
+      }
+    ],
+    "cancellation": {
+      "taskId": "6a75f92d-1d76-4804-bbd6-d1310856974b",
+      "feedbackMs": 122,
+      "ownedDecoders": 0,
+      "record": {
+        "id": "6a75f92d-1d76-4804-bbd6-d1310856974b",
+        "state": "canceled",
+        "generation": 1,
+        "payload": {
+          "operation": "video.capture",
+          "inputs": [
+            "c23f657f-07ca-4c81-b66d-01b92c8d206b"
+          ],
+          "parameters": {
+            "renderer": "browser-worker",
+            "frontendBytes": 490884,
+            "layout": {
+              "start": 0,
+              "end": 30.166667,
+              "fps": 60,
+              "maxFrames": 2000,
+              "crop": {
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0
+              },
+              "sourceWidth": 64,
+              "sourceHeight": 48
+            }
+          }
+        },
+        "progress": 0.1,
+        "pid": 41675,
+        "process_created": 1792324941.249123,
+        "error": null,
+        "results": [],
+        "created_at": "2026-10-18T12:02:21.131505+00:00",
+        "updated_at": "2026-10-18T12:02:22.251078+00:00"
+      },
+      "finalState": "canceled",
+      "lateResultAbsent": true,
+      "backendStop": {
+        "generation": 1,
+        "cancelElapsedSeconds": 0.01169633399695158,
+        "processStopConfirmed": true,
+        "scope": "local_owned_processes",
+        "aiState": null,
+        "ownedProcessCount": 1
+      }
+    },
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 38,
+      "taskCount": 15,
+      "activeTasks": 0
+    }
+  },
+  "nativeCancellation": {
+    "beforeProgress": 0.30800662617338487,
+    "beforeOwnedDecoderElements": 1,
+    "observedClickThroughStatusMs": 295,
+    "internalFeedbackMs": 122,
+    "afterOwnedDecoderElements": 0,
+    "backendStopScope": "local_owned_processes",
+    "note": "Decoder DOM release and unit-tested Worker termination do not establish browser OS process stop time or joint RSS."
+  },
+  "checks": {
+    "python": 51,
+    "javascript": 92,
+    "productionBuild": true,
+    "focusedEslint": true,
+    "skillValidator": true,
+    "gitDiffCheck": true,
+    "productionReferenceImports": false
+  },
+  "remaining": [
+    "Full original video editor: native player/range/crop handles/frame selection/matte brush/output workflow",
+    "Formal video document, unified history, save/reopen/conflict/late-read guards",
+    "Actual editor navigation/background continuation and all cancellation phases",
+    "More codecs/HDR/large real media, browser+engine joint memory and OS-level browser Worker stop timing",
+    "macOS 14, IME/focus/Retina/VoiceOver, complete AI workflow and portable distribution"
+  ]
+}

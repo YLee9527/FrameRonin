@@ -37,11 +37,15 @@ def checked_id(value):
     return value
 
 
-def digest(path):
+def digest(path, check=None):
     result = hashlib.sha256()
     with Path(path).open('rb') as source:
-        while block := source.read(1024 * 1024):
+        while True:
+            if check:check()
+            block=source.read(1024 * 1024)
+            if not block:break
             result.update(block)
+    if check:check()
     return result.hexdigest()
 
 
@@ -238,7 +242,7 @@ class Project:
                 row['metadata'] = json.loads(row['metadata']) if row['metadata'] else None
             return result
 
-    def version(self, version_id, verify=True):
+    def version(self, version_id, verify=True, check=None):
         with self.connection() as db:
             row = db.execute('SELECT v.*,a.name FROM versions v JOIN assets a ON a.id=v.asset_id WHERE v.id=?', (version_id,)).fetchone()
         if not row:
@@ -246,7 +250,7 @@ class Project:
         result = dict(row)
         result['metadata'] = json.loads(result['metadata'])
         path = self.safe(result['path'])
-        if not path.is_file() or (verify and digest(path) != result['sha256']):
+        if not path.is_file() or (verify and digest(path,check) != result['sha256']):
             raise RoninError('VERSION_CONTENT_CHANGED', 'The selected asset version is missing or its content changed.')
         # Old JPEG/WebP indices lack the browser's EXIF display dimensions.
         # Supplement them without changing raw dimensions, IDs or stored files.

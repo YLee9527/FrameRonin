@@ -341,3 +341,15 @@ PNG 拆分、GIF 准备与逐行编码接入受控宿主 Worker，保留原 floo
 真实 Worker ZIP 由独立验收驱动提交正式队列：21 任务/44 版本校验有效，最终全部产物通过最新完整输入/输出解码校验。未知字段/类型、重复或倒序索引、缺失时间、额外遮罩、超预算和非宿主执行预先拒绝；错误索引、布尔冒充数字、分组、成员及原帧字节不能发布。新增最后一个输出 PNG 解码完成后取消的回归，禁止校验返回成功；宿主传输验证双输入顺序、过期代次及 NaN 进度拒绝。
 
 47 Python / 86 JS、生产/原版测试页构建、相关 ESLint 和 Skill 结构通过。复现：运行原版测试页的 video frame tools 控件，下载后使用 `tests/compare_video_frames_oracle.py <zip> --output <json>`；`tests/accept_video_frames_oracle.py` 将真实 Worker 产物发布到新的空项目。详情见 [内核证据](evidence/skill-video-frame-engine.json)。本检查点不包含真实视频解码/取帧、裁切/播放/选帧/画笔界面、正式视频文档及实际加工取消/导航；这些与联合内存、完整格式、AI/分发继续实施，S2/S3/S4 保持未完成。
+
+## 2026-10-18 受控原生视频取帧
+
+video.capture 使用与原 ParamsStep 相同的宿主原生视频解码，不借用 FFmpeg 替换帧或色彩。一个原生异步快照传入专用 Worker，裁切、PNG 和 ZIP 编码离开主线程；不使用动画回调。受控隐藏媒体元素独立于 React 组件，取消卸载解码器、撤销对象 URL、终止 Worker，迟到快照关闭。项目输入接口只返回当前任务唯一的正式视频副本，内容校验每 MiB 检查取消/代次，禁止任意素材 ID、路径及缓存。后台完整核对 PNG、数量、尺寸、编码缓存预算和代次才发布。
+
+固定九份源视频、15 种场景完成真实原浏览器/迁移 Worker 对照，覆盖 H264 MP4/MOV/MKV、VP9 WebM、灰度、BT709 full range、SAR、旋转、整数/小数/重叠裁边、范围、小数 FPS 和帧数上限。14 项成功共 133 帧，全部元数据、尺寸、RGBA 及 PNG 字节相同；MPEG4 AVI 在原版与迁移版均为媒体错误 4，计为一个明确拒绝样本，不宣称支持该格式。原始实现摘录仅在测试构建中使用，源视频/原源码校验值及原输出已冻结。
+
+独立同源验收页调用生产 import/runManagedTask/API，不绕过正式任务完成接口。15 样本中 14 个任务成功发布，AVI 在原生预检后未创建任务；下载 ZIP 与项目结果内容散列相同。另一次 30 秒/60fps 样本在可见进度 30.8%、受控解码器为 1 时点击取消，约 295ms 页面显示 canceled，内部反馈 122ms，解码器 1→0。任务最终 canceled/代次 1、结果为空，无受控 ZIP；后端所属进程停止 0.0117s。后端停止范围仍仅为 local_owned_processes，不以 DOM 元素和单元测试宣称浏览器 OS 进程或联合 RSS 已测。正式项目最终 38 版本/15 任务、无活动任务，数据库和全部内容校验通过。
+
+负向覆盖严格字段/布尔/NaN、范围、物理编码尺寸隐藏超预算、输出数量/尺寸/成员/缓存、非宿主执行、过期/取消/未 ready 素材读取、校验中取消及无关操作拒绝。客户端检查串行帧、原生失败、Worker 创建/传输失败、无效进度、过期代次、待完成快照取消及迟到释放，确认取帧读取登记副本而非原 OS File。51 Python / 92 JS、构建及专项检查完成情况见 [取帧证据](evidence/skill-video-capture.json)。
+
+复现：构建原版测试页运行 video capture 并下载；`tests/compare_video_capture_oracle.py <oracle.zip> --managed <managed.zip> --output <json>` 核对冻结样本；同源测试页由 `build-managed-capture.mjs` 与 `tests/support/managed_capture_server.py --project <已有空闲验收项目> --port <loopback端口>` 提供。完成后 `tests/verify_video_capture_publication.py <managed.zip> --project <项目> --cancellation <cancel.zip> --output <json>` 只核对既有任务，不重跑生成。完整原视频编辑界面、正式文档/撤销与实际导航、更多真实媒体/阶段取消、联合资源及最终交付仍待完成，S2/S3/S4 不升级。

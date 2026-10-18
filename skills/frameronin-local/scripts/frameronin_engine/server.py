@@ -44,6 +44,12 @@ def application(project, port):
         # asset library and its thumbnails on every request.
         return {'project': project.manifest, 'operations': REGISTRY, 'memoryBudgetBytes': memory_budget()}
 
+    @app.get('/api/tasks/{task_id}/browser/input')
+    def native_browser_input(task_id: str, generation: int):
+        from .browser_tasks import input_source
+        version=input_source(project,task_id,generation)
+        return FileResponse(version['absolutePath'],headers={'Cache-Control':'no-store'})
+
     async def import_upload(file, asset_id=None):
         suffix = Path(file.filename or 'upload').suffix.lower()
         temporary = project.safe(f'.pending/upload-{identifier()}{suffix}')
