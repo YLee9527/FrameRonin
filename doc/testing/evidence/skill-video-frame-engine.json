@@ -1,5 +1,5 @@
 {
-  "codeCommit": null,
+  "codeCommit": "140d097",
   "date": "2026-10-18",
   "scope": "Original ParamsStep frame-processing kernel, real dedicated Workers and formal queue publication; video decoding/crop/selection/workbench/document acceptance remains open",
   "sources": "skills/frameronin-local/assets/fixtures/video-frames/manifest.json",
