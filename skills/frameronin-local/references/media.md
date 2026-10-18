@@ -16,6 +16,8 @@
 
 交互式像素还原、双背景、透明边缘、网格、光流和散图工具由 [工作台](workbench.md) 承载，沿用原算法。对最终文件比较解码像素、透明度、尺寸、帧数、时长及索引；编码文件字节不同并不一定代表像素不同。
 
+独立抠图的 `image.matteTool` 内核保留色度键、白底 WebGL、双背景、修复和贴边侵蚀，必须有宿主 Worker；CLI 或通用提案不能直接执行。双背景仅接受按黑、白顺序选择的同尺寸版本，自动去水印失败会报错。工作台的正式文档与交互接入仍在迁移，尚不能将原同步界面当作受控流程使用。`image.matte` 的 rembg 模型处理是另一操作，不用它代替原算法。
+
 `sequence.opticalFlow` 直接复用原 OpenCV.js 双向 Farneback、平滑、位移限制与融合算法，在受控 Node 进程执行。参数为 alpha、nearestNeighbor、bidirectional、quality（fast/balanced/high）、smoothFlow、maxMotionRelative；2–500 张同尺寸帧输出 2N−1 PNG 帧和报告。每帧对完整处理，不独立分块。16×512 固定样本的 31 帧通过浏览器与后台严格 RGBA 对照。工作台补帧页支持取消；离开页面后任务继续，在项目面板读取正式结果。
 
 本地取消返回 processStopConfirmed 和 cancelElapsedSeconds，并保存任务 cancellation.json；此确认只涵盖本地受控进程。身份或停止权限无法核验时，结果先失效，再报告 CANCEL_* 错误，不伪造停止成功。AI 服务端状态仍需核对宿主调用。

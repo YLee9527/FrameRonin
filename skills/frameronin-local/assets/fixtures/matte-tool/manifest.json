@@ -1,0 +1,674 @@
+{
+  "formatVersion": 1,
+  "comparison": "Strict dimensions, format and all RGBA channels, including transparent pixels; no tolerance",
+  "originals": {
+    "reference/frontend/src/components/ImageMatte.tsx": "f9deb1c231bcafe69e2ae52ca3aee32d35e5f184fe694cd137b8075d413b9149",
+    "reference/frontend/src/lib/doubleBackgroundMatte.ts": "7d8be08fc74a40def90a57e6d21761f1c1aff9434c6fdfc9188ea46b73636681",
+    "reference/frontend/src/lib/geminiWatermark.ts": "52e85580efadaaf90df84e5895c2bb06b09fb88c68b5f1c555bbc2db995799db"
+  },
+  "sources": {
+    "alpha.webp": "b37e07f9538e64d366742cf01d114989cc103a21a5b22a99ccf298efbad36755",
+    "black.png": "79df3a6e0fffdfa9c8759258c4a9dd8b9dc88483748525819fa0fc6bf4bb1e6c",
+    "color-alpha.png": "b760ad895998339d4933540fa41ed1c672b4e182d50106ee7f0ad96f337dad6a",
+    "islands-16.png": "b7c09805f79586e410339d2df99aded3abfab6c6f3a64a5bab0d803a49b40c97",
+    "islands-20.png": "3205c8ff90660d97ad35f567fbd97dab8941efe9f650087e48b367e5251da1a2",
+    "jpeg-422.jpg": "2610345802f5a16c7e6e8c107d4072d4af3b1cc6820eda1ae5ab9784dd3bbec0",
+    "jpeg-444.jpg": "1d885af5a98ceaaaa0474787530f93ddaa9af9e30db9742609afae655c19c389",
+    "jpeg-cmyk.jpg": "8b079967e1820da147294151a6508ef6cd8eaba3d64d1edeaba3b6d7d0d63868",
+    "jpeg-gray.jpg": "2c660f3b3135deb267281955c52829bc25c207e34d9f0143cd493823c9bb4a6d",
+    "jpeg-orientation8.jpg": "ff84fe1252b3f511fd0ca4bcbad8f4222a65a2126d5a7b1e4140066445be14a7",
+    "jpeg-progressive.jpg": "f20d0f1e0c71a3bb6e6a984a05eca915faf72f892d611f276c6abf408f8c31af",
+    "oriented.jpg": "982f820df903b94af60a7847501d4d4e537501873fcb9865f6b3660e7c77f47e",
+    "oriented.webp": "83be4d2b6cfaee0d7814823c0e49fe204e00b554e46069e9587c60f17b17cb88",
+    "photo.jpg": "99bc0f06f8ae654e670cd1d200380e56d23541827dccd2d4ac74f78488d91607",
+    "profiled.png": "e78a698f1615f165ba0b14c16176651150e101a15b66980a043a4dd4abb257bf",
+    "repair.png": "7892b71758adbc87c2251dd1118016708e2be9993e571355d3cd2cc6438a1e77",
+    "thin.png": "22ff4be3fdc46da22a9a52c2f49eb9129960e1d3f1c4823059a0c0402e28578e",
+    "threshold1024.png": "e1d91ed134108eef2ae1e31cc0853efe5ce6840664bc251461bbb5a5ec0bbafa",
+    "threshold1025.png": "0f14b72130e57d41d7a5279e9f96bf8763c9366f11b8df6aa2c9d534f51886f8",
+    "white-alpha.png": "52f162e158d9c9a2c227d337b3e7bcf0a9787693653a0d1d6c62157528a96ea5",
+    "white.png": "bd9ec87570344ec1ad9958149eabc0d321871e4c4858d2184cb96bf5fab89754"
+  },
+  "cases": [
+    {
+      "id": "chroma-default",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-blue",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#0000ff",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-custom",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#806432",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-minimal",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 5,
+        "smoothness": 5,
+        "spill": 5,
+        "erosion": 0
+      }
+    },
+    {
+      "id": "chroma-maximal",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 100,
+        "smoothness": 100,
+        "spill": 100,
+        "erosion": 100
+      }
+    },
+    {
+      "id": "chroma-fractional",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 34.5,
+        "smoothness": 36.25,
+        "spill": 74.5,
+        "erosion": 14.9
+      }
+    },
+    {
+      "id": "chroma-one-pass",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 5
+      }
+    },
+    {
+      "id": "chroma-four-passes",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 44.9
+      }
+    },
+    {
+      "id": "white-default",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-no-erosion",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 0
+      }
+    },
+    {
+      "id": "white-minimum",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 5,
+        "smoothness": 5,
+        "erosion": 5
+      }
+    },
+    {
+      "id": "white-maximum",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 100,
+        "smoothness": 100,
+        "erosion": 100
+      }
+    },
+    {
+      "id": "white-fractional",
+      "inputs": [
+        "color-alpha.png"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 34.5,
+        "smoothness": 36.25,
+        "erosion": 14.9
+      }
+    },
+    {
+      "id": "chroma-photo-jpg",
+      "inputs": [
+        "photo.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-jpeg-444-jpg",
+      "inputs": [
+        "jpeg-444.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-jpeg-422-jpg",
+      "inputs": [
+        "jpeg-422.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-jpeg-progressive-jpg",
+      "inputs": [
+        "jpeg-progressive.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-jpeg-gray-jpg",
+      "inputs": [
+        "jpeg-gray.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-jpeg-cmyk-jpg",
+      "inputs": [
+        "jpeg-cmyk.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-oriented-jpg",
+      "inputs": [
+        "oriented.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-jpeg-orientation8-jpg",
+      "inputs": [
+        "jpeg-orientation8.jpg"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-oriented-webp",
+      "inputs": [
+        "oriented.webp"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-alpha-webp",
+      "inputs": [
+        "alpha.webp"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "chroma-profiled-png",
+      "inputs": [
+        "profiled.png"
+      ],
+      "layout": {
+        "mode": "chroma",
+        "keyColor": "#00ff00",
+        "tolerance": 35,
+        "smoothness": 34,
+        "spill": 75,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-photo-jpg",
+      "inputs": [
+        "photo.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-jpeg-444-jpg",
+      "inputs": [
+        "jpeg-444.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-jpeg-422-jpg",
+      "inputs": [
+        "jpeg-422.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-jpeg-progressive-jpg",
+      "inputs": [
+        "jpeg-progressive.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-jpeg-gray-jpg",
+      "inputs": [
+        "jpeg-gray.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-jpeg-cmyk-jpg",
+      "inputs": [
+        "jpeg-cmyk.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-oriented-jpg",
+      "inputs": [
+        "oriented.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-jpeg-orientation8-jpg",
+      "inputs": [
+        "jpeg-orientation8.jpg"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-oriented-webp",
+      "inputs": [
+        "oriented.webp"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-alpha-webp",
+      "inputs": [
+        "alpha.webp"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "white-profiled-png",
+      "inputs": [
+        "profiled.png"
+      ],
+      "layout": {
+        "mode": "whiteErode",
+        "tolerance": 35,
+        "smoothness": 34,
+        "erosion": 77
+      }
+    },
+    {
+      "id": "double-default",
+      "inputs": [
+        "black.png",
+        "white.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 70,
+        "edgeContrast": 53
+      }
+    },
+    {
+      "id": "double-minimum",
+      "inputs": [
+        "black.png",
+        "white.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 50,
+        "edgeContrast": 50
+      }
+    },
+    {
+      "id": "double-maximum",
+      "inputs": [
+        "black.png",
+        "white.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 100,
+        "edgeContrast": 100
+      }
+    },
+    {
+      "id": "double-fractional",
+      "inputs": [
+        "black.png",
+        "white.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 71.5,
+        "edgeContrast": 62.25
+      }
+    },
+    {
+      "id": "double-transparent-white-overdraw",
+      "inputs": [
+        "black.png",
+        "white-alpha.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 70,
+        "edgeContrast": 53
+      }
+    },
+    {
+      "id": "double-watermark-threshold1024",
+      "inputs": [
+        "threshold1024.png",
+        "threshold1024.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 70,
+        "edgeContrast": 53
+      }
+    },
+    {
+      "id": "double-watermark-threshold1025",
+      "inputs": [
+        "threshold1025.png",
+        "threshold1025.png"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 70,
+        "edgeContrast": 53
+      }
+    },
+    {
+      "id": "double-jpeg-same-source",
+      "inputs": [
+        "photo.jpg",
+        "photo.jpg"
+      ],
+      "layout": {
+        "mode": "doubleBg",
+        "tolerance": 70,
+        "edgeContrast": 53
+      }
+    },
+    {
+      "id": "repair-repair",
+      "inputs": [
+        "repair.png"
+      ],
+      "layout": {
+        "mode": "repair"
+      }
+    },
+    {
+      "id": "repair-thin",
+      "inputs": [
+        "thin.png"
+      ],
+      "layout": {
+        "mode": "repair"
+      }
+    },
+    {
+      "id": "repair-islands-16",
+      "inputs": [
+        "islands-16.png"
+      ],
+      "layout": {
+        "mode": "repair"
+      }
+    },
+    {
+      "id": "repair-islands-20",
+      "inputs": [
+        "islands-20.png"
+      ],
+      "layout": {
+        "mode": "repair"
+      }
+    },
+    {
+      "id": "frontier-0",
+      "inputs": [
+        "repair.png"
+      ],
+      "layout": {
+        "mode": "frontier",
+        "erosion": 0
+      }
+    },
+    {
+      "id": "frontier-1",
+      "inputs": [
+        "repair.png"
+      ],
+      "layout": {
+        "mode": "frontier",
+        "erosion": 1
+      }
+    },
+    {
+      "id": "frontier-14.9",
+      "inputs": [
+        "repair.png"
+      ],
+      "layout": {
+        "mode": "frontier",
+        "erosion": 14.9
+      }
+    },
+    {
+      "id": "frontier-50",
+      "inputs": [
+        "repair.png"
+      ],
+      "layout": {
+        "mode": "frontier",
+        "erosion": 50
+      }
+    },
+    {
+      "id": "frontier-100",
+      "inputs": [
+        "repair.png"
+      ],
+      "layout": {
+        "mode": "frontier",
+        "erosion": 100
+      }
+    }
+  ]
+}

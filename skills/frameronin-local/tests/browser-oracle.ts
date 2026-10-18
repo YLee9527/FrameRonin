@@ -1,3 +1,4 @@
+import {originalMatteTool} from '../.runtime/oracle/original-matte-tool'
 import {originalScatterDetect,originalScatterExport} from '../.runtime/oracle/original-scatter'
 import {originalVisibleWatermark} from '../.runtime/oracle/original-visible-watermark'
 import {originalSpriteSplit,originalSpriteGifs} from '../.runtime/oracle/original-sprite-sheet'
@@ -421,7 +422,22 @@ async function runSheetPrepare(){
  }
  await publish(zip,'browser-sheet-prepare.zip');status.textContent=`Sheet preparation complete: ${fixture.cases.length} original comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare]] as const) {
+async function runMatteTool(){
+ const fixture=await(await fetch('/matte-tool/manifest.json')).json(),zip=new JSZip(),cache=new Map<string,Blob>()
+ for(const entry of fixture.cases){
+  status.textContent=`Standalone matte: ${entry.id}`
+  for(const input of entry.inputs)if(!cache.has(input))cache.set(input,await(await fetch(`/matte-tool/${input}`)).blob())
+  const files=entry.inputs.map((input:string)=>cache.get(input)!)
+  zip.file(`${entry.id}/original.png`,await originalMatteTool(files,entry.layout))
+  const worker=new Worker(new URL('../assets/workbench/src/lib/matteTool.worker.ts',import.meta.url),{type:'module'})
+  try{
+   const blob=await new Promise<Blob>((resolve,reject)=>{worker.onmessage=e=>{if(e.data.error)reject(new Error(e.data.error));else if(e.data.blob)resolve(e.data.blob)};worker.onerror=e=>reject(new Error(e.message));worker.postMessage({id:entry.id,generation:0,files,parameters:{layout:entry.layout,frontendBytes:0},budgetBytes:2*1024**3})})
+   zip.file(`${entry.id}/actual.png`,blob)
+  }finally{worker.terminate()}
+ }
+ await publish(zip,'browser-matte-tool.zip');status.textContent=`Standalone matte complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

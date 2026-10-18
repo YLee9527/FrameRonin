@@ -65,3 +65,5 @@ export {initialCustomSliceDraft,validateStoredCustomSlice,serializeCustomSlice,r
 export {createCustomSliceHistory,customSliceHistoryReducer} from '../../assets/workbench/src/localProject/useCustomSliceDocument'
 export {customSliceAssetWorker} from '../../assets/workbench/src/lib/customSliceAssetWorker'
 export {parseRearrangeText} from '../../assets/workbench/src/lib/customSliceRearrange'
+
+export {validateMatteToolLayout,checkMatteToolBudget} from '../../assets/workbench/src/lib/matteTool'

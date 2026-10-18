@@ -3,7 +3,7 @@ import { jsonPost, localJson } from './api'
 type Ready={ready:boolean;generation?:number;state?:string}
 /** Runs beyond its component's lifetime. The existing queue owns publication;
  * this Worker supplies only encoded content, never paths, task state or version IDs. */
-export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void,options:{operation:string;budgetBytes:number}={operation:'image.customScale',budgetBytes:0}){
+export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void,options:{operation:string;budgetBytes:number;files?:Blob[]}={operation:'image.customScale',budgetBytes:0}){
   let worker:Worker|null=null,timer:ReturnType<typeof setInterval>|null=null,generation:number|undefined
   let heartbeatFailure:((reason:unknown)=>void)|null=null
   const stop=()=>worker?.terminate()
@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=['image.sheetPreprocess','image.sheetPrepare'].includes(options.operation)?new Worker(new URL('../lib/sheetPrepare.worker.ts',import.meta.url),{type:'module'}):
+    worker=options.operation==='image.matteTool'?new Worker(new URL('../lib/matteTool.worker.ts',import.meta.url),{type:'module'}):
+      ['image.sheetPreprocess','image.sheetPrepare'].includes(options.operation)?new Worker(new URL('../lib/sheetPrepare.worker.ts',import.meta.url),{type:'module'}):
       ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames'].includes(options.operation)?new Worker(new URL('../lib/sheetAdjust.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.spriteGifs'?new Worker(new URL('../lib/spriteGifRows.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.visibleWatermark'?new Worker(new URL('../lib/geminiWatermark.worker.ts',import.meta.url),{type:'module'}):
@@ -43,7 +44,7 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
         else if(event.data.blob instanceof Blob)resolve(event.data.blob)
         else reject(new Error('BROWSER_OUTPUT_INVALID'))
       }
-      worker!.postMessage({id,generation,file,parameters,budgetBytes:options.budgetBytes,operation:options.operation})
+      worker!.postMessage({id,generation,file,files:options.files,parameters,budgetBytes:options.budgetBytes,operation:options.operation})
     })
     signal.throwIfAborted()
     const form=new FormData();form.append('generation',String(generation));form.append('file',blob,'worker-result.png')

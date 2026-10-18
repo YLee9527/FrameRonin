@@ -104,6 +104,9 @@ REGISTRY = {
     'image.sheetFrames': operation(['archive'],{'layout':{'type':'object','default':{}},
         'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
         'zip_report','original_sheet_adjust_frame_archive',overhead=256),
+    'image.matteTool': operation(['image+'],{'layout':{'type':'object','default':{}},
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'png_report','original_standalone_matte',overhead=256),
     'image.sheetPreprocess': operation(['image'],{'layout':{'type':'object','default':{}},
         'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
         'png_report','original_sheet_pro_preprocess',overhead=256),
@@ -232,6 +235,9 @@ def preview(project, payload):
     if name in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames']:
         from .sheet_adjust import review
         estimate,_,_=review(versions[0],values,{'image.sheetCompose':'compose','image.sheetGif':'gif','image.sheetFix':'fix','image.sheetFrames':'frames'}[name],memory_budget())
+    if name=='image.matteTool':
+        from .matte_tool import review
+        estimate,_=review(versions,values,memory_budget())
     if name in ['image.sheetPreprocess','image.sheetPrepare']:
         from .sheet_prepare import review
         estimate,_=review(versions[0],values,'preprocess' if name=='image.sheetPreprocess' else 'prepare',memory_budget())
@@ -384,7 +390,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['image.matteTool','image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,

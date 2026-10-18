@@ -1,0 +1,2826 @@
+{
+  "codeCommit": null,
+  "date": "2026-10-18",
+  "scope": "Standalone ImageMatte processing kernel and managed multi-input Worker transport; workbench controls/documents/history and complete Skill remain open",
+  "originals": {
+    "reference/frontend/src/components/ImageMatte.tsx": "f9deb1c231bcafe69e2ae52ca3aee32d35e5f184fe694cd137b8075d413b9149",
+    "reference/frontend/src/lib/doubleBackgroundMatte.ts": "7d8be08fc74a40def90a57e6d21761f1c1aff9434c6fdfc9188ea46b73636681",
+    "reference/frontend/src/lib/geminiWatermark.ts": "52e85580efadaaf90df84e5895c2bb06b09fb88c68b5f1c555bbc2db995799db"
+  },
+  "fixture": "skills/frameronin-local/assets/fixtures/matte-tool/manifest.json",
+  "fixtureSources": {
+    "alpha.webp": "b37e07f9538e64d366742cf01d114989cc103a21a5b22a99ccf298efbad36755",
+    "black.png": "79df3a6e0fffdfa9c8759258c4a9dd8b9dc88483748525819fa0fc6bf4bb1e6c",
+    "color-alpha.png": "b760ad895998339d4933540fa41ed1c672b4e182d50106ee7f0ad96f337dad6a",
+    "islands-16.png": "b7c09805f79586e410339d2df99aded3abfab6c6f3a64a5bab0d803a49b40c97",
+    "islands-20.png": "3205c8ff90660d97ad35f567fbd97dab8941efe9f650087e48b367e5251da1a2",
+    "jpeg-422.jpg": "2610345802f5a16c7e6e8c107d4072d4af3b1cc6820eda1ae5ab9784dd3bbec0",
+    "jpeg-444.jpg": "1d885af5a98ceaaaa0474787530f93ddaa9af9e30db9742609afae655c19c389",
+    "jpeg-cmyk.jpg": "8b079967e1820da147294151a6508ef6cd8eaba3d64d1edeaba3b6d7d0d63868",
+    "jpeg-gray.jpg": "2c660f3b3135deb267281955c52829bc25c207e34d9f0143cd493823c9bb4a6d",
+    "jpeg-orientation8.jpg": "ff84fe1252b3f511fd0ca4bcbad8f4222a65a2126d5a7b1e4140066445be14a7",
+    "jpeg-progressive.jpg": "f20d0f1e0c71a3bb6e6a984a05eca915faf72f892d611f276c6abf408f8c31af",
+    "oriented.jpg": "982f820df903b94af60a7847501d4d4e537501873fcb9865f6b3660e7c77f47e",
+    "oriented.webp": "83be4d2b6cfaee0d7814823c0e49fe204e00b554e46069e9587c60f17b17cb88",
+    "photo.jpg": "99bc0f06f8ae654e670cd1d200380e56d23541827dccd2d4ac74f78488d91607",
+    "profiled.png": "e78a698f1615f165ba0b14c16176651150e101a15b66980a043a4dd4abb257bf",
+    "repair.png": "7892b71758adbc87c2251dd1118016708e2be9993e571355d3cd2cc6438a1e77",
+    "thin.png": "22ff4be3fdc46da22a9a52c2f49eb9129960e1d3f1c4823059a0c0402e28578e",
+    "threshold1024.png": "e1d91ed134108eef2ae1e31cc0853efe5ce6840664bc251461bbb5a5ec0bbafa",
+    "threshold1025.png": "0f14b72130e57d41d7a5279e9f96bf8763c9366f11b8df6aa2c9d534f51886f8",
+    "white-alpha.png": "52f162e158d9c9a2c227d337b3e7bcf0a9787693653a0d1d6c62157528a96ea5",
+    "white.png": "bd9ec87570344ec1ad9958149eabc0d321871e4c4858d2184cb96bf5fab89754"
+  },
+  "frozenOriginalOutputs": "skills/frameronin-local/assets/fixtures/matte-tool/original",
+  "comparison": {
+    "cases": 52,
+    "modeCounts": {
+      "chroma": 19,
+      "whiteErode": 16,
+      "doubleBg": 8,
+      "repair": 4,
+      "frontier": 5
+    },
+    "failed": [],
+    "strictRgba": true,
+    "encodedEqualCount": 52,
+    "archiveSha256": "326eefc165e1356687a90a943b8d76673b22b3881bd63102839ab73471abe5ee",
+    "results": [
+      {
+        "sample": "chroma-default",
+        "mode": "chroma",
+        "originalSha256": "311d5e5e3f87b04a69ccada24ed21e468a6a3a59857f1b2dc4537615aa9c5f42",
+        "workerSha256": "311d5e5e3f87b04a69ccada24ed21e468a6a3a59857f1b2dc4537615aa9c5f42",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-blue",
+        "mode": "chroma",
+        "originalSha256": "11697b03c6cd9bea13472c40b693b0ce05e6b0983e0d1692ec4557ef80555def",
+        "workerSha256": "11697b03c6cd9bea13472c40b693b0ce05e6b0983e0d1692ec4557ef80555def",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-custom",
+        "mode": "chroma",
+        "originalSha256": "a5ec5391e10fdb9794c749c4680a179dc791deb284222ad94ca9757e4db9e488",
+        "workerSha256": "a5ec5391e10fdb9794c749c4680a179dc791deb284222ad94ca9757e4db9e488",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-minimal",
+        "mode": "chroma",
+        "originalSha256": "51c1de4189037ef873b61dddb04faf8d2c4282b28c89a3039799ac6446d962c2",
+        "workerSha256": "51c1de4189037ef873b61dddb04faf8d2c4282b28c89a3039799ac6446d962c2",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-maximal",
+        "mode": "chroma",
+        "originalSha256": "9e4bbff4896651feea96f6d443627a1a500a0650761e7815a03ffda149af6200",
+        "workerSha256": "9e4bbff4896651feea96f6d443627a1a500a0650761e7815a03ffda149af6200",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-fractional",
+        "mode": "chroma",
+        "originalSha256": "544d3c3a5727650011ebcaf7a498b99a497d5a70b994b29f5d5ed04fa678d5d5",
+        "workerSha256": "544d3c3a5727650011ebcaf7a498b99a497d5a70b994b29f5d5ed04fa678d5d5",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-one-pass",
+        "mode": "chroma",
+        "originalSha256": "8c3cddd65f482b8e80e9a7b6a7d4b78d73ab0305e8dfc58eb42ec576fbbbe028",
+        "workerSha256": "8c3cddd65f482b8e80e9a7b6a7d4b78d73ab0305e8dfc58eb42ec576fbbbe028",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-four-passes",
+        "mode": "chroma",
+        "originalSha256": "48fea7d6508d2aa46b3b93e6cf6452e4e9ac3e526aaa2e104402432825eda6f2",
+        "workerSha256": "48fea7d6508d2aa46b3b93e6cf6452e4e9ac3e526aaa2e104402432825eda6f2",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-default",
+        "mode": "whiteErode",
+        "originalSha256": "9a37a12ec05d1e9b2b99fe0e43d2d7a03d0cada1981403c92c56d8d047477f39",
+        "workerSha256": "9a37a12ec05d1e9b2b99fe0e43d2d7a03d0cada1981403c92c56d8d047477f39",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-no-erosion",
+        "mode": "whiteErode",
+        "originalSha256": "a6f5e83694c3d00d67b830eb91e528568b4de119a241410f858f186dd9f24bf8",
+        "workerSha256": "a6f5e83694c3d00d67b830eb91e528568b4de119a241410f858f186dd9f24bf8",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-minimum",
+        "mode": "whiteErode",
+        "originalSha256": "3b6956c357dfcecc410b175249cdda4d2c0a4bc593d44d18a01b8b566a1e910a",
+        "workerSha256": "3b6956c357dfcecc410b175249cdda4d2c0a4bc593d44d18a01b8b566a1e910a",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-maximum",
+        "mode": "whiteErode",
+        "originalSha256": "80886d4e99d14a91f31ac5612293645571f3c5163244df86fd79ec209fe95a0d",
+        "workerSha256": "80886d4e99d14a91f31ac5612293645571f3c5163244df86fd79ec209fe95a0d",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-fractional",
+        "mode": "whiteErode",
+        "originalSha256": "87c027815059b188af5cc0da4173bb3e5834a96d5cc5c693d8c9b34704d7d672",
+        "workerSha256": "87c027815059b188af5cc0da4173bb3e5834a96d5cc5c693d8c9b34704d7d672",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-photo-jpg",
+        "mode": "chroma",
+        "originalSha256": "9cbc505cc0d53ed39203212e3e2b5babedcebf400b9945ad4f60ab5512bdc3fb",
+        "workerSha256": "9cbc505cc0d53ed39203212e3e2b5babedcebf400b9945ad4f60ab5512bdc3fb",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-jpeg-444-jpg",
+        "mode": "chroma",
+        "originalSha256": "311fe7b4da7b5d1dde538c0c448f0589ef4d44d24820a8eab82017f20e3986ca",
+        "workerSha256": "311fe7b4da7b5d1dde538c0c448f0589ef4d44d24820a8eab82017f20e3986ca",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-jpeg-422-jpg",
+        "mode": "chroma",
+        "originalSha256": "99e49d78afe7b0a33d5ea0feb17f1a60fb5e453c6bc8a283cebc062c07204f5d",
+        "workerSha256": "99e49d78afe7b0a33d5ea0feb17f1a60fb5e453c6bc8a283cebc062c07204f5d",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-jpeg-progressive-jpg",
+        "mode": "chroma",
+        "originalSha256": "61642adcd6066d94397ba8f3472ea0da4e32686253477603c9ea60f45df01ce8",
+        "workerSha256": "61642adcd6066d94397ba8f3472ea0da4e32686253477603c9ea60f45df01ce8",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-jpeg-gray-jpg",
+        "mode": "chroma",
+        "originalSha256": "8f6d5ea2c1b8d01125e687ec96da0b8ddd1e960244d4ef29a0a31dbeb33af5f7",
+        "workerSha256": "8f6d5ea2c1b8d01125e687ec96da0b8ddd1e960244d4ef29a0a31dbeb33af5f7",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-jpeg-cmyk-jpg",
+        "mode": "chroma",
+        "originalSha256": "badf664975735f142d3fdaa70ef819785559681305b3bd79f98483285a99fe22",
+        "workerSha256": "badf664975735f142d3fdaa70ef819785559681305b3bd79f98483285a99fe22",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-oriented-jpg",
+        "mode": "chroma",
+        "originalSha256": "63a6a43195654fe80f1b62ab1f4dc3e90e61638abf4399dc76e466f90e0d81a2",
+        "workerSha256": "63a6a43195654fe80f1b62ab1f4dc3e90e61638abf4399dc76e466f90e0d81a2",
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-jpeg-orientation8-jpg",
+        "mode": "chroma",
+        "originalSha256": "f2254c094b3ddfcea434e5660e509a5cfc0f21c1df5d7b73dc5466d05a000079",
+        "workerSha256": "f2254c094b3ddfcea434e5660e509a5cfc0f21c1df5d7b73dc5466d05a000079",
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-oriented-webp",
+        "mode": "chroma",
+        "originalSha256": "2d7283b5691affe24e23ffa2875a687ed658b2a721f949617691fb831b1b69eb",
+        "workerSha256": "2d7283b5691affe24e23ffa2875a687ed658b2a721f949617691fb831b1b69eb",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-alpha-webp",
+        "mode": "chroma",
+        "originalSha256": "2d7283b5691affe24e23ffa2875a687ed658b2a721f949617691fb831b1b69eb",
+        "workerSha256": "2d7283b5691affe24e23ffa2875a687ed658b2a721f949617691fb831b1b69eb",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "chroma-profiled-png",
+        "mode": "chroma",
+        "originalSha256": "ca0d13c9f66d10bafb6358c595b3345f5c13a1563c343a59fcce929c984af963",
+        "workerSha256": "ca0d13c9f66d10bafb6358c595b3345f5c13a1563c343a59fcce929c984af963",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-photo-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "2fe6de23799c5c5dc1932166c8b9f6c337526c97e0f6cb777cdb18ff8524ae69",
+        "workerSha256": "2fe6de23799c5c5dc1932166c8b9f6c337526c97e0f6cb777cdb18ff8524ae69",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-jpeg-444-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "bbf3ff4c1459aecfae029b1b0845e59e70442d6cda4b53770619bfb5f9b40ad5",
+        "workerSha256": "bbf3ff4c1459aecfae029b1b0845e59e70442d6cda4b53770619bfb5f9b40ad5",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-jpeg-422-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "380b6758bb1ee9a0520cc3b617e9746080b2b4cd1381c4c46d20d309ae9c5cdd",
+        "workerSha256": "380b6758bb1ee9a0520cc3b617e9746080b2b4cd1381c4c46d20d309ae9c5cdd",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-jpeg-progressive-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "71160c477b272b847fccc4eeadfd8aa0b492bb07e4376ae368fa23ba6e6659ca",
+        "workerSha256": "71160c477b272b847fccc4eeadfd8aa0b492bb07e4376ae368fa23ba6e6659ca",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-jpeg-gray-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "4d9342a43bdea6edb321b7905de84b16eee1eb4d31f8f09be894ab72b910eb24",
+        "workerSha256": "4d9342a43bdea6edb321b7905de84b16eee1eb4d31f8f09be894ab72b910eb24",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-jpeg-cmyk-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "decc2ed7a5f85215220f9332785df8abd2e3cc776cace588817c539b85044583",
+        "workerSha256": "decc2ed7a5f85215220f9332785df8abd2e3cc776cace588817c539b85044583",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-oriented-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "539615be1d8d27797d733c62a938e025b8378519c12405b156a4dfadca80b90b",
+        "workerSha256": "539615be1d8d27797d733c62a938e025b8378519c12405b156a4dfadca80b90b",
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-jpeg-orientation8-jpg",
+        "mode": "whiteErode",
+        "originalSha256": "c57cafc5caa2112e75799c67c5aa0ab8389f8abd1c85d236f706586bc428a23e",
+        "workerSha256": "c57cafc5caa2112e75799c67c5aa0ab8389f8abd1c85d236f706586bc428a23e",
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-oriented-webp",
+        "mode": "whiteErode",
+        "originalSha256": "343df04ec91e311b568883507ad56350c24614521a74e2cd1dae419092d281b8",
+        "workerSha256": "343df04ec91e311b568883507ad56350c24614521a74e2cd1dae419092d281b8",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-alpha-webp",
+        "mode": "whiteErode",
+        "originalSha256": "343df04ec91e311b568883507ad56350c24614521a74e2cd1dae419092d281b8",
+        "workerSha256": "343df04ec91e311b568883507ad56350c24614521a74e2cd1dae419092d281b8",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "white-profiled-png",
+        "mode": "whiteErode",
+        "originalSha256": "343df04ec91e311b568883507ad56350c24614521a74e2cd1dae419092d281b8",
+        "workerSha256": "343df04ec91e311b568883507ad56350c24614521a74e2cd1dae419092d281b8",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-default",
+        "mode": "doubleBg",
+        "originalSha256": "692f44b1d81d9027d88ce5b90262de4c336715d7cef5fd0b2ae2596ba03dbd5f",
+        "workerSha256": "692f44b1d81d9027d88ce5b90262de4c336715d7cef5fd0b2ae2596ba03dbd5f",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-minimum",
+        "mode": "doubleBg",
+        "originalSha256": "836bf7c4fbe8b84f27c5276714641ab82c55035b20c45947dcc627413d97568d",
+        "workerSha256": "836bf7c4fbe8b84f27c5276714641ab82c55035b20c45947dcc627413d97568d",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-maximum",
+        "mode": "doubleBg",
+        "originalSha256": "e55ec728d6b1a01c16c213baf76e3b8a0b426ab0a61275acf59895fab70de903",
+        "workerSha256": "e55ec728d6b1a01c16c213baf76e3b8a0b426ab0a61275acf59895fab70de903",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-fractional",
+        "mode": "doubleBg",
+        "originalSha256": "30ec1af6e37acd517dc827e2e83146ecd08887d0316dad331be301b8fbaa7340",
+        "workerSha256": "30ec1af6e37acd517dc827e2e83146ecd08887d0316dad331be301b8fbaa7340",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-transparent-white-overdraw",
+        "mode": "doubleBg",
+        "originalSha256": "9b1e648488f6193b9633e890dee0f94fe2c2986622745ccefccbb791b58994fe",
+        "workerSha256": "9b1e648488f6193b9633e890dee0f94fe2c2986622745ccefccbb791b58994fe",
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-watermark-threshold1024",
+        "mode": "doubleBg",
+        "originalSha256": "dda292b1c8eb2b157826ca69dded4ffbeb17288823f6b3c73476c10cce3575fa",
+        "workerSha256": "dda292b1c8eb2b157826ca69dded4ffbeb17288823f6b3c73476c10cce3575fa",
+        "equal": true,
+        "width": 1024,
+        "height": 1024,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-watermark-threshold1025",
+        "mode": "doubleBg",
+        "originalSha256": "6641fcf53f1e8f85e98c147e996cbfb480a98983505ad5943f0ba8473ea3a309",
+        "workerSha256": "6641fcf53f1e8f85e98c147e996cbfb480a98983505ad5943f0ba8473ea3a309",
+        "equal": true,
+        "width": 1025,
+        "height": 1025,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "double-jpeg-same-source",
+        "mode": "doubleBg",
+        "originalSha256": "3277b1e813644ed4d12c2000b52bc32ff3f56c5f668c58a33854f962062e3864",
+        "workerSha256": "3277b1e813644ed4d12c2000b52bc32ff3f56c5f668c58a33854f962062e3864",
+        "equal": true,
+        "width": 64,
+        "height": 48,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "repair-repair",
+        "mode": "repair",
+        "originalSha256": "d0682f50c865f61d3862851309f4c77737d09bc8861950054ad3f55d41bdbc61",
+        "workerSha256": "d0682f50c865f61d3862851309f4c77737d09bc8861950054ad3f55d41bdbc61",
+        "equal": true,
+        "width": 53,
+        "height": 47,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "repair-thin",
+        "mode": "repair",
+        "originalSha256": "3392de2de59845726d743ce3a74a2de3d2d44b519a50d6c70531960244b97030",
+        "workerSha256": "3392de2de59845726d743ce3a74a2de3d2d44b519a50d6c70531960244b97030",
+        "equal": true,
+        "width": 53,
+        "height": 1,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "repair-islands-16",
+        "mode": "repair",
+        "originalSha256": "98f05c0961048ac725c11959228c9c4fe545edb98a25422f83903ff91a9683ca",
+        "workerSha256": "98f05c0961048ac725c11959228c9c4fe545edb98a25422f83903ff91a9683ca",
+        "equal": true,
+        "width": 1000,
+        "height": 801,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "repair-islands-20",
+        "mode": "repair",
+        "originalSha256": "5fa77cf8b9eed393960f8d46278a1f2948167342057f77ffb27e58c3663c375d",
+        "workerSha256": "5fa77cf8b9eed393960f8d46278a1f2948167342057f77ffb27e58c3663c375d",
+        "equal": true,
+        "width": 1420,
+        "height": 1410,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "frontier-0",
+        "mode": "frontier",
+        "originalSha256": "5cd8bd4ee991e07ecc06eb7c0640a438fd529eafc72d5ce4876c9b957b372dee",
+        "workerSha256": "5cd8bd4ee991e07ecc06eb7c0640a438fd529eafc72d5ce4876c9b957b372dee",
+        "equal": true,
+        "width": 53,
+        "height": 47,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "frontier-1",
+        "mode": "frontier",
+        "originalSha256": "ebcaa79edb7144aa8c786ccde6631c9d17cbaf281b533bdbfc61bcbf9001500e",
+        "workerSha256": "ebcaa79edb7144aa8c786ccde6631c9d17cbaf281b533bdbfc61bcbf9001500e",
+        "equal": true,
+        "width": 53,
+        "height": 47,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "frontier-14.9",
+        "mode": "frontier",
+        "originalSha256": "5145732a57d1571cba12024a978856b4d6b73212d749921e8b841fe53d3b4c50",
+        "workerSha256": "5145732a57d1571cba12024a978856b4d6b73212d749921e8b841fe53d3b4c50",
+        "equal": true,
+        "width": 53,
+        "height": 47,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "frontier-50",
+        "mode": "frontier",
+        "originalSha256": "0bb530b197aae99ccbc5b4bd947034289db4fb1ccc1b73a6d46528f0caa673a9",
+        "workerSha256": "0bb530b197aae99ccbc5b4bd947034289db4fb1ccc1b73a6d46528f0caa673a9",
+        "equal": true,
+        "width": 53,
+        "height": 47,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "frontier-100",
+        "mode": "frontier",
+        "originalSha256": "0bb530b197aae99ccbc5b4bd947034289db4fb1ccc1b73a6d46528f0caa673a9",
+        "workerSha256": "0bb530b197aae99ccbc5b4bd947034289db4fb1ccc1b73a6d46528f0caa673a9",
+        "equal": true,
+        "width": 53,
+        "height": 47,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      }
+    ]
+  },
+  "publication": {
+    "projectId": "f6e72625-9ce7-4d68-9d39-9a4400a38715",
+    "tasks": [
+      {
+        "sample": "chroma-default",
+        "operation": "image.matteTool",
+        "taskId": "abfd85db-6c28-4360-8044-ac858e6fdc5c",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "bdc17c0f-8861-46b3-967c-90b1351b1596",
+          "6367b8cf-58c9-4fb8-91c5-018ca4b00f3e"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10678962501697242,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-blue",
+        "operation": "image.matteTool",
+        "taskId": "f9926c81-b5c2-4247-995d-f61d7959d462",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "b96651f1-01e0-493b-b9ae-7ff2ddf70cf7",
+          "118ab2a5-2e58-4a5d-b392-78e724de92d1"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#0000ff",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11143304104916751,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-custom",
+        "operation": "image.matteTool",
+        "taskId": "c0d72288-3305-422f-a5ba-bfbaa252f0e0",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "786865d4-5979-4cfe-a226-739c1cf293fe",
+          "33cf513f-26dc-48ef-a0e1-c0e5cbcfdd56"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#806432",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1134847910143435,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-minimal",
+        "operation": "image.matteTool",
+        "taskId": "6cfbe0a9-1521-462c-b42d-95c6664180a9",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "76c0427d-bb39-4301-9d0f-a37164464c28",
+          "70b9fecd-585a-4875-b274-8cfb1093847c"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 5,
+              "smoothness": 5,
+              "spill": 5,
+              "erosion": 0
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10813904204405844,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-maximal",
+        "operation": "image.matteTool",
+        "taskId": "003c041e-a45a-4f49-9731-3ef37fe09a47",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "e3507a68-4603-4541-b847-c0cbad22ed87",
+          "e193f3f4-e1c4-40c2-878a-42a8e65b485e"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 100,
+              "smoothness": 100,
+              "spill": 100,
+              "erosion": 100
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10494820796884596,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-fractional",
+        "operation": "image.matteTool",
+        "taskId": "9973351b-aff8-45f6-ba94-65cf377c79b8",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "638db8f1-c224-45de-b3d7-1a07770123fd",
+          "2f3456f4-332d-485d-9901-a5d72f1a80ff"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 34.5,
+              "smoothness": 36.25,
+              "spill": 74.5,
+              "erosion": 14.9
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10779320797882974,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-one-pass",
+        "operation": "image.matteTool",
+        "taskId": "9566af7f-f0ec-4a1c-98c8-a7984f6dfb0b",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "bbd22654-1dfa-4db5-8741-9964ab2b05cd",
+          "3453f245-71ff-4efe-8c53-b52774de1c0d"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 5
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10784591606352478,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-four-passes",
+        "operation": "image.matteTool",
+        "taskId": "c01f5c7e-8a05-49ae-8ce3-8f9e67a3423f",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "c48451a0-bee6-4036-b726-115489faafb2",
+          "c8074dc1-1cba-45c0-827a-3a1095f00732"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 44.9
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10899287497159094,
+          "mode": "chroma",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "white-default",
+        "operation": "image.matteTool",
+        "taskId": "0904dd3d-0dbf-430c-a150-020b0fdc4dc1",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "73ee3568-0f34-4dfe-8f3d-a1b70588cad0",
+          "452017f9-45df-4760-8c26-516d20e2e837"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11018550000153482,
+          "mode": "whiteErode",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "white-no-erosion",
+        "operation": "image.matteTool",
+        "taskId": "cbd99c44-508f-4b19-a95f-889df14b8540",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "97dbdb2e-550e-49e4-88d5-7aae4658c37b",
+          "b38bb4fc-3256-4442-b3cd-1acd4965bd3a"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 0
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10892066697124392,
+          "mode": "whiteErode",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "white-minimum",
+        "operation": "image.matteTool",
+        "taskId": "db0829d9-28e2-4e4e-99f4-206382a63658",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "a91f63f2-91f2-4bfe-b2e8-5d6c49eb6ed2",
+          "d5818cd2-1c4c-45fd-a9e6-401dc6f5dc15"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 5,
+              "smoothness": 5,
+              "erosion": 5
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10889495897572488,
+          "mode": "whiteErode",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "white-maximum",
+        "operation": "image.matteTool",
+        "taskId": "f74f17e7-668a-4e84-85fe-ecd60c37f6e2",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "fd939661-0c8f-4537-8c35-9e5c9637462e",
+          "96a1f1b8-8351-4338-a6dc-a1e72cd0fe3e"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 100,
+              "smoothness": 100,
+              "erosion": 100
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10952779196668416,
+          "mode": "whiteErode",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "white-fractional",
+        "operation": "image.matteTool",
+        "taskId": "4fd561ea-9d12-4f47-9c50-bf44802e6d31",
+        "state": "succeeded",
+        "inputs": [
+          "bc5f12a9-e27b-4000-8be0-8add61f273d1"
+        ],
+        "results": [
+          "c70f848b-ab4a-4ec5-a79f-1bfdf185443f",
+          "c9079681-ed5d-4cc3-8ee3-95d34494efca"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 34.5,
+              "smoothness": 36.25,
+              "erosion": 14.9
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10788412496913224,
+          "mode": "whiteErode",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "chroma-photo-jpg",
+        "operation": "image.matteTool",
+        "taskId": "13ce9491-7606-416c-b787-ced3ef505f49",
+        "state": "succeeded",
+        "inputs": [
+          "443e5410-daa2-4f12-a7d9-4bd329c51b90"
+        ],
+        "results": [
+          "deaa5aa2-5b93-4b05-aa52-b8172d488de8",
+          "44d670e2-d02b-4015-8e2b-ac7d8696b307"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10939991602208465,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-jpeg-444-jpg",
+        "operation": "image.matteTool",
+        "taskId": "4d1640d6-367a-4b64-9d16-58bea65a3c53",
+        "state": "succeeded",
+        "inputs": [
+          "474b2882-dfa3-41b1-b379-0884750131ce"
+        ],
+        "results": [
+          "c5d7ac24-5a3c-4df0-8c23-15a42dd3a26b",
+          "fac57d04-a7c0-45a6-98d0-e9f7304e69c3"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1091299579711631,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-jpeg-422-jpg",
+        "operation": "image.matteTool",
+        "taskId": "ba5dae04-8c92-4a3c-8cfe-55c4cf8c907a",
+        "state": "succeeded",
+        "inputs": [
+          "a34c0be5-624b-446a-b4c6-c6212cc0b549"
+        ],
+        "results": [
+          "97fb9f95-dd1b-4448-abb6-f0c6dd8f9a3b",
+          "e6cabe7a-a6ae-49cd-9ec4-17ce7fe70b67"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10532066691666842,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-jpeg-progressive-jpg",
+        "operation": "image.matteTool",
+        "taskId": "55eab39c-8db2-4969-949c-54ab922863b6",
+        "state": "succeeded",
+        "inputs": [
+          "40c649a7-6c94-42a7-baf8-6197f7b0044f"
+        ],
+        "results": [
+          "88714f79-f230-4e67-9a74-31c7b754521e",
+          "41e3605b-ff33-4b4b-8041-151fc259e922"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10939220897853374,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-jpeg-gray-jpg",
+        "operation": "image.matteTool",
+        "taskId": "e9e53f93-665f-4143-bf26-7fa0a0869265",
+        "state": "succeeded",
+        "inputs": [
+          "9fd23f9f-21c7-4fd2-9a0a-ad00471a129c"
+        ],
+        "results": [
+          "b0ce3b1f-b1b4-4c6e-8f1c-fbbeb306bb04",
+          "825831e6-d72e-41cd-abe8-24bff2d5ec30"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10975958395283669,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-jpeg-cmyk-jpg",
+        "operation": "image.matteTool",
+        "taskId": "8cc4a5ae-ec55-4f88-8b37-c237ec14f0a9",
+        "state": "succeeded",
+        "inputs": [
+          "8df30657-5a2f-4474-a6b8-179bb08cc6e5"
+        ],
+        "results": [
+          "2b7867a4-88df-44f5-8b1b-b2548c6a614c",
+          "46d37a17-cd5f-438c-b7c8-7d1f0201bfd5"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1092547079315409,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-oriented-jpg",
+        "operation": "image.matteTool",
+        "taskId": "0ad45088-041b-4780-905b-7a1daf88c3ff",
+        "state": "succeeded",
+        "inputs": [
+          "60ee13d0-2d7d-4027-bcf9-052aaaaaad0b"
+        ],
+        "results": [
+          "8488b9b4-2b83-4716-843c-82db158b2442",
+          "a9a9ef3d-889c-4b10-ba17-4271de3d1ee6"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10971599991898984,
+          "mode": "chroma",
+          "width": 48,
+          "height": 64
+        }
+      },
+      {
+        "sample": "chroma-jpeg-orientation8-jpg",
+        "operation": "image.matteTool",
+        "taskId": "4092b501-c401-4dfe-93e7-216ba299f987",
+        "state": "succeeded",
+        "inputs": [
+          "dd0df98b-74f1-4082-bae9-6e9bbdd7a4e6"
+        ],
+        "results": [
+          "f36bc908-d9cb-405d-97c4-aae0ea4eab71",
+          "07dc8406-67c7-4608-9d12-0696dfbdebc3"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10993224999401718,
+          "mode": "chroma",
+          "width": 48,
+          "height": 64
+        }
+      },
+      {
+        "sample": "chroma-oriented-webp",
+        "operation": "image.matteTool",
+        "taskId": "40ef429b-66ae-42c6-9ddb-71e1ac81598e",
+        "state": "succeeded",
+        "inputs": [
+          "e2fd7428-0e15-401a-a067-930c30a7e8eb"
+        ],
+        "results": [
+          "65eb3bf8-c7f3-4649-abe9-3cc344aa4591",
+          "8d9fad7c-cb50-4d86-8198-76e35dd59cc4"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11007154104299843,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-alpha-webp",
+        "operation": "image.matteTool",
+        "taskId": "340fbc23-fe2d-497b-bf65-d7c236040dd7",
+        "state": "succeeded",
+        "inputs": [
+          "65bc50f7-5bc5-4675-b923-654c804e16cb"
+        ],
+        "results": [
+          "ddcb7050-d523-4d3b-88d6-20d6d8ddc675",
+          "3304bf37-eb1e-449c-8266-cb1a2534e5f8"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10760779201518744,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "chroma-profiled-png",
+        "operation": "image.matteTool",
+        "taskId": "f8645ade-84ee-44c5-a420-8d40f5c845a9",
+        "state": "succeeded",
+        "inputs": [
+          "2a3d7c10-3086-4d41-a2b2-c7e21dd5f9aa"
+        ],
+        "results": [
+          "825249bb-e35d-4502-8633-78b822a9b38b",
+          "265503a2-fd38-4d53-98a1-1d2691707e97"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#00ff00",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10779970907606184,
+          "mode": "chroma",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-photo-jpg",
+        "operation": "image.matteTool",
+        "taskId": "52c72e2f-30b4-4cb7-96da-3cf27e0c7d90",
+        "state": "succeeded",
+        "inputs": [
+          "443e5410-daa2-4f12-a7d9-4bd329c51b90"
+        ],
+        "results": [
+          "473197de-2cde-4688-8856-760da3a382ce",
+          "16d343b4-5ae6-4207-9774-50c3523eb706"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10903412499465048,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-jpeg-444-jpg",
+        "operation": "image.matteTool",
+        "taskId": "390b9a19-3e8c-4db8-bc89-830bc592c58a",
+        "state": "succeeded",
+        "inputs": [
+          "474b2882-dfa3-41b1-b379-0884750131ce"
+        ],
+        "results": [
+          "11c6ebb4-c0d6-4be7-bbd6-2aa403ef1a7f",
+          "5b22ddc0-e838-4ed5-a887-1eb45e9ce863"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10967583407182246,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-jpeg-422-jpg",
+        "operation": "image.matteTool",
+        "taskId": "16b5c82f-03b5-4b6f-a87d-e62287f7c700",
+        "state": "succeeded",
+        "inputs": [
+          "a34c0be5-624b-446a-b4c6-c6212cc0b549"
+        ],
+        "results": [
+          "70c6d2b9-f5b9-4be9-98e8-c0f9980d3e97",
+          "b7057a46-acc5-43cb-8d7b-33e900ac325b"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10984608298167586,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-jpeg-progressive-jpg",
+        "operation": "image.matteTool",
+        "taskId": "102a9c00-5aef-4374-9b17-93f17a41bfdd",
+        "state": "succeeded",
+        "inputs": [
+          "40c649a7-6c94-42a7-baf8-6197f7b0044f"
+        ],
+        "results": [
+          "25eefc30-0ff9-4ea1-ab35-9b122f376a1e",
+          "47c05746-97a9-4ef6-8d04-a55df64f692f"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1086657919222489,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-jpeg-gray-jpg",
+        "operation": "image.matteTool",
+        "taskId": "6d0edbaf-4f2f-4432-954f-300e1f84cbed",
+        "state": "succeeded",
+        "inputs": [
+          "9fd23f9f-21c7-4fd2-9a0a-ad00471a129c"
+        ],
+        "results": [
+          "bf3ad5aa-9663-403e-b9b8-0402fee6c5c0",
+          "82abeee5-8829-452b-b9b3-adfb4a069e24"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10594641696661711,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-jpeg-cmyk-jpg",
+        "operation": "image.matteTool",
+        "taskId": "2810a70b-b6e2-4dbd-994f-e93f0176e3e0",
+        "state": "succeeded",
+        "inputs": [
+          "8df30657-5a2f-4474-a6b8-179bb08cc6e5"
+        ],
+        "results": [
+          "ba972eca-13c8-4434-84b6-3060fbaa430b",
+          "08eaac5b-88a7-4ddc-aa4d-f9e0facdc6a7"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11030808405485004,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-oriented-jpg",
+        "operation": "image.matteTool",
+        "taskId": "9ef4c1ef-fab7-4b7d-b6ea-5d5431274dcf",
+        "state": "succeeded",
+        "inputs": [
+          "60ee13d0-2d7d-4027-bcf9-052aaaaaad0b"
+        ],
+        "results": [
+          "373ce3fe-ff5b-4752-8b4a-8973f199d128",
+          "d607caf9-4f01-4547-bca3-529a5f069b75"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11012483399827033,
+          "mode": "whiteErode",
+          "width": 48,
+          "height": 64
+        }
+      },
+      {
+        "sample": "white-jpeg-orientation8-jpg",
+        "operation": "image.matteTool",
+        "taskId": "e5ba30c8-0058-41b7-ac9a-56bcf51abcc6",
+        "state": "succeeded",
+        "inputs": [
+          "dd0df98b-74f1-4082-bae9-6e9bbdd7a4e6"
+        ],
+        "results": [
+          "6cb4efbe-415b-4824-819b-6b928a0dffb2",
+          "b8d2e8d5-16c1-48d5-b43a-f3e22e60bf4d"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10998929105699062,
+          "mode": "whiteErode",
+          "width": 48,
+          "height": 64
+        }
+      },
+      {
+        "sample": "white-oriented-webp",
+        "operation": "image.matteTool",
+        "taskId": "99f2ed2f-9ed8-44b4-afe0-4eee214a9b0f",
+        "state": "succeeded",
+        "inputs": [
+          "e2fd7428-0e15-401a-a067-930c30a7e8eb"
+        ],
+        "results": [
+          "24ca58eb-3fd3-4aae-be8f-ee59a2ce5972",
+          "76f2da8d-b45f-496d-8dc5-783216806269"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11260854208376259,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-alpha-webp",
+        "operation": "image.matteTool",
+        "taskId": "5f5bcf38-5404-49e6-801a-1df3dca71568",
+        "state": "succeeded",
+        "inputs": [
+          "65bc50f7-5bc5-4675-b923-654c804e16cb"
+        ],
+        "results": [
+          "50a63d77-b3db-4d40-8468-7912f18cef76",
+          "7d24fbfa-b766-44b1-93cb-1e32d27b09fd"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1080647089984268,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "white-profiled-png",
+        "operation": "image.matteTool",
+        "taskId": "91b51c7a-0c7f-4af2-99d0-d2f35bc65426",
+        "state": "succeeded",
+        "inputs": [
+          "2a3d7c10-3086-4d41-a2b2-c7e21dd5f9aa"
+        ],
+        "results": [
+          "2d9aa177-0736-4115-b2dd-2d42ae3cbbd4",
+          "318169c4-69fe-421d-9f6e-7d5b09eb4740"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "whiteErode",
+              "tolerance": 35,
+              "smoothness": 34,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10921887506265193,
+          "mode": "whiteErode",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "double-default",
+        "operation": "image.matteTool",
+        "taskId": "e20e6b1c-25c6-40a6-a4c4-c6c3f9f3ded4",
+        "state": "succeeded",
+        "inputs": [
+          "7735e335-5520-4009-8fc5-b23c42baaadd",
+          "40fd60cb-2403-4d31-a8e6-4ae2d244dca1"
+        ],
+        "results": [
+          "c50a0797-be33-4c52-86d9-c5ac16ae38da",
+          "df4e37ed-5cff-4825-a588-c4baef0e0653"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 70,
+              "edgeContrast": 53
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11056495795492083,
+          "mode": "doubleBg",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "double-minimum",
+        "operation": "image.matteTool",
+        "taskId": "7bc23629-147d-44f3-a650-6ec000aaae8b",
+        "state": "succeeded",
+        "inputs": [
+          "7735e335-5520-4009-8fc5-b23c42baaadd",
+          "40fd60cb-2403-4d31-a8e6-4ae2d244dca1"
+        ],
+        "results": [
+          "3ce8fa82-3928-446b-a955-6fd72153404e",
+          "9ce6e481-9564-4b0d-9bb8-dd98549bb297"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 50,
+              "edgeContrast": 50
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11013666691724211,
+          "mode": "doubleBg",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "double-maximum",
+        "operation": "image.matteTool",
+        "taskId": "a1b7a851-c98f-4a39-a434-233e84164359",
+        "state": "succeeded",
+        "inputs": [
+          "7735e335-5520-4009-8fc5-b23c42baaadd",
+          "40fd60cb-2403-4d31-a8e6-4ae2d244dca1"
+        ],
+        "results": [
+          "3f36c552-b7ca-43e4-bead-45ebc5a2dc1c",
+          "59f965cd-f252-4486-bffd-59fb0d4d3e9c"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 100,
+              "edgeContrast": 100
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10771658399607986,
+          "mode": "doubleBg",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "double-fractional",
+        "operation": "image.matteTool",
+        "taskId": "eb40e75b-d0be-4373-a40d-8db9aaabc82a",
+        "state": "succeeded",
+        "inputs": [
+          "7735e335-5520-4009-8fc5-b23c42baaadd",
+          "40fd60cb-2403-4d31-a8e6-4ae2d244dca1"
+        ],
+        "results": [
+          "c164282e-3fa6-43aa-9079-76639f1ba461",
+          "08f06ba5-2ab7-44e6-91e8-b8d0f22f0512"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 71.5,
+              "edgeContrast": 62.25
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10912520892452449,
+          "mode": "doubleBg",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "double-transparent-white-overdraw",
+        "operation": "image.matteTool",
+        "taskId": "113d2140-29a7-4a19-8e06-fb36a721b12c",
+        "state": "succeeded",
+        "inputs": [
+          "7735e335-5520-4009-8fc5-b23c42baaadd",
+          "498f9f5e-8ce8-4689-9659-1662c2acbe00"
+        ],
+        "results": [
+          "2c05fd50-1000-4ff2-b858-1d79de4e5860",
+          "eb6c0988-9115-4386-afdb-92a6fab5d3c5"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 70,
+              "edgeContrast": 53
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10802970896475017,
+          "mode": "doubleBg",
+          "width": 43,
+          "height": 37
+        }
+      },
+      {
+        "sample": "double-watermark-threshold1024",
+        "operation": "image.matteTool",
+        "taskId": "9193dd81-3c6d-4fdd-ae6d-a44bb0603d06",
+        "state": "succeeded",
+        "inputs": [
+          "29c78c96-3e57-4ae4-ad4e-d6967e87717a",
+          "29c78c96-3e57-4ae4-ad4e-d6967e87717a"
+        ],
+        "results": [
+          "93a225a7-95f3-4ac7-a076-1ccbaf0ece49",
+          "506c5458-2e34-447c-b6e4-e13731f427e5"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 70,
+              "edgeContrast": 53
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10780516604427248,
+          "mode": "doubleBg",
+          "width": 1024,
+          "height": 1024
+        }
+      },
+      {
+        "sample": "double-watermark-threshold1025",
+        "operation": "image.matteTool",
+        "taskId": "0720b661-d329-4071-8e02-0573f937d9cb",
+        "state": "succeeded",
+        "inputs": [
+          "04173d88-5b85-4023-9c46-458d9f07c1bc",
+          "04173d88-5b85-4023-9c46-458d9f07c1bc"
+        ],
+        "results": [
+          "9c9c8e91-4b18-4ab9-98d9-02275ec5cd06",
+          "0b1a98e2-405c-4ba4-9247-090fe35c2f31"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 70,
+              "edgeContrast": 53
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11131375003606081,
+          "mode": "doubleBg",
+          "width": 1025,
+          "height": 1025
+        }
+      },
+      {
+        "sample": "double-jpeg-same-source",
+        "operation": "image.matteTool",
+        "taskId": "7d728043-4631-4b5f-add1-180dbc28f52a",
+        "state": "succeeded",
+        "inputs": [
+          "443e5410-daa2-4f12-a7d9-4bd329c51b90",
+          "443e5410-daa2-4f12-a7d9-4bd329c51b90"
+        ],
+        "results": [
+          "66315087-2aa2-4791-9e70-401d7937ef51",
+          "7b74c727-c59a-49c5-804e-bbe4dcb23132"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 70,
+              "edgeContrast": 53
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10851370799355209,
+          "mode": "doubleBg",
+          "width": 64,
+          "height": 48
+        }
+      },
+      {
+        "sample": "repair-repair",
+        "operation": "image.matteTool",
+        "taskId": "9af71a7d-cba2-42aa-bbef-6276cd4e93ae",
+        "state": "succeeded",
+        "inputs": [
+          "3e50f57f-be54-4b31-b36e-50070957240f"
+        ],
+        "results": [
+          "02b7630a-2413-449a-a67c-d00f9dbcbfa9",
+          "5c3bd313-c412-4dd5-afc6-34d749b99f51"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "repair"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10822745901532471,
+          "mode": "repair",
+          "width": 53,
+          "height": 47
+        }
+      },
+      {
+        "sample": "repair-thin",
+        "operation": "image.matteTool",
+        "taskId": "fe5f3106-cef6-4492-8a8f-202665888099",
+        "state": "succeeded",
+        "inputs": [
+          "71ced5f9-383a-45ce-91c1-b1cee42d9913"
+        ],
+        "results": [
+          "1bf8b63b-c1f0-4e5a-bd09-f865e2836925",
+          "59bf392b-278b-4fc0-b8c1-312052fb79b8"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "repair"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10950604092795402,
+          "mode": "repair",
+          "width": 53,
+          "height": 1
+        }
+      },
+      {
+        "sample": "repair-islands-16",
+        "operation": "image.matteTool",
+        "taskId": "b094ea40-ef67-48f4-81ee-51e338e2dfa6",
+        "state": "succeeded",
+        "inputs": [
+          "e49ada15-4e7d-4b7e-be58-53f1d7ab4972"
+        ],
+        "results": [
+          "2e5fee00-bc25-4584-a6ab-c22d9ff1d533",
+          "27dc5878-e9e5-445b-adbf-ab8bd91d9445"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "repair"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10971987503580749,
+          "mode": "repair",
+          "width": 1000,
+          "height": 801
+        }
+      },
+      {
+        "sample": "repair-islands-20",
+        "operation": "image.matteTool",
+        "taskId": "08d313e8-2e7d-4f9a-a5a9-dc52409b631e",
+        "state": "succeeded",
+        "inputs": [
+          "aef6c5a6-e3f6-4674-b430-8e13073922ae"
+        ],
+        "results": [
+          "0d6a7b49-5c02-49c0-bd8e-0d2f079840b5",
+          "e57a74ae-a97e-4181-86c4-584b8e9b371a"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "repair"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10700529103633016,
+          "mode": "repair",
+          "width": 1420,
+          "height": 1410
+        }
+      },
+      {
+        "sample": "frontier-0",
+        "operation": "image.matteTool",
+        "taskId": "dac3dbb5-be1f-4ad5-a757-5cb161217fac",
+        "state": "succeeded",
+        "inputs": [
+          "3e50f57f-be54-4b31-b36e-50070957240f"
+        ],
+        "results": [
+          "7c025049-c2ab-4e21-8907-aaf728693054",
+          "618aea1a-14c9-4ab4-8d38-fe35db3420d3"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 0
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1090402080444619,
+          "mode": "frontier",
+          "width": 53,
+          "height": 47
+        }
+      },
+      {
+        "sample": "frontier-1",
+        "operation": "image.matteTool",
+        "taskId": "ad6498ba-c601-44d2-ae7f-c1a39c9013a6",
+        "state": "succeeded",
+        "inputs": [
+          "3e50f57f-be54-4b31-b36e-50070957240f"
+        ],
+        "results": [
+          "c3ce8f26-ee66-4a90-ba35-69cabb0b35be",
+          "0bdd7e40-e463-4445-b85f-2f1973c49040"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 1
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.110373541014269,
+          "mode": "frontier",
+          "width": 53,
+          "height": 47
+        }
+      },
+      {
+        "sample": "frontier-14.9",
+        "operation": "image.matteTool",
+        "taskId": "ecdbfdb8-29f9-48b8-bc3c-bbbded6e90ac",
+        "state": "succeeded",
+        "inputs": [
+          "3e50f57f-be54-4b31-b36e-50070957240f"
+        ],
+        "results": [
+          "3017f733-bfb8-4503-a6f5-fc0180c59c08",
+          "b4711ca9-d81a-4b82-afcd-5d234c9b3f10"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 14.9
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10850620805285871,
+          "mode": "frontier",
+          "width": 53,
+          "height": 47
+        }
+      },
+      {
+        "sample": "frontier-50",
+        "operation": "image.matteTool",
+        "taskId": "fcd835bc-0236-4a69-a8d6-2a1b8dfaf814",
+        "state": "succeeded",
+        "inputs": [
+          "3e50f57f-be54-4b31-b36e-50070957240f"
+        ],
+        "results": [
+          "6608ec96-b1b7-444a-80bb-e30160ce3ac7",
+          "e2296b5f-b1a8-4896-b7ba-94c67f59e602"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 50
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10758054198231548,
+          "mode": "frontier",
+          "width": 53,
+          "height": 47
+        }
+      },
+      {
+        "sample": "frontier-100",
+        "operation": "image.matteTool",
+        "taskId": "35405754-2041-4984-8610-efe3131bc4ab",
+        "state": "succeeded",
+        "inputs": [
+          "3e50f57f-be54-4b31-b36e-50070957240f"
+        ],
+        "results": [
+          "e4677511-dd17-468e-b7ea-291170230b26",
+          "332ca015-e989-4c28-8e32-79011a9c165c"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "image.matteTool",
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 100
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10978920897468925,
+          "mode": "frontier",
+          "width": 53,
+          "height": 47
+        }
+      }
+    ],
+    "rejections": [],
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 125
+    }
+  },
+  "validation": {
+    "python": {
+      "passed": 43,
+      "failed": 0
+    },
+    "javascript": {
+      "passed": 80,
+      "failed": 0
+    },
+    "productionBuild": true,
+    "targetedEslint": true,
+    "skillStructure": true,
+    "currentProjectVersions": 125,
+    "database": "ok"
+  },
+  "negativeCoverage": [
+    "Unknown, unused and type-confused mode parameters; huge integers, NaN, out-of-range controls",
+    "Exact one/two selected input counts; mismatched displayed dimensions; animation; unsupported native mode and direct CLI submission",
+    "Complete two-source/intermediate/frontend resource budget and origin-bound internal PNG allowance",
+    "Wrong-sized PNG rejection; cancellation during decoded output validation and late publication rejection",
+    "Mock host transport verifies both black/white inputs, ignores foreign/stale generations, and posts only its own result"
+  ],
+  "fidelityNotes": [
+    "Chroma source-alpha replacement, original spill suppression and 3x3 minimum-alpha erosion are preserved",
+    "White background uses unchanged original GLSL programs and framebuffers; unsupported or failed WebGL is an explicit failure",
+    "Black/white overdraw, image-to-PNG normalization and automatic 48/96 watermark removal are preserved",
+    "Repair retains four source-over composites, 20 percent alpha threshold and global island-size rules; frontier retains 0..56 hard-shave passes",
+    "No global repair or erosion algorithm was independently tiled"
+  ],
+  "oldBehaviorFixes": [
+    "Mask load/decode failures no longer silently skip cleaning or use an approximate mask",
+    "Current browser combined JPEG EXIF-90/flipY path reversed the first column; flattening JPEG orientation before WebGL upload restores strict original pixels"
+  ],
+  "diagnostics": {
+    "firstCandidate": "49/50 cases passed; white-oriented-jpg had one reversed column",
+    "decodedVideoFrameCandidate": "Five JPEG WebGL cases failed and were rejected",
+    "finalCandidate": "All 52 passed; only this corpus was frozen and published"
+  },
+  "screenshot": "doc/testing/evidence/skill-matte-tool-engine.png",
+  "remainingGates": [
+    "Original ImageMatte workbench integration, formal document/history, actual sampling/pan/cancel/navigation",
+    "Real foreground/edge quality on user-relevant assets, more formats/browsers and actual GPU-unavailable environments",
+    "Joint browser/engine memory and Worker stop timing, full accessibility/minimum system and complete Skill delivery"
+  ]
+}

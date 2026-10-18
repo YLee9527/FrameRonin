@@ -114,3 +114,31 @@ test('large verified selections reuse one ordered metadata batch without uploadi
     assert.equal(requests[1].url,'/api/versions/manifest');assert(!requests.some(request=>request.url==='/api/assets'))
   }finally{globalThis.fetch=nativeFetch}
 })
+
+test('double-background host task sends both selected inputs in order and publishes only its own execution generation',async()=>{
+ const previous=globalThis.Worker,workers=[],selected=[new File(['black'],'black.png'),new File(['white'],'white.png')]
+ let published=false,postedGeneration
+ globalThis.Worker=class{
+  constructor(url){this.url=String(url);this.stopped=0;workers.push(this)}
+  postMessage(request){this.request=request;queueMicrotask(()=>{
+   this.onmessage({data:{id:'foreign',generation:7,blob:new Blob(['ignored'])}})
+   this.onmessage({data:{id:request.id,generation:6,blob:new Blob(['stale'])}})
+   this.onmessage({data:{id:request.id,generation:7,phase:'processing'}})
+   this.onmessage({data:{id:request.id,generation:7,blob:new Blob(['managed PNG'],{type:'image/png'})}})
+  })}
+  terminate(){this.stopped++}
+ }
+ const requests=fixture({
+  '/api/tasks/task':()=>response({id:'task',state:published?'succeeded':'running',progress:published?1:.1,results:published?['output']:[]}),
+  '/api/tasks/task/browser':()=>response({ready:true,generation:7,state:'running'}),
+  '/api/tasks/task/browser/heartbeat':()=>response({accepted:true}),
+  '/api/tasks/task/browser/result':async options=>{postedGeneration=options.body.get('generation');assert.equal(await options.body.get('file').text(),'managed PNG');published=true;return response({accepted:true})},
+ })
+ try{
+  const result=await runManagedTask('image.matteTool',selected,{renderer:'browser-worker',layout:{mode:'doubleBg',tolerance:70,edgeContrast:53}})
+  assert.equal(result.taskId,'task');assert.equal(workers.length,1);assert(workers[0].url.includes('matteTool.worker'))
+  assert.deepEqual(await Promise.all(workers[0].request.files.map(file=>file.text())),['black','white'])
+  assert.equal(workers[0].request.generation,7);assert.equal(postedGeneration,'7');assert.equal(workers[0].stopped,1)
+  assert.equal(requests.filter(request=>request.url.endsWith('/browser/result')).length,1)
+ }finally{globalThis.fetch=nativeFetch;globalThis.Worker=previous}
+})

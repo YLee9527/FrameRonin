@@ -380,6 +380,52 @@ class ProjectTests(unittest.TestCase):
         with self.assertRaises(Cancelled):accept(self.project,tid,0,archive)
         self.assertFalse(task(self.project,tid)['results']);self.assertTrue(self.project.verify()['valid'])
 
+    def test_standalone_matte_requires_exact_recipes_scoped_inputs_and_cancel_safe_publication(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        from frameronin_engine.matte_tool import review,validate_result
+        chroma={'mode':'chroma','keyColor':'#00ff00','tolerance':35,'smoothness':34,'spill':75,'erosion':77}
+        payload={'operation':'image.matteTool','inputs':[self.version['id']],'parameters':{'layout':chroma}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        for changes in [{'command':'run'},{'keyColor':'#fff'},{'keyColor':42},{'spill':True},{'erosion':101},{'tolerance':10**800},{'smoothness':float('nan')},{'mode':'doubleBg'},{'mode':['chroma']}]:
+            with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':{'layout':{**chroma,**changes}}})
+        for inputs in [[],[self.version['id']]*2]:
+            with self.assertRaises(RoninError):preview(self.project,{**payload,'inputs':inputs})
+        for p in [{'renderer':'native','layout':chroma},{'layout':chroma,'frontendBytes':2*1024**3},{'layout':chroma,'extra':True}]:
+            with self.assertRaises(RoninError):preview(self.project,{**payload,'parameters':p})
+        double={'operation':'image.matteTool','inputs':[self.version['id']]*2,'parameters':{'layout':{'mode':'doubleBg','tolerance':70,'edgeContrast':53}}}
+        self.assertTrue(preview(self.project,double)['requiresWorkbench'])
+        wrong=self.root/'wrong.png';Image.new('RGBA',(15,12)).save(wrong)
+        with self.assertRaises(RoninError):preview(self.project,{**double,'inputs':[self.version['id'],self.project.import_file(wrong)['id']]})
+        animated=self.root/'animated.png';Image.new('RGBA',(16,12),'red').save(animated,save_all=True,append_images=[Image.new('RGBA',(16,12),'blue')],duration=100)
+        with self.assertRaises(RoninError):preview(self.project,{**payload,'inputs':[self.project.import_file(animated)['id']]})
+        params={'layout':{'mode':'repair'},'frontendBytes':0}
+        large={**self.version,'origin':'image.matteTool','metadata':{**self.version['metadata'],'bytes':24*1024**2}}
+        self.assertLess(review([large],params,2*1024**3)[0],2*1024**3)
+        with self.assertRaises(RoninError):review([{**large,'origin':'import'}],params,2*1024**3)
+        with self.assertRaises(RoninError):validate_result(wrong,[self.version],params,2*1024**3,lambda:None)
+        checks=0
+        def canceled_during_decode():
+            nonlocal checks
+            checks+=1
+            if checks==2:raise Cancelled()
+        with self.assertRaises(Cancelled):validate_result(self.source,[self.version],params,2*1024**3,canceled_during_decode)
+        def running(request):
+            created=submit(self.project,request,browser_client=True);deadline=time.monotonic()+10
+            while not ready(self.project,created['id'])['ready']:
+                self.assertLess(time.monotonic(),deadline);time.sleep(.05)
+            return created['id']
+        tid=running(double)
+        with self.assertRaises(RoninError):accept(self.project,tid,0,wrong)
+        accept(self.project,tid,0,self.source);completed=wait(self.project,tid,10)
+        self.assertEqual(completed['state'],'succeeded',completed)
+        report=json.loads(Path(self.project.version(completed['results'][1])['absolutePath']).read_text())
+        self.assertEqual([report['mode'],report['width'],report['height'],report['outputFrames']],['doubleBg',16,12,1])
+        tid=running(payload);cancel(self.project,tid)
+        with self.assertRaises(Cancelled):accept(self.project,tid,0,self.source)
+        self.assertEqual(task(self.project,tid)['results'],[])
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_visible_watermark_uses_original_dimensions_static_input_and_owned_publication(self):
         from frameronin_engine.browser_tasks import ready,accept
         payload={'operation':'image.visibleWatermark','inputs':[self.version['id']],'parameters':{'sizeMode':'96'}}
