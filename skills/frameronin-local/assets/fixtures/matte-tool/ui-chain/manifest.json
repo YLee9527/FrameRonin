@@ -1,0 +1,31 @@
+{
+  "source": "original archive ImageMatte functions via browser oracle",
+  "archiveSha256": "4e93984efa4e6a6f75a40397447d329448a737f0e15ff76579ee725dcbcbb362",
+  "files": {
+    "raw.png": "692f44b1d81d9027d88ce5b90262de4c336715d7cef5fd0b2ae2596ba03dbd5f",
+    "repair.png": "54616bab4e23aba2d7bbdd7d0098d37d0434de7bd3b86c46bbc0504f7ad4351b",
+    "frontier-0.png": "54616bab4e23aba2d7bbdd7d0098d37d0434de7bd3b86c46bbc0504f7ad4351b",
+    "frontier-25.png": "b85c831997755a999b5c622058cdf997ab87c7a093a9060c72c4165a2073d0f7",
+    "frontier-50.png": "b36f34045d718d017741f0b598e04f0f799bab51d9d56a0d81285cad864f6229",
+    "sample.json": "f017e2b809b42b7fd1e4ff609f0a0b67ef2ad3119757a7f0f369c2fddc8ca5d0",
+    "sample-chroma.png": "4b362610d5958c6227f2887f8f3775ab4c4853a39fa7782fb5343c9595109304"
+  },
+  "doubleSettings": {
+    "tolerance": 70,
+    "edgeContrast": 53
+  },
+  "erosionFromRepair": [
+    0,
+    25,
+    50
+  ],
+  "sourceSample": [
+    20,
+    25
+  ],
+  "originalSources": {
+    "reference/frontend/src/components/ImageMatte.tsx": "f9deb1c231bcafe69e2ae52ca3aee32d35e5f184fe694cd137b8075d413b9149",
+    "reference/frontend/src/lib/doubleBackgroundMatte.ts": "7d8be08fc74a40def90a57e6d21761f1c1aff9434c6fdfc9188ea46b73636681",
+    "reference/frontend/src/lib/geminiWatermark.ts": "52e85580efadaaf90df84e5895c2bb06b09fb88c68b5f1c555bbc2db995799db"
+  }
+}

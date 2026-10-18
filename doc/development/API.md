@@ -4,7 +4,7 @@
 
 DoubleBg 恰好读取两张同显示尺寸的图片，保留原先的 PNG 归一、自动 48/96 去水印及差分链；其他模式读取一张。输入为静态 PNG/JPEG/WebP ≤20 MiB，repair/frontier 可继续使用 origin 为 image.matteTool 的正式 PNG ≤128 MiB。输出为一张原显示尺寸 PNG 和报告，每边 ≤30000px、文件 ≤128 MiB。完整工作集估算为 256 MiB + 所有输入像素×192 + 所有输入文件字节×12 + frontendBytes，超限不缩小。
 
-白底模式保留原 WebGL 着色器；Worker 核对纹理、视口、绘制缓冲、帧缓冲和上下文状态，不支持时明确失败。JPEG 的 Canvas 解码与 GPU 上传路径分别保持原行为，旋转先展开再交由 WebGL 翻转，避免组合旋转造成单列错误。双背景遮罩加载或解码失败不再静默跳过/近似去水印。上述模式当前已完成内核、原版对照和正式发布；独立 ImageMatte 界面、文档与完整交互仍在迁移，不把测试驱动当作按钮验收。
+白底模式保留原 WebGL 着色器；Worker 核对纹理、视口、绘制缓冲、帧缓冲和上下文状态，不支持时明确失败。JPEG 的 Canvas 解码与 GPU 上传路径分别保持原行为，旋转先展开再交由 WebGL 翻转，避免组合旋转造成单列错误。双背景遮罩加载或解码失败不再静默跳过/近似去水印。独立 ImageMatte 工作台已接入上述任务，支持正式 image-matte 文档、统一历史、有界预览及原像素取色。原生画布拖放和联合资源等验收缺口见专项证据，不能由内核或按钮检查推断全部交互完成。
 
 精灵表输入操作 `image.sheetPreprocess`、`image.sheetPrepare`、`image.sheetFrames` 均要求宿主 `browser-worker`。前两项输入一个正式静态 PNG/JPEG/WebP（≤20 MiB）；Frames 输入受控 PNG 帧 ZIP。独立 SpriteSheetAdjust 与集成 SheetPro 已接入同一受控工作台、正式文档和统一历史。
 

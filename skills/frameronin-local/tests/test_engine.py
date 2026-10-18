@@ -383,6 +383,8 @@ class ProjectTests(unittest.TestCase):
     def test_standalone_matte_requires_exact_recipes_scoped_inputs_and_cancel_safe_publication(self):
         from frameronin_engine.browser_tasks import ready,accept
         from frameronin_engine.matte_tool import review,validate_result
+        document=identifier();self.project.save_document(document,'image-matte',{'formatVersion':1},0)
+        self.assertEqual(self.project.document(document)['kind'],'image-matte')
         chroma={'mode':'chroma','keyColor':'#00ff00','tolerance':35,'smoothness':34,'spill':75,'erosion':77}
         payload={'operation':'image.matteTool','inputs':[self.version['id']],'parameters':{'layout':chroma}}
         self.assertTrue(preview(self.project,payload)['requiresWorkbench'])

@@ -67,3 +67,6 @@ export {customSliceAssetWorker} from '../../assets/workbench/src/lib/customSlice
 export {parseRearrangeText} from '../../assets/workbench/src/lib/customSliceRearrange'
 
 export {validateMatteToolLayout,checkMatteToolBudget} from '../../assets/workbench/src/lib/matteTool'
+
+export {initialMatteDraft,matteFiles,matteInputs,matteLayout,matteReports,serializeMatte,restoreMatte,validateStoredMatte} from '../../assets/workbench/src/localProject/matteDocument'
+export {createMatteHistory,matteHistoryReducer} from '../../assets/workbench/src/localProject/useMatteDocument'

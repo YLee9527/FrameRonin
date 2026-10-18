@@ -437,7 +437,17 @@ async function runMatteTool(){
  }
  await publish(zip,'browser-matte-tool.zip');status.textContent=`Standalone matte complete: ${fixture.cases.length} original comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool]] as const) {
+async function runMatteChain(){
+ const folder='/matte-tool/',zip=new JSZip(),black=await(await fetch(folder+'black.png')).blob(),white=await(await fetch(folder+'white.png')).blob()
+ const raw=await originalMatteTool([black,white],{mode:'doubleBg',tolerance:70,edgeContrast:53}),repair=await originalMatteTool([raw],{mode:'repair'})
+ zip.file('raw.png',raw);zip.file('repair.png',repair)
+ for(const erosion of [0,25,50])zip.file(`frontier-${erosion}.png`,await originalMatteTool([repair],{mode:'frontier',erosion}))
+ const source=await(await fetch(folder+'color-alpha.png')).blob(),image=await new Promise<HTMLImageElement>((resolve,reject)=>{const url=URL.createObjectURL(source),img=new Image();img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=reject;img.src=url}),canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;const context=canvas.getContext('2d')!;context.drawImage(image,0,0)
+ const color=[...context.getImageData(20,25,1,1).data],keyColor='#'+color.slice(0,3).map(v=>v.toString(16).padStart(2,'0')).join('')
+ zip.file('sample.json',JSON.stringify({x:20,y:25,color,keyColor}));zip.file('sample-chroma.png',await originalMatteTool([source],{mode:'chroma',keyColor,tolerance:35,smoothness:34,spill:75,erosion:77}))
+ await publish(zip,'browser-matte-chain.zip');status.textContent='Original matte repair chain complete: 6 PNGs and one sampled color'
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

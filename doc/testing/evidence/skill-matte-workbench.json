@@ -1,0 +1,630 @@
+{
+  "date": "2026-10-18",
+  "scope": "Independent ImageMatte managed workbench, formal document and unified history checkpoint; native stash drag remains unverified; complete Skill S2/S3/S4 remain open",
+  "codeCommit": null,
+  "kernelEvidence": "doc/testing/evidence/skill-matte-tool-engine.json",
+  "actualWorkbench": {
+    "projectId": "d014444e-15c9-4a17-b752-28bdc7b79e4d",
+    "mainAsset": "/assets/index-51kK314X.js",
+    "screenshot": "doc/testing/evidence/skill-matte-workbench.png",
+    "rawRepairErosion": {
+      "raw.png": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "repair.png": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "frontier-25.png": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      }
+    },
+    "rawRepairTasks": [
+      {
+        "id": "0c5d4bab-ff38-4f7e-a6da-93811d5e66c1",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.matteTool",
+          "inputs": [
+            "b81eae69-3a28-4703-8f71-6b69790f02c3",
+            "99724873-117d-4ed1-b185-a640a394cbf4"
+          ],
+          "parameters": {
+            "layout": {
+              "mode": "doubleBg",
+              "tolerance": 70,
+              "edgeContrast": 53
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 151002220
+          }
+        },
+        "results": [
+          "9896bbf6-df9d-44ae-8bda-2c5107dbd9d2",
+          "0557773a-66c6-4ec9-b3b9-98c90cb9edef"
+        ]
+      },
+      {
+        "id": "7f4608a4-b92e-40d4-a601-706e4b3f6d26",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.matteTool",
+          "inputs": [
+            "9896bbf6-df9d-44ae-8bda-2c5107dbd9d2"
+          ],
+          "parameters": {
+            "layout": {
+              "mode": "repair"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 151006906
+          }
+        },
+        "results": [
+          "d83933b3-3dc4-4184-a71e-4ed20c6efea5",
+          "e1a1061f-6f58-47c7-8e98-08ceeed2afbc"
+        ]
+      },
+      {
+        "id": "6f6b8e78-eb37-49d1-afd4-62c988f272f9",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.matteTool",
+          "inputs": [
+            "d83933b3-3dc4-4184-a71e-4ed20c6efea5"
+          ],
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 25
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 151011542
+          }
+        },
+        "results": [
+          "e33e614e-4b0e-476d-8620-a0dea113c2dd",
+          "93ef6fd1-1f2d-4eca-a033-134548c3400b"
+        ]
+      },
+      {
+        "id": "a17b356e-7d3e-43e5-8ab2-6c0b1c025a8d",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.matteTool",
+          "inputs": [
+            "d83933b3-3dc4-4184-a71e-4ed20c6efea5"
+          ],
+          "parameters": {
+            "layout": {
+              "mode": "frontier",
+              "erosion": 50
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 151016344
+          }
+        },
+        "results": [
+          "6ed2ee9b-4016-4f6c-aa1a-69201cc1e694",
+          "d73c5007-65a7-44c7-b843-fa4895f93a8e"
+        ]
+      }
+    ],
+    "erosion50AndZeroHistory": {
+      "comparisons": {
+        "frontier-50.png": {
+          "equal": true,
+          "width": 43,
+          "height": 37,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": true
+        },
+        "frontier-0.png": {
+          "equal": true,
+          "width": 43,
+          "height": 37,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": true
+        }
+      },
+      "zeroUndoRedoNoNewTaskOrVersion": true,
+      "counts": {
+        "tasks": 4,
+        "versions": 10
+      },
+      "document": {
+        "id": "3696ac9a-a569-4a51-b3ca-ecb515024c8d",
+        "kind": "image-matte",
+        "revision": 7
+      },
+      "undoErosion": 50,
+      "redoErosion": 0,
+      "undoFocus": "抠图工作区"
+    },
+    "reopenAndPanZoom": {
+      "actualReopen": true,
+      "codeMain": "index-Dornv2P9.js",
+      "sourceFiles": [
+        "black.png",
+        "white.png"
+      ],
+      "result": "repair",
+      "postErosion": 0,
+      "download": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "beforeChromaCounts": {
+        "tasks": 4,
+        "versions": 10
+      },
+      "viewGestures": {
+        "rightDragDelta": [
+          40,
+          30
+        ],
+        "before": [
+          42,
+          -13
+        ],
+        "after": [
+          82,
+          17
+        ],
+        "undo": [
+          42,
+          -13
+        ],
+        "redo": [
+          82,
+          17
+        ],
+        "wheelBefore": 2.5,
+        "wheelAfter": 2.65,
+        "wheelUndo": 2.5,
+        "wheelRedo": 2.65,
+        "newProcessingTasks": 0
+      }
+    },
+    "sampling": {
+      "defaultChroma": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "sample": {
+        "x": 20,
+        "y": 25,
+        "color": [
+          178,
+          62,
+          22,
+          103
+        ],
+        "keyColor": "#b23e16"
+      },
+      "uiPickedColor": "#B23E16",
+      "sampledChroma": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "sampleTask": {
+        "id": "5bfcc2a3-82c0-46f8-a671-dfdfb8741f16",
+        "state": "succeeded",
+        "payload": {
+          "operation": "image.matteTool",
+          "inputs": [
+            "f2608ef8-878b-4c59-8d28-96b08c0b31c4"
+          ],
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#b23e16",
+              "tolerance": 35,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 151016750
+          }
+        },
+        "results": [
+          "ba293baf-b63d-4dd4-bf1a-4b6105c2939f",
+          "c94c7c07-ff9e-4b94-8409-235c366f0a57"
+        ]
+      },
+      "samplingUsesOriginalCanvasRounding": true
+    },
+    "whiteWebGL": {
+      "white-default.png": {
+        "equal": true,
+        "width": 43,
+        "height": 37,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "white-oriented-jpg.png": {
+        "equal": true,
+        "width": 48,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      }
+    },
+    "samplingCancelAndRace": {
+      "canceledSamplingRetainedKey": "#00ff00",
+      "delayedWorkerSeconds": 4,
+      "coalescingBefore": {
+        "tasks": 16,
+        "versions": 34
+      },
+      "coalescingAfter": {
+        "tasks": 17,
+        "versions": 36
+      },
+      "task": {
+        "id": "695a1c5f-8b55-4f59-af53-fb7270dd5a20",
+        "state": "succeeded",
+        "generation": 0,
+        "payload": {
+          "operation": "image.matteTool",
+          "inputs": [
+            "1ade6daa-d70d-47cb-8039-4796242d6316"
+          ],
+          "parameters": {
+            "layout": {
+              "mode": "chroma",
+              "keyColor": "#b23e16",
+              "tolerance": 37,
+              "smoothness": 34,
+              "spill": 75,
+              "erosion": 77
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 151000136
+          }
+        },
+        "results": [
+          "b2434f37-85d9-4838-ae84-9c037578672e",
+          "7f177b7f-2674-4893-ad3f-6ce707ba4aee"
+        ]
+      },
+      "preservedTolerance": 37,
+      "preservedView": {
+        "backgroundActive": true,
+        "background": "#37634d",
+        "zoom": 1,
+        "panX": 0,
+        "panY": 0
+      }
+    },
+    "processingCancel": {
+      "fixture": {
+        "width": 2500,
+        "height": 2500,
+        "format": "JPEG RGB8",
+        "bytes": 2381739,
+        "sha256": "8f5442427a5c194c503410d720e7a37ab537b62884987b044ab0413229befe6b",
+        "generator": "numpy.default_rng(1729).integers(0,256,(2500,2500,3),dtype=uint8); Pillow JPEG quality=45 subsampling=2"
+      },
+      "feedbackBeforeWorkerMs": 289,
+      "feedbackWorkerPhase20Ms": 293,
+      "phase20Meaning": "Worker announced processing before decode/algorithm; no claim of synchronous CPU-loop interruption timing",
+      "tasks": [
+        {
+          "id": "007deadd-ef10-4f3f-bc29-a175898ced6f",
+          "state": "canceled",
+          "generation": 1,
+          "payload": {
+            "operation": "image.matteTool",
+            "inputs": [
+              "cb5b905e-21d5-47cc-96e5-b76d773cb6ab"
+            ],
+            "parameters": {
+              "layout": {
+                "mode": "chroma",
+                "keyColor": "#b23e16",
+                "tolerance": 35,
+                "smoothness": 34,
+                "spill": 75,
+                "erosion": 77
+              },
+              "renderer": "browser-worker",
+              "frontendBytes": 155780482
+            }
+          },
+          "results": []
+        },
+        {
+          "id": "c5441246-f91d-4c49-ab2b-cccf6ba5b045",
+          "state": "canceled",
+          "generation": 1,
+          "payload": {
+            "operation": "image.matteTool",
+            "inputs": [
+              "cb5b905e-21d5-47cc-96e5-b76d773cb6ab"
+            ],
+            "parameters": {
+              "layout": {
+                "mode": "chroma",
+                "keyColor": "#b23e16",
+                "tolerance": 35,
+                "smoothness": 34,
+                "spill": 75,
+                "erosion": 77
+              },
+              "renderer": "browser-worker",
+              "frontendBytes": 155780482
+            }
+          },
+          "results": []
+        }
+      ],
+      "stopEvidence": {
+        "007deadd-ef10-4f3f-bc29-a175898ced6f": {
+          "generation": 1,
+          "cancelElapsedSeconds": 0.013780666049569845,
+          "processStopConfirmed": true,
+          "scope": "local_owned_processes",
+          "aiState": null,
+          "ownedProcessCount": 1
+        },
+        "c5441246-f91d-4c49-ab2b-cccf6ba5b045": {
+          "generation": 1,
+          "cancelElapsedSeconds": 0.009616374969482422,
+          "processStopConfirmed": true,
+          "scope": "local_owned_processes",
+          "aiState": null,
+          "ownedProcessCount": 1
+        }
+      },
+      "lateResultsEmpty": true,
+      "browserWorkerStopTiming": "terminate invoked before feedback; whole browser/OS worker stop timing remains unmeasured"
+    },
+    "previewCancelRetry": {
+      "delayedWorkerSeconds": 4,
+      "observedCanceledAndRetry": true,
+      "noProcessingTaskAdded": true
+    },
+    "conflict": {
+      "originalId": "37a21eea-717b-4061-97e2-2568686a5769",
+      "originalRevision": 5,
+      "originalPanX": 888,
+      "copyId": "80b18441-a6f2-4574-892d-bd4b5d0de37f",
+      "copyPanX": 123,
+      "failedSaveBlockedNavigation": true
+    },
+    "lateRead": {
+      "documentId": "80b18441-a6f2-4574-892d-bd4b5d0de37f",
+      "preservedPanX": 321,
+      "candidateRejected": true
+    },
+    "backgroundRepairAndFrontier": {
+      "leftBeforeFirstStageCompleted": true,
+      "delayedResultUploadSeconds": 4,
+      "tasks": [
+        {
+          "id": "8ba3bd6b-5504-4d1c-813b-d898f1c492d4",
+          "state": "succeeded",
+          "generation": 0,
+          "payload": {
+            "operation": "image.matteTool",
+            "inputs": [
+              "17fbe3a7-15ae-4cdb-ac89-eb16a46a77f8"
+            ],
+            "parameters": {
+              "layout": {
+                "mode": "frontier",
+                "erosion": 25
+              },
+              "renderer": "browser-worker",
+              "frontendBytes": 151020976
+            }
+          },
+          "results": [
+            "70de2714-e7f1-4956-90e5-273a7ea385bd",
+            "082ed473-74fd-48ba-b888-a1ef7aca943b"
+          ]
+        },
+        {
+          "id": "d84dcaa0-b5b4-4088-ad4c-1be25af23e0a",
+          "state": "succeeded",
+          "generation": 0,
+          "payload": {
+            "operation": "image.matteTool",
+            "inputs": [
+              "9896bbf6-df9d-44ae-8bda-2c5107dbd9d2"
+            ],
+            "parameters": {
+              "layout": {
+                "mode": "repair"
+              },
+              "renderer": "browser-worker",
+              "frontendBytes": 151016344
+            }
+          },
+          "results": [
+            "17fbe3a7-15ae-4cdb-ac89-eb16a46a77f8",
+            "73677d3d-3cab-45f2-8cb4-616ab9263545"
+          ]
+        }
+      ],
+      "downloadComparisons": {
+        "black_doublebg (6).png": {
+          "equal": true,
+          "width": 43,
+          "height": 37,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": true
+        },
+        "content.png": {
+          "equal": true,
+          "width": 43,
+          "height": 37,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": true
+        }
+      }
+    },
+    "stash": {
+      "buttonAddsItem": true,
+      "downloadAfterTransferStrictlyEqual": true,
+      "nativeCanvasDrag": "Not verified: ordinary drag attempts produced no added stash item in current host; retained as open acceptance gap"
+    },
+    "inputRejections": {
+      "afterBackgroundTaskCount": 20,
+      "afterInvalidInputs": {
+        "tasks": 20,
+        "versions": 45
+      },
+      "noNewTasks": true,
+      "rejected": [
+        "black43x37_white48x64",
+        "animated GIF extension",
+        "8192x8192 RGBA8 complete-workset budget"
+      ],
+      "uiMessages": [
+        "黑底图与白底图尺寸必须一致",
+        "请选择静态 PNG、JPEG 或 WebP。",
+        "超出内存预算，请减小输入尺寸。"
+      ]
+    },
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ],
+    "project": {
+      "valid": true,
+      "database": "ok",
+      "versions": 45,
+      "tasks": 20,
+      "activeTasks": 0
+    }
+  },
+  "checks": {
+    "python": {
+      "passed": 43,
+      "failed": 0
+    },
+    "javascript": {
+      "passed": 82,
+      "failed": 0
+    },
+    "productionBuild": "passed",
+    "focusedESLint": "passed",
+    "skillStructure": "passed"
+  },
+  "openGates": [
+    "Native canvas-to-stash drag and cross-tool drag acceptance",
+    "Real photographic edge quality and remaining static formats/GPU environments",
+    "Whole controlled browser/engine RSS and browser Worker stop timing",
+    "Global stash decoding/storage budget and project ownership",
+    "VoiceOver, Retina, full keyboard/IME and macOS 14 acceptance",
+    "Other modules, full AI quality, portable distribution and complete Skill regression"
+  ]
+}
