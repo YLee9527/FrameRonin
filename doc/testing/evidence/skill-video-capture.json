@@ -1,4 +1,5 @@
 {
+  "codeCommit": "1ee111d",
   "date": "2026-10-18",
   "scope": "Native browser video capture + dedicated crop/PNG/ZIP Worker; actual production task APIs through separate same-origin test page, not the complete video editor",
   "fixture": "skills/frameronin-local/assets/fixtures/video-capture/manifest.json",
