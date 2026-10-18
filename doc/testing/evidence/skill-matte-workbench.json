@@ -1,7 +1,7 @@
 {
   "date": "2026-10-18",
   "scope": "Independent ImageMatte managed workbench, formal document and unified history checkpoint; native stash drag remains unverified; complete Skill S2/S3/S4 remain open",
-  "codeCommit": null,
+  "codeCommit": "6aee7f6",
   "kernelEvidence": "doc/testing/evidence/skill-matte-tool-engine.json",
   "actualWorkbench": {
     "projectId": "d014444e-15c9-4a17-b752-28bdc7b79e4d",
