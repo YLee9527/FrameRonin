@@ -1,0 +1,2720 @@
+{
+  "date": "2026-10-18",
+  "scope": "Video document schema/serialization/lineage/history foundation and skip-matte selected-frame transport; full video editor and shared save controls are not yet wired",
+  "selectionComparison": {
+    "archiveSha256": "b1621f82850cabb008706cf5d05e50197ae440debe9356fe8f60b9bc64962c4a",
+    "cases": [
+      {
+        "sample": "select-sparse",
+        "layout": {
+          "mode": "select",
+          "selected": [
+            0,
+            2,
+            6
+          ]
+        },
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "select-single-pixel",
+        "layout": {
+          "mode": "select",
+          "selected": [
+            3
+          ]
+        },
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "select-all",
+        "layout": {
+          "mode": "select",
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_006.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      }
+    ],
+    "failed": []
+  },
+  "frameRegression": {
+    "cases": 21,
+    "failed": []
+  },
+  "queuePublication": {
+    "projectId": "1cbc6664-8a67-4cc9-9e69-b2ac6e35d44b",
+    "tasks": [
+      {
+        "sample": "analyze",
+        "taskId": "22857718-d253-4a71-9636-e9b8f389a9b4",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "238eadba-8d52-4835-b9cd-ef31d94ffd98",
+          "5c6c4cf6-0c11-41eb-b035-66180e160c63"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "analyze"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 0,
+          "elapsedSeconds": 0.11063337500672787,
+          "mode": "analyze",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "hashes": [
+            "-1030815479_0",
+            "-1030815479_0",
+            "-1925759959_0",
+            "107_0",
+            "1488388879_-1478722104",
+            "312176_49491",
+            "1701390562_-328935903"
+          ],
+          "duplicates": [
+            {
+              "index": 0,
+              "groupId": 0,
+              "totalInGroup": 2
+            },
+            {
+              "index": 1,
+              "groupId": 0,
+              "totalInGroup": 2
+            }
+          ],
+          "frameCount": 7
+        }
+      },
+      {
+        "sample": "matte-default",
+        "taskId": "f868e526-fcdf-429a-b165-39fca77225a2",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "a1aeeb4a-1cb0-4d98-afbf-522d6c9fee8f",
+          "14496206-ccc8-4ec8-859f-345f8780668e"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 40,
+              "feather": 10,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.10757958400063217,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-default-brush",
+        "taskId": "9ee73a6d-bb3a-43f3-ba11-132fc193788d",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881",
+          "e9740768-a940-485a-adb2-6a8fb862b538"
+        ],
+        "results": [
+          "975dfe32-7cbf-4608-839a-cad56fb262f6",
+          "0abc664f-5227-4ac3-a9db-6133485447c1"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 40,
+              "feather": 10,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11151970794890076,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-hard",
+        "taskId": "6934d9d9-bbcf-486b-af67-7d810d12a339",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "0bb44662-659b-441d-9f01-1364c091c4cf",
+          "142ff6c6-c0ca-48bf-8ed8-bcd89572e8b5"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 1,
+              "feather": 0,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.1128649590536952,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-hard-brush",
+        "taskId": "1cd77f3c-1311-4a66-9e07-afa6b709a9d2",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881",
+          "e9740768-a940-485a-adb2-6a8fb862b538"
+        ],
+        "results": [
+          "5d4691f6-51ea-484e-85ef-bd165348b3fa",
+          "d8640454-fa2f-4789-8e07-1300d3b05dab"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 1,
+              "feather": 0,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11522262496873736,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-wide",
+        "taskId": "f696b059-7687-4c48-8796-8403d1e976bf",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "5ee9b0e7-ed25-4c89-a83f-2242ebaa9814",
+          "86d84bd3-ed34-4503-b750-05a9e3ad3d79"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 100,
+              "feather": 30,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11114829208236188,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-wide-brush",
+        "taskId": "9698351d-c716-46f9-becc-ce2c86556929",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881",
+          "e9740768-a940-485a-adb2-6a8fb862b538"
+        ],
+        "results": [
+          "c119743b-1639-4481-9b38-b40c97e84aef",
+          "54d6ba1b-6019-4f89-a7cd-1baa19a8e7f4"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 100,
+              "feather": 30,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11394233396276832,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-fractional",
+        "taskId": "4e539f14-c213-4a64-bc06-d839b5245825",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "82dced5e-bfd7-439b-8064-116719d5a320",
+          "58c17fdb-1ffd-4c0e-8e15-4b2cc9a2025a"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 37.5,
+              "feather": 8.25,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.10930262506008148,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-fractional-brush",
+        "taskId": "6a79e95e-287b-453b-856d-f0dd3fac0d2f",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881",
+          "e9740768-a940-485a-adb2-6a8fb862b538"
+        ],
+        "results": [
+          "2560248b-9d09-4e4d-8437-8f6d18b0b9d6",
+          "57385b14-c418-41ec-999a-c3bb0399dd23"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 37.5,
+              "feather": 8.25,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.10452195908874273,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "compose-default",
+        "taskId": "e17222e0-1520-4423-8d44-071bb6a22078",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "7caa58ee-fdec-464e-96fa-e1f514a04569",
+          "b607bed8-66be-4e3f-b988-17928d026a56"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11351341695990413,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-unused-columns",
+        "taskId": "07c0789b-e96e-4188-906d-07db44c0e3b3",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "67b10315-dac9-471c-aee1-a1aed6f1f55d",
+          "29bd67ee-0caa-460a-a2f2-35a47e6eded7"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 12,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10687516699545085,
+          "mode": "compose",
+          "width": 309,
+          "height": 21,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 309,
+              "h": 21
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 78,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 104,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 130,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 156,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-fractional",
+        "taskId": "38095c5b-21f6-4c72-9c38-c82464cd3fbf",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "c68df275-7425-4314-b26d-790ef05f2c0f",
+          "39f56d99-9b20-4fd0-83ec-eb6fbd35e44d"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23.5,
+              "height": 21.25,
+              "padding": 2.5,
+              "spacing": 1.25,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10854845808353275,
+          "mode": "compose",
+          "width": 73,
+          "height": 66,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23.5,
+              "h": 21.25
+            },
+            "sheet_size": {
+              "w": 73.0,
+              "h": 66.25
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0.0,
+                "y": 0.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 24.75,
+                "y": 0.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 49.5,
+                "y": 0.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0.0,
+                "y": 22.5,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 24.75,
+                "y": 22.5,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 49.5,
+                "y": 22.5,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0.0,
+                "y": 45.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-no-upscale",
+        "taskId": "c68f4bea-425f-49a2-be2b-652f74e689bd",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "703c4eb6-f8cb-4683-9357-9fc42453da3e",
+          "10faa4fd-a478-48e2-afda-89c373cfcdf5"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 64,
+              "height": 64,
+              "padding": 0,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10966645798180252,
+          "mode": "compose",
+          "width": 198,
+          "height": 198,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 64,
+              "h": 64
+            },
+            "sheet_size": {
+              "w": 198,
+              "h": 198
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 64,
+                "h": 64,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 67,
+                "y": 0,
+                "w": 64,
+                "h": 64,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 134,
+                "y": 0,
+                "w": 64,
+                "h": 64,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 67,
+                "w": 64,
+                "h": 64,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 67,
+                "y": 67,
+                "w": 64,
+                "h": 64,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 134,
+                "y": 67,
+                "w": 64,
+                "h": 64,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 134,
+                "w": 64,
+                "h": 64,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-negative-inner",
+        "taskId": "6e93a3b2-1ba6-476b-8b30-c1b37968001b",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "7841d886-70fe-44f3-9f0e-9a28750bcf38",
+          "07e0ebad-17e5-4315-95be-dc0176c608d6"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 8,
+              "height": 7,
+              "padding": 6,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11245666700415313,
+          "mode": "compose",
+          "width": 30,
+          "height": 27,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 8,
+              "h": 7
+            },
+            "sheet_size": {
+              "w": 30,
+              "h": 27
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 8,
+                "h": 7,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 11,
+                "y": 0,
+                "w": 8,
+                "h": 7,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 22,
+                "y": 0,
+                "w": 8,
+                "h": 7,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 10,
+                "w": 8,
+                "h": 7,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 11,
+                "y": 10,
+                "w": 8,
+                "h": 7,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 22,
+                "y": 10,
+                "w": 8,
+                "h": 7,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 20,
+                "w": 8,
+                "h": 7,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-one-column",
+        "taskId": "af3cbf64-da1f-4774-b733-712bd874bb76",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "e403b8bd-d559-4e0a-8edc-13940a31e660",
+          "0eea088e-a27c-4b24-8d75-bff83950b748"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 0,
+              "spacing": 0,
+              "columns": 1,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11237320897635072,
+          "mode": "compose",
+          "width": 23,
+          "height": 147,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 23,
+              "h": 147
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 0,
+                "y": 21,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 0,
+                "y": 42,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 63,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 0,
+                "y": 84,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 0,
+                "y": 105,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 126,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-0.5",
+        "taskId": "8863e5dc-73fe-4f3c-9704-b4a94b807082",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "77f2d6fd-b843-4f0f-9008-9fd245e56a72",
+          "865cde26-7595-4cbc-a4e7-6cdc73c9c51c"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0.5,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11390508292242885,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-1",
+        "taskId": "a0b967b1-0df1-4e45-80c8-6255488957f8",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "8ed4d566-8538-491e-b098-b777c66ebea4",
+          "2963e269-eaf5-4507-9963-7bdf020ba41d"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 1,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1126835000468418,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-3",
+        "taskId": "12ff0401-773a-4f2c-a40d-e1f2fe3dcf98",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "06c7ad9b-19fe-4a05-a188-49a943ba0422",
+          "0fb171d4-a69b-403f-b6a7-c5e7fa6e8fba"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 3,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11404254205990583,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-16",
+        "taskId": "20f62be0-232f-447e-8b81-c4b87562dc8c",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "daa458bd-bce2-451a-8b2d-199ce6166dae",
+          "d3b95b74-aaf6-4f27-b531-dd0577e1d256"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 16,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11480458395089954,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "archive-extracted",
+        "taskId": "41cd7976-8254-4fde-8c95-cb90fdef1cde",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "a3e7e8f0-15de-4f10-9cec-50491b245941",
+          "3f523d1a-53dc-406c-b108-024a2fdec21d"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "archive",
+              "kind": "extracted",
+              "selected": [
+                0,
+                2,
+                3,
+                6
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 4,
+          "elapsedSeconds": 0.10530400008428842,
+          "mode": "archive",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "archive-matted",
+        "taskId": "47e34329-bd39-47e8-acd8-7e0486c758c9",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "5cb85fcd-c01b-4f7b-96d9-6215ff46aba3",
+          "504fbe67-1019-446a-9806-aee00cd0db1a"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "archive",
+              "kind": "matted",
+              "selected": [
+                0,
+                2,
+                3,
+                6
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 4,
+          "elapsedSeconds": 0.11455370800103992,
+          "mode": "archive",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "select-sparse",
+        "taskId": "70af136a-05a1-4190-9e8f-e8bae6e77af9",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "08f01bb1-69ac-4fa9-8820-50a7e2af8ccb",
+          "ad35bb9e-1d1e-4b03-b691-c8419aeb9251"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "select",
+              "selected": [
+                0,
+                2,
+                6
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 3,
+          "elapsedSeconds": 0.1149275409989059,
+          "mode": "select",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "select-single-pixel",
+        "taskId": "91bc0e9d-613f-4c21-80cd-a8fd8bf7dfe3",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "f0bfe883-2674-4b01-bc7e-5636037de830",
+          "1002a92b-5b34-4f19-a32b-dc5c9189ef66"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "select",
+              "selected": [
+                3
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11244037502910942,
+          "mode": "select",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            3
+          ],
+          "frameSizes": [
+            {
+              "w": 1,
+              "h": 1
+            }
+          ]
+        }
+      },
+      {
+        "sample": "select-all",
+        "taskId": "400e09c1-7d6b-4259-a724-a91dc6b3c2b2",
+        "state": "succeeded",
+        "inputs": [
+          "32971324-21a0-4a0c-9e86-039cb6b89881"
+        ],
+        "results": [
+          "a339a5af-9b2f-4044-b1e9-27b966014b82",
+          "3fb21291-1392-4c57-acc6-18237bf24e23"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "select",
+              "selected": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 7,
+          "elapsedSeconds": 0.10463291697669774,
+          "mode": "select",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      }
+    ],
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 50
+    }
+  },
+  "realDocuments": {
+    "projectId": "a2506c46-7c9f-4dcf-892a-c44b245c87c1",
+    "archiveSha256": "a19eea4a6267620d54e8acc3a3a06b59e516d7655ae843142cbdc76f5ce94a3f",
+    "documents": [
+      {
+        "masked": false,
+        "documentId": "8244a119-6f0f-4d27-8820-71b7fbe9f001",
+        "copyDocumentId": "c536c18c-1c46-4aef-94fe-f430e92ce564",
+        "revision": 1,
+        "conflictStatus": 400,
+        "taskIds": [
+          "535bd253-e00c-49b6-9017-bed64a7df525",
+          "5e071942-85c7-4567-b93a-bb41f7b4fbe1",
+          "909b2012-71b6-4a5d-8540-aa091da8d8b1",
+          "8e27a97f-d8ac-420e-895c-e20499046ee0",
+          "d4453c29-4478-4740-9f79-eb96fb917a7e",
+          "275423aa-e3b3-4dc8-a5e2-e0d2540bf157",
+          "3a0f5cc3-5b12-47f3-ace7-4d0f810a2c1d"
+        ],
+        "sourceVersion": "77c12eb1-fef8-4d7b-99b8-5faab9a9ffc7",
+        "reopenedReferencesEqual": true,
+        "noAdditionalTasksOrAssets": true,
+        "stages": [
+          {
+            "stage": "capture",
+            "taskId": "535bd253-e00c-49b6-9017-bed64a7df525",
+            "operation": "video.capture",
+            "mode": null,
+            "results": [
+              "c310ef52-7604-49ea-a502-d9150d0db9c3",
+              "3c759b88-a8ee-4078-bd23-cce52138f85d"
+            ]
+          },
+          {
+            "stage": "analysis",
+            "taskId": "5e071942-85c7-4567-b93a-bb41f7b4fbe1",
+            "operation": "video.frameTools",
+            "mode": "analyze",
+            "results": [
+              "dac108e8-d5fb-4857-bd71-201d8285903b",
+              "9cb88fa6-0c7a-4ff1-9121-cf0528599701"
+            ]
+          },
+          {
+            "stage": "processed",
+            "taskId": "909b2012-71b6-4a5d-8540-aa091da8d8b1",
+            "operation": "video.frameTools",
+            "mode": "select",
+            "results": [
+              "3f89238d-6265-45fb-b9d3-f82f5ac7fb19",
+              "6dbe093a-9021-4691-839d-1ebf6ccedc95"
+            ]
+          },
+          {
+            "stage": "rawSheet",
+            "taskId": "8e27a97f-d8ac-420e-895c-e20499046ee0",
+            "operation": "video.frameTools",
+            "mode": "compose",
+            "results": [
+              "0304de45-b17d-4b81-aca2-f284c8bc2f78",
+              "536da8c4-2cb5-492a-8f1e-bbe6a7aadb44"
+            ]
+          },
+          {
+            "stage": "styledSheet",
+            "taskId": "d4453c29-4478-4740-9f79-eb96fb917a7e",
+            "operation": "video.frameTools",
+            "mode": "compose",
+            "results": [
+              "68b77d60-f5ba-44ea-a136-00b523451a7f",
+              "75c9aea2-4741-4f48-9c6c-851ad36813bc"
+            ]
+          },
+          {
+            "stage": "rawDownload",
+            "taskId": "275423aa-e3b3-4dc8-a5e2-e0d2540bf157",
+            "operation": "video.frameTools",
+            "mode": "archive",
+            "results": [
+              "f0b0ceb0-0c3c-4aac-bd28-fc7c3717a423",
+              "f5fbe516-a074-48fe-ac68-238b62ae7871"
+            ]
+          },
+          {
+            "stage": "processedDownload",
+            "taskId": "3a0f5cc3-5b12-47f3-ace7-4d0f810a2c1d",
+            "operation": "video.frameTools",
+            "mode": "archive",
+            "results": [
+              "13c71ca4-6ef1-453f-986f-e46ea23b3902",
+              "6f682823-83af-4298-a37e-0a2cef028a69"
+            ]
+          }
+        ]
+      },
+      {
+        "masked": true,
+        "documentId": "059e83d8-5447-4a1b-b205-fbb57fa7d2ed",
+        "copyDocumentId": "3be86324-7c79-4670-8bbe-19828052fe3d",
+        "revision": 1,
+        "conflictStatus": 400,
+        "taskIds": [
+          "535bd253-e00c-49b6-9017-bed64a7df525",
+          "5e071942-85c7-4567-b93a-bb41f7b4fbe1",
+          "8d8a4947-4b01-41de-9752-292d27f2723c",
+          "937cd597-0610-47d9-959f-0203854dbf24",
+          "facba8ee-d126-4f9e-8ddb-8d36d16a8d8d",
+          "bca866cd-4def-48c0-a282-6e153be70b29",
+          "55684af9-a301-4ac9-bb4a-d406b5faa35d"
+        ],
+        "sourceVersion": "77c12eb1-fef8-4d7b-99b8-5faab9a9ffc7",
+        "reopenedReferencesEqual": true,
+        "noAdditionalTasksOrAssets": true,
+        "stages": [
+          {
+            "stage": "capture",
+            "taskId": "535bd253-e00c-49b6-9017-bed64a7df525",
+            "operation": "video.capture",
+            "mode": null,
+            "results": [
+              "c310ef52-7604-49ea-a502-d9150d0db9c3",
+              "3c759b88-a8ee-4078-bd23-cce52138f85d"
+            ]
+          },
+          {
+            "stage": "analysis",
+            "taskId": "5e071942-85c7-4567-b93a-bb41f7b4fbe1",
+            "operation": "video.frameTools",
+            "mode": "analyze",
+            "results": [
+              "dac108e8-d5fb-4857-bd71-201d8285903b",
+              "9cb88fa6-0c7a-4ff1-9121-cf0528599701"
+            ]
+          },
+          {
+            "stage": "processed",
+            "taskId": "8d8a4947-4b01-41de-9752-292d27f2723c",
+            "operation": "video.frameTools",
+            "mode": "matte",
+            "results": [
+              "1c4ee3f3-53d2-49a4-9812-2840de5eab76",
+              "cabf9a85-8554-4491-8a5c-4d367e39298f"
+            ]
+          },
+          {
+            "stage": "rawSheet",
+            "taskId": "937cd597-0610-47d9-959f-0203854dbf24",
+            "operation": "video.frameTools",
+            "mode": "compose",
+            "results": [
+              "84cf19b0-d26d-42ee-ab35-acec5fb54681",
+              "3acdc073-e4c8-4a77-84be-177e0741c266"
+            ]
+          },
+          {
+            "stage": "styledSheet",
+            "taskId": "facba8ee-d126-4f9e-8ddb-8d36d16a8d8d",
+            "operation": "video.frameTools",
+            "mode": "compose",
+            "results": [
+              "5f8741e8-dfb9-4a95-a238-8f9157a3248c",
+              "ba99a840-bd15-4970-be77-624aea79b4aa"
+            ]
+          },
+          {
+            "stage": "rawDownload",
+            "taskId": "bca866cd-4def-48c0-a282-6e153be70b29",
+            "operation": "video.frameTools",
+            "mode": "archive",
+            "results": [
+              "958c5216-0dc7-4c0a-88dc-13743290d640",
+              "bd72229a-6c1e-400d-8491-2674906b8741"
+            ]
+          },
+          {
+            "stage": "processedDownload",
+            "taskId": "55684af9-a301-4ac9-bb4a-d406b5faa35d",
+            "operation": "video.frameTools",
+            "mode": "archive",
+            "results": [
+              "6cd88d9d-fe66-49c5-b89c-97ce0165dfce",
+              "6f3e8b1d-29eb-4684-995d-b42eced2db16"
+            ]
+          }
+        ]
+      }
+    ],
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 26,
+      "taskCount": 12,
+      "documentCount": 4,
+      "activeTasks": 0
+    }
+  },
+  "currentSerializerReadOnlyApi": {
+    "projectId": "a2506c46-7c9f-4dcf-892a-c44b245c87c1",
+    "documents": [
+      {
+        "id": "3be86324-7c79-4670-8bbe-19828052fe3d",
+        "revision": 1,
+        "sourceVersion": "77c12eb1-fef8-4d7b-99b8-5faab9a9ffc7",
+        "taskId": "8d8a4947-4b01-41de-9752-292d27f2723c",
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "059e83d8-5447-4a1b-b205-fbb57fa7d2ed",
+        "revision": 1,
+        "sourceVersion": "77c12eb1-fef8-4d7b-99b8-5faab9a9ffc7",
+        "taskId": "8d8a4947-4b01-41de-9752-292d27f2723c",
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "c536c18c-1c46-4aef-94fe-f430e92ce564",
+        "revision": 1,
+        "sourceVersion": "77c12eb1-fef8-4d7b-99b8-5faab9a9ffc7",
+        "taskId": "909b2012-71b6-4a5d-8540-aa091da8d8b1",
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "8244a119-6f0f-4d27-8820-71b7fbe9f001",
+        "revision": 1,
+        "sourceVersion": "77c12eb1-fef8-4d7b-99b8-5faab9a9ffc7",
+        "taskId": "909b2012-71b6-4a5d-8540-aa091da8d8b1",
+        "referenceIdentityPreserved": true
+      }
+    ],
+    "tasks": 12,
+    "assets": 26,
+    "requests": 259,
+    "writes": 0,
+    "unchanged": true
+  },
+  "checks": {
+    "python": 53,
+    "javascript": 94,
+    "productionBuild": true,
+    "focusedEslint": true,
+    "skillValidator": true,
+    "gitDiffCheck": true
+  },
+  "notes": [
+    "Initial real save failed because the new video document kind had not yet been registered. That idle diagnostic project was preserved; the successful evidence comes from a new final project.",
+    "The two real lineages use the production task/import/document APIs through a separate same-origin test page. They are not final video-editor UI acceptance.",
+    "The mask-input lineage uses a synthetic mask from the first captured PNG; it tests immutable binding, not real brush drawing or quality.",
+    "Source/capture/analysis/processed/raw+styled sheet/download references are frozen separately from current edited parameters and selection. Restore and undo/redo do not rerun processing."
+  ],
+  "remaining": [
+    "Full original ParamsStep player, crop handles and native sampling/brush UI migration",
+    "Actual video document save bar, navigation guards, late-result and late-load interaction acceptance",
+    "Bounded video thumbnails/playback/export previews and all cancellation phases",
+    "Joint memory, more real media/codecs, accessibility/macOS 14, remaining modules, AI quality and portable distribution"
+  ]
+}

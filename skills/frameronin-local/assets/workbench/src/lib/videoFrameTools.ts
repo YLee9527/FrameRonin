@@ -2,6 +2,7 @@
 export type VideoFrameSize={w:number;h:number}
 export type VideoFrameLayout=
  |{mode:'analyze'}
+ |{mode:'select';selected:number[]}
  |{mode:'matte';selected:number[];background:string;tolerance:number;feather:number;mask:boolean}
  |{mode:'compose';width:number;height:number;padding:number;spacing:number;columns:number;timestamps:number[];strokeWidth:number;strokeColor:string}
  |{mode:'archive';selected:number[];kind:'extracted'|'matted'}
@@ -16,6 +17,7 @@ function selection(v:unknown,count:number):asserts v is number[]{
 export function validateVideoFrameLayout(sizes:VideoFrameSize[],value:unknown):asserts value is VideoFrameLayout{
  if(!sizes.length||sizes.length>2000||sizes.some(s=>!integer(s.w,1,30000)||!integer(s.h,1,30000))||!object(value))throw new Error('VIDEO_FRAME_LAYOUT')
  if(value.mode==='analyze'&&fields(value,['mode']))return
+ if(value.mode==='select'&&fields(value,['mode','selected'])){selection(value.selected,sizes.length);return}
  if(value.mode==='archive'&&fields(value,['mode','selected','kind'])&&['extracted','matted'].includes(String(value.kind))){selection(value.selected,sizes.length);return}
  if(value.mode==='matte'&&fields(value,['mode','selected','background','tolerance','feather','mask'])&&color(value.background)&&finite(value.tolerance,1,100)&&finite(value.feather,0,30)&&typeof value.mask==='boolean'){selection(value.selected,sizes.length);return}
  if(value.mode==='compose'&&fields(value,['mode','width','height','padding','spacing','columns','timestamps','strokeWidth','strokeColor'])
@@ -31,7 +33,7 @@ export function videoFramePlan(sizes:VideoFrameSize[],layout:VideoFrameLayout,en
  validateVideoFrameLayout(sizes,layout)
  if(!integer(budget,1,2*1024**3)||!integer(encodedBytes,1,256*1024**2)||!integer(frontendBytes,0,2*1024**3))throw new Error('VIDEO_FRAME_BUDGET')
  if(!!mask!==(layout.mode==='matte'&&layout.mask)||mask&&(!integer(mask.w,1,30000)||!integer(mask.h,1,30000)))throw new Error('VIDEO_FRAME_MASK')
- const selected=layout.mode==='matte'||layout.mode==='archive'?layout.selected:sizes.map((_,i)=>i)
+ const selected=layout.mode==='matte'||layout.mode==='archive'||layout.mode==='select'?layout.selected:sizes.map((_,i)=>i)
  const width=layout.mode==='compose'?Math.floor(layout.columns*(layout.width+layout.spacing)-layout.spacing):0
  const height=layout.mode==='compose'?Math.floor(Math.ceil(sizes.length/layout.columns)*(layout.height+layout.spacing)-layout.spacing):0
  const maxPixels=Math.max(...sizes.map(s=>s.w*s.h),mask?mask.w*mask.h:0,layout.mode==='compose'?Math.ceil(layout.width)*Math.ceil(layout.height):0)

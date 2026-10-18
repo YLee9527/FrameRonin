@@ -2,5 +2,6 @@
 <style>body{font:18px system-ui;max-width:960px;margin:40px auto}button,a{padding:12px;margin:10px}progress{width:400px}pre{white-space:pre-wrap}</style>
 <h1>Native video task acceptance</h1><p>This separate test page uses production project/task APIs. It does not replace the video editor.</p>
 <button id="all">Run all native capture samples</button><button id="long">Start managed cancellation sample</button><button id="cancel" disabled>Cancel current native task</button>
+<button id="document">Run video document roundtrip</button>
 <p><progress id="progress" aria-label="Native capture progress" max="1" value="0"></progress></p><p id="status" role="status">Ready</p><p id="decoder">Owned decoder elements: 0</p><pre id="results"></pre><a id="download" hidden>Download managed capture evidence</a>
 <script type="module" src="./managed-capture.ts"></script></html>

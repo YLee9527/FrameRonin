@@ -38,7 +38,8 @@ self.onmessage=async(event:MessageEvent<Request>)=>{
   if(layout.mode==='compose')sheet=canvas(plan.width,plan.height)
   for(let position=0;position<plan.selected.length;position++){
    const index=plan.selected[position]
-   if(layout.mode==='archive')output.file(`${layout.kind==='extracted'?'frames/frame_':'matted_frames/matte_'}${String(position+1).padStart(5,'0')}.png`,await sources[index].arrayBuffer())
+   if(layout.mode==='select')output.file(`frame_${String(position).padStart(3,'0')}.png`,await sources[index].arrayBuffer())
+   else if(layout.mode==='archive')output.file(`${layout.kind==='extracted'?'frames/frame_':'matted_frames/matte_'}${String(position+1).padStart(5,'0')}.png`,await sources[index].arrayBuffer())
    else{
     current=await createImageBitmap(sources[index]);if(current.width!==sizes[index].w||current.height!==sizes[index].h)throw new Error('VIDEO_FRAME_SIZE_CHANGED')
     if(layout.mode==='analyze'){

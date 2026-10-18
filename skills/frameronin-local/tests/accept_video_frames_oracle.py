@@ -17,8 +17,9 @@ from frameronin_engine.browser_tasks import ready,accept,heartbeat
 from frameronin_engine.errors import Cancelled
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('archive',type=Path);parser.add_argument('--project',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('archive',type=Path);parser.add_argument('--project',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--selection',action='store_true');args=parser.parse_args()
     fixture=SKILL/'assets/fixtures/video-frames';manifest=json.loads((fixture/'manifest.json').read_text());project=Project.create(args.project,'FrameRonin 视频逐帧内核验收')
+    if args.selection:manifest['cases'].extend(json.loads((fixture/'selection.json').read_text())['cases'])
     frames=project.import_file(fixture/'frames.zip')['id'];brush=project.import_file(fixture/'brush.png')['id'];records=[]
     with zipfile.ZipFile(args.archive) as archive,tempfile.TemporaryDirectory(prefix='ronin-video-frame-output-') as temporary,ThreadPoolExecutor(max_workers=1) as pool:
         for entry in manifest['cases']:

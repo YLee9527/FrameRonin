@@ -72,4 +72,6 @@ export {initialMatteDraft,matteFiles,matteInputs,matteLayout,matteReports,serial
 export {createMatteHistory,matteHistoryReducer} from '../../assets/workbench/src/localProject/useMatteDocument'
 export {validateVideoFrameLayout,videoFramePlan,videoTimestamps,sampleVideoSelection,videoFingerprint,videoDuplicateMarkers,videoInnerStroke} from '../../assets/workbench/src/lib/videoFrameTools'
 export {videoCapturePlan} from '../../assets/workbench/src/lib/videoCapture'
+export {initialVideoDraft,validateStoredVideo,serializeVideo,restoreVideo,videoFiles,videoCaptureLayout} from '../../assets/workbench/src/localProject/videoDocument'
+export {createVideoHistory,videoHistoryReducer} from '../../assets/workbench/src/localProject/useVideoDocument'
 export {captureSelectedVideo,inspectSelectedVideo} from '../../assets/workbench/src/lib/browserVideoCapture'

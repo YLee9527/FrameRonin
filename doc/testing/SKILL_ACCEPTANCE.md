@@ -353,3 +353,13 @@ video.capture 使用与原 ParamsStep 相同的宿主原生视频解码，不借
 负向覆盖严格字段/布尔/NaN、范围、物理编码尺寸隐藏超预算、输出数量/尺寸/成员/缓存、非宿主执行、过期/取消/未 ready 素材读取、校验中取消及无关操作拒绝。客户端检查串行帧、原生失败、Worker 创建/传输失败、无效进度、过期代次、待完成快照取消及迟到释放，确认取帧读取登记副本而非原 OS File。51 Python / 92 JS、构建及专项检查完成情况见 [取帧证据](evidence/skill-video-capture.json)。
 
 复现：构建原版测试页运行 video capture 并下载；`tests/compare_video_capture_oracle.py <oracle.zip> --managed <managed.zip> --output <json>` 核对冻结样本；同源测试页由 `build-managed-capture.mjs` 与 `tests/support/managed_capture_server.py --project <已有空闲验收项目> --port <loopback端口>` 提供。完成后 `tests/verify_video_capture_publication.py <managed.zip> --project <项目> --cancellation <cancel.zip> --output <json>` 只核对既有任务，不重跑生成。完整原视频编辑界面、正式文档/撤销与实际导航、更多真实媒体/阶段取消、联合资源及最终交付仍待完成，S2/S3/S4 不升级。
+
+## 2026-10-18 视频文档及跳过抠图传输基础
+
+新增 video 格式 1、稳定素材引用、七类实际处理结果、任务来源与报告校验及有界统一历史。当前参数、选择、遮罩可与既有结果的冻结配方不同；恢复核对每个实际任务，不用当前参数重新运行。范围/未知字段、分页/游标、素材别名、输入及输出顺序、遮罩尺寸、错误任务状态、描边基准、时间戳和原帧下载范围均有拒绝检查。后台新增 video 文档类型，沿用修订冲突和同 ID 类型不可变约束。
+
+原 skipMattingToNext 直接保留所选 Blob 的行为，以 select 模式连续帧 ZIP 传输。新增稀疏选帧、单像素和全部七帧三项原字节对照，共 11 个 PNG 成员相同；后台拒绝像素相同但重新编码的替代 PNG。原 21 项逐帧对照重新通过，合计 24 个实际 Worker 输出由正式队列发布，50 个版本与数据库有效。原冻结语料未覆盖或改写。
+
+独立同源测试页调用生产 API，实际视频→取帧→分析→选帧/带遮罩抠图→原图集/描边→两种帧下载完成两条链。保存、重开、引用对象复用、另存、旧修订拒绝及结果撤销重做通过，未增加任务或素材。首次保存发现 video 类型遗漏，修正后保留该诊断项目，在新项目重新验收：12 任务/26 版本/4 文档有效、无活动任务。带遮罩分支使用首帧合成测试遮罩，只验素材来源，不代表手绘画笔或质量验收。最新生产序列化器又对四份已存文档完成只读 API 复验，拒绝任何 HTTP 写入，引用和全部任务保持相同。
+
+53 Python / 94 JS、生产构建、相关 ESLint、Skill 与项目校验通过。复现：原版测试页 video frame tools 控件现在运行 24 项；原 21 项仍由 compare_video_frames_oracle.py 核对，新增三项由 compare_video_selection_oracle.py 核对，accept_video_frames_oracle.py 的 --selection 包含新增队列发布。同源测试页的 Run video document roundtrip 创建实际任务与文档；下载后用 verify_video_documents.py 核对已有项目，verify_video_document_api.mjs 对运行中的已有项目只读恢复/序列化，不重跑加工。详见 [文档基础证据](evidence/skill-video-document.json) 和[测试页截图](evidence/skill-video-document.png)。完整原视频编辑器、共享保存控件、手势与导航、迟到读取/结果、预览分页、联合资源和其他完整范围仍待迁移，不升级 S2/S3/S4。

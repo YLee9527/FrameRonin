@@ -1,0 +1,9 @@
+{
+  "formatVersion": 1,
+  "purpose": "Original ParamsStep skipMattingToNext retains selected Blob objects in source order. ZIP is the controlled transport; member PNG bytes must remain identical.",
+  "cases": [
+    {"id":"select-sparse","layout":{"mode":"select","selected":[0,2,6]}},
+    {"id":"select-single-pixel","layout":{"mode":"select","selected":[3]}},
+    {"id":"select-all","layout":{"mode":"select","selected":[0,1,2,3,4,5,6]}}
+  ]
+}

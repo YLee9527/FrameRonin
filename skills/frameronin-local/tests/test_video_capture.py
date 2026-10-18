@@ -24,6 +24,13 @@ class VideoCaptureTests(unittest.TestCase):
     def tearDown(self):self.temp.cleanup()
     def parameters(self):return {'renderer':'browser-worker','frontendBytes':0,'layout':{'sourceWidth':64,'sourceHeight':48,'start':0,'end':1,'fps':10,'maxFrames':2000,'crop':{'left':0,'top':0,'right':0,'bottom':0}}}
     def payload(self):return {'operation':'video.capture','inputs':[self.source['id']],'parameters':self.parameters()}
+    def test_video_document_kind_keeps_revision_and_kind_conflict_guards(self):
+        key=identifier();payload={'formatVersion':1,'source':self.source['id']}
+        self.assertEqual(self.project.save_document(key,'video',payload,0)['revision'],1)
+        self.assertEqual(self.project.document(key)['payload'],payload)
+        with self.assertRaises(RoninError):self.project.save_document(key,'video',payload,0)
+        with self.assertRaises(RoninError):self.project.save_document(key,'image',payload,1)
+        self.assertEqual(self.project.save_document(key,'video',payload,1)['revision'],2)
     def test_strict_native_capture_review_and_host_boundary(self):
         payload=self.payload();result=preview(self.project,payload);self.assertTrue(result['requiresWorkbench'])
         reviewed=review(self.project.version(self.source['id']),payload['parameters'],2*1024**3);self.assertEqual(reviewed['outputFrames'],11)

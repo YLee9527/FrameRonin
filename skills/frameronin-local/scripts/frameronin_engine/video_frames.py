@@ -25,6 +25,8 @@ def layout(sizes,p):
     mode=p.get('mode')
     selected=list(range(len(sizes)));w=h=0
     if mode=='analyze' and fields(p,['mode']):pass
+    elif mode=='select' and fields(p,['mode','selected']):
+        selection(p['selected'],len(sizes));selected=p['selected']
     elif mode=='archive' and fields(p,['mode','selected','kind']) and p['kind'] in ['extracted','matted']:
         selection(p['selected'],len(sizes));selected=p['selected']
     elif mode=='matte' and fields(p,['mode','selected','background','tolerance','feather','mask']) and color(p['background']) and finite(p['tolerance'],1,100) and finite(p['feather'],0,30) and type(p['mask']) is bool:
@@ -69,8 +71,16 @@ def validate_result(path,versions,p,budget,check):
     # requires every selected archive member to decode, including analysis jobs.
     archive_info(versions[0]['absolutePath'],budget,decode=True,check=check)
     check()
-    if mode=='matte':
+    if mode in ['matte','select']:
         archive_info(path,budget,decode=True,expected=[sizes[i] for i in plan['selected']],check=check)
+        if mode=='select':
+            with zipfile.ZipFile(versions[0]['absolutePath']) as source,zipfile.ZipFile(path) as output:
+                for i,index in enumerate(plan['selected']):
+                    with source.open(f'frame_{index:03d}.png') as a,output.open(f'frame_{i:03d}.png') as b:
+                        while True:
+                            check();x=a.read(MIB);y=b.read(MIB)
+                            if x!=y:reject('VIDEO_FRAME_SELECTION_COPY','Skipping matte must preserve the selected PNG bytes.')
+                            if not x:break
         check()
         return {**plan,'frameSizes':[sizes[i] for i in plan['selected']]}
     if Path(path).stat().st_size>128*MIB:reject('VIDEO_FRAME_OUTPUT_LIMIT','The frame output ZIP exceeds 128 MiB.')

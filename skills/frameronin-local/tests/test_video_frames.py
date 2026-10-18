@@ -91,5 +91,18 @@ class VideoFrameTests(unittest.TestCase):
         with patch.object(PngImageFile,'load',load),self.assertRaises(Cancelled):self.validate(path,case,canceled)
         members['frame_005.png']=(FIXTURE/'frame_003.png').read_bytes()
         with self.assertRaises(RoninError):self.validate(self.output(members),case)
+    def test_skip_matte_retains_exact_selected_png_bytes_and_rejects_substitution(self):
+        case={'layout':{'mode':'select','selected':[0,2,6]}}
+        self.assertTrue(preview(self.project,self.payload(case))['requiresWorkbench'])
+        with zipfile.ZipFile(FIXTURE/'frames.zip') as source:
+            members={f'frame_{i:03d}.png':source.read(f'frame_{index:03d}.png') for i,index in enumerate(case['layout']['selected'])}
+        self.assertEqual(self.validate(self.output(members),case)['outputFrames'],3)
+        changed=io.BytesIO()
+        with Image.open(io.BytesIO(members['frame_000.png'])) as image:
+            image.convert('RGBA').save(changed,format='PNG',compress_level=0)
+        members['frame_000.png']=changed.getvalue()
+        with self.assertRaises(RoninError):self.validate(self.output(members),case)
+        for selected in [[],[0,0],[2,0],[7],[False]]:
+            with self.assertRaises(RoninError):preview(self.project,self.payload({'layout':{'mode':'select','selected':selected}}))
 
 if __name__=='__main__':unittest.main()

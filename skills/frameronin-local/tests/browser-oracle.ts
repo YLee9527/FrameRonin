@@ -454,6 +454,8 @@ async function runMatteChain(){
 }
 async function runVideoFrames(){
  const fixture=await(await fetch('/video-frames/manifest.json')).json(),source=await(await fetch('/video-frames/frames.zip')).blob(),brush=await(await fetch('/video-frames/brush.png')).blob()
+ const selectionCases=await(await fetch('/video-frames/selection.json')).json()
+ fixture.cases.push(...selectionCases.cases)
  const input=await JSZip.loadAsync(source),frames:Blob[]=await Promise.all(fixture.frames.map((n:string)=>input.file(n)!.async('blob'))),zip=new JSZip()
  for(const entry of fixture.cases as {id:string;layout:VideoFrameLayout}[]){
   status.textContent=`Video frame tools: ${entry.id}`
@@ -463,6 +465,9 @@ async function runVideoFrames(){
     const hashes=[];for(const frame of frames)hashes.push(await originalVideoFrames.imageFingerprint(ref(frame)))
     const markers=await originalVideoFrames.analyzeDuplicateFrames(frames.map(blob=>({dataUrl:ref(blob)})))
     old.file('analysis.json',JSON.stringify({hashes,duplicates:[...markers].map(([index,value])=>({index,...value})),frameCount:frames.length}))
+   }else if(p.mode==='select'){
+    // Original skipMattingToNext takes the selected Blob references unchanged.
+    p.selected.forEach((index,i)=>old.file(`frame_${String(i).padStart(3,'0')}.png`,frames[index]))
    }else if(p.mode==='archive'){
     const folder=old.folder(p.kind==='extracted'?'frames':'matted_frames')!
     p.selected.forEach((index,i)=>folder.file(`${p.kind==='extracted'?'frame':'matte'}_${String(i+1).padStart(5,'0')}.png`,frames[index]))
