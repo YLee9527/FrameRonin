@@ -1,5 +1,5 @@
 {
-  "codeCommit": null,
+  "codeCommit": "895d13d",
   "date": "2026-10-18",
   "scope": "Standalone ImageMatte processing kernel and managed multi-input Worker transport; workbench controls/documents/history and complete Skill remain open",
   "originals": {
