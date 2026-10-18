@@ -1,0 +1,430 @@
+{
+  "formatVersion": 1,
+  "sources": {
+    "frame_000.png": "3051109f26c4c6bcce2c01a7fb9d23c365e68a07da67c7814133b5c8524ef582",
+    "frame_001.png": "3051109f26c4c6bcce2c01a7fb9d23c365e68a07da67c7814133b5c8524ef582",
+    "frame_002.png": "9cd0f80aecdfc4fc30cc2752b43e7950d6f4e46087e51ca2d3c2e3c22d70d751",
+    "frame_003.png": "3f4515fbb552a11628ce40ef947267cd069cee8c0d7427584b989e6a700d4367",
+    "frame_004.png": "71495d827d544b3f033f610832787ef1fe21538628a74d5ecbdc3a5174f96935",
+    "frame_005.png": "91de88b97d16b15cc70d97f1fcfe1941b11a214a572a12a3b5e96709c1027eec",
+    "frame_006.png": "639673c25ca45d0cdea1b8b7dc63ad3fdb75d394dc4f4c2a93f9f3fe351a8787",
+    "brush.png": "cd8b0f0a953abeb123714ef297c40ec57e12ed21e7eaf66be4b83fd9416e41e5",
+    "frames.zip": "b498a24eef3b91c0dadad56b55e3fdc40d4020efec1f0f612f3a40eac082f066"
+  },
+  "originals": {
+    "reference/frontend/src/components/ParamsStep.tsx": "040cd27b630b91895204db866035b6544b3fb15e21a4166e9849c7f78de9250a",
+    "reference/frontend/src/components/ParamsStep/utils.ts": "51c2c0dd5253c665f76de50f4708508591a63cbcda9888d826bbbbd4cdd19c31"
+  },
+  "frames": [
+    "frame_000.png",
+    "frame_001.png",
+    "frame_002.png",
+    "frame_003.png",
+    "frame_004.png",
+    "frame_005.png",
+    "frame_006.png"
+  ],
+  "cases": [
+    {
+      "id": "analyze",
+      "layout": {
+        "mode": "analyze"
+      }
+    },
+    {
+      "id": "matte-default",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 40,
+        "feather": 10,
+        "mask": false
+      }
+    },
+    {
+      "id": "matte-default-brush",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 40,
+        "feather": 10,
+        "mask": true
+      }
+    },
+    {
+      "id": "matte-hard",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 1,
+        "feather": 0,
+        "mask": false
+      }
+    },
+    {
+      "id": "matte-hard-brush",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 1,
+        "feather": 0,
+        "mask": true
+      }
+    },
+    {
+      "id": "matte-wide",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 100,
+        "feather": 30,
+        "mask": false
+      }
+    },
+    {
+      "id": "matte-wide-brush",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 100,
+        "feather": 30,
+        "mask": true
+      }
+    },
+    {
+      "id": "matte-fractional",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 37.5,
+        "feather": 8.25,
+        "mask": false
+      }
+    },
+    {
+      "id": "matte-fractional-brush",
+      "layout": {
+        "mode": "matte",
+        "selected": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "background": "#263b40",
+        "tolerance": 37.5,
+        "feather": 8.25,
+        "mask": true
+      }
+    },
+    {
+      "id": "compose-default",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 2,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-unused-columns",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 2,
+        "spacing": 3,
+        "columns": 12,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-fractional",
+      "layout": {
+        "mode": "compose",
+        "width": 23.5,
+        "height": 21.25,
+        "padding": 2.5,
+        "spacing": 1.25,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-no-upscale",
+      "layout": {
+        "mode": "compose",
+        "width": 64,
+        "height": 64,
+        "padding": 0,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-negative-inner",
+      "layout": {
+        "mode": "compose",
+        "width": 8,
+        "height": 7,
+        "padding": 6,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-one-column",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 0,
+        "spacing": 0,
+        "columns": 1,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-stroke-0.5",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 2,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 0.5,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-stroke-1",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 2,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 1,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-stroke-3",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 2,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 3,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "compose-stroke-16",
+      "layout": {
+        "mode": "compose",
+        "width": 23,
+        "height": 21,
+        "padding": 2,
+        "spacing": 3,
+        "columns": 3,
+        "timestamps": [
+          0,
+          0.1,
+          0.2005,
+          0.3005,
+          0.4,
+          0.9999,
+          1.234567
+        ],
+        "strokeWidth": 16,
+        "strokeColor": "#8325cd"
+      }
+    },
+    {
+      "id": "archive-extracted",
+      "layout": {
+        "mode": "archive",
+        "kind": "extracted",
+        "selected": [
+          0,
+          2,
+          3,
+          6
+        ]
+      }
+    },
+    {
+      "id": "archive-matted",
+      "layout": {
+        "mode": "archive",
+        "kind": "matted",
+        "selected": [
+          0,
+          2,
+          3,
+          6
+        ]
+      }
+    }
+  ],
+  "comparison": {
+    "png": "strict decoded RGBA and dimensions; record encoded equality",
+    "json": "exact object fields; compose frames compared by stable i because original async image loads can reorder index rows",
+    "archive": "exact names and selected PNG bytes; ZIP metadata ignored"
+  }
+}

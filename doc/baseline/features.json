@@ -70,12 +70,13 @@
     "implementation": "reference/frontend/src/components/ParamsStep.tsx",
     "inputs": "video + parameters",
     "outputs": "PNG frames/sheet/ZIP/index",
-    "dependencies": "Python/Pillow/rembg/FFmpeg",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx",
-    "sample": "fixed-video-sheet",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "dependencies": "browser Canvas/Worker/JSZip; Python ZIP/PNG validation; complete video capture pending",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx; skills/frameronin-local/assets/workbench/src/lib/videoFrames.worker.ts",
+    "sample": "video-frames/manifest.json",
+    "evidence": "doc/testing/evidence/skill-video-frame-engine.json",
+    "status": "原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收",
+    "limits": "Ordered PNG ZIP <=128 MiB and <=2000 frames; per-mode strict layout; static brush PNG <=20 MiB; output ZIP/inflated members <=128 MiB; full working-set budget; actual video/UI acceptance still pending",
+    "baselineCorrection": "The implemented ParamsStep uses browser video capture and client frame processing. Its backend pipeline is a separate path and cannot alone establish frontend behavior parity."
   },
   {
     "id": "video.png",
@@ -83,12 +84,13 @@
     "implementation": "reference/frontend/src/components/ParamsStep.tsx",
     "inputs": "video + parameters",
     "outputs": "PNG frames/sheet/ZIP/index",
-    "dependencies": "Python/Pillow/rembg/FFmpeg",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx",
-    "sample": "fixed-video-png",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "dependencies": "browser Canvas/Worker/JSZip; Python ZIP/PNG validation; complete video capture pending",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx; skills/frameronin-local/assets/workbench/src/lib/videoFrames.worker.ts",
+    "sample": "video-frames/manifest.json",
+    "evidence": "doc/testing/evidence/skill-video-frame-engine.json",
+    "status": "原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收",
+    "limits": "Ordered PNG ZIP <=128 MiB and <=2000 frames; per-mode strict layout; static brush PNG <=20 MiB; output ZIP/inflated members <=128 MiB; full working-set budget; actual video/UI acceptance still pending",
+    "baselineCorrection": "The implemented ParamsStep uses browser video capture and client frame processing. Its backend pipeline is a separate path and cannot alone establish frontend behavior parity."
   },
   {
     "id": "video.zip",
@@ -96,12 +98,13 @@
     "implementation": "reference/frontend/src/components/ParamsStep.tsx",
     "inputs": "video + parameters",
     "outputs": "PNG frames/sheet/ZIP/index",
-    "dependencies": "Python/Pillow/rembg/FFmpeg",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx",
-    "sample": "fixed-video-zip",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "dependencies": "browser Canvas/Worker/JSZip; Python ZIP/PNG validation; complete video capture pending",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx; skills/frameronin-local/assets/workbench/src/lib/videoFrames.worker.ts",
+    "sample": "video-frames/manifest.json",
+    "evidence": "doc/testing/evidence/skill-video-frame-engine.json",
+    "status": "原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收",
+    "limits": "Ordered PNG ZIP <=128 MiB and <=2000 frames; per-mode strict layout; static brush PNG <=20 MiB; output ZIP/inflated members <=128 MiB; full working-set budget; actual video/UI acceptance still pending",
+    "baselineCorrection": "The implemented ParamsStep uses browser video capture and client frame processing. Its backend pipeline is a separate path and cannot alone establish frontend behavior parity."
   },
   {
     "id": "video.index",
@@ -109,12 +112,13 @@
     "implementation": "reference/frontend/src/components/ParamsStep.tsx",
     "inputs": "video + parameters",
     "outputs": "PNG frames/sheet/ZIP/index",
-    "dependencies": "Python/Pillow/rembg/FFmpeg",
-    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx",
-    "sample": "fixed-video-index",
-    "evidence": null,
-    "status": "awaiting module acceptance",
-    "limits": "operation registry/budget; PerfectPixel max side 2048; AI retry max 3"
+    "dependencies": "browser Canvas/Worker/JSZip; Python ZIP/PNG validation; complete video capture pending",
+    "targetModule": "skills/frameronin-local/assets/workbench/src/components/ParamsStep.tsx; skills/frameronin-local/assets/workbench/src/lib/videoFrames.worker.ts",
+    "sample": "video-frames/manifest.json",
+    "evidence": "doc/testing/evidence/skill-video-frame-engine.json",
+    "status": "原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收",
+    "limits": "Ordered PNG ZIP <=128 MiB and <=2000 frames; per-mode strict layout; static brush PNG <=20 MiB; output ZIP/inflated members <=128 MiB; full working-set budget; actual video/UI acceptance still pending",
+    "baselineCorrection": "The implemented ParamsStep uses browser video capture and client frame processing. Its backend pipeline is a separate path and cannot alone establish frontend behavior parity."
   },
   {
     "id": "video.detect",

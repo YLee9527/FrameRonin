@@ -70,3 +70,4 @@ export {validateMatteToolLayout,checkMatteToolBudget} from '../../assets/workben
 
 export {initialMatteDraft,matteFiles,matteInputs,matteLayout,matteReports,serializeMatte,restoreMatte,validateStoredMatte} from '../../assets/workbench/src/localProject/matteDocument'
 export {createMatteHistory,matteHistoryReducer} from '../../assets/workbench/src/localProject/useMatteDocument'
+export {validateVideoFrameLayout,videoFramePlan,videoTimestamps,sampleVideoSelection,videoFingerprint,videoDuplicateMarkers,videoInnerStroke} from '../../assets/workbench/src/lib/videoFrameTools'

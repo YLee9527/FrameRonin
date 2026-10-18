@@ -1,0 +1,3489 @@
+{
+  "codeCommit": null,
+  "date": "2026-10-18",
+  "scope": "Original ParamsStep frame-processing kernel, real dedicated Workers and formal queue publication; video decoding/crop/selection/workbench/document acceptance remains open",
+  "sources": "skills/frameronin-local/assets/fixtures/video-frames/manifest.json",
+  "originalComparison": {
+    "cases": [
+      {
+        "sample": "analyze",
+        "mode": "analyze",
+        "originalSha256": "a3a653630765b849a1251ce9ac465dc9859d71498316b1dcc5bca0c738a7ff09",
+        "actualSha256": "6f7f2ffd9620acc083ea971c2e70ee2605e459267c4bf5c4fa196a02f04d20bb",
+        "equal": true,
+        "members": [
+          {
+            "member": "analysis.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-default",
+        "mode": "matte",
+        "originalSha256": "9356820a60a6a9fefe81c29ee2a5812d95cd5e4b4ddaaa1d1c634e3ad4811029",
+        "actualSha256": "a256ea7fc0fe5669791556e6d9e867fa07d53ebd74122b1c56c86cd3e2beaf90",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-default-brush",
+        "mode": "matte",
+        "originalSha256": "ca4438526d307d1ab385df5ef89d6145b4f7fe6d7a8a60d55b3cda562a8c5ae0",
+        "actualSha256": "8dd715ef0aec93eef9a34e0c6d8b3254da113b8e81d0906a7395bdc7f7bf5d34",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-hard",
+        "mode": "matte",
+        "originalSha256": "634ab15fe5f338f5df8a400bf2a9a22f9069125eeeefb2455296a117977f24a1",
+        "actualSha256": "aa5fffc3da09e1a81c0c4b5f948461b017e2d1044200852f2376f8a548d3f749",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-hard-brush",
+        "mode": "matte",
+        "originalSha256": "7c473739eab92742540e779eb88803c2591a4261d03beed7d592de458dcfaf01",
+        "actualSha256": "d40bf235664333b20a64fbb9829707ab8e409c3ee5effb0900d1d7066e6db2bc",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-wide",
+        "mode": "matte",
+        "originalSha256": "c1ef522042d9dd747724a15ea77a5345d128e819d063af1aaa87530ab25f72e2",
+        "actualSha256": "94b2e3742238e80a4cb0308ea97897c8b385fcf5a955bc3569491af15b5bc681",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-wide-brush",
+        "mode": "matte",
+        "originalSha256": "5225400791e86862b044a28913dac099850648d4a0ffb4a20a69058b2db0fb2d",
+        "actualSha256": "1b6a72f1338c1e5102d9551b43252ab322001d757ea0da918529d7eb255f8d41",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-fractional",
+        "mode": "matte",
+        "originalSha256": "2b72464e7a2599f7ef6b07a1d9c54bb39782294ab38a27a74300dba57359099b",
+        "actualSha256": "00b352e4ad76c8ca2a9d1a9014c5f9983b4e7db1b4eb2ecf69efaa75d23311cc",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "matte-fractional-brush",
+        "mode": "matte",
+        "originalSha256": "34cc93294edcfbce347215f501726fc9e9014a2b1005d58d10d759d9030239a4",
+        "actualSha256": "e3ca734ecec160310d3cd8abf1647da34af7af65878fde61c43528862fca84c5",
+        "equal": true,
+        "members": [
+          {
+            "member": "frame_000.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_002.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_003.png",
+            "equal": true,
+            "width": 7,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_004.png",
+            "equal": true,
+            "width": 2,
+            "height": 5,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frame_005.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-default",
+        "mode": "compose",
+        "originalSha256": "221ee2a7547f07955a4417787f88830c46f3135a52b5161a7df85cb358df9182",
+        "actualSha256": "da66a29cfbc1b39cdbe63163dea5bce48943b4cd9ced6c4d7f64278cf619a38c",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-unused-columns",
+        "mode": "compose",
+        "originalSha256": "5dc3e3795b8c1b21528623e128db512ae87fb912d95e28fa0d81e91931a208a3",
+        "actualSha256": "b0b9279ded7b22f45acb67662f6ef939d73d675600d2b61719a3b6686031557d",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 309,
+            "height": 21,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-fractional",
+        "mode": "compose",
+        "originalSha256": "4290425dd8f1a1a8bf8aff5c9b96131c4376a6d157614b20e183f21be9eb352e",
+        "actualSha256": "88088dc8d45426465bc8cc9a79fa681e524bec77336496da7d0ec4e6bddaeffb",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 73,
+            "height": 66,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-no-upscale",
+        "mode": "compose",
+        "originalSha256": "0251e557e1b050230828921096c7186da602f9b4bc1e53762c8f6715353a6c91",
+        "actualSha256": "9f2c9c27049ac7ccd15202a6598bccdeaef7f76a5727549835a3a0b16c30441b",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 198,
+            "height": 198,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-negative-inner",
+        "mode": "compose",
+        "originalSha256": "52aabbaf653eec6b67f14d44f8945e7e5cdd4a1c01cc33cb4e76e86d2450e406",
+        "actualSha256": "27ebfc63eaafdabab03aca607afb6748661285e74c298b845941e6ecc9cdb3d3",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 30,
+            "height": 27,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-one-column",
+        "mode": "compose",
+        "originalSha256": "23dfeab482e4a32d7d97d5d299f3096e96f76de2d4ddc7ac0b60a0bd0d341a2b",
+        "actualSha256": "3b3f32338083b45747bc8eeeaef40d32e2bea156b0a48ee6753d9085cd4d0df8",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 23,
+            "height": 147,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-stroke-0.5",
+        "mode": "compose",
+        "originalSha256": "5d66f7c9043598dd60a5bfc42e7803ad36f54f4afd0b7b6a6923618690f122e4",
+        "actualSha256": "0d10080fdf2d8c1b09b45d8da5cb29678fc50ca7d616390c4a96de292b1b5fda",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-stroke-1",
+        "mode": "compose",
+        "originalSha256": "913d8fa90d232ba3536d75d8dfeeae090eae0b4933897fe02ddf987465192856",
+        "actualSha256": "3d44e20dbbef5180357142fb0b245dc2c72f347e7203d0116b5b3224eb2da94e",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-stroke-3",
+        "mode": "compose",
+        "originalSha256": "42c9481e06beb71705a606e55c11a4a006b7f9b43a48861d1fcf3104b7e85975",
+        "actualSha256": "5148e0674ae79782605355204b70f31baa2b4fcf0ae583871dec3958ba8298f1",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "compose-stroke-16",
+        "mode": "compose",
+        "originalSha256": "e98e29582525694de9cf7142852a753f0afbfe1ba53c3b8d20fd8dde6cb8406e",
+        "actualSha256": "79572ead29b31ac8fc5f79ed6bcdfa4d937b8a60b3c3f597cf9d182d714f68b6",
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      {
+        "sample": "archive-extracted",
+        "mode": "archive",
+        "originalSha256": "2c046e5df1f4190a7041aad9a9417172180db6d6cbfea50b936ad94000188fd1",
+        "actualSha256": "878c9e196444238b888fa6edf11d04becfc2bef6bb69728668500e701b055cd9",
+        "equal": true,
+        "members": [
+          {
+            "member": "frames/",
+            "equal": true
+          },
+          {
+            "member": "frames/frame_00001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frames/frame_00002.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frames/frame_00003.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "frames/frame_00004.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      {
+        "sample": "archive-matted",
+        "mode": "archive",
+        "originalSha256": "570a04c30af763a2e1115bc1cb391055af80cc512160ce45138db97c52419b6b",
+        "actualSha256": "f42ab11838dc36193dda50cbcc349daaae49f84c62bff481a0f505f6219ba96c",
+        "equal": true,
+        "members": [
+          {
+            "member": "matted_frames/",
+            "equal": true
+          },
+          {
+            "member": "matted_frames/matte_00001.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "matted_frames/matte_00002.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "matted_frames/matte_00003.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "matted_frames/matte_00004.png",
+            "equal": true,
+            "width": 31,
+            "height": 9,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      }
+    ],
+    "countByMode": {
+      "analyze": 1,
+      "matte": 8,
+      "compose": 10,
+      "archive": 2
+    },
+    "archiveSha256": "c6878ed91c7c009c2e84a4ef1b67848ab6d7a200b76474bdbee467099d643f26",
+    "comparisonPolicy": "Exact PNG dimensions and decoded RGBA; archive PNG bytes unchanged; JSON exact by field, compose index rows normalized by stable i; ZIP metadata ignored",
+    "firstFailure": {
+      "samples": [
+        "compose-fractional"
+      ],
+      "pixelsWereEqual": true,
+      "reason": "Original index sheet_size retains fractional computed dimensions while PNG canvas truncates; corrected index, retained original behavior",
+      "finalFailed": []
+    }
+  },
+  "actualWorkerPublication": {
+    "projectId": "b959334c-8227-4ca6-97c3-08756ccc51bc",
+    "tasks": [
+      {
+        "sample": "analyze",
+        "taskId": "7bf313ff-b1f3-4c67-b36b-3a0d2b0e4b7c",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "8a84c369-f0cb-49bb-aa60-90cdd4d4dbcc",
+          "e1e70591-b188-44bd-a4cb-b12f963a5d2c"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "analyze"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 0,
+          "elapsedSeconds": 0.11234487500041723,
+          "mode": "analyze",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "hashes": [
+            "-1030815479_0",
+            "-1030815479_0",
+            "-1925759959_0",
+            "107_0",
+            "1488388879_-1478722104",
+            "312176_49491",
+            "1701390562_-328935903"
+          ],
+          "duplicates": [
+            {
+              "index": 0,
+              "groupId": 0,
+              "totalInGroup": 2
+            },
+            {
+              "index": 1,
+              "groupId": 0,
+              "totalInGroup": 2
+            }
+          ],
+          "frameCount": 7
+        }
+      },
+      {
+        "sample": "matte-default",
+        "taskId": "d1b5a4f4-74cb-4051-b9ef-d69bcc3f2aff",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "4ef81f2e-c6b0-4f1d-a56f-73f3462ad956",
+          "30766e2d-20ed-4c90-85e8-1149fde502db"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 40,
+              "feather": 10,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11494083399884403,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-default-brush",
+        "taskId": "5b1b7c68-4253-4a61-9dea-c9a304170d33",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3",
+          "ae44ad8f-0a5b-450b-a506-d9e71fd8141a"
+        ],
+        "results": [
+          "2b129397-58f2-4ca3-935f-624cb08d4062",
+          "f1f7fb54-19a3-41df-b050-bc0ac73d75d0"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 40,
+              "feather": 10,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11538112501148134,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-hard",
+        "taskId": "c8fc3b30-a40e-4bce-abd1-f848deb4c4ef",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "f3a801dd-80fe-43db-8f6e-bff82a6373e2",
+          "d908412a-78dd-4baa-90a6-a721e1ef5486"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 1,
+              "feather": 0,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.1152160840574652,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-hard-brush",
+        "taskId": "6cc4ccdd-7569-4444-880c-f141bdb5c1af",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3",
+          "ae44ad8f-0a5b-450b-a506-d9e71fd8141a"
+        ],
+        "results": [
+          "b35945db-c977-41e5-8704-aa3d0e400d79",
+          "0d1a41e8-3178-4cdc-b8ad-63f61293e475"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 1,
+              "feather": 0,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11482237500604242,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-wide",
+        "taskId": "69645a36-9636-4181-a192-582182592e3e",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "d655e9b4-03da-4e83-900a-157b5f3a29c8",
+          "1ec58c01-bb82-4ae0-b4f3-947eadae0165"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 100,
+              "feather": 30,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.10622016689740121,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-wide-brush",
+        "taskId": "7e06e90c-68f6-4804-ae97-be524ecce3ca",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3",
+          "ae44ad8f-0a5b-450b-a506-d9e71fd8141a"
+        ],
+        "results": [
+          "9ffed692-d954-4aaf-a55b-434b8f4a7360",
+          "af018027-f315-41ae-87ee-b28c9cb22773"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 100,
+              "feather": 30,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.10656283295247704,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-fractional",
+        "taskId": "55fc1f9a-dc29-46bf-a704-6979ad74d07c",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "1287073c-b0fd-488f-90c3-c11c042584e1",
+          "06e4088a-c225-42ee-87af-8f113ab9d438"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 37.5,
+              "feather": 8.25,
+              "mask": false
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.1154172079404816,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "matte-fractional-brush",
+        "taskId": "7c130e0c-7cf0-482a-b9d0-136c75c1197d",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3",
+          "ae44ad8f-0a5b-450b-a506-d9e71fd8141a"
+        ],
+        "results": [
+          "94262f30-e2ab-4a88-8a3c-0ca543a25319",
+          "8779e626-be64-4c02-a808-7a6b8ae05086"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "matte",
+              "selected": [
+                0,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "background": "#263b40",
+              "tolerance": 37.5,
+              "feather": 8.25,
+              "mask": true
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 6,
+          "elapsedSeconds": 0.11048758297692984,
+          "mode": "matte",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 7,
+              "h": 9
+            },
+            {
+              "w": 2,
+              "h": 5
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "compose-default",
+        "taskId": "a65859ce-3ffe-4f8c-b14f-f0d95231fce2",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "8d287c7f-8b37-4a88-ba3f-b7a929bc793b",
+          "d3ff3966-369b-43c5-8759-c03a32898e4f"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10549479094333947,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-unused-columns",
+        "taskId": "a70654d4-c68e-4982-8519-d42abb387103",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "a996f4d2-b15a-4aaa-bbb0-58021c2d5863",
+          "204f5367-bf16-4c48-ab1b-8b027720c5be"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 12,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10995433304924518,
+          "mode": "compose",
+          "width": 309,
+          "height": 21,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 309,
+              "h": 21
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 78,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 104,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 130,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 156,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-fractional",
+        "taskId": "816a2ea3-e96c-4fb4-969a-830dd6cb8257",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "2191aefa-8011-40f1-8916-3d09da246c8e",
+          "a9df2024-d415-4d85-be6a-b005009b906b"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23.5,
+              "height": 21.25,
+              "padding": 2.5,
+              "spacing": 1.25,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11280175007414073,
+          "mode": "compose",
+          "width": 73,
+          "height": 66,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23.5,
+              "h": 21.25
+            },
+            "sheet_size": {
+              "w": 73.0,
+              "h": 66.25
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0.0,
+                "y": 0.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 24.75,
+                "y": 0.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 49.5,
+                "y": 0.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0.0,
+                "y": 22.5,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 24.75,
+                "y": 22.5,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 49.5,
+                "y": 22.5,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0.0,
+                "y": 45.0,
+                "w": 23.5,
+                "h": 21.25,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-no-upscale",
+        "taskId": "3583ec49-0a16-4ede-af5d-44707f88d3c0",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "6508ab5a-f82f-4e62-bd88-70d74fa5765d",
+          "3aa6a829-7027-4a63-a8c0-cec44fed528a"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 64,
+              "height": 64,
+              "padding": 0,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11573070799931884,
+          "mode": "compose",
+          "width": 198,
+          "height": 198,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 64,
+              "h": 64
+            },
+            "sheet_size": {
+              "w": 198,
+              "h": 198
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 64,
+                "h": 64,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 67,
+                "y": 0,
+                "w": 64,
+                "h": 64,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 134,
+                "y": 0,
+                "w": 64,
+                "h": 64,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 67,
+                "w": 64,
+                "h": 64,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 67,
+                "y": 67,
+                "w": 64,
+                "h": 64,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 134,
+                "y": 67,
+                "w": 64,
+                "h": 64,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 134,
+                "w": 64,
+                "h": 64,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-negative-inner",
+        "taskId": "43555248-2858-4792-839f-2d8eddd14961",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "4fe3a0b8-21c8-4704-a2b3-f96b528ba93a",
+          "8694a08b-324e-4600-aecd-fe2ac6694b25"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 8,
+              "height": 7,
+              "padding": 6,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.10900604096241295,
+          "mode": "compose",
+          "width": 30,
+          "height": 27,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 8,
+              "h": 7
+            },
+            "sheet_size": {
+              "w": 30,
+              "h": 27
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 8,
+                "h": 7,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 11,
+                "y": 0,
+                "w": 8,
+                "h": 7,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 22,
+                "y": 0,
+                "w": 8,
+                "h": 7,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 10,
+                "w": 8,
+                "h": 7,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 11,
+                "y": 10,
+                "w": 8,
+                "h": 7,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 22,
+                "y": 10,
+                "w": 8,
+                "h": 7,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 20,
+                "w": 8,
+                "h": 7,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-one-column",
+        "taskId": "b436cc43-e494-4bd5-b47b-c8c3edb1cd58",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "3507ae4b-54f7-4ab5-8663-f7b73df7c571",
+          "84f82d55-2723-40a8-927d-2569af96a6a1"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 0,
+              "spacing": 0,
+              "columns": 1,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11443770804908127,
+          "mode": "compose",
+          "width": 23,
+          "height": 147,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 23,
+              "h": 147
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 0,
+                "y": 21,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 0,
+                "y": 42,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 63,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 0,
+                "y": 84,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 0,
+                "y": 105,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 126,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-0.5",
+        "taskId": "df80bc75-3d11-4c7e-b31f-54bef984d5c9",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "24b5586f-c13c-412d-a579-ca992eef6395",
+          "fffa0773-9a66-4745-8a11-fac6d30e7262"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 0.5,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11547645810060203,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-1",
+        "taskId": "cbd854c5-fadb-4155-ab98-eae00eb42d38",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "16a9c627-2f97-42c2-8f74-c9cc55c3879f",
+          "9a623403-872f-4de6-9245-a5b5804849f1"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 1,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11671904195100069,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-3",
+        "taskId": "750c4502-b76b-4284-8f9c-a0d1758bdafa",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "44f313f9-15a1-48d5-afb5-ff608e49a7f1",
+          "04437398-9745-471e-983c-03382c08c9ae"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 3,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.1031992919743061,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "compose-stroke-16",
+        "taskId": "b5c6ebb6-9a5e-4a5e-be5c-9b5bb03b3f12",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "b119d796-6997-4fd6-b1e1-19ba183a70b4",
+          "0f0807dc-046e-45c1-a05e-9429c85b3172"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "compose",
+              "width": 23,
+              "height": 21,
+              "padding": 2,
+              "spacing": 3,
+              "columns": 3,
+              "timestamps": [
+                0,
+                0.1,
+                0.2005,
+                0.3005,
+                0.4,
+                0.9999,
+                1.234567
+              ],
+              "strokeWidth": 16,
+              "strokeColor": "#8325cd"
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 1,
+          "elapsedSeconds": 0.11352920904755592,
+          "mode": "compose",
+          "width": 75,
+          "height": 69,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "index": {
+            "version": "1.0",
+            "frame_size": {
+              "w": 23,
+              "h": 21
+            },
+            "sheet_size": {
+              "w": 75,
+              "h": 69
+            },
+            "frames": [
+              {
+                "i": 0,
+                "x": 0,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.0
+              },
+              {
+                "i": 1,
+                "x": 26,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.1
+              },
+              {
+                "i": 2,
+                "x": 52,
+                "y": 0,
+                "w": 23,
+                "h": 21,
+                "t": 0.201
+              },
+              {
+                "i": 3,
+                "x": 0,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.301
+              },
+              {
+                "i": 4,
+                "x": 26,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 0.4
+              },
+              {
+                "i": 5,
+                "x": 52,
+                "y": 24,
+                "w": 23,
+                "h": 21,
+                "t": 1.0
+              },
+              {
+                "i": 6,
+                "x": 0,
+                "y": 48,
+                "w": 23,
+                "h": 21,
+                "t": 1.235
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sample": "archive-extracted",
+        "taskId": "ef84d0fe-e1e4-4f45-b23f-9ea363e44c05",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "9587719e-9faa-4239-9eff-0fa005276eb0",
+          "feea9e71-6aa7-403c-93e7-451fd142383a"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "archive",
+              "kind": "extracted",
+              "selected": [
+                0,
+                2,
+                3,
+                6
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 4,
+          "elapsedSeconds": 0.11507029202766716,
+          "mode": "archive",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      },
+      {
+        "sample": "archive-matted",
+        "taskId": "88315d5d-4a74-4899-abfd-d59f4f8f78a1",
+        "state": "succeeded",
+        "inputs": [
+          "6abbafaf-3200-4303-8ff1-fcfbac1868e3"
+        ],
+        "results": [
+          "c956003e-90b5-4327-8fd9-191a1826d926",
+          "a6573aaf-294f-4e82-8ae8-16157dede88f"
+        ],
+        "encodedOutputPreserved": true,
+        "report": {
+          "operation": "video.frameTools",
+          "parameters": {
+            "layout": {
+              "mode": "archive",
+              "kind": "matted",
+              "selected": [
+                0,
+                2,
+                3,
+                6
+              ]
+            },
+            "renderer": "browser-worker",
+            "frontendBytes": 0
+          },
+          "method": "original-host-canvas-worker",
+          "generation": 0,
+          "outputFrames": 4,
+          "elapsedSeconds": 0.11133670795243233,
+          "mode": "archive",
+          "width": 0,
+          "height": 0,
+          "inputFrames": 7,
+          "selected": [
+            0,
+            2,
+            3,
+            6
+          ],
+          "frameSizes": [
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 17,
+              "h": 13
+            },
+            {
+              "w": 1,
+              "h": 1
+            },
+            {
+              "w": 31,
+              "h": 9
+            }
+          ]
+        }
+      }
+    ],
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 44
+    }
+  },
+  "latestResultRevalidation": {
+    "tasks": [
+      {
+        "taskId": "7bf313ff-b1f3-4c67-b36b-3a0d2b0e4b7c",
+        "mode": "analyze",
+        "outputFrames": 0,
+        "revalidated": true
+      },
+      {
+        "taskId": "d1b5a4f4-74cb-4051-b9ef-d69bcc3f2aff",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "5b1b7c68-4253-4a61-9dea-c9a304170d33",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "c8fc3b30-a40e-4bce-abd1-f848deb4c4ef",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "6cc4ccdd-7569-4444-880c-f141bdb5c1af",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "69645a36-9636-4181-a192-582182592e3e",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "7e06e90c-68f6-4804-ae97-be524ecce3ca",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "55fc1f9a-dc29-46bf-a704-6979ad74d07c",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "7c130e0c-7cf0-482a-b9d0-136c75c1197d",
+        "mode": "matte",
+        "outputFrames": 6,
+        "revalidated": true
+      },
+      {
+        "taskId": "a65859ce-3ffe-4f8c-b14f-f0d95231fce2",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "a70654d4-c68e-4982-8519-d42abb387103",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "816a2ea3-e96c-4fb4-969a-830dd6cb8257",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "3583ec49-0a16-4ede-af5d-44707f88d3c0",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "43555248-2858-4792-839f-2d8eddd14961",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "b436cc43-e494-4bd5-b47b-c8c3edb1cd58",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "df80bc75-3d11-4c7e-b31f-54bef984d5c9",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "cbd854c5-fadb-4155-ab98-eae00eb42d38",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "750c4502-b76b-4284-8f9c-a0d1758bdafa",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "b5c6ebb6-9a5e-4a5e-be5c-9b5bb03b3f12",
+        "mode": "compose",
+        "outputFrames": 1,
+        "revalidated": true
+      },
+      {
+        "taskId": "ef84d0fe-e1e4-4f45-b23f-9ea363e44c05",
+        "mode": "archive",
+        "outputFrames": 4,
+        "revalidated": true
+      },
+      {
+        "taskId": "88315d5d-4a74-4899-abfd-d59f4f8f78a1",
+        "mode": "archive",
+        "outputFrames": 4,
+        "revalidated": true
+      }
+    ],
+    "activeTasks": 0,
+    "valid": true,
+    "scope": "Latest complete input/output decoding and final cancellation checks"
+  },
+  "checks": {
+    "python": {
+      "passed": 47,
+      "failed": 0
+    },
+    "javascript": {
+      "passed": 86,
+      "failed": 0
+    },
+    "productionBuild": "passed",
+    "oracleBuild": "passed",
+    "focusedESLint": "passed",
+    "skillStructure": "passed"
+  },
+  "regressionCoverage": [
+    "Unknown fields/types, ordered unique selections, timestamps, mask count/type and full memory budget",
+    "Host-required boundary blocks CLI/generic execution before task creation",
+    "Host transport retains frame ZIP and mask order, rejects foreign/stale generations and non-finite progress without upload",
+    "Duplicate group indices and exact export member lists",
+    "Sprite PNG size, index geometry/order/millisecond time and boolean-number confusion",
+    "Exact selected frame bytes and fully decodable PNGs",
+    "Cancellation during input/output verification and after last output frame decode",
+    "Original repeated-addition timestamp boundary and prior-selection range sampling",
+    "Original sparse fingerprint terminal coercion and global eight-neighbour stroke distance"
+  ],
+  "screenshot": "doc/testing/evidence/skill-video-frame-engine.png",
+  "openGates": [
+    "Actual video decoder/seek/capture and crop equivalence",
+    "Complete ParamsStep replacement, playback/selection/brush UI and native document/history",
+    "Real application buttons, download/restore/conflict/cancel/navigation acceptance",
+    "Peak joint RSS, OS browser Worker stop timing, large video and format/codec coverage",
+    "Complete Skill S2/S3/S4, full AI quality and portable distribution"
+  ]
+}

@@ -3,7 +3,7 @@ import { jsonPost, localJson } from './api'
 type Ready={ready:boolean;generation?:number;state?:string}
 /** Runs beyond its component's lifetime. The existing queue owns publication;
  * this Worker supplies only encoded content, never paths, task state or version IDs. */
-export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void,options:{operation:string;budgetBytes:number;files?:Blob[]}={operation:'image.customScale',budgetBytes:0}){
+export async function browserCanvasTask(id:string,file:Blob,parameters:object,signal:AbortSignal,onStarted?:()=>void,options:{operation:string;budgetBytes:number;files?:Blob[];onProgress?:(progress:number)=>void}={operation:'image.customScale',budgetBytes:0}){
   let worker:Worker|null=null,timer:ReturnType<typeof setInterval>|null=null,generation:number|undefined
   let heartbeatFailure:((reason:unknown)=>void)|null=null
   const stop=()=>worker?.terminate()
@@ -23,7 +23,8 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
     const heartbeat=()=>localJson(`/api/tasks/${id}/browser/heartbeat`,{...jsonPost({generation}),signal})
     await heartbeat()
     timer=setInterval(()=>{void heartbeat().catch(error=>{stop();heartbeatFailure?.(error)})},1000)
-    worker=options.operation==='image.matteTool'?new Worker(new URL('../lib/matteTool.worker.ts',import.meta.url),{type:'module'}):
+    worker=options.operation==='video.frameTools'?new Worker(new URL('../lib/videoFrames.worker.ts',import.meta.url),{type:'module'}):
+      options.operation==='image.matteTool'?new Worker(new URL('../lib/matteTool.worker.ts',import.meta.url),{type:'module'}):
       ['image.sheetPreprocess','image.sheetPrepare'].includes(options.operation)?new Worker(new URL('../lib/sheetPrepare.worker.ts',import.meta.url),{type:'module'}):
       ['image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames'].includes(options.operation)?new Worker(new URL('../lib/sheetAdjust.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.spriteGifs'?new Worker(new URL('../lib/spriteGifRows.worker.ts',import.meta.url),{type:'module'}):
@@ -40,6 +41,10 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
       worker!.onmessage=event=>{
         if(event.data.id!==id||event.data.generation!==generation)return
         if(event.data.phase==='processing'){onStarted?.();return}
+        if(event.data.phase==='progress'){
+          if(typeof event.data.progress!=='number'||!Number.isFinite(event.data.progress)||event.data.progress<0||event.data.progress>1){reject(new Error('BROWSER_PROGRESS_INVALID'));return}
+          options.onProgress?.(.2+.6*event.data.progress);return
+        }
         if(event.data.error)reject(new Error(event.data.error))
         else if(event.data.blob instanceof Blob)resolve(event.data.blob)
         else reject(new Error('BROWSER_OUTPUT_INVALID'))

@@ -142,3 +142,33 @@ test('double-background host task sends both selected inputs in order and publis
   assert.equal(requests.filter(request=>request.url.endsWith('/browser/result')).length,1)
  }finally{globalThis.fetch=nativeFetch;globalThis.Worker=previous}
 })
+
+test('video host tasks preserve frame ZIP/mask order, accept bounded frame progress and reject invalid progress before upload',async()=>{
+ const previous=globalThis.Worker,selected=[new File(['frames'],'frames.zip'),new File(['mask'],'mask.png')]
+ let published=false,bad=false,worker,updates=[]
+ globalThis.Worker=class{
+  constructor(url){this.url=String(url);this.stopped=false;worker=this}
+  postMessage(request){this.request=request;queueMicrotask(()=>{
+   this.onmessage({data:{id:request.id,generation:7,phase:'processing'}})
+   this.onmessage({data:{id:request.id,generation:6,phase:'progress',progress:NaN}})
+   this.onmessage({data:{id:request.id,generation:7,phase:'progress',progress:bad?NaN:.5}})
+   if(!bad)this.onmessage({data:{id:request.id,generation:7,blob:new Blob(['zip'])}})
+  })}
+  terminate(){this.stopped=true}
+ }
+ const configure=()=>fixture({
+  '/api/versions/input':()=>response({id:'input',metadata:{kind:'archive',bytes:6}}),
+  '/api/tasks/task':()=>response({id:'task',state:published?'succeeded':'running',progress:published?1:.1,results:published?['output']:[]}),
+  '/api/tasks/task/browser':()=>response({ready:true,generation:7}),
+  '/api/tasks/task/browser/heartbeat':()=>response({accepted:true}),
+  '/api/tasks/task/browser/failure':()=>response({accepted:true}),
+  '/api/tasks/task/browser/result':()=>{published=true;return response({accepted:true})},
+ })
+ try{
+  configure();await runManagedTask('video.frameTools',selected,{renderer:'browser-worker',layout:{mode:'matte',mask:true}},{onProgress:p=>updates.push(p)})
+  assert(worker.url.includes('videoFrames.worker'));assert.deepEqual(await Promise.all(worker.request.files.map(f=>f.text())),['frames','mask']);assert(updates.includes(.5));assert(worker.stopped)
+  bad=true;published=false;updates=[];const requests=configure()
+  await assert.rejects(runManagedTask('video.frameTools',selected,{renderer:'browser-worker',layout:{mode:'matte',mask:true}}),/BROWSER_PROGRESS_INVALID/)
+  assert(!requests.some(r=>r.url.endsWith('/browser/result')));assert(worker.stopped)
+ }finally{globalThis.fetch=nativeFetch;globalThis.Worker=previous}
+})

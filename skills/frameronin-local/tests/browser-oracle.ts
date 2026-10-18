@@ -32,6 +32,8 @@ import {runFineEditorWorker} from '../assets/workbench/src/lib/fineEditorWorker'
 import {stampFineCircle} from '../assets/workbench/src/lib/fineEditorPixels'
 import {originalNormal} from '../.runtime/oracle/original-normal'
 import {processNormalImage} from '../assets/workbench/src/lib/normalImageTools'
+import * as originalVideoFrames from '../.runtime/oracle/utils'
+import type {VideoFrameLayout} from '../assets/workbench/src/lib/videoFrameTools'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -447,7 +449,46 @@ async function runMatteChain(){
  zip.file('sample.json',JSON.stringify({x:20,y:25,color,keyColor}));zip.file('sample-chroma.png',await originalMatteTool([source],{mode:'chroma',keyColor,tolerance:35,smoothness:34,spill:75,erosion:77}))
  await publish(zip,'browser-matte-chain.zip');status.textContent='Original matte repair chain complete: 6 PNGs and one sampled color'
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain]] as const) {
+async function runVideoFrames(){
+ const fixture=await(await fetch('/video-frames/manifest.json')).json(),source=await(await fetch('/video-frames/frames.zip')).blob(),brush=await(await fetch('/video-frames/brush.png')).blob()
+ const input=await JSZip.loadAsync(source),frames:Blob[]=await Promise.all(fixture.frames.map((n:string)=>input.file(n)!.async('blob'))),zip=new JSZip()
+ for(const entry of fixture.cases as {id:string;layout:VideoFrameLayout}[]){
+  status.textContent=`Video frame tools: ${entry.id}`
+  const p=entry.layout,urls:string[]=[],ref=(blob:Blob)=>{const value=URL.createObjectURL(blob);urls.push(value);return value},old=new JSZip()
+  try{
+   if(p.mode==='analyze'){
+    const hashes=[];for(const frame of frames)hashes.push(await originalVideoFrames.imageFingerprint(ref(frame)))
+    const markers=await originalVideoFrames.analyzeDuplicateFrames(frames.map(blob=>({dataUrl:ref(blob)})))
+    old.file('analysis.json',JSON.stringify({hashes,duplicates:[...markers].map(([index,value])=>({index,...value})),frameCount:frames.length}))
+   }else if(p.mode==='archive'){
+    const folder=old.folder(p.kind==='extracted'?'frames':'matted_frames')!
+    p.selected.forEach((index,i)=>folder.file(`${p.kind==='extracted'?'frame':'matte'}_${String(i+1).padStart(5,'0')}.png`,frames[index]))
+   }else if(p.mode==='matte'){
+    const rgb=[1,3,5].map(at=>parseInt(p.background.slice(at,at+2),16)),mask=p.mask?ref(brush):null
+    for(const [position,index] of p.selected.entries()){
+     let result=await originalVideoFrames.applyChromaKey(ref(frames[index]),rgb[0],rgb[1],rgb[2],p.tolerance,p.feather)
+     if(mask)result=await originalVideoFrames.applyBrushMask(result.dataUrl,mask)
+     old.file(`frame_${String(position).padStart(3,'0')}.png`,result.blob)
+    }
+   }else{
+    let selected=frames
+    if(p.strokeWidth>0){
+     selected=[];for(const frame of frames)selected.push(await originalVideoFrames.applyInnerStroke(await originalVideoFrames.resizeFrameToBlob(frame,p.width,p.height,p.padding),p.strokeWidth,p.strokeColor))
+    }
+    const result=await originalVideoFrames.composeSpriteSheetClient(selected.map(blob=>({blob,dataUrl:ref(blob)})),p.timestamps,p.width,p.height,p.padding,p.spacing,p.columns,originalVideoFrames.resizeFrameToCanvas)
+    old.file('sprite.png',result.pngBlob);old.file('index.json',JSON.stringify(result.index,null,2))
+   }
+   zip.file(`${entry.id}/original.zip`,await old.generateAsync({type:'blob'}))
+  }finally{urls.forEach(value=>URL.revokeObjectURL(value))}
+  const worker=new Worker(new URL('../assets/workbench/src/lib/videoFrames.worker.ts',import.meta.url),{type:'module'})
+  try{
+   const blob=await new Promise<Blob>((resolve,reject)=>{worker.onerror=e=>reject(new Error(e.message));worker.onmessage=e=>{if(e.data.error)reject(new Error(e.data.error));else if(e.data.blob)resolve(e.data.blob)};worker.postMessage({id:entry.id,generation:0,file:source,files:p.mode==='matte'&&p.mask?[source,brush]:[source],operation:'video.frameTools',parameters:{layout:p,frontendBytes:0},budgetBytes:2*1024**3})})
+   zip.file(`${entry.id}/actual.zip`,blob)
+  }finally{worker.terminate()}
+ }
+ await publish(zip,'browser-video-frames.zip');status.textContent=`Video frame tools complete: ${fixture.cases.length} original comparisons`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain],['#video-frames',runVideoFrames]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

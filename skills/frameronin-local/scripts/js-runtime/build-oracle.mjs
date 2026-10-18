@@ -161,6 +161,7 @@ const {tool=action,brushColor='#000000',brushSize=4,eraserSize=8,tolerance:super
 const pushHistory=()=>{};let rect:any=p.rect??null;const setSelectionRect=(v:any)=>{rect=v};
 ${fineCallbacks}\nif(action==='move')commitSelectMove(p.rect,p.dx,p.dy);else if(action==='erase')superEraserAt(p.x,p.y);else if(action!=='none')drawAt(p.x,p.y);return rect;}`)
 await fs.cp(path.join(skill,'assets/fixtures/fine-editor'),path.join(output,'fine-editor'),{recursive:true})
+await fs.cp(path.join(skill,'assets/fixtures/video-frames'),path.join(output,'video-frames'),{recursive:true})
 const config = path.join(skill, '.runtime/oracle-vite.config.mjs')
 // Keep the original browser's Rollup CommonJS handling. An esbuild-only browser
 // bundle exposes Emscripten's self-returning `then` during dynamic import.
