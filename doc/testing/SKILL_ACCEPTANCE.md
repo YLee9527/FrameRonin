@@ -379,3 +379,13 @@ video.capture 使用与原 ParamsStep 相同的宿主原生视频解码，不借
 复现辅助预览/笔画使用原版测试页的 video preview and brush comparison，下载后运行 tests/compare_video_assets_oracle.py；固定工作台配方见 video-frames/workbench.json，实际下载由 compare_video_workbench_oracle.py 比较。1000 帧由 video-capture/performance.json 和原版测试页提供，compare_video_large_oracle.py 比较；冻结原输出均随 fixtures 保存。verify_video_document_api.mjs 对已有运行项目只读核对。测试延迟仅在 tests/support/gated_workbench.py，生产无调试开关。
 
 更多真实格式/边缘质量、高分辨率/全阶段取消、联合浏览器与引擎 RSS、跨标签预算、macOS 14/中文输入/Retina/VoiceOver 和其余完整功能仍开放；S2/S3/S4 保持未完成。
+
+## 2026-10-19 AdvancedPixel 光流周边内核检查点
+
+原光流算法已在后台，本轮补充原比例网格切分 image.flowSplit 和 sequence.flowExport 的 PNG 图集/ZIP。切分保留每个边界的 floor(x×W/cols) 差值及至少 1px 规则，不复用会丢弃余边的序列切分。图集保留等尺寸要求、行优先顺序和列数夹到帧数；ZIP 保留 frame_001.png 等命名与顺序。新增前端保留字节预算，原 sequence.opticalFlow 也计入该值和编码输入副本。
+
+独立原浏览器九项固定对照覆盖整除/余边/极小切片/单格、四种列数和混合尺寸 ZIP。初次 ZIP 直接复制 PNG 时发现低 Alpha 像素差异，恢复原画布编码语义后九项全部严格 RGBA 相同，未增加容差；保留首次诊断项目和失败原因。正式任务共 9 项/60 版本，数据库及内容校验通过。原输出、源文件和原代码散列随 flow-tools/manifest.json 与 original/ 冻结。
+
+56 Python / 99 JS、三项光流周边专项、原版测试页构建及 Node 语法检查通过。负向覆盖类型/范围、伪 PNG ZIP、不同尺寸图集、超过 30000 边长、未知路径与前端预算超限，拒绝前未创建任务。复现：原版测试页 Run original optical flow grid and exports 下载 browser-flow-tools.zip，然后 tests/accept_flow_tools_oracle.py <zip> --project <新验收项目> --output <json>；默认同时核对已冻结原输出，--freeze 只用于第一次生成基线，不覆盖已有目录。
+
+此检查点尚未改写 AdvancedPixel 界面。其正式文档/统一历史、跨工具输入与结果、预览/取消/离开后继续和实际交互仍待接入，不以后台内核证明完整入口完成。详见 [内核证据](evidence/skill-flow-tools-engine.json)，S2/S3/S4 不升级。

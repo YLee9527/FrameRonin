@@ -1,0 +1,1300 @@
+{
+  "date": "2026-10-19",
+  "scope": "AdvancedPixel original proportional grid and PNG/ZIP export kernel only; UI/document integration remains pending",
+  "projectId": "33469e99-a8b0-41fc-947d-8d9861b5787f",
+  "archiveSha256": "22fb08aea1deab81ab8d6efe5348ce456db2ec6fc6e4ef943b48ca21c3103024",
+  "cases": [
+    {
+      "sample": "split-exact",
+      "operation": "image.flowSplit",
+      "taskId": "10ce32e5-e6be-4682-a665-698b4a259cb6",
+      "results": [
+        "72f1f1df-6dc6-4aa0-974c-81503253e039",
+        "549e2f54-cb83-43c9-8711-b5eccbb1ccc5",
+        "0ee81561-a9b8-432f-97a2-f111c14147ad",
+        "a176dc67-65be-41f7-a706-b2dc6394e83b",
+        "1ba1d47b-938a-484b-9ad0-6eb779e4e792",
+        "19eead05-9be2-42ea-8341-b21fca1acf6c",
+        "93a5be44-87dc-4785-8706-13c2fe57bea1",
+        "def0fe8d-2b21-4c2e-aefd-e292b64d4460",
+        "dd22067e-5ba8-41e9-886d-46e1a0b504ef",
+        "60f91913-9f6a-4d9c-8c1a-924797447739",
+        "8aaf8cd8-3cd0-43ab-a47f-c29e67733131",
+        "b66bc241-26a1-464a-9562-65753c725c44",
+        "a56e0403-4483-4418-af20-b6c3d9b30633"
+      ],
+      "report": {
+        "frameDimensions": [
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          },
+          {
+            "width": 16,
+            "height": 16
+          }
+        ],
+        "outputFrames": 12,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "image.flowSplit",
+        "parameters": {
+          "columns": 4,
+          "rows": 3,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png",
+          "output/result-0001.png",
+          "output/result-0002.png",
+          "output/result-0003.png",
+          "output/result-0004.png",
+          "output/result-0005.png",
+          "output/result-0006.png",
+          "output/result-0007.png",
+          "output/result-0008.png",
+          "output/result-0009.png",
+          "output/result-0010.png",
+          "output/result-0011.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "split-exact/0.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/1.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/2.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/3.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/4.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/5.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/6.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/7.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/8.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/9.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/10.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-exact/11.png",
+          "equal": true,
+          "width": 16,
+          "height": 16,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "split-remainder",
+      "operation": "image.flowSplit",
+      "taskId": "d32e4bc3-672e-46b0-ad0c-b014dea24abb",
+      "results": [
+        "206790f9-92b1-4743-913b-77d8d6e5209a",
+        "2436983f-31d4-4710-9f58-61e0d0fe2c2b",
+        "bf98ec98-150e-41f4-bdcb-2ec230984a6b",
+        "f6261de6-0e0d-48f8-91d6-302080276a66",
+        "33aa2b27-7e32-498e-9dde-ba701873b43a",
+        "6c3fd607-1b65-4f0d-ba34-fd8560794dc3",
+        "829afac3-01f6-43d1-a68d-6b9a2bcbc586"
+      ],
+      "report": {
+        "frameDimensions": [
+          {
+            "width": 4,
+            "height": 4
+          },
+          {
+            "width": 4,
+            "height": 4
+          },
+          {
+            "width": 5,
+            "height": 4
+          },
+          {
+            "width": 4,
+            "height": 5
+          },
+          {
+            "width": 4,
+            "height": 5
+          },
+          {
+            "width": 5,
+            "height": 5
+          }
+        ],
+        "outputFrames": 6,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "image.flowSplit",
+        "parameters": {
+          "columns": 3,
+          "rows": 2,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png",
+          "output/result-0001.png",
+          "output/result-0002.png",
+          "output/result-0003.png",
+          "output/result-0004.png",
+          "output/result-0005.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "split-remainder/0.png",
+          "equal": true,
+          "width": 4,
+          "height": 4,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-remainder/1.png",
+          "equal": true,
+          "width": 4,
+          "height": 4,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-remainder/2.png",
+          "equal": true,
+          "width": 5,
+          "height": 4,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-remainder/3.png",
+          "equal": true,
+          "width": 4,
+          "height": 5,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-remainder/4.png",
+          "equal": true,
+          "width": 4,
+          "height": 5,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-remainder/5.png",
+          "equal": true,
+          "width": 5,
+          "height": 5,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "split-tiny",
+      "operation": "image.flowSplit",
+      "taskId": "05238dc3-14cd-45ed-8319-8f52959050ef",
+      "results": [
+        "e44bad8d-df90-4253-b7a8-f01eba723055",
+        "f882ba53-c074-4195-8da2-6956161cabb2",
+        "d15810dd-b8fc-4ea2-8152-d78fcacda3b0",
+        "ab9f292c-502c-41b2-a59f-b26e0a5999e7",
+        "7db3cee7-2717-4ebf-ba18-110dec085e5a",
+        "97913028-ed63-4480-9414-e8f3db4ee9de",
+        "83ec72a9-dbac-4a53-8af5-1ad5b277a2bb",
+        "9c319f03-e00d-496a-bc16-5aae81619536",
+        "abbe002d-04ff-4615-98c1-8728f3117149",
+        "72b2a8b1-0a2c-4399-bbc6-2125dfd133db",
+        "f02e0579-cf9c-407b-ace9-edd453a67fb2",
+        "6e39e708-22ae-400a-8ec7-6fef8d7664e0",
+        "e57b8ca1-e527-4983-b02e-de9b48684fcc",
+        "171f712d-a9a7-4737-967c-6d191347db11",
+        "f2ca0988-69bf-4201-badc-265623ff5163",
+        "12585713-fd39-4013-be69-f7b3bf6e5c31",
+        "0cf8832e-7263-48c2-b113-198818d407a2",
+        "5ea0f924-cb7d-4080-8459-cc41c92fa040",
+        "157cc344-6d3a-4569-8c14-ed95638901af",
+        "5d59a775-e9d7-4b96-8eed-33c0cecc84da",
+        "1fb06c76-9652-453b-9972-8d4c0b2585fa",
+        "457dbb98-7c1b-4f4e-9fff-fd659414a56b",
+        "bdb63a66-8b58-43e1-b780-7f61b7c2b302",
+        "0d960599-f0ba-40d4-83c2-01332812b6f7",
+        "1fbf0f33-299d-4a55-80e2-0563f571aa6f"
+      ],
+      "report": {
+        "frameDimensions": [
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          },
+          {
+            "width": 1,
+            "height": 1
+          }
+        ],
+        "outputFrames": 24,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "image.flowSplit",
+        "parameters": {
+          "columns": 8,
+          "rows": 3,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png",
+          "output/result-0001.png",
+          "output/result-0002.png",
+          "output/result-0003.png",
+          "output/result-0004.png",
+          "output/result-0005.png",
+          "output/result-0006.png",
+          "output/result-0007.png",
+          "output/result-0008.png",
+          "output/result-0009.png",
+          "output/result-0010.png",
+          "output/result-0011.png",
+          "output/result-0012.png",
+          "output/result-0013.png",
+          "output/result-0014.png",
+          "output/result-0015.png",
+          "output/result-0016.png",
+          "output/result-0017.png",
+          "output/result-0018.png",
+          "output/result-0019.png",
+          "output/result-0020.png",
+          "output/result-0021.png",
+          "output/result-0022.png",
+          "output/result-0023.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "split-tiny/0.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/1.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/2.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/3.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/4.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/5.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/6.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/7.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/8.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/9.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/10.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/11.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/12.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/13.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/14.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/15.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/16.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/17.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/18.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/19.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/20.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/21.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/22.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "file": "split-tiny/23.png",
+          "equal": true,
+          "width": 1,
+          "height": 1,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "split-one",
+      "operation": "image.flowSplit",
+      "taskId": "2b2bb4aa-fc59-4cfb-81e2-04084e0024df",
+      "results": [
+        "e906ccd9-34e8-4af5-8337-d611cf70e993",
+        "75496f42-b923-430c-a445-faf2b7b658b2"
+      ],
+      "report": {
+        "frameDimensions": [
+          {
+            "width": 64,
+            "height": 48
+          }
+        ],
+        "outputFrames": 1,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "image.flowSplit",
+        "parameters": {
+          "columns": 1,
+          "rows": 1,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "split-one/0.png",
+          "equal": true,
+          "width": 64,
+          "height": 48,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "sheet-1",
+      "operation": "sequence.flowExport",
+      "taskId": "5d87ae93-92ee-4840-a62c-8bd87bd18045",
+      "results": [
+        "58f0b64e-ecd9-4bc0-8cc4-1710424ac142",
+        "26ac34ea-09e7-41c3-b987-91ac05e42411"
+      ],
+      "report": {
+        "format": "sheet",
+        "columns": 1,
+        "frameCount": 3,
+        "width": 64,
+        "height": 144,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "sequence.flowExport",
+        "parameters": {
+          "format": "sheet",
+          "columns": 1,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "sheet-1/0.png",
+          "equal": true,
+          "width": 64,
+          "height": 144,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "sheet-2",
+      "operation": "sequence.flowExport",
+      "taskId": "97aedd57-47b1-4b41-a051-09ecb37fe516",
+      "results": [
+        "c2fdefbb-c1c9-49e5-a517-accde1ee6f37",
+        "993c195a-f09e-474b-88ac-352a79f2480a"
+      ],
+      "report": {
+        "format": "sheet",
+        "columns": 2,
+        "frameCount": 3,
+        "width": 128,
+        "height": 96,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "sequence.flowExport",
+        "parameters": {
+          "format": "sheet",
+          "columns": 2,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "sheet-2/0.png",
+          "equal": true,
+          "width": 128,
+          "height": 96,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "sheet-3",
+      "operation": "sequence.flowExport",
+      "taskId": "51c0b4e7-7c34-46e2-9bd4-3fa361b010d3",
+      "results": [
+        "c351c1ad-51df-4dc4-9d6e-dd3e59672898",
+        "5c12c443-0e99-4744-a98b-f05e57f90417"
+      ],
+      "report": {
+        "format": "sheet",
+        "columns": 3,
+        "frameCount": 3,
+        "width": 192,
+        "height": 48,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "sequence.flowExport",
+        "parameters": {
+          "format": "sheet",
+          "columns": 3,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "sheet-3/0.png",
+          "equal": true,
+          "width": 192,
+          "height": 48,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "sheet-999",
+      "operation": "sequence.flowExport",
+      "taskId": "738bc3b8-da88-4d3e-b1ad-be8ffaed1999",
+      "results": [
+        "ee5d44a9-b6e0-4c74-837c-d7a2c529a749",
+        "a93682c8-230f-4994-83ba-03cf0467e07f"
+      ],
+      "report": {
+        "format": "sheet",
+        "columns": 3,
+        "frameCount": 3,
+        "width": 192,
+        "height": 48,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "sequence.flowExport",
+        "parameters": {
+          "format": "sheet",
+          "columns": 999,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.png"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "sheet-999/0.png",
+          "equal": true,
+          "width": 192,
+          "height": 48,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "equal": true
+    },
+    {
+      "sample": "zip-order",
+      "operation": "sequence.flowExport",
+      "taskId": "66b5f412-74a3-4895-86f0-065185ae098a",
+      "results": [
+        "b3da2adc-0ed3-4814-b4b1-52d9ec52e035",
+        "9373c9dc-da38-4c8c-9407-da68136cc2f6"
+      ],
+      "report": {
+        "format": "zip",
+        "frameCount": 3,
+        "method": "original-advanced-pixel-grid-export",
+        "operation": "sequence.flowExport",
+        "parameters": {
+          "format": "zip",
+          "columns": 1,
+          "frontendBytes": 0
+        },
+        "files": [
+          "output/result-0000.zip"
+        ]
+      },
+      "comparisons": [
+        {
+          "file": "zip-order/0.zip",
+          "equal": true,
+          "members": [
+            {
+              "member": "frame_001.png",
+              "equal": true,
+              "width": 64,
+              "height": 48,
+              "maxChannelError": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "differentPixels": 0,
+              "firstDifference": null,
+              "encodedBytesEqual": false
+            },
+            {
+              "member": "frame_002.png",
+              "equal": true,
+              "width": 2,
+              "height": 2,
+              "maxChannelError": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "differentPixels": 0,
+              "firstDifference": null,
+              "encodedBytesEqual": false
+            },
+            {
+              "member": "frame_003.png",
+              "equal": true,
+              "width": 64,
+              "height": 48,
+              "maxChannelError": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "differentPixels": 0,
+              "firstDifference": null,
+              "encodedBytesEqual": false
+            }
+          ]
+        }
+      ],
+      "equal": true
+    }
+  ],
+  "failed": [],
+  "verification": {
+    "valid": true,
+    "database": "ok",
+    "versions": 60,
+    "tasks": 9
+  },
+  "baselineCreated": true,
+  "checks": {
+    "pythonTests": 56,
+    "javascriptTests": 99,
+    "focusedFlowTests": 3,
+    "oracleBuild": "passed",
+    "nodeSyntax": "passed"
+  },
+  "negativeCases": [
+    "boolean and out-of-range grid parameters",
+    "JPEG bytes must not be renamed as PNG in result ZIP",
+    "unequal sprite sheet frame dimensions",
+    "composed side above 30000 pixels",
+    "unknown path parameter",
+    "frontend retained bytes over budget before task creation"
+  ],
+  "diagnostic": {
+    "initialFailedCases": [
+      "zip-order"
+    ],
+    "reason": "Copying PNG bytes skipped the original Canvas alpha/color normalization. Restore the encoding pass rather than relaxing pixel tolerances.",
+    "correctedComparison": "All nine browser-original cases are strict RGBA equal."
+  },
+  "remaining": [
+    "AdvancedPixel workbench uses old synchronous grid/ZIP/sheet path until wired to these operations",
+    "Formal optical-flow document, unified history and cross-tool input/results",
+    "Actual workbench save/reopen/cancel/navigation and bounded previews",
+    "Full Skill S2/S3/S4 and final joint resource/native acceptance"
+  ]
+}

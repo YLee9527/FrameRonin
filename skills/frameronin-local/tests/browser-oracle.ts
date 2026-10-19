@@ -26,7 +26,7 @@ import { processWithMesh as originalMeshProcess } from '../.runtime/oracle/origi
 import { loadOpenCv } from '../assets/workbench/src/lib/pixellise/opencv'
 import { originalScale } from '../.runtime/oracle/original-scale'
 import { originalUnify } from '../.runtime/oracle/original-unify'
-import {splitSpriteSheetGrid as originalSplitGrid,findDuplicateFrameIndexGroups as originalFindDuplicates} from '../.runtime/oracle/original-duplicate'
+import {splitSpriteSheetGrid as originalSplitGrid,composeSpriteSheetGrid as originalFlowSheet,findDuplicateFrameIndexGroups as originalFindDuplicates} from '../.runtime/oracle/original-duplicate'
 import {originalFineEditor} from '../.runtime/oracle/original-fine-editor'
 import {runFineEditorWorker} from '../assets/workbench/src/lib/fineEditorWorker'
 import {stampFineCircle} from '../assets/workbench/src/lib/fineEditorPixels'
@@ -571,6 +571,31 @@ async function runVideoWorkbench(){
   await publish(output,'browser-video-workbench.zip');status.textContent='Original video workbench complete: mask, matte, raw and styled sheet'
  }finally{urls.forEach(url=>URL.revokeObjectURL(url))}
 }
+async function runFlowTools(){
+ const manifest=await(await fetch('/flow-tools/manifest.json')).json(),zip=new JSZip()
+ for(const sample of manifest.cases){
+  status.textContent='Original flow tools: '+sample.id
+  const images:HTMLImageElement[]=[],urls:string[]=[]
+  try{
+   for(const name of sample.inputs){
+    const blob=await(await fetch('/flow-tools/'+name)).blob(),url=URL.createObjectURL(blob),image=new Image();urls.push(url)
+    await new Promise<void>((resolve,reject)=>{image.onload=()=>resolve();image.onerror=()=>reject(new Error('FLOW_ORIGINAL_DECODE'));image.src=url});images.push(image)
+   }
+   if(sample.operation==='image.flowSplit'){
+    const cells=originalSplitGrid(images[0],sample.parameters.columns,sample.parameters.rows)
+    for(const [i,cell] of cells.entries())zip.file(`${sample.id}/${i}.png`,await png(cell))
+   }else{
+    const cells=images.map(image=>{const c=document.createElement('canvas');c.width=image.naturalWidth;c.height=image.naturalHeight;c.getContext('2d')!.drawImage(image,0,0);return c})
+    if(sample.parameters.format==='zip'){
+     const archive=new JSZip();for(const [i,c] of cells.entries())archive.file(`frame_${String(i+1).padStart(3,'0')}.png`,await png(c))
+     zip.file(sample.id+'/0.zip',await archive.generateAsync({type:'blob'}))
+    }else zip.file(sample.id+'/0.png',await png(originalFlowSheet(cells,Math.min(cells.length,sample.parameters.columns))))
+   }
+  }finally{urls.forEach(u=>URL.revokeObjectURL(u))}
+ }
+ await publish(zip,'browser-flow-tools.zip');status.textContent=`Original flow tools complete: ${manifest.cases.length} samples`
+}
+document.querySelector<HTMLButtonElement>('#flow-tools')!.addEventListener('click',async()=>{download.hidden=true;try{await runFlowTools()}catch(error){status.textContent='Oracle failed: '+String(error)}})
 async function runVideoLarge(){
  const fixture=await(await fetch('/video-capture/performance.json')).json(),file=await(await fetch('/video-capture/'+fixture.source)).blob(),zip=new JSZip()
  status.textContent='Original large video capture running: 1000 frames'

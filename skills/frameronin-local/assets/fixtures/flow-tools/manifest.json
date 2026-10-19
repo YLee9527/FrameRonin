@@ -1,0 +1,122 @@
+{
+  "formatVersion": 1,
+  "sources": {
+    "source.png": "08aad05ca8cfebd993bb4ee940207161fbf55fafebdf3cf93364bb6fe3fc27d1",
+    "uneven.png": "066f59375c5b6209d0d0b105613da160e22810d6b9e0d96d352779aecfb62bc1",
+    "tiny.png": "00bfaf182ac88ba80587a31a8be7b8741fd317367ff7456bdd1f6cffd84143a1"
+  },
+  "originals": {
+    "reference/frontend/src/components/RoninProAdvancedPixel.tsx": "96313e220cb778780b42f4f6df2cb26a6418d6381b40b4d2280d0848b34d6b6f",
+    "reference/frontend/src/lib/spriteGridDuplicate.ts": "8257d92932d0c2ca77345a01310c3fe6e5cf7a1dbe014d08c1602c6a98395f8d"
+  },
+  "cases": [
+    {
+      "id": "split-exact",
+      "operation": "image.flowSplit",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "columns": 4,
+        "rows": 3
+      }
+    },
+    {
+      "id": "split-remainder",
+      "operation": "image.flowSplit",
+      "inputs": [
+        "uneven.png"
+      ],
+      "parameters": {
+        "columns": 3,
+        "rows": 2
+      }
+    },
+    {
+      "id": "split-tiny",
+      "operation": "image.flowSplit",
+      "inputs": [
+        "tiny.png"
+      ],
+      "parameters": {
+        "columns": 8,
+        "rows": 3
+      }
+    },
+    {
+      "id": "split-one",
+      "operation": "image.flowSplit",
+      "inputs": [
+        "source.png"
+      ],
+      "parameters": {
+        "columns": 1,
+        "rows": 1
+      }
+    },
+    {
+      "id": "sheet-1",
+      "operation": "sequence.flowExport",
+      "inputs": [
+        "source.png",
+        "source.png",
+        "source.png"
+      ],
+      "parameters": {
+        "format": "sheet",
+        "columns": 1
+      }
+    },
+    {
+      "id": "sheet-2",
+      "operation": "sequence.flowExport",
+      "inputs": [
+        "source.png",
+        "source.png",
+        "source.png"
+      ],
+      "parameters": {
+        "format": "sheet",
+        "columns": 2
+      }
+    },
+    {
+      "id": "sheet-3",
+      "operation": "sequence.flowExport",
+      "inputs": [
+        "source.png",
+        "source.png",
+        "source.png"
+      ],
+      "parameters": {
+        "format": "sheet",
+        "columns": 3
+      }
+    },
+    {
+      "id": "sheet-999",
+      "operation": "sequence.flowExport",
+      "inputs": [
+        "source.png",
+        "source.png",
+        "source.png"
+      ],
+      "parameters": {
+        "format": "sheet",
+        "columns": 999
+      }
+    },
+    {
+      "id": "zip-order",
+      "operation": "sequence.flowExport",
+      "inputs": [
+        "source.png",
+        "tiny.png",
+        "source.png"
+      ],
+      "parameters": {
+        "format": "zip"
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@ export { importLegacyWorkflow, validateStrictWorkflow } from '../../assets/workb
 export { getPerfectPixel, PERFECT_PIXEL_MAX_SIDE } from '../../assets/workbench/src/lib/perfectPixel/perfectPixel'
 export { doubleBackgroundMatteFromBlobs, postProcessDoubleBgMatteBlob, applyAlphaErosionToBlob } from '../../assets/workbench/src/lib/doubleBackgroundMatte'
 export { stitchImageBlobs } from '../../assets/workbench/src/lib/simpleStitchVertical'
-export { splitSpriteSheetGrid, findDuplicateFrameIndexGroups } from '../../assets/workbench/src/lib/spriteGridDuplicate'
+export { splitSpriteSheetGrid, composeSpriteSheetGrid, findDuplicateFrameIndexGroups } from '../../assets/workbench/src/lib/spriteGridDuplicate'
 export { createInitialState, rsepriteReducer } from '../../assets/workbench/src/components/Rseprite/useRsepriteState'
 export { validateStoredRseprite } from '../../assets/workbench/src/localProject/rsepriteDocument'
 export { interpolateMidFrameOpticalFlow, expandFramesWithOpticalMidpoints } from '../../assets/workbench/src/lib/opticalFlowInterpolate'

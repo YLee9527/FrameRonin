@@ -8,6 +8,7 @@ const skill = path.resolve(here, '../..')
 const root = path.resolve(skill, '../..')
 const output = path.join(skill, '.runtime/oracle')
 await fs.mkdir(output, { recursive: true })
+await fs.cp(path.join(skill,'assets/fixtures/flow-tools'),path.join(output,'flow-tools'),{recursive:true})
 await fs.cp(path.join(skill, 'assets/workbench/public'), output, { recursive: true })
 const manifest = JSON.parse(await fs.readFile(path.join(root, 'doc/baseline/presets.json'), 'utf8'))
 await fs.writeFile(path.join(output, 'preset-manifest.json'), JSON.stringify(manifest.map(preset => ({

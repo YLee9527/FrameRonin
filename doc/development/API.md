@@ -1,5 +1,9 @@
 # CLI 与本地 API
 
+`image.flowSplit` 接收一份静态 PNG/JPEG/WebP，columns/rows 各 1–64、frontendBytes；每份 ≤20 MiB、边长 ≤30000。后台复用原 splitSpriteSheetGrid 的比例边界和最少 1px 行为，按行输出全部 PNG 和报告。允许输出不等尺寸，光流阶段仍严格拒绝不同尺寸帧。
+
+`sequence.flowExport` 接收 1–1000 份静态图，format 为 zip/sheet，columns 为 1–1000、frontendBytes。ZIP 仅接受已处理 PNG，逐帧按原画布语义规范化并编码，名称 frame_001.png 起；不会把 JPEG 字节伪装成 PNG。sheet 要求等尺寸，实际列数 min(输入数,columns)，行优先，最终边长 ≤30000，输出 PNG/报告。两者估算 256 MiB + frontendBytes + 输入字节×8 + 输入像素总和×32 + 输出像素×32，超预算在启动前拒绝，执行在受控 Node 进程族中。原 sequence.opticalFlow 新增 frontendBytes 默认 0，并计入编码输入副本；算法未改写。这些周边内核已对照，AdvancedPixel 工作台接入尚待完成。
+
 `video.capture` 接收一份正式视频版本，参数为 `renderer=browser-worker`、`frontendBytes` 和精确 `layout={sourceWidth,sourceHeight,start,end,fps,maxFrames,crop:{left,top,right,bottom}}`。显示尺寸为 1–30000 整数，起止秒为 0–86400 且 end>start，FPS 为 1–60 有限数，最多 2000 帧。裁边允许有限小数和原版重叠裁边，PNG 画布向下取整并至少 1px；时间戳按原版反复累加间隔。输入 ≤200 MiB，不支持的原生编解码器明确失败，不静默改用 FFmpeg。CLI/通用提案不能直接执行该宿主操作。
 
 宿主在任务 ready 后使用 `GET /api/tasks/{id}/browser/input?generation=N` 读取该任务唯一的已登记视频；不接收客户端路径或素材 ID，逐 MiB 校验内容并复查状态/代次，响应 `Cache-Control: no-store`。其他操作、未 ready、取消或过期代次拒绝。原生媒体元素仅协调解码及异步快照；最多一个可转移帧进入专用 Worker，后者负责裁切、PNG 与 ZIP 编码，不依赖动画回调。任务取消清理解码器、对象 URL 和 Worker，迟到快照关闭而不使用；最终上传仍由后台核对 PNG 成员、尺寸、数量及取消代次后发布 ZIP/报告。

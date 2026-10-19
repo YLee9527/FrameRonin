@@ -117,6 +117,43 @@ if (request.operation === 'workflow') {
     report={groups,indexBase:0,frameDimensions:cells.map(cell=>({width:cell.width,height:cell.height}))}
   }
   report={...report,method:'original-ronin-image-tools',operation:request.operation,parameters:request.parameters,outputFrames:outputs.length}
+} else if (request.operation==='image.flowSplit'||request.operation==='sequence.flowExport') {
+  const parameters=request.parameters
+  if(request.operation==='sequence.flowExport'&&parameters.format==='zip'){
+    // The original ZIP encodes Canvas frames. Preserve that alpha/color
+    // normalization; copying arbitrary PNG bytes changes low-alpha pixels.
+    const zip=new JSZip()
+    for(const [index,blob] of blobs.entries()){
+      const image=await dom.loadImage(Buffer.from(await blob.arrayBuffer()))
+      const canvas=dom.createCanvas(image.width,image.height);canvas.getContext('2d').drawImage(image,0,0)
+      const normalized=algorithms.composeSpriteSheetGrid([canvas],1)
+      zip.file(`frame_${String(index+1).padStart(3,'0')}.png`,await normalized.encode('png'))
+      canvas.width=canvas.height=normalized.width=normalized.height=1
+      process.stdout.write(JSON.stringify({progress:(index+1)/blobs.length*.8})+'\n')
+    }
+    outputs.push(new Blob([await zip.generateAsync({type:'nodebuffer'})]));extensions.push('zip')
+    report={format:'zip',frameCount:blobs.length}
+  }else{
+    const images=[]
+    for(const blob of blobs){
+      const image=await dom.loadImage(Buffer.from(await blob.arrayBuffer()))
+      const canvas=dom.createCanvas(image.width,image.height);canvas.getContext('2d').drawImage(image,0,0)
+      images.push({native:canvas,naturalWidth:image.width,naturalHeight:image.height})
+    }
+    if(request.operation==='image.flowSplit'){
+      const cells=algorithms.splitSpriteSheetGrid(images[0],parameters.columns,parameters.rows)
+      for(const [index,cell] of cells.entries()){
+        outputs.push(new Blob([await cell.encode('png')]))
+        process.stdout.write(JSON.stringify({progress:(index+1)/cells.length*.9})+'\n')
+      }
+      report={frameDimensions:cells.map(c=>({width:c.width,height:c.height})),outputFrames:cells.length}
+    }else{
+      const cols=Math.min(images.length,parameters.columns),sheet=algorithms.composeSpriteSheetGrid(images.map(i=>i.native),cols)
+      outputs.push(new Blob([await sheet.encode('png')]))
+      report={format:'sheet',columns:cols,frameCount:images.length,width:sheet.width,height:sheet.height}
+    }
+  }
+  report={...report,method:'original-advanced-pixel-grid-export',operation:request.operation,parameters}
 } else if (request.operation === 'opticalFlow') {
   const frames = []
   for (const blob of blobs) frames.push(await dom.loadImage(Buffer.from(await blob.arrayBuffer())))

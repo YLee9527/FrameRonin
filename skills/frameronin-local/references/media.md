@@ -22,7 +22,7 @@ video.frameTools 的 select 模式用于跳过抠图，连续 PNG ZIP 保留所�
 
 独立抠图的 `image.matteTool` 保留色度键、白底 WebGL、双背景、修复和贴边侵蚀，必须从工作台启动宿主 Worker；CLI 或通用提案不能直接执行。双背景仅接受按黑、白顺序选择的同尺寸版本，自动去水印失败会报错。工作台保存 image-matte 正式文档及已有结果；修复从原抠图结果计算，贴边侵蚀始终从修复版本重算，归零直接切回修复结果。`image.matte` 的 rembg 模型处理是另一操作，不用它代替原算法。
 
-`sequence.opticalFlow` 直接复用原 OpenCV.js 双向 Farneback、平滑、位移限制与融合算法，在受控 Node 进程执行。参数为 alpha、nearestNeighbor、bidirectional、quality（fast/balanced/high）、smoothFlow、maxMotionRelative；2–500 张同尺寸帧输出 2N−1 PNG 帧和报告。每帧对完整处理，不独立分块。16×512 固定样本的 31 帧通过浏览器与后台严格 RGBA 对照。工作台补帧页支持取消；离开页面后任务继续，在项目面板读取正式结果。
+`sequence.opticalFlow` 直接复用原 OpenCV.js 双向 Farneback、平滑、位移限制与融合算法，在受控 Node 进程执行。参数为 alpha、nearestNeighbor、bidirectional、quality（fast/balanced/high）、smoothFlow、maxMotionRelative、frontendBytes；2–500 张同尺寸帧输出 2N−1 PNG 帧和报告。每帧对完整处理，不独立分块。16×512 固定样本的 31 帧通过浏览器与后台严格 RGBA 对照。工作台补帧页支持取消；离开页面后任务继续，在项目面板读取正式结果。
 
 本地取消返回 processStopConfirmed 和 cancelElapsedSeconds，并保存任务 cancellation.json；此确认只涵盖本地受控进程。身份或停止权限无法核验时，结果先失效，再报告 CANCEL_* 错误，不伪造停止成功。AI 服务端状态仍需核对宿主调用。
 
@@ -53,3 +53,5 @@ RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、
 图片右下角可见水印使用工作台的 `image.visibleWatermark`，支持 auto/48/96，保留原逆 Alpha 和独立入口的 96px 强度。静态 PNG/JPEG/WebP 最大 20 MiB，受完整预算和原尺寸限制；结果保存为正式 PNG 与报告。此模式需要宿主 Worker，CLI/通用提案直接执行拒绝。原图经重压缩或缩放后可能有残留，应检查实际素材；不可见水印不在该工具范围内。
 
 精灵表按行 GIF 使用工作台的 `image.spriteGifs`，严格布局为 columns、rows、唯一 order、framesPerRow、duration，输出有序 GIF ZIP 与报告。保留原每行最大尺寸左上补透明、独立调色板和 GIF 10ms 时长舍入。原网格切分使用 `image.customSlice`，行列最大 64、总帧数最大 4096；每行 GIF 最多 128 帧、时长 20–500ms、ZIP 最大 128 MiB。静态 PNG/JPEG/WebP 最大 20 MiB，仍受完整工作集预算约束；必须保留宿主浏览器执行端，不使用近似的后端编码替代。
+
+AdvancedPixel 的 image.flowSplit 与 sequence.flowExport 后台内核已加入操作注册表，保留原比例网格余边/极小格和图集列数/帧顺序/ZIP 画布编码；源图每份最多 20 MiB、边长 30000，图集必须等尺寸并符合预算。完整 AdvancedPixel 页面尚未切换，正式文档/历史及实际交互继续实施，不将内核对照视为工作台已验收。

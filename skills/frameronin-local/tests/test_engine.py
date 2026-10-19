@@ -911,6 +911,59 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(cancel(self.project, first['id'])['state'], 'canceled')
         self.assertEqual(wait(self.project, second['id'], 10)['state'], 'succeeded')
 
+    def test_flow_proportional_grid_keeps_remainder_pixels_and_tiny_cells(self):
+        for columns,rows in [(3,2),(32,16)]:
+            record=submit(self.project,{'operation':'image.flowSplit','inputs':[self.version['id']],
+                'parameters':{'columns':columns,'rows':rows}})
+            result=wait(self.project,record['id'],20)
+            self.assertEqual(result['state'],'succeeded',result)
+            self.assertEqual(len(result['results']),columns*rows+1)
+            for i,version_id in enumerate(result['results'][:-1]):
+                width=max(1,((i%columns+1)*16)//columns-((i%columns)*16)//columns)
+                height=max(1,((i//columns+1)*12)//rows-((i//columns)*12)//rows)
+                version=self.project.version(version_id)
+                self.assertEqual((version['metadata']['width'],version['metadata']['height']),(width,height))
+            if columns==3:
+                with Image.open(self.project.version(result['results'][0])['absolutePath']) as cell:
+                    self.assertEqual(cell.convert('RGBA').getpixel((2,3)),(255,30,20,255))
+        self.assertTrue(self.project.verify()['valid'])
+
+    def test_flow_exports_keep_order_and_original_canvas_column_clamp(self):
+        second_path=self.root/'second.png';Image.new('RGBA',(16,12),(20,40,90,255)).save(second_path)
+        second=self.project.import_file(second_path)
+        inputs=[self.version['id'],second['id'],self.version['id']]
+        zipped=submit(self.project,{'operation':'sequence.flowExport','inputs':inputs,'parameters':{'format':'zip'}})
+        done=wait(self.project,zipped['id'],20);self.assertEqual(done['state'],'succeeded',done)
+        with zipfile.ZipFile(self.project.version(done['results'][0])['absolutePath']) as archive:
+            self.assertEqual(archive.namelist(),['frame_001.png','frame_002.png','frame_003.png'])
+            for name,version in zip(archive.namelist(),inputs):
+                import io
+                with Image.open(io.BytesIO(archive.read(name))) as actual, Image.open(self.project.version(version)['absolutePath']) as expected:
+                    self.assertEqual(actual.convert('RGBA').tobytes(),expected.convert('RGBA').tobytes())
+        sheet=submit(self.project,{'operation':'sequence.flowExport','inputs':inputs,'parameters':{'format':'sheet','columns':999}})
+        done=wait(self.project,sheet['id'],20);self.assertEqual(done['state'],'succeeded',done)
+        with Image.open(self.project.version(done['results'][0])['absolutePath']) as image:
+            self.assertEqual(image.size,(48,12));self.assertEqual(image.convert('RGBA').getpixel((16,0)),(20,40,90,255))
+
+    def test_flow_tools_reject_unsafe_inputs_and_account_for_frontend_before_dispatch(self):
+        source=self.root/'not-png.jpg';Image.new('RGB',(16,12),'red').save(source);jpeg=self.project.import_file(source)
+        other=self.root/'unequal.png';Image.new('RGBA',(15,12),'blue').save(other);unequal=self.project.import_file(other)
+        wide_path=self.root/'wide.png';Image.new('RGBA',(20000,1),'blue').save(wide_path);wide=self.project.import_file(wide_path)
+        invalid=[{'operation':'image.flowSplit','inputs':[self.version['id']],'parameters':{'columns':True}},
+            {'operation':'image.flowSplit','inputs':[self.version['id']],'parameters':{'rows':65}},
+            {'operation':'sequence.flowExport','inputs':[jpeg['id']],'parameters':{'format':'zip'}},
+            {'operation':'sequence.flowExport','inputs':[self.version['id'],unequal['id']],'parameters':{'format':'sheet'}},
+            {'operation':'sequence.flowExport','inputs':[wide['id'],wide['id']],'parameters':{'format':'sheet','columns':2}},
+            {'operation':'sequence.flowExport','inputs':[self.version['id']],'parameters':{'path':'../out.png'}}]
+        for payload in invalid:
+            with self.assertRaises(RoninError):preview(self.project,payload)
+        with patch('frameronin_engine.operations.memory_budget',return_value=512*1024**2):
+            for operation in ['image.flowSplit','sequence.flowExport','sequence.opticalFlow']:
+                with self.assertRaises(RoninError):preview(self.project,{'operation':operation,
+                    'inputs':[self.version['id']]*(2 if operation=='sequence.opticalFlow' else 1),
+                    'parameters':{'frontendBytes':512*1024**2}})
+        with self.project.connection() as db:self.assertEqual(db.execute('SELECT count(*) FROM tasks').fetchone()[0],0)
+
     def test_cancel_stops_nested_media_processes_and_records_confirmation(self):
         source = self.root / 'flow.png'
         Image.new('RGBA', (512, 512), (40, 80, 120, 255)).save(source)

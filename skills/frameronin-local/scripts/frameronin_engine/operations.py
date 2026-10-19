@@ -66,7 +66,13 @@ REGISTRY = {
     'sequence.opticalFlow': operation(['image+'], {'alpha': number(0.5, 0, 1),
         'nearestNeighbor': {'type':'boolean','default':False}, 'bidirectional': {'type':'boolean','default':True},
         'quality': choice('balanced',['fast','balanced','high']), 'smoothFlow': {'type':'boolean','default':True},
-        'maxMotionRelative': number(0.35,0.05,0.95)}, 'png_sequence_report', 'full_frame_pair', overhead=384),
+        'maxMotionRelative': number(0.35,0.05,0.95),
+        'frontendBytes': integer(0,0,2*1024**3)}, 'png_sequence_report', 'full_frame_pair', overhead=384),
+    'image.flowSplit': operation(['image'], {'columns': integer(4,1,64), 'rows': integer(1,1,64),
+        'frontendBytes': integer(0,0,2*1024**3)}, 'png_sequence_report', 'original_proportional_grid', overhead=256),
+    'sequence.flowExport': operation(['image+'], {'format': choice('zip',['zip','sheet']),
+        'columns': integer(1,1,1000), 'frontendBytes': integer(0,0,2*1024**3)},
+        'png_or_zip_report', 'original_optical_flow_export', overhead=256),
     'image.slice': operation(['image'], {'columns': integer(4, 1, 128), 'rows': integer(4, 1, 128)},
                              'png_zip_index', 'stream'),
     'image.sliceBrowser': operation(['image'], {'columns': integer(2,1,128),'rows': integer(2,1,128),
@@ -356,6 +362,24 @@ def preview(project, payload):
         if not 2 <= len(versions) <= 500 or len({(v['metadata']['width'],v['metadata']['height']) for v in versions}) != 1:
             raise RoninError('OPTICAL_FLOW_FRAMES', 'Select 2–500 frames with identical dimensions; output is limited to 999 frames.')
         estimate += sum(pixels) * 4 + pixels[0] * (2 * len(versions) - 1) * 4 + max(pixels) * 64
+        estimate += values['frontendBytes'] + sum(v['metadata']['bytes'] for v in versions)*4
+    if name in ['image.flowSplit','sequence.flowExport']:
+        if any(v['metadata'].get('frames',1)!=1 or v['metadata'].get('containerFormat') not in ['PNG','JPEG','WEBP'] or v['metadata']['bytes']>20*1024**2 or max(v['metadata']['width'],v['metadata']['height'])>30000 for v in versions):
+            raise RoninError('FLOW_SOURCE_FORMAT','Select static PNG, JPEG or WebP frames up to 20 MiB and 30000 pixels per side.')
+        if name=='sequence.flowExport' and values['format']=='zip' and any(v['metadata'].get('containerFormat')!='PNG' for v in versions):
+            raise RoninError('FLOW_EXPORT_FORMAT','Frame ZIP export requires the processed PNG versions; source JPEG/WebP files must not be renamed as PNG.')
+        output_pixels=0
+        if name=='image.flowSplit':
+            m=versions[0]['metadata'];cols,rows=values['columns'],values['rows']
+            output_pixels=max(1,math.ceil(m['width']/cols))*max(1,math.ceil(m['height']/rows))*cols*rows
+        elif values['format']=='sheet':
+            sizes={(v['metadata']['width'],v['metadata']['height']) for v in versions}
+            if len(sizes)!=1:raise RoninError('FLOW_EXPORT_DIMENSIONS','Sprite sheet frames must have identical dimensions.')
+            width,height=next(iter(sizes));cols=min(len(versions),values['columns'])
+            width*=cols;height*=math.ceil(len(versions)/cols)
+            if max(width,height)>30000:raise RoninError('FLOW_EXPORT_DIMENSIONS','The composed sheet may not exceed 30000 pixels per side.')
+            output_pixels=width*height
+        estimate=256*1024**2+values['frontendBytes']+sum(v['metadata']['bytes'] for v in versions)*8+sum(pixels)*32+output_pixels*32
     if name in ['workflow.strict', 'workflow.legacy']:
         graph = values['graph']
         if name == 'workflow.strict':
