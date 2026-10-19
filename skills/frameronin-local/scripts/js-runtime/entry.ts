@@ -74,4 +74,6 @@ export {validateVideoFrameLayout,videoFramePlan,videoTimestamps,sampleVideoSelec
 export {videoCapturePlan} from '../../assets/workbench/src/lib/videoCapture'
 export {initialVideoDraft,validateStoredVideo,serializeVideo,restoreVideo,videoFiles,videoCaptureLayout} from '../../assets/workbench/src/localProject/videoDocument'
 export {createVideoHistory,videoHistoryReducer} from '../../assets/workbench/src/localProject/useVideoDocument'
+export {videoAssets,videoAssetPlan} from '../../assets/workbench/src/lib/videoAssets'
+export {videoCropHit,videoCropDrag} from '../../assets/workbench/src/lib/videoInteraction'
 export {captureSelectedVideo,inspectSelectedVideo} from '../../assets/workbench/src/lib/browserVideoCapture'

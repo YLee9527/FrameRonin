@@ -530,7 +530,7 @@ function App() {
             <>
               <Steps
                 current={currentStep}
-                onChange={(idx) => setStep(STEP_KEYS[idx])}
+                onChange={(idx) => {void navigateWithSave(()=>setStep(STEP_KEYS[idx]))}}
                 items={[
                   { title: t('stepUpload') },
                   { title: t('stepParams') },
@@ -542,7 +542,7 @@ function App() {
                   <Button
                     type="text"
                     icon={<ArrowLeftOutlined />}
-                    onClick={() => { setMode(null); setStep('upload'); setFile(null) }}
+                    onClick={() => {void navigateWithSave(()=>{updateMode(null);setStep('upload');setFile(null)})}}
                   >
                     {t('backToHome')}
                   </Button>
@@ -559,6 +559,7 @@ function App() {
                     file={file}
                     params={params}
                     onParamsChange={setParams}
+                    onFileChange={setFile}
                   />
                 )}
               </Card>

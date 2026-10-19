@@ -164,6 +164,22 @@ await fs.cp(path.join(skill,'assets/fixtures/fine-editor'),path.join(output,'fin
 await fs.cp(path.join(skill,'assets/fixtures/video-frames'),path.join(output,'video-frames'),{recursive:true})
 await fs.cp(path.join(skill,'assets/fixtures/video-capture'),path.join(output,'video-capture'),{recursive:true})
 const originalCaptureSource=await fs.readFile(path.join(root,'reference/frontend/src/components/ParamsStep.tsx'),'utf8')
+const brushStart=originalCaptureSource.indexOf('  const drawStroke = (x: number, y: number) => {')
+const brushEnd=originalCaptureSource.indexOf('\n  const handlePointerDown',brushStart)
+const brushMove=originalCaptureSource.indexOf('  const handlePointerMove = (e: React.PointerEvent)',brushEnd)
+const segmentStart=originalCaptureSource.indexOf("          mCtx.globalCompositeOperation = 'source-over'",brushMove)
+const segmentEnd=originalCaptureSource.indexOf('          redrawDisplay()',segmentStart)
+if([brushStart,brushEnd,brushMove,segmentStart,segmentEnd].some(n=>n<0))throw new Error('Original video brush markers changed')
+await fs.writeFile(path.join(output,'original-video-brush.ts'),`
+export async function originalVideoBrush(maskFile:Blob|null,size:any,stroke:any){
+ const mask=document.createElement('canvas');mask.width=size.w;mask.height=size.h;
+ if(maskFile){const image=await new Promise<HTMLImageElement>((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(maskFile);img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=reject;img.src=url});mask.getContext('2d')!.drawImage(image,0,0)}
+ const maskRef={current:mask},brushSize=stroke.size,redrawDisplay=()=>{},onMaskChange=()=>{};
+ ${originalCaptureSource.slice(brushStart,brushEnd)}
+ drawStroke(stroke.points[0][0],stroke.points[0][1]);let last=stroke.points[0];
+ for(const point of stroke.points.slice(1)){const prev={x:last[0],y:last[1]},pos={x:point[0],y:point[1]},mCtx=mask.getContext('2d')!;${originalCaptureSource.slice(segmentStart,segmentEnd)}last=point;}
+ try{return await new Promise<Blob>((resolve,reject)=>mask.toBlob(b=>b?resolve(b):reject(new Error('Original mask encoding')),'image/png'))}finally{mask.width=mask.height=1}
+}`)
 const captureFunction=originalCaptureSource.indexOf('  const extractFrames = async () => {')
 const captureSetupStart=originalCaptureSource.indexOf('    const interval = 1 / fps',captureFunction)
 const captureSetupEnd=originalCaptureSource.indexOf('    try {\n      video.pause()',captureSetupStart)

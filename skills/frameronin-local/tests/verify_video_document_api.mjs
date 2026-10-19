@@ -4,7 +4,7 @@
  */
 import assert from 'node:assert/strict'
 import {writeFile} from 'node:fs/promises'
-import {restoreVideo,serializeVideo} from '../.runtime/js/algorithms.mjs'
+import {restoreVideo,serializeVideo,validateStoredVideo} from '../.runtime/js/algorithms.mjs'
 
 const args=process.argv.slice(2),baseIndex=args.indexOf('--base'),outputIndex=args.indexOf('--output')
 assert(baseIndex>=0&&outputIndex>=0,'Pass --base http://127.0.0.1:<owned-port> --output <json>')
@@ -21,7 +21,7 @@ try{
  const rows=[]
  for(const info of documents){
   const saved=await get(`/api/documents/${info.id}`),draft=await restoreVideo(saved.payload),serialized=await serializeVideo(draft)
-  assert.deepEqual(serialized,saved.payload)
+  assert.deepEqual(serialized,validateStoredVideo(saved.payload))
   if(draft.capture)assert.equal(draft.capture.inputs[0],draft.source)
   if(draft.processed)assert.equal(draft.processed.inputs[0],draft.capture.data)
   if(draft.styledSheet)assert.equal(draft.styledSheet.inputs[0],draft.processed.data)

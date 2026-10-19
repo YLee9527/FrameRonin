@@ -1,10 +1,10 @@
 # 项目格式 1
 
-视频 `kind=video`、`formatVersion=1` 已建立数据与历史基础，完整视频编辑器尚待接入。文档保存正式 source、原生显示 info、当前 settings/view、frameCount/frameSize、升序 selected 和当前 mask，以及 capture/analysis/processed/rawSheet/styledSheet/rawDownload/processedDownload 七类可空结果。每个结果为 `{data,report,inputs,taskId}`，所有文件为 `{versionId,name,type}`，不存对象 URL 或用户路径。
+视频 `kind=video`、`formatVersion=1` 已接入正式工作台。文档保存正式 source、原生显示 info、当前 settings/view、frameCount/frameSize、升序 selected 和当前 mask，以及 capture/analysis/processed/rawSheet/styledSheet/rawDownload/processedDownload 七类可空结果。每个结果为 `{data,report,inputs,taskId}`，所有文件为 `{versionId,name,type}`，不存对象 URL 或用户路径。view 保存分页、游标、动画 FPS/速度/循环及预览背景；仅已知的早期五字段 view 补默认速度 1 和循环 true，未知或部分新字段仍拒绝。
 
 恢复先检查严格字段、范围、分页/游标、唯一身份及一致文件别名，再核对源视频元数据、成功任务、输入输出顺序、实际取帧尺寸/时间戳、处理选帧、遮罩尺寸、图集时间和描边基准、原帧下载的完整顺序。遮罩结果允许保留其实际使用的历史遮罩，与当前 mask 分开；当前设置和选择同样允许尚未应用。所有来源可核对后才按预算读取正文，检查报告参数及输出数量。未知操作、取消任务、其他素材、错误格式或伪装结果拒绝。
 
-视频历史保存输入、参数、裁切/画笔手势、选择、视图和既有结果引用，50 步且累计文件双份不超过 256 MiB；当前文档不会为了历史预算而丢弃。撤销、重做和重开不重新加工或生成。已有 API 专项验证不代表最终保存按钮、导航、迟到读取保护或视频手势界面已经验收，继续见待完成清单。
+视频历史保存输入、参数、完整裁切/画笔手势、选择、视图和既有结果引用，50 步且累计文件双份不超过 256 MiB；当前文档不会为了历史预算而丢弃。撤销、重做和重开不重新加工或生成。共享保存控件等待必要笔画/取色，读取期间的编辑或未结束手势拒绝覆盖；修订冲突阻止导航并可另存。任务完成再次核对文档身份与编辑代次，过期结果留在项目，不覆盖当前文档。详见视频工作台专项验收。
 
 独立抠图 `kind=image-matte`、`formatVersion=1` 保存 mode、settings、view、source/black/white，以及 raw/repaired/eroded 三阶段结果。图片和报告只保存 `{versionId,name,type}`，每个结果另保存有序 inputs 和 taskId。raw 必须来自当前选定原件；repair 来自 raw 图片，frontier 来自 repaired 图片。恢复先核对字段、资源元数据、成功任务及输入输出顺序、模式/参数和尺寸，再按预算读取并核对报告。未知字段、路径、身份别名和不合法链直接拒绝。当前参数可不同于上次结果，界面明确显示尚未应用。
 

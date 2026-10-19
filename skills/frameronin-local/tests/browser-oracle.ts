@@ -37,6 +37,8 @@ import type {VideoFrameLayout} from '../assets/workbench/src/lib/videoFrameTools
 import {originalVideoCapture} from '../.runtime/oracle/original-video-capture'
 import {captureSelectedVideo,inspectSelectedVideo} from '../assets/workbench/src/lib/browserVideoCapture'
 import {videoCapturePlan} from '../assets/workbench/src/lib/videoCapture'
+import {videoAssets,type VideoAssetRequest} from '../assets/workbench/src/lib/videoAssets'
+import {originalVideoBrush} from '../.runtime/oracle/original-video-brush'
 
 // An explicit test page, built separately from the product. The original browser
 // algorithm is the oracle; it deliberately bypasses the managed task adapter.
@@ -519,7 +521,65 @@ async function runVideoCapture(){
  }
  await publish(zip,'browser-video-capture.zip');status.textContent=`Video capture complete: ${fixture.cases.length} original comparisons`
 }
-for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain],['#video-frames',runVideoFrames],['#video-capture',runVideoCapture]] as const) {
+async function runVideoAssets(){
+ const fixture=await(await fetch('/video-frames/assets.json')).json(),source=await(await fetch('/video-frames/frames.zip')).blob(),brush=await(await fetch('/video-frames/brush.png')).blob(),sheet=await(await fetch('/video-frames/original/compose-default.zip')).blob()
+ const input=await JSZip.loadAsync(source),output=new JSZip(),previous=new Map<string,{original:Blob;actual:Blob}>()
+ const load=async(blob:Blob)=>{const url=URL.createObjectURL(blob);try{return await new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=url})}finally{URL.revokeObjectURL(url)}}
+ const thumbnail=async(blob:Blob,size:{w:number;h:number},limit:number)=>{const image=await load(blob),scale=Math.min(1,limit/Math.max(size.w,size.h)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(size.w*scale));c.height=Math.max(1,Math.round(size.h*scale));c.getContext('2d')!.drawImage(image,0,0,c.width,c.height);try{return await new Promise<Blob>((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('Original preview encoding')),'image/png'))}finally{c.width=c.height=1}}
+ for(const entry of fixture.cases){
+  status.textContent='Video preview/brush: '+entry.id
+  const {id,...p}=entry,oldMask=p.mask==='fixture'?brush:p.mask?previous.get(p.mask)!.original:null,newMask=p.mask==='fixture'?brush:p.mask?previous.get(p.mask)!.actual:null
+  let files:Blob[]=[],previews:Blob[]=[],color:number[]|null=null
+  if(p.action==='brush')files=[await originalVideoBrush(oldMask,p.size,p.stroke)]
+  else if(p.action==='frames')for(const index of p.indices)previews.push(await thumbnail(await input.file(`frame_${String(index).padStart(3,'0')}.png`)!.async('blob'),p.size,p.limit))
+  else if(p.action==='sample'){
+   const image=await load(await input.file(`frame_${String(p.index).padStart(3,'0')}.png`)!.async('blob')),c=document.createElement('canvas');c.width=p.size.w;c.height=p.size.h;const ctx=c.getContext('2d')!;ctx.drawImage(image,0,0);color=Array.from(ctx.getImageData(p.x,p.y,1,1).data);c.width=c.height=1
+  }else if(p.action==='matte'){
+   const frame=await input.file(`frame_${String(p.index).padStart(3,'0')}.png`)!.async('blob'),url=URL.createObjectURL(frame),maskUrl=oldMask?URL.createObjectURL(oldMask):null,rgb=[1,3,5].map(i=>parseInt(p.background.slice(i,i+2),16))
+   try{let result=await originalVideoFrames.applyChromaKey(url,rgb[0],rgb[1],rgb[2],p.tolerance,p.feather);if(maskUrl)result=await originalVideoFrames.applyBrushMask(result.dataUrl,maskUrl);previews=[await thumbnail(result.blob,p.size,p.limit)]}finally{URL.revokeObjectURL(url);if(maskUrl)URL.revokeObjectURL(maskUrl)}
+  }else{
+   const zip=await JSZip.loadAsync(sheet),png=await zip.file('sprite.png')!.async('blob'),json=await zip.file('index.json')!.async('blob');files=[new Blob([png],{type:'image/png'}),new Blob([json],{type:'application/json'})];previews=[await thumbnail(png,p.size,p.limit)]
+  }
+  const request={...p,...(p.action!=='brush'?{file:p.action==='sheet'?sheet:source}:{}),...('mask'in p?{mask:newMask}:{})} as VideoAssetRequest
+  const actual=await videoAssets(request,2*1024**3,0,new AbortController().signal)
+  const record=(r:{files:Blob[];previews:Blob[];color:number[]|null})=>({fileCount:r.files.length,previewCount:r.previews.length,color:r.color})
+  output.file(`${id}/original.json`,JSON.stringify(record({files,previews,color})));output.file(`${id}/actual.json`,JSON.stringify(record(actual)))
+  for(const [kind,values] of [['original-file',files],['actual-file',actual.files],['original-preview',previews],['actual-preview',actual.previews]] as const)for(const [i,value] of values.entries())output.file(`${id}/${kind}_${i}.${value.type==='application/json'?'json':'png'}`,value)
+  if(p.action==='brush')previous.set(id,{original:files[0],actual:actual.files[0]})
+ }
+ await publish(output,'browser-video-assets.zip');status.textContent=`Video preview and brush complete: ${fixture.cases.length} original comparisons`
+}
+async function runVideoWorkbench(){
+ const p=await(await fetch('/video-frames/workbench.json')).json(),source=await(await fetch(`/video-capture/original/${p.capture}.zip`)).blob(),input=await JSZip.loadAsync(source),output=new JSZip(),mask=await originalVideoBrush(null,p.maskSize,p.stroke),urls:string[]=[]
+ const ref=(blob:Blob)=>{const url=URL.createObjectURL(blob);urls.push(url);return url}
+ try{
+  status.textContent='Original video workbench: mask and matte';output.file('mask.png',mask)
+  const matted:Blob[]=[],maskUrl=ref(mask),rgb=[1,3,5].map(i=>parseInt(p.background.slice(i,i+2),16)),archive=new JSZip(),folder=archive.folder('matted_frames')!
+  for(const [i,index] of p.selected.entries()){
+   const original=await input.file(`frame_${String(index).padStart(3,'0')}.png`)!.async('blob'),matte=await originalVideoFrames.applyChromaKey(ref(original),rgb[0],rgb[1],rgb[2],p.tolerance,p.feather),result=await originalVideoFrames.applyBrushMask(matte.dataUrl,maskUrl)
+   matted.push(result.blob);folder.file(`matte_${String(i+1).padStart(5,'0')}.png`,result.blob)
+  }
+  output.file('matted.zip',await archive.generateAsync({type:'blob'}))
+  const q=p.compose
+  for(const styled of [false,true]){
+   status.textContent='Original video workbench: '+(styled?'styled':'raw')+' sheet'
+   const frames:Blob[]=[]
+   for(const blob of matted)frames.push(styled?await originalVideoFrames.applyInnerStroke(await originalVideoFrames.resizeFrameToBlob(blob,q.width,q.height,q.padding),p.innerStroke.width,p.innerStroke.color):blob)
+   const result=await originalVideoFrames.composeSpriteSheetClient(frames.map(blob=>({blob,dataUrl:ref(blob)})),q.timestamps,q.width,q.height,q.padding,q.spacing,q.columns,originalVideoFrames.resizeFrameToCanvas),zip=new JSZip()
+   zip.file('sprite.png',result.pngBlob);zip.file('index.json',JSON.stringify(result.index,null,2));output.file((styled?'styled':'raw')+'.zip',await zip.generateAsync({type:'blob'}))
+  }
+  await publish(output,'browser-video-workbench.zip');status.textContent='Original video workbench complete: mask, matte, raw and styled sheet'
+ }finally{urls.forEach(url=>URL.revokeObjectURL(url))}
+}
+async function runVideoLarge(){
+ const fixture=await(await fetch('/video-capture/performance.json')).json(),file=await(await fetch('/video-capture/'+fixture.source)).blob(),zip=new JSZip()
+ status.textContent='Original large video capture running: 1000 frames'
+ const result=await originalVideoCapture(file,fixture.parameters)
+ for(const [i,frame] of result.frames.entries())zip.file(`frame_${String(i).padStart(3,'0')}.png`,frame.blob)
+ zip.file('capture.json',JSON.stringify({info:result.info,width:result.width,height:result.height,cropWidth:result.cropWidth,cropHeight:result.cropHeight,timestamps:result.frames.map(f=>f.timestamp)}))
+ await publish(zip,'browser-video-large.zip');status.textContent=`Original large video capture complete: ${result.frames.length} frames`
+}
+for (const [selector, run] of [['#flow', runFlow], ['#presets', runPresets], ['#audio-run', runAudio], ['#map-run',runMap],['#gif-run',runGif],['#sequence-run',runSequence],['#pixel-run',runPixel],['#ronin-run',runRonin],['#smooth-worker',runSmoothWorker],['#fine-editor',runFineEditor],['#normal-image',runNormalImage],['#expand-shrink',runExpandShrink],['#scatter',runScatter],['#custom-slice',runCustomSlice],['#visible-watermark',runVisibleWatermark],['#sprite-sheet',runSpriteSheet],['#sheet-adjust',runSheetAdjust],['#sheet-prepare',runSheetPrepare],['#matte-tool',runMatteTool],['#matte-chain',runMatteChain],['#video-frames',runVideoFrames],['#video-capture',runVideoCapture],['#video-assets',runVideoAssets],['#video-workbench',runVideoWorkbench],['#video-large',runVideoLarge]] as const) {
   document.querySelector<HTMLButtonElement>(selector)!.addEventListener('click', async () => {
     download.hidden = true
     try { await run() } catch (error) { status.textContent = `Oracle failed: ${String(error)}` }

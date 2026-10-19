@@ -1,0 +1,13 @@
+{
+  "formatVersion":1,
+  "capture":"fractional-crop",
+  "selected":[0,2,8],
+  "background":"#2cae40",
+  "tolerance":40,
+  "feather":10,
+  "maskSize":{"w":58,"h":41},
+  "stroke":{"size":4,"points":[[29,21]]},
+  "compose":{"width":58.75,"height":41.25,"padding":0,"spacing":0,"columns":4,"timestamps":[0,0.2,0.8]},
+  "innerStroke":{"width":1.5,"color":"#000000"},
+  "comparison":"Actual UI raw frames were separately compared against the frozen capture. Compare the saved brush mask, selected matted ZIP, raw and styled sheets, PNG and index with original browser operations. PNG uses strict RGBA; index rows use stable i."
+}

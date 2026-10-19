@@ -2,15 +2,15 @@
 
 | 操作 | 原入口 | 原实现 | 输入 → 输出 | 验收状态 |
 | --- | --- | --- | --- | --- |
-| video.fps | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
-| video.range | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
-| video.maxFrames | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
-| video.crop | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
-| video.background | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 待逐项验收 |
-| video.sheet | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收 |
-| video.png | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收 |
-| video.zip | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收 |
-| video.index | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原 ParamsStep 逐帧内核 21 项像素/结构对照及正式发布通过；真实视频取帧、裁切及完整界面/文档仍待验收 |
+| video.fps | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原生样本 15 项及小数 FPS 对照、实际 60fps/1000 帧工作台通过；更多格式和联合资源继续验收 |
+| video.range | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原时间累加与范围对照、实际原生播放/循环和具名滑块键盘通过；完整可访问性继续验收 |
+| video.maxFrames | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 2000 帧上限校验、1000 帧实际选帧/重开/下载和计算中取消通过；高分辨率联合资源继续验收 |
+| video.crop | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 整数/小数/重叠裁边原版对照、实际拖拽/键盘/整手势撤销和 58×41 下载通过；更多真实媒体继续验收 |
+| video.background | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 原色度键/画笔对照、实际取色/遮罩/抠图与跳过原字节传输通过；真实素材质量继续验收 |
+| video.sheet | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 小数排版与 1.5px 描边实际导出严格原版对照、归零/历史复用及迟到保护通过；联合资源继续验收 |
+| video.png | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 实际中文名 PNG 下载严格原版像素/字节相同，正式文档保存/重开通过；完整格式继续验收 |
+| video.zip | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 实际原帧/抠图/图集 ZIP 对照及 1000 帧 PNG 字节相同；离开后结果项目下载通过 |
+| video.index | 视频抽帧 | reference/frontend/src/components/ParamsStep.tsx | video + parameters → PNG frames/sheet/ZIP/index | 实际索引下载与原版固定配方相同；保留小数尺寸/时间戳、稳定帧索引及文档来源核对 |
 | video.detect | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 固定角标视频对照原检测/修复实现通过；小于 120×60 及资源超限预先拒绝，真实品牌水印质量待验收 |
 | video.remove | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 后台修复及工作台真实取消/离开后运行通过，固定输出视频与原实现严格相同；小字样本保留原残影，质量不记为通过 |
 | video.mp4 | 视频水印 | reference/frontend/src/components/SeedanceWatermarkRemover.tsx | video → clean MP4 | 正式 MP4 下载与版本字节一致，24 帧与原输出严格 RGB 相同，原 AAC 解码 PCM 相同，工作台完整播放通过 |

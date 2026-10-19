@@ -1,0 +1,839 @@
+{
+  "date": "2026-10-19",
+  "scope": "Original video ParamsStep workbench wired to controlled native capture, Workers, formal video documents and shared history/save controls; checkpoint only",
+  "projectId": "a798fee9-044e-4f62-b3f7-7bc25422f01f",
+  "previewAndBrushOriginalComparison": {
+    "archiveSha256": "877039bd38a75ff02731d13af507885cc3f8f0a1010dec27a53187effde4bc34",
+    "fixtureSha256": "30e3683011912f6777a16e771d606b7e6b0e6f3cc87c3fa6ba48f8aae6c86953",
+    "cases": [
+      {
+        "sample": "brush-single",
+        "action": "brush",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 1,
+          "previewCount": 0,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "file_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "brush-poly",
+        "action": "brush",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 1,
+          "previewCount": 0,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "file_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "brush-wide",
+        "action": "brush",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 1,
+          "previewCount": 0,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "file_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "brush-existing",
+        "action": "brush",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 1,
+          "previewCount": 0,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "file_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "brush-second",
+        "action": "brush",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 1,
+          "previewCount": 0,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "file_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "frames-three",
+        "action": "frames",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 3,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "preview_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "preview_1.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "preview_2.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "frames-one-pixel",
+        "action": "frames",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 1,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "preview_0.png",
+            "equal": true,
+            "width": 1,
+            "height": 1,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "frames-scaled",
+        "action": "frames",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 2,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "preview_0.png",
+            "equal": true,
+            "width": 8,
+            "height": 6,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "preview_1.png",
+            "equal": true,
+            "width": 8,
+            "height": 6,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "sample-origin",
+        "action": "sample",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 0,
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "members": [],
+        "equal": true
+      },
+      {
+        "sample": "sample-alpha",
+        "action": "sample",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 0,
+          "color": [
+            164,
+            20,
+            26,
+            255
+          ]
+        },
+        "members": [],
+        "equal": true
+      },
+      {
+        "sample": "matte-preview",
+        "action": "matte",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 1,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "preview_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "matte-preview-mask",
+        "action": "matte",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 0,
+          "previewCount": 1,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "preview_0.png",
+            "equal": true,
+            "width": 17,
+            "height": 13,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "sheet-preview",
+        "action": "sheet",
+        "metadataEqual": true,
+        "metadata": {
+          "fileCount": 2,
+          "previewCount": 1,
+          "color": null
+        },
+        "members": [
+          {
+            "member": "file_0.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "file_1.json",
+            "equal": true,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "preview_0.png",
+            "equal": true,
+            "width": 75,
+            "height": 69,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ],
+        "equal": true
+      }
+    ],
+    "failed": []
+  },
+  "actualWorkbenchDownloadComparison": {
+    "originalSha256": "9e1cc8805f43e820925d828c2c2195d1078480df864a93fa62cfb82c1d4e2e24",
+    "recipeSha256": "35eabe0b7024d5b438e71c12cb6963ffc304cdcc24937d7f8f7ff11508d5d212",
+    "downloadHashes": {
+      "mask": "96de66329670c8ea66786c64ac8d5acf8eac6019e42c0a65b86987a3724580ac",
+      "matted": "fbabc4dbe17ccc4e865badce4bde2714365dd961d51acfe53505685917b58f37",
+      "raw": "8fe29c04a885270804b19ac2f57dc1c387cfe5e35eb9d18bbf8fb560be9fada3",
+      "styled": "c34f0ed7c8e04a8f84fe06aea751c54eaf781a52c0de42dbd4f1d0356660da54",
+      "png": "9c361f5f3792ff10771df04ec59b5cda9d2378621b570287be4f1d975cac2bbc",
+      "index": "135fd8039ff43d2ac67a899c7fee93009146d7b76a82b490850a1fed910e11d0"
+    },
+    "comparisons": {
+      "mask": {
+        "equal": true,
+        "width": 58,
+        "height": 41,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "matted": {
+        "equal": true,
+        "members": [
+          {
+            "member": "matted_frames/",
+            "equal": true
+          },
+          {
+            "member": "matted_frames/matte_00001.png",
+            "equal": true,
+            "width": 58,
+            "height": 41,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "matted_frames/matte_00002.png",
+            "equal": true,
+            "width": 58,
+            "height": 41,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "matted_frames/matte_00003.png",
+            "equal": true,
+            "width": 58,
+            "height": 41,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          }
+        ]
+      },
+      "raw": {
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 235,
+            "height": 41,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      "styled": {
+        "equal": true,
+        "members": [
+          {
+            "member": "sprite.png",
+            "equal": true,
+            "width": 235,
+            "height": 41,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": true
+          },
+          {
+            "member": "index.json",
+            "equal": true
+          }
+        ]
+      },
+      "pngDownload": {
+        "equal": true,
+        "width": 235,
+        "height": 41,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      "indexDownload": {
+        "equal": true
+      }
+    },
+    "failed": []
+  },
+  "thousandFrameComparison": {
+    "originalSha256": "ab530e4b41fceb1bd4cab5bf0cc6bac28629687c4a56f9c0d28f4919612727a3",
+    "actualSha256": "05416d2127ba4ea55c90ee4457e0dad169b39d1bcbbb4667b42fbbc13548e81a",
+    "frames": 1000,
+    "width": 64,
+    "height": 48,
+    "timestampsEqual": true,
+    "encodedPngBytesEqual": true,
+    "failedFrames": []
+  },
+  "fractionalCropComparison": {
+    "frames": 11,
+    "width": 58,
+    "height": 41,
+    "encodedPngBytesEqual": true
+  },
+  "documentGuards": {
+    "verification": {
+      "valid": true,
+      "database": "ok",
+      "versionCount": 33,
+      "taskCount": 16
+    },
+    "copyDocumentId": "d7af69db-c807-4354-ae78-710b13166be5",
+    "copySourcePreserved": true,
+    "textEditWhileLoadingPreserved": true,
+    "heldStationaryGesturePreserved": true,
+    "skipMattePngBytesPreserved": true,
+    "undoReusedPriorMatteTask": "991f12b4-40a4-4b75-adb9-04a93e4739b9"
+  },
+  "cancellation": {
+    "task": {
+      "id": "2424b300-dfba-4437-950b-cf50944de435",
+      "state": "canceled",
+      "generation": 1,
+      "payload": {
+        "operation": "video.capture",
+        "inputs": [
+          "10e7bb55-6c44-43cf-8b5c-1d788d8b7f17"
+        ],
+        "parameters": {
+          "renderer": "browser-worker",
+          "frontendBytes": 126320004,
+          "layout": {
+            "sourceWidth": 64,
+            "sourceHeight": 48,
+            "start": 0,
+            "end": 30,
+            "fps": 60,
+            "maxFrames": 2000,
+            "crop": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            }
+          }
+        }
+      },
+      "results": []
+    },
+    "observedUiBeforePercent": 30,
+    "observedUiFeedbackMs": 250,
+    "backendStop": {
+      "generation": 1,
+      "cancelElapsedSeconds": 0.013950458960607648,
+      "processStopConfirmed": true,
+      "scope": "local_owned_processes",
+      "aiState": null,
+      "ownedProcessCount": 1
+    },
+    "lateResultAbsent": true,
+    "tasks": 11,
+    "versions": 23
+  },
+  "background": {
+    "singleStage": {
+      "id": "b37cbf9b-396b-4f27-8813-574e954ee5c8",
+      "state": "succeeded",
+      "generation": 0,
+      "payload": {
+        "operation": "video.frameTools",
+        "inputs": [
+          "66bd6e9e-da36-4c3e-85a2-61f4fa354f25"
+        ],
+        "parameters": {
+          "renderer": "browser-worker",
+          "frontendBytes": 133853048,
+          "layout": {
+            "mode": "compose",
+            "width": 58.75,
+            "height": 41.25,
+            "padding": 0,
+            "spacing": 0,
+            "columns": 4,
+            "timestamps": [
+              0,
+              0.2,
+              0.7999999999999999
+            ],
+            "strokeWidth": 0,
+            "strokeColor": "#000000"
+          }
+        }
+      },
+      "progress": 1.0,
+      "pid": 63795,
+      "process_created": 1792375596.923522,
+      "error": null,
+      "results": [
+        "e6fce6b6-ff4f-4d62-b660-63273a8610a4",
+        "ce989dc7-3040-405a-9001-8ff0aa87cc1b"
+      ],
+      "created_at": "2026-10-19T02:06:36.840219+00:00",
+      "updated_at": "2026-10-19T02:06:39.258683+00:00"
+    },
+    "captureStage": {
+      "id": "6c244afd-479a-4af6-a331-7a7495b500af",
+      "state": "succeeded",
+      "generation": 0,
+      "payload": {
+        "operation": "video.capture",
+        "inputs": [
+          "69f9b3c1-e4c6-4d21-8066-43b28ce6229f"
+        ],
+        "parameters": {
+          "renderer": "browser-worker",
+          "frontendBytes": 133853048,
+          "layout": {
+            "sourceWidth": 64,
+            "sourceHeight": 48,
+            "start": 0,
+            "end": 1,
+            "fps": 10,
+            "maxFrames": 300,
+            "crop": {
+              "left": 1.5,
+              "top": 2.25,
+              "right": 3.75,
+              "bottom": 4.5
+            }
+          }
+        }
+      },
+      "progress": 1.0,
+      "pid": 64165,
+      "process_created": 1792375718.50752,
+      "error": null,
+      "results": [
+        "84de8a6c-c45d-4803-8d63-987569520cdb",
+        "f3cedf09-9543-4141-bb81-8652643ca87b"
+      ],
+      "created_at": "2026-10-19T02:08:38.434260+00:00",
+      "updated_at": "2026-10-19T02:08:43.995911+00:00"
+    },
+    "analysisStage": {
+      "id": "7b5e3b4f-52bd-4c58-94a1-7b9a70ee5179",
+      "state": "succeeded",
+      "generation": 0,
+      "payload": {
+        "operation": "video.frameTools",
+        "inputs": [
+          "84de8a6c-c45d-4803-8d63-987569520cdb"
+        ],
+        "parameters": {
+          "renderer": "browser-worker",
+          "frontendBytes": 133766032,
+          "layout": {
+            "mode": "analyze"
+          }
+        }
+      },
+      "progress": 1.0,
+      "pid": 64177,
+      "process_created": 1792375724.191391,
+      "error": null,
+      "results": [
+        "e3800818-4525-45ec-94e9-04221dc13809",
+        "ecc00c63-2db5-4c9f-ab7b-6ba0127ba952"
+      ],
+      "created_at": "2026-10-19T02:08:44.126291+00:00",
+      "updated_at": "2026-10-19T02:08:49.496422+00:00"
+    },
+    "singleStageOriginalPixelsEqual": true,
+    "backgroundCapturedPngBytesEqual": true,
+    "backgroundAnalysisEqual": true,
+    "existingDocumentUnchanged": true,
+    "analysisStartedAfterHomeMs": 5214,
+    "finalInvisibleContentFetches": 0,
+    "taskCount": 19,
+    "versionCount": 39
+  },
+  "backgroundActualProjectPanelDownloadEqual": true,
+  "lateResult": {
+    "taskId": "6bc3d237-7cc5-4da2-bd3c-6fcb156b2f86",
+    "state": "succeeded",
+    "editedWidthObserved": 59,
+    "currentEditingPreserved": true,
+    "priorRawTaskPreserved": "ff4028d0-b6b6-415c-8d46-d03b84751f77",
+    "priorStyledTaskPreserved": "ee25ba33-1c6c-4416-8052-c5db348b8738",
+    "restoredSampleWidth": 58.75
+  },
+  "nativeUi": {
+    "thousandFrameColdReopen": true,
+    "lastPage": 42,
+    "lastPageCount": 16,
+    "checkboxUncheckAndUndo": true,
+    "animationObservedCursor": 165,
+    "nonLoopingAnimationStopsAtLastFrame": true,
+    "animationSpeed4": true,
+    "sourceReplayPlayingObserved": true,
+    "sourceRangeAutoReplayObserved": true,
+    "sourceWithoutAutoReplayReachesNativeEnd": true,
+    "namedRangeAndAnimationSlidersKeyboard": true,
+    "previewCancelFeedbackMs": 297,
+    "previewRetryRestored": true,
+    "zhEnJa": true,
+    "zeroStrokeReusesRawAndUndoRedo": true,
+    "budgetRefusedBeforeTask": true,
+    "screenshot": "skill-video-workbench.png"
+  },
+  "finalReadOnlyRestoration": {
+    "projectId": "a798fee9-044e-4f62-b3f7-7bc25422f01f",
+    "documents": [
+      {
+        "id": "d7af69db-c807-4354-ae78-710b13166be5",
+        "revision": 9,
+        "sourceVersion": "69f9b3c1-e4c6-4d21-8066-43b28ce6229f",
+        "taskId": "991f12b4-40a4-4b75-adb9-04a93e4739b9",
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "aae00fbf-d8d3-47d0-9853-9d2e9e3f384d",
+        "revision": 16,
+        "sourceVersion": "10e7bb55-6c44-43cf-8b5c-1d788d8b7f17",
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "8668b488-949f-4ab8-a8a8-e0b1c27894d3",
+        "revision": 27,
+        "sourceVersion": "69f9b3c1-e4c6-4d21-8066-43b28ce6229f",
+        "taskId": "991f12b4-40a4-4b75-adb9-04a93e4739b9",
+        "referenceIdentityPreserved": true
+      }
+    ],
+    "tasks": 20,
+    "assets": 41,
+    "requests": 157,
+    "writes": 0,
+    "unchanged": true
+  },
+  "finalProjectVerification": {
+    "valid": true,
+    "database": "ok",
+    "tasks": 20,
+    "versions": 41,
+    "documents": 3,
+    "activeTasks": 0,
+    "canceledTaskStillHasNoResults": true
+  },
+  "checks": {
+    "pythonTests": 53,
+    "javascriptTests": 99,
+    "productionBuild": "passed",
+    "targetedESLint": "passed"
+  },
+  "remaining": [
+    "Joint browser/engine RSS and cross-tab reservation measurement",
+    "Broader real media formats, long high-resolution capture and stage-specific cancellation samples",
+    "Complete macOS 14, IME, Retina and VoiceOver acceptance",
+    "Remaining AdvancedPixel/editor/game/AI/distribution scope; S2/S3/S4 remain incomplete"
+  ]
+}

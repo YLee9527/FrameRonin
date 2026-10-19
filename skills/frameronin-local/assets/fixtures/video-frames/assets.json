@@ -1,0 +1,19 @@
+{
+  "formatVersion":1,
+  "comparison":"Strict RGBA, dimensions and sampled colors; also record PNG and JSON byte equality. Full source and original-code hashes are inherited from manifest.json.",
+  "cases":[
+    {"id":"brush-single","action":"brush","size":{"w":17,"h":13},"mask":null,"stroke":{"size":4,"points":[[2,3]]}},
+    {"id":"brush-poly","action":"brush","size":{"w":17,"h":13},"mask":null,"stroke":{"size":4,"points":[[-2,0],[3,3],[9,7],[3,3]]}},
+    {"id":"brush-wide","action":"brush","size":{"w":17,"h":13},"mask":null,"stroke":{"size":80,"points":[[8,6],[9,7]]}},
+    {"id":"brush-existing","action":"brush","size":{"w":17,"h":13},"mask":"fixture","stroke":{"size":9,"points":[[1,2],[13,9],[1,2]]}},
+    {"id":"brush-second","action":"brush","size":{"w":17,"h":13},"mask":"brush-poly","stroke":{"size":6,"points":[[15,1],[3,10],[9,7]]}},
+    {"id":"frames-three","action":"frames","size":{"w":17,"h":13},"count":7,"indices":[0,1,2],"limit":1024},
+    {"id":"frames-one-pixel","action":"frames","size":{"w":1,"h":1},"count":7,"indices":[3],"limit":64},
+    {"id":"frames-scaled","action":"frames","size":{"w":17,"h":13},"count":7,"indices":[0,2],"limit":8},
+    {"id":"sample-origin","action":"sample","size":{"w":17,"h":13},"count":7,"index":0,"x":0,"y":0},
+    {"id":"sample-alpha","action":"sample","size":{"w":17,"h":13},"count":7,"index":2,"x":3,"y":5},
+    {"id":"matte-preview","action":"matte","size":{"w":17,"h":13},"count":7,"index":0,"background":"#263b40","tolerance":40,"feather":10,"mask":null,"limit":1024},
+    {"id":"matte-preview-mask","action":"matte","size":{"w":17,"h":13},"count":7,"index":0,"background":"#263b40","tolerance":40,"feather":10,"mask":"fixture","limit":1024},
+    {"id":"sheet-preview","action":"sheet","size":{"w":75,"h":69},"limit":1024}
+  ]
+}

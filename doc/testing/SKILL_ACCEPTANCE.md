@@ -363,3 +363,19 @@ video.capture 使用与原 ParamsStep 相同的宿主原生视频解码，不借
 独立同源测试页调用生产 API，实际视频→取帧→分析→选帧/带遮罩抠图→原图集/描边→两种帧下载完成两条链。保存、重开、引用对象复用、另存、旧修订拒绝及结果撤销重做通过，未增加任务或素材。首次保存发现 video 类型遗漏，修正后保留该诊断项目，在新项目重新验收：12 任务/26 版本/4 文档有效、无活动任务。带遮罩分支使用首帧合成测试遮罩，只验素材来源，不代表手绘画笔或质量验收。最新生产序列化器又对四份已存文档完成只读 API 复验，拒绝任何 HTTP 写入，引用和全部任务保持相同。
 
 53 Python / 94 JS、生产构建、相关 ESLint、Skill 与项目校验通过。复现：原版测试页 video frame tools 控件现在运行 24 项；原 21 项仍由 compare_video_frames_oracle.py 核对，新增三项由 compare_video_selection_oracle.py 核对，accept_video_frames_oracle.py 的 --selection 包含新增队列发布。同源测试页的 Run video document roundtrip 创建实际任务与文档；下载后用 verify_video_documents.py 核对已有项目，verify_video_document_api.mjs 对运行中的已有项目只读恢复/序列化，不重跑加工。详见 [文档基础证据](evidence/skill-video-document.json) 和[测试页截图](evidence/skill-video-document.png)。完整原视频编辑器、共享保存控件、手势与导航、迟到读取/结果、预览分页、联合资源和其他完整范围仍待迁移，不升级 S2/S3/S4。
+
+## 2026-10-19 视频工作台、正式保存与完整交互检查点
+
+原 ParamsStep 改为受控工作台：原生播放/时间范围、完整数字和八向拖拽裁切、分页选帧/重复标记、选中列表采样、播放/循环/速度、原像素取色、画笔/抠图/跳过、图集/描边及 PNG/ZIP/索引下载。主线程保留交互与轻量 SVG，ZIP/PNG/完整像素与笔画计算由可取消 Worker 执行。预览串行且分页，正式加工前卸载可见解码器并停止临时预览。时间范围和动画游标修正为实际具名滑块，键盘 Home/End 已复验。
+
+固定辅助样本 13 项通过原版严格对照；真实鼠标画笔、带遮罩三帧抠图、小数图集、1.5px 描边及实际 PNG/索引/ZIP 下载全部与原配方相同。1000 帧、64×48、60fps 样本的全部 PNG 像素、编码字节、时间戳和原版一致；冷重开保持末页 42、全部选择和结果引用，原生勾选/撤销和动画游标 1→165 实际通过。此样本不替代先前 1000×256×256 序列 GIF 测试，也不宣称高分辨率视频联合 RSS 已测。
+
+正式 video 文档接入共享保存、自动保存、另存、冲突阻止导航、完整手势及结果统一历史。数字编辑与静止按住手势都能阻止迟到读取覆盖；计算期间从 58.75 改到 59 的新宽度及既有图集引用保留，迟到图集只进入项目。跳过抠图保留原 PNG 字节，描边归零及撤销/重做不重新加工。超预算图集在创建任务前拒绝。
+
+实际取帧在 30% 点击取消，约 250ms 反馈、所属后台进程停止约 0.014s，解码器清理，最终取消代次 1 且结果为空；其他任务完成后再次核对无迟到结果。受控脚本加载延迟下预览取消反馈 297ms，重试成功。离开编辑器后单段图集结果仍可从项目面板下载并严格对照；两段取帧→分析的分析请求在返回首页 5214ms 后发起，最终产物有效且不覆盖已保存文档。离开后最后一段不下载不可见结果，必要首段读取用于继续分析。
+
+最终正式项目 20 任务/41 版本/3 文档、无活动任务，数据库及内容校验通过；三个文档只读恢复/序列化一致，未新增任务、版本或文档。53 Python / 99 JS、生产构建、相关 ESLint 和 Skill 结构检查通过。详见 [结构化证据](evidence/skill-video-workbench.json) 与[真实工作台截图](evidence/skill-video-workbench.png)。
+
+复现辅助预览/笔画使用原版测试页的 video preview and brush comparison，下载后运行 tests/compare_video_assets_oracle.py；固定工作台配方见 video-frames/workbench.json，实际下载由 compare_video_workbench_oracle.py 比较。1000 帧由 video-capture/performance.json 和原版测试页提供，compare_video_large_oracle.py 比较；冻结原输出均随 fixtures 保存。verify_video_document_api.mjs 对已有运行项目只读核对。测试延迟仅在 tests/support/gated_workbench.py，生产无调试开关。
+
+更多真实格式/边缘质量、高分辨率/全阶段取消、联合浏览器与引擎 RSS、跨标签预算、macOS 14/中文输入/Retina/VoiceOver 和其余完整功能仍开放；S2/S3/S4 保持未完成。

@@ -12,9 +12,10 @@ type Props<S extends object, T> = {
   prepareSnapshot?: () => Promise<void>
   externalDirty?:boolean
   hasPendingEdits?:()=>boolean
+  stableLayout?:boolean
 }
 
-export default function DocumentSaveBar<S extends object, T>({ kind, snapshot, serialize, restore, applySnapshot, sameSnapshot, discardSnapshot,prepareSnapshot,externalDirty=false,hasPendingEdits }: Props<S, T>) {
+export default function DocumentSaveBar<S extends object, T>({ kind, snapshot, serialize, restore, applySnapshot, sameSnapshot, discardSnapshot,prepareSnapshot,externalDirty=false,hasPendingEdits,stableLayout=false }: Props<S, T>) {
   const { lang } = useLanguage()
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -103,8 +104,8 @@ export default function DocumentSaveBar<S extends object, T>({ kind, snapshot, s
     return () => window.removeEventListener('beforeunload', beforeUnload)
   }, [same,pendingEdits])
   return <Space wrap style={{ marginBottom: 16 }}>
-    <Button loading={saving} onClick={() => { void save(true).catch(() => {}) }}>{text.save}</Button>
-    <Button disabled={saving} onClick={() => { void saveAs().catch(() => {}) }}>{text.saveAs}</Button>
+    <Button style={stableLayout?{width:lang==='zh'?150:220}:undefined} loading={saving} onClick={() => { void save(true).catch(() => {}) }}>{text.save}</Button>
+    <Button style={stableLayout?{width:lang==='zh'?160:220}:undefined} disabled={saving} onClick={() => { void saveAs().catch(() => {}) }}>{text.saveAs}</Button>
     <Select aria-label={text.select} placeholder={text.select} style={{ minWidth: 230 }} value={selected}
       getPopupContainer={trigger => trigger.parentElement ?? document.body}
       disabled={saving} onChange={setSelected} options={available.map(item => ({ value: item.id, label: `${item.id.slice(0, 8)} · v${item.revision}` }))} />
@@ -127,7 +128,7 @@ export default function DocumentSaveBar<S extends object, T>({ kind, snapshot, s
         setSelected(document.id)
       } catch (error) { if (alive.current) setError(`${text.loading}: ${String(error)}`) } finally { if (alive.current) setSaving(false) }
     }}>{text.load}</Button>
-    <Typography.Text type={dirty ? 'warning' : 'secondary'}>{dirty ? text.unsaved : record.current.revision ? text.saved : text.fresh}</Typography.Text>
+    <Typography.Text style={stableLayout?{display:'inline-block',width:150}:undefined} type={dirty ? 'warning' : 'secondary'}>{dirty ? text.unsaved : record.current.revision ? text.saved : text.fresh}</Typography.Text>
     {error && <Alert type="error" title={error} />}
   </Space>
 }

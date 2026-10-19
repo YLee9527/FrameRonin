@@ -4,12 +4,12 @@ import {limitFileHistory} from './fileHistory'
 
 type History={present:VideoDraft;past:VideoDraft[];future:VideoDraft[];checkpoint?:VideoDraft}
 type Action={type:'change';update:(draft:VideoDraft)=>VideoDraft}|{type:'restore';draft:VideoDraft}|{type:'begin'|'end'|'undo'|'redo'}
-const same=(a:VideoDraft,b:VideoDraft)=>(Object.keys(a) as (keyof VideoDraft)[]).every(k=>a[k]===b[k])
+export const sameVideoDraft=(a:VideoDraft,b:VideoDraft)=>(Object.keys(a) as (keyof VideoDraft)[]).every(k=>a[k]===b[k])
 export const createVideoHistory=(present:VideoDraft=initialVideoDraft()):History=>({present,past:[],future:[]})
 function reduce(state:History,action:Action):History{
  if(action.type==='restore')return createVideoHistory(action.draft)
  if(action.type==='begin')return state.checkpoint?state:{...state,checkpoint:state.present}
- if(action.type==='end')return !state.checkpoint?state:{present:state.present,past:same(state.checkpoint,state.present)?state.past:[...state.past,state.checkpoint].slice(-50),future:state.future}
+ if(action.type==='end')return !state.checkpoint?state:{present:state.present,past:sameVideoDraft(state.checkpoint,state.present)?state.past:[...state.past,state.checkpoint].slice(-50),future:state.future}
  if(action.type==='undo'||action.type==='redo'){
   const current=reduce(state,{type:'end'})
   if(action.type==='undo')return current.past.length?{present:current.past.at(-1)!,past:current.past.slice(0,-1),future:[...current.future,current.present].slice(-50)}:current
@@ -17,11 +17,11 @@ function reduce(state:History,action:Action):History{
  }
  if(action.type!=='change')return state
  const present=action.update(state.present)
- return same(present,state.present)?state:{present,past:state.checkpoint?state.past:[...state.past,state.present].slice(-50),future:[],checkpoint:state.checkpoint}
+ return sameVideoDraft(present,state.present)?state:{present,past:state.checkpoint?state.past:[...state.past,state.present].slice(-50),future:[],checkpoint:state.checkpoint}
 }
 export const videoHistoryReducer=(state:History,action:Action)=>limitFileHistory(reduce(state,action),videoFiles)
-export function useVideoDocument(){
- const [history,dispatch]=useReducer(videoHistoryReducer,undefined,createVideoHistory),latest=useRef(history)
+export function useVideoDocument(initial?:VideoDraft){
+ const [history,dispatch]=useReducer(videoHistoryReducer,initial,value=>createVideoHistory(value??initialVideoDraft())),latest=useRef(history)
  useLayoutEffect(()=>{latest.current=history},[history])
  const change=useCallback((update:(d:VideoDraft)=>VideoDraft)=>dispatch({type:'change',update}),[])
  const set=useCallback(<K extends keyof VideoDraft>(key:K,value:SetStateAction<VideoDraft[K]>)=>change(d=>{const next=typeof value==='function'?(value as (v:VideoDraft[K])=>VideoDraft[K])(d[key]):value;return Object.is(next,d[key])?d:{...d,[key]:next}}),[change])

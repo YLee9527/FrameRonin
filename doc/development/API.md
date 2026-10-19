@@ -4,9 +4,9 @@
 
 宿主在任务 ready 后使用 `GET /api/tasks/{id}/browser/input?generation=N` 读取该任务唯一的已登记视频；不接收客户端路径或素材 ID，逐 MiB 校验内容并复查状态/代次，响应 `Cache-Control: no-store`。其他操作、未 ready、取消或过期代次拒绝。原生媒体元素仅协调解码及异步快照；最多一个可转移帧进入专用 Worker，后者负责裁切、PNG 与 ZIP 编码，不依赖动画回调。任务取消清理解码器、对象 URL 和 Worker，迟到快照关闭而不使用；最终上传仍由后台核对 PNG 成员、尺寸、数量及取消代次后发布 ZIP/报告。
 
-取帧预算为 256 MiB + 视频字节×2 + max(显示像素,真实编码像素)×96 + 编码缓存上限×8 + frontendBytes。缓存上限取 min(128 MiB,帧数×(输出像素×5+输出高度+1024))，同时检查最终 ZIP 和所有 PNG 字节总和。原生显示尺寸与时长在解码后再次核验。实际测试页验证原版对照与正式队列，不代表完整视频编辑器、保存/重开或联合 RSS 已通过。
+取帧预算为 256 MiB + 视频字节×2 + max(显示像素,真实编码像素)×96 + 编码缓存上限×8 + frontendBytes。缓存上限取 min(128 MiB,帧数×(输出像素×5+输出高度+1024))，同时检查最终 ZIP 和所有 PNG 字节总和。原生显示尺寸与时长在解码后再次核验。原版对照、正式队列及视频工作台的固定样本已验收；联合 RSS 与更广泛真实格式仍开放。
 
-视频逐帧内核 `video.frameTools` 接收一份连续命名 `frame_000.png` 等的 PNG ZIP，以及 matte 模式可选的第二份画笔 PNG。参数为严格 layout、renderer=browser-worker、frontendBytes；CLI/通用提案不能直接执行。它保留原 ParamsStep 的逐帧算法，尚不能替代视频解码、裁切、选帧和完整工作台验收。
+视频逐帧内核 `video.frameTools` 接收一份连续命名 `frame_000.png` 等的 PNG ZIP，以及 matte 模式可选的第二份画笔 PNG。参数为严格 layout、renderer=browser-worker、frontendBytes；CLI/通用提案不能直接执行。完整工作台由它与 video.capture、临时预览 Worker 组合，正式任务和临时交互分别取消。
 
 layout 按模式使用精确字段：analyze 只有 mode；select 为 mode/selected；archive 为 mode/selected/kind（extracted 或 matted）；matte 为 mode/selected/background/tolerance/feather/mask；compose 为 mode/width/height/padding/spacing/columns/timestamps/strokeWidth/strokeColor。selected 为升序唯一源索引，最多 2000 帧。色度键容差 1–100、羽化 0–30，边距/间距 0–64、列数 1–64、描边 0–16；有限小数保留。timestamps 与全部输入帧一一对应，范围 0–86400 秒。目标边长 1–30000，最终画布边长取整且不超过 30000；原索引的 sheet_size 保留计算得到的小数值。
 
@@ -14,7 +14,9 @@ analyze 输出 ZIP 中的 analysis.json，保留原稀疏指纹及碰撞语义�
 
 select 为原“跳过抠图”的连续帧传输：所选原 PNG 按顺序复制为 frame_000.png 等，供后续图集使用。后台逐成员解码，并分块核对与原文件字节相同；即使像素相同，重新编码的替代 PNG 也不能通过。它不烘焙尺寸、画笔或色度键，不替代 archive 的原下载命名。
 
-输入/输出 ZIP 及累计未压缩成员均限制 128 MiB，拒绝未知成员、链接、加密及不支持的压缩格式。导出 ZIP 只接受该模式的精确成员，包括原命名需要的目录项。内存估算为 256 MiB +（输入 ZIP、其 PNG 成员及可选遮罩字节）×12 + 最大单帧/中间帧像素×96 + 输出像素×32 + frontendBytes。PNG、索引、分组和原字节复制逐项校验，最后核对取消代次才发布结果及报告。内核对照和正式队列发布不等于完整视频界面已接入。
+输入/输出 ZIP 及累计未压缩成员均限制 128 MiB，拒绝未知成员、链接、加密及不支持的压缩格式。导出 ZIP 只接受该模式的精确成员，包括原命名需要的目录项。内存估算为 256 MiB +（输入 ZIP、其 PNG 成员及可选遮罩字节）×12 + 最大单帧/中间帧像素×96 + 输出像素×32 + frontendBytes。PNG、索引、分组和原字节复制逐项校验，最后核对取消代次才发布结果及报告。
+
+视频临时 Worker 请求为 frames/sample/matte/sheet/brush，按标签页串行，预览每次最多 256 帧、最长边 1024；主界面按 24/64/128 帧分页，动画按 64 帧有界预取。采样和笔画保留原尺寸；笔画最多 32768 个整数坐标，显示几何最多约 2048 点但正式计算保留全部样本。请求计入 96 MiB 基础、前端保留、压缩/解压输入、中间像素与预览缓存；正式加工前终止临时 Worker 并卸载可见解码器。取消先失效消息再 terminate；任务完成后编辑代次不符时仅保留项目结果。离开编辑器的首段取帧仍读取必要输出以启动分析，最后一段不再下载不可见预览。
 
 独立抠图内核 `image.matteTool` 接收正式图片版本列表，以及 `layout`、`renderer=browser-worker`、`frontendBytes`。`layout` 采用严格的模式参数：chroma 为 mode/keyColor/tolerance/smoothness/spill/erosion；whiteErode 为 mode/tolerance/smoothness/erosion；doubleBg 为 mode/tolerance/edgeContrast；repair 只有 mode；frontier 为 mode/erosion。字段不可混用，未知字段直接拒绝。色度键和白底容差/平滑、抑色范围 5–100，侵蚀 0–100，双背景容差/边缘对比 50–100，保留有限小数及原遍数舍入。
 

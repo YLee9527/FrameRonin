@@ -1,0 +1,23 @@
+{
+  "formatVersion": 1,
+  "source": "long-loop.mp4",
+  "sourceSha256": "46e12f27a665dca726d7cf282969d91777d87fc1eb22991386afed35e460a84c",
+  "metadata": {
+    "width": 64,
+    "height": 48,
+    "durationSeconds": 30.166667
+  },
+  "parameters": {
+    "start": 0,
+    "end": 30,
+    "fps": 60,
+    "maxFrames": 1000,
+    "crop": {
+      "left": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0
+    }
+  },
+  "purpose": "Actual video workbench 1000-frame pagination, archive and original decoder comparison; fixed artificial input copied from the already-imported owned loopback test project."
+}
