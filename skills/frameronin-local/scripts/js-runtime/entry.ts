@@ -78,5 +78,7 @@ export {videoAssets,videoAssetPlan} from '../../assets/workbench/src/lib/videoAs
 export {videoCropHit,videoCropDrag} from '../../assets/workbench/src/lib/videoInteraction'
 export {initialFlowDraft,sortFlowFiles,flowNeedsBrowserDecode,validateFlowOptions,validateStoredFlow,serializeFlow,restoreFlow,flowFiles,flowReports} from '../../assets/workbench/src/localProject/flowDocument'
 export {createFlowHistory,flowHistoryReducer} from '../../assets/workbench/src/localProject/useFlowDocument'
+export {initialControlDraft,validateStoredControl,checkControlAssets,serializeControl,restoreControl,controlFiles,controlObstacle} from '../../assets/workbench/src/localProject/controlDocument'
+export {createControlHistory,controlHistoryReducer} from '../../assets/workbench/src/localProject/useControlDocument'
 export {materializeStashUrl,stashTransferName} from '../../assets/workbench/src/stash/transfer'
 export {captureSelectedVideo,inspectSelectedVideo} from '../../assets/workbench/src/lib/browserVideoCapture'

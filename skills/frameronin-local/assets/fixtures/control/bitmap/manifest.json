@@ -1,0 +1,37 @@
+{
+  "formatVersion": 1,
+  "sources": {
+    "fine-editor/source.png": "a88c1e18bf1e47944e6124675d04f9432aeb4f7ffcc2a8f150ed60cb6c84a540",
+    "fine-editor/source.jpg": "64386acee5a7acbe3815603dcc71cd6aa0a0b53f26e1b37f6f0117a047d093e0",
+    "fine-editor/source-lossless.webp": "4bf54b6055332f58176acb9f933a218d8bad33acf22a4009f094cd2852c12677",
+    "fine-editor/source-lossy.webp": "654ec8766e2480b56f8022e6ffbf110aa111bf3d1d1a2812c0f81bcc4218ffe8",
+    "fine-editor/source-oriented.jpg": "9e3dc3f7b2b1210bed3ad432b2671aa8703cd33ec165acee773c7f02fc1608a0",
+    "fine-editor/source-oriented.png": "b16a7f4785f33e526b30d30bfbb8f260d0a4bfec7a199d5ad2654f1476e005fa",
+    "fine-editor/source-oriented.webp": "c5100f3a8f218ed8105fd8a9a348853e1c6c8bc1f065e66a8e51b01f0ba322c6",
+    "decha.png": "13048584fb78c10320184c4cc78c909b9ada6915ef574378d3afc7d2b5db0e29",
+    "debg.png": "439b7dc5a0b078f8f9e6fa04ed98cb695d07a04647f7d77ee75de500d81b5b1d",
+    "hou384.png": "0a3c3d993d9ebe6b3af3512e3618f0fe48317c4f3fa8539f06f5ade6487fb993",
+    "qian384.png": "996b368702107384ad782de3101c876f17d4d4cb93c0d2d57e02631e8608ef2b",
+    "zombie_walk.png": "85ba9bc1cd4f098987116290ec90dc9e4b717dc82db73e6d53c93363fdafbeff",
+    "zombie_walk2.png": "e9f3cc6e4befc2a8c1f330a18bb6ef74e79c1c9d110957f089cb2b9e5602d725",
+    "zombie_walk3.png": "c0d05a9b66603abb85f8007884c4a04f1a6ad8f70006771450fac4c7b5626954",
+    "zombie_walk4.png": "12ed8593e165a999649e28ec8a448905e9764eae7ed2765be979b4482202ea83"
+  },
+  "originals": {
+    "fine-editor--source.png.png": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea",
+    "fine-editor--source.jpg.png": "f12c0692a68c00015a61aba5dff6f024fa595544bcc7f0417e8cff7b501ebd58",
+    "fine-editor--source-lossless.webp.png": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea",
+    "fine-editor--source-lossy.webp.png": "26a5f75917a80360566f6e0affafbad0456045bb8aeca8fef131f9e4cf80fcfa",
+    "fine-editor--source-oriented.jpg.png": "a304aa2989cb26894fcb8601c9523dd0cecacaac6e9f1f4b9a87e30a9fc95755",
+    "fine-editor--source-oriented.png.png": "c93121bb05b9846922737d1ae8ceaff9dae5e501a80ccb68dd3cb55e87ba01bf",
+    "fine-editor--source-oriented.webp.png": "248c4abc589623218c03cb731b72689e25ec7c4284b14ae940ed01a65e8224ea",
+    "decha.png.png": "f5904896881c2f90900cd24235452d831912e78c8f97936c0bc56e9f3b267092",
+    "debg.png.png": "897fdb5aae8beb4bfb985e0a0904b300b2f92e0de08aca39836c45f625d59f27",
+    "hou384.png.png": "43f4c5fbd79ba757870694eb1a6236316800efd2fc9ce604fdfd13630401fea6",
+    "qian384.png.png": "75d17b479fefdb29d568d08869bd29c7827c535a11de0341207865220bcc9577",
+    "zombie_walk.png.png": "85ba9bc1cd4f098987116290ec90dc9e4b717dc82db73e6d53c93363fdafbeff",
+    "zombie_walk2.png.png": "e9f3cc6e4befc2a8c1f330a18bb6ef74e79c1c9d110957f089cb2b9e5602d725",
+    "zombie_walk3.png.png": "c0d05a9b66603abb85f8007884c4a04f1a6ad8f70006771450fac4c7b5626954",
+    "zombie_walk4.png.png": "12ed8593e165a999649e28ec8a448905e9764eae7ed2765be979b4482202ea83"
+  }
+}

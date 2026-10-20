@@ -1,0 +1,385 @@
+{
+  "date": "2026-10-20",
+  "scope": "Original topdown/arcade ControlTest scenes with formal projects, assets, history, bounded cancellable display decode and actual interaction acceptance; checkpoint only",
+  "projectId": "1b179d18-d1ad-4faa-ba32-5d60f0de3734",
+  "originalBitmapComparison": {
+    "archiveSha256": "5494943634813e7861afa66e7d700172ed4287b4ba3bc9652038bddafb86f2a0",
+    "fixtureSha256": "b4e3184c49175a93d6aaf697c0aa3b8faaf1fe771faef7529e00028c5ea41ca1",
+    "cases": [
+      {
+        "sample": "fine-editor/source.png",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "fine-editor/source.jpg",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "fine-editor/source-lossless.webp",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "fine-editor/source-lossy.webp",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "fine-editor/source-oriented.jpg",
+        "equal": true,
+        "width": 12,
+        "height": 16,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "fine-editor/source-oriented.png",
+        "equal": true,
+        "width": 12,
+        "height": 16,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "fine-editor/source-oriented.webp",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "decha.png",
+        "equal": true,
+        "width": 252,
+        "height": 252,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "debg.png",
+        "equal": true,
+        "width": 1413,
+        "height": 771,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "hou384.png",
+        "equal": true,
+        "width": 688,
+        "height": 384,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "qian384.png",
+        "equal": true,
+        "width": 688,
+        "height": 384,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "zombie_walk.png",
+        "equal": true,
+        "width": 192,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "zombie_walk2.png",
+        "equal": true,
+        "width": 224,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "zombie_walk3.png",
+        "equal": true,
+        "width": 320,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      },
+      {
+        "sample": "zombie_walk4.png",
+        "equal": true,
+        "width": 224,
+        "height": 64,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": true
+      }
+    ],
+    "failed": []
+  },
+  "actualUi": {
+    "movedRight": {
+      "fromX": 219,
+      "toX": 241.5
+    },
+    "blockedAtX": 258.75,
+    "obstacleUndo": "位置 258.75, 118.00 · idledown · 碰撞区 0 · 怪物 0",
+    "obstacleRedo": "位置 258.75, 118.00 · idledown · 碰撞区 1 · 怪物 0",
+    "item": "位置 258.75, 118.00 · item · 碰撞区 1 · 怪物 0",
+    "attract": "位置 258.75, 118.00 · attractL · 碰撞区 1 · 怪物 0",
+    "run": "位置 258.75, 110.50 · runup · 碰撞区 1 · 怪物 0",
+    "coldReopen": "位置 258.75, 118.00 · idledown · 碰撞区 1 · 怪物 0",
+    "loadCancelFeedbackMs": 332,
+    "loadCancelStage": "controlled Worker script startup delay",
+    "cancelStayedCanceled": true,
+    "m4aPlayback": " · 音乐播放中",
+    "conflictBlockedNavigation": true,
+    "lateReadPreservedEdit": "true",
+    "arcadeInitial": "位置 333.00, 251.00 · 待机 · 碰撞区 0 · 怪物 7",
+    "arcadeUpperBoundary": "位置 333.00, 230.00 · 待机 · 碰撞区 0 · 怪物 9",
+    "arcadeMoveRight": "位置 360.00, 230.00 · 待机 · 碰撞区 0 · 怪物 9",
+    "aacPlayback": " · 音乐播放中",
+    "saveControlTyping": {
+      "before": "位置 360.00, 230.00 · 待机 · 碰撞区 0 · 怪物 9",
+      "after": "位置 360.00, 230.00 · 待机 · 碰撞区 0 · 怪物 10"
+    },
+    "arcadeColdReopen": "位置 360.00, 230.00 · 待机 · 碰撞区 0 · 怪物 3",
+    "fullscreenLanguageShortcut": true,
+    "uploadTextColor": "rgba(255, 255, 255, 0.85)"
+  },
+  "defenceActionObserved": true,
+  "saveCopyPreservedSelectedVersionsAndNewMusicSetting": true,
+  "sceneStatePolicy": "Saved document stores selected assets, obstacles/edit mode, music preference and explicit spawn. Current animation phase, held keys and random live monsters are transient and reset on open/spawn change.",
+  "readOnlyRestore": {
+    "projectId": "1b179d18-d1ad-4faa-ba32-5d60f0de3734",
+    "documents": [
+      {
+        "id": "297a4c21-1d54-4751-a9e9-a11baf44abee",
+        "revision": 2,
+        "variant": "arcade",
+        "selectedAssets": [
+          "sprite",
+          "background",
+          "foreground",
+          "music"
+        ],
+        "obstacles": [],
+        "spawn": {
+          "x": 359.9999999999993,
+          "y": 230,
+          "facing": -1
+        },
+        "musicOn": true,
+        "unchanged": true
+      },
+      {
+        "id": "65d2b397-b24c-415f-90e6-137aefd14e9c",
+        "revision": 2,
+        "variant": "topdown",
+        "selectedAssets": [
+          "sprite",
+          "background",
+          "music"
+        ],
+        "obstacles": [
+          {
+            "x": 280,
+            "y": 130,
+            "w": 30,
+            "h": 50
+          }
+        ],
+        "spawn": {
+          "x": 258.75,
+          "y": 118,
+          "facing": -1
+        },
+        "musicOn": false,
+        "unchanged": true
+      },
+      {
+        "id": "331cddd9-c17c-4660-88bd-4db7da4d4992",
+        "revision": 11,
+        "variant": "topdown",
+        "selectedAssets": [
+          "sprite",
+          "background",
+          "music"
+        ],
+        "obstacles": [
+          {
+            "x": 280,
+            "y": 130,
+            "w": 30,
+            "h": 50
+          }
+        ],
+        "spawn": {
+          "x": 258.75,
+          "y": 118,
+          "facing": -1
+        },
+        "musicOn": true,
+        "unchanged": true
+      }
+    ],
+    "assets": 7,
+    "tasks": 0,
+    "reads": 44,
+    "metadataPosts": 0,
+    "writes": 0,
+    "unchanged": true
+  },
+  "projectVerification": {
+    "valid": true,
+    "database": "ok",
+    "versions": 7,
+    "documents": 3,
+    "tasks": 0
+  },
+  "screenshots": {
+    "skill-control-workbench.png": "29a2af87fb68651cd010edce978b8b3979d02d31a716c04afd7f68e6cf671086",
+    "skill-control-workbench-arcade.png": "37d444eafd24ae07cf4262ad5c147ddfce5ed9d91a199516f6eca2e5670ff106",
+    "skill-control-workbench-en.png": "a756db2410a43e64902c642772b5289098e44277b457cdca47d3278c4702bb9b",
+    "skill-control-workbench-ja.png": "c6c531b9fca4c72c75d660a02755e742dbdfc518e1f6561fb86e345216f5af34"
+  },
+  "checks": {
+    "pythonTests": 60,
+    "javascriptTests": 111,
+    "finalControlTests": 4,
+    "productionBuild": true,
+    "targetedEslint": true,
+    "browserOracleBuild": true,
+    "skillValidation": true
+  },
+  "cancellationScope": "Actual 332ms feedback measured during a controlled two-second Worker script-start delay, then no late scene application and successful retry; owned Worker abort/late bitmap disposal also regression-tested. Does not prove every decoder/OS process stopped within five seconds.",
+  "audioAcceptance": "Bundled OGG and selected M4A/AAC reached native playing events in actual scenes; formal media metadata/PCM budget validated. No subjective listening-quality claim.",
+  "originalDefectCorrections": [
+    "Minimum 4px obstacles at the right/bottom edge now remain inside the arena instead of extending past its edge",
+    "Game keys require canvas focus, preserving document/input shortcuts and clearing held keys on blur/visibility change",
+    "Explicit audio failure/retry instead of silently swallowing all playback errors",
+    "Responsive display and dark control theme preserve original logical/render dimensions while keeping file labels readable"
+  ],
+  "remaining": [
+    "Infinite map project persistence/runtime migration and complete asset/source entry classification",
+    "Whole-editor combinations, more real source/audio formats, native drag, full keyboard/IME/VoiceOver/Retina/macOS14 acceptance",
+    "Joint browser/engine RSS and complete decoder cancellation timing, portable distribution and full AI template/quality gates; S2/S3/S4 remain incomplete"
+  ]
+}

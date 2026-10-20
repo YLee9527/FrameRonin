@@ -506,9 +506,9 @@ function App() {
               <AssetsAndSourceShare />
             </Card>
           ) : mode === 'controlTest' ? (
-            <ControlTest onBack={() => setMode(null)} variant="topdown" />
+            <ControlTest key="topdown" onBack={() => setMode(null)} variant="topdown" />
           ) : mode === 'controlTestArcade' ? (
-            <ControlTest onBack={() => setMode(null)} variant="arcade" />
+            <ControlTest key="arcade" onBack={() => setMode(null)} variant="arcade" />
           ) : mode === 'roninPro' ? (
             <Card>
               <RoninPro

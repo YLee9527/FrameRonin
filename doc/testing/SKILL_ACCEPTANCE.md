@@ -409,3 +409,21 @@ video.capture 使用与原 ParamsStep 相同的宿主原生视频解码，不借
 复现：工作台使用 fixtures/flow-tools/workbench/inputs 或 input-sheet.png（8×2），默认平衡参数生成31帧；下载后运行 tests/compare_flow_workbench.py <ZIP> --sheet <PNG，可选> --output <JSON>，会先核对冻结输入、原输出和原代码散列。六种格式语料复用 fine-editor 的原 Canvas 冻结样本。tests/verify_flow_document_api.mjs --base <本机服务> --output <JSON> 只读恢复既有文档，禁止加工/导入/保存。测试延迟仍只在 tests/support/gated_workbench.py。
 
 原生拖放、宿主各阶段完整停止计时、联合 RSS/跨标签预算、更多真实质量/格式、macOS 14/输入法/Retina/VoiceOver，以及其余编辑器、游戏、AI 与分发保持开放，不升级 S2/S3/S4。
+
+## 2026-10-20 控制测试场景、项目与素材检查点
+
+保留原 ControlTest 的俯视/街机、全部帧区域/动画定义、绘制/深度/阴影、移动和碰撞、四种怪物及原前后景。新增 control-topdown/control-arcade 正式格式 1 和独立文档空间：选定角色/背景/前景/音乐先导入正式版本，保存原件、碰撞区、编辑/音乐开关和显式起点。实时动画、按键及随机怪物保持暂态，保存不持续刷新位置；“将当前位置设为起点”才纳入历史，重开或改起点重置模拟。统一历史 50 步/256 MiB 编码文件，保留原每个动画回调的移动量，不擅自改变为按 dt 位移。
+
+原 HTMLImage→Canvas 与专用 Worker→可转移 ImageBitmap 的 15 项实际浏览器对照全部严格 RGBA 相同：七种已有 PNG/JPEG/WebP/方向样本与默认角色、两背景、前景和四种怪物图。解码/方向及全分辨率像素在 Worker，显示层仅作固定小帧切取与原游戏绘制；取消/过期消息关闭位图，离开清理 Worker/位图/音频。静态图片 20 MiB、原角色布局至少 252×252，音乐 64 MiB/一小时且有 PCM 预算；恢复另计当前已显示纹理及音频。超过预算、伪装类型、非法源引用/别名、未知字段/场景、越界矩形/起点和旧修订均有拒绝检查。
+
+真实俯视场景 D 将 X=219 移至 241.5；固定 x=280 的碰撞矩形阻挡角色，继续移动停在 258.75，符合原 21px 角色边界。碰撞区撤销/重做、起点撤销/重做及重置实际通过；I/J/K 和 Shift 跑步在持键期间观察到对应动作。街机场景 W 到原 y=230 上边界、D 从 x=333 到 360，怪物继续生成。数值是本机样本记录，跨刷新率仍按原行为判断，不把一秒位移固定为跨平台标准。
+
+自定义角色/背景及街机前景实际导入、保存和冷重开通过；默认 OGG、选定 M4A/AAC 观察到宿主原生 playing 事件，未声称听感质量验收。音乐失败提供重试并保留失败状态。保存按钮获焦后 D 不移动角色；离焦/隐藏清空按键，场景有焦点轮廓。画布随窗口缩放但逻辑/渲染尺寸不变；修正深色场景上传列表的对比度。中、英、日界面及全屏语言快捷键实际检查通过。
+
+并发提高修订后返回首页被保存冲突阻止，另存保持当前素材/起点与关闭音乐设置。两秒受控正文延迟下读取另一文档时修改障碍物模式，迟到读取拒绝覆盖，保存副本仍保留新编辑。Worker 启动延迟时实际取消反馈 332ms，取消状态保持、无迟到场景应用，移除延迟后重试成功；此证据限定启动阶段，不代表所有解码/操作系统进程五秒内退出。
+
+最终 3 文档/7 正式版本、0 加工任务，数据库及内容校验通过；只读 API 恢复/序列化全部文档一致，冷重开/三语切换未新增素材或任务。60 Python / 111 JS、生产/原版测试页构建、相关 ESLint 和 Skill 结构检查通过；四项控制文档/历史/资源/Worker 回归在最后模型变更后另复验。源码、输入与原像素冻结于 control/bitmap/ 和 control/workbench.json，音频为自有一秒合成音。
+
+复现：原版测试页 Run game bitmap decoder comparison 下载 browser-control-bitmaps.zip，运行 tests/compare_control_bitmaps.py <ZIP> --output <JSON>，默认核对已冻结输入和原像素，--freeze 只创建不存在的初次目录。场景操作按 control/workbench.json；tests/verify_control_document_api.mjs --base <本机服务> --output <JSON> 只读恢复既有文档，拒绝导入/加工/保存。详见 [结构化证据](evidence/skill-control-workbench.json)、[俯视](evidence/skill-control-workbench.png)、[街机](evidence/skill-control-workbench-arcade.png)、[英文](evidence/skill-control-workbench-en.png)和[日文](evidence/skill-control-workbench-ja.png)。
+
+边缘最小碰撞矩形原来可伸出场景，现限制在场景内，属于单独记录的旧缺陷修正。无限地图完整迁移、资源入口、更广媒体/输入法/VoiceOver/Retina/macOS14、联合 RSS/跨标签预算、完整取消、AI 与分发仍开放，S2/S3/S4 不升级。

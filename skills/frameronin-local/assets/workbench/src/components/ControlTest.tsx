@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { Button, Switch, Typography, Upload } from 'antd'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type SetStateAction } from 'react'
+import { Alert, Button, ConfigProvider, Switch, Typography, Upload, message, theme } from 'antd'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
 import { useLanguage } from '../i18n/context'
 import StashDropZone from './StashDropZone'
+import {useControlDocument} from '../localProject/useControlDocument'
+import {ControlDocumentSurface} from '../localProject/ControlDocumentSurface'
+import {useControlImages} from '../localProject/useControlImages'
+import {controlObstacle, type ControlRect} from '../localProject/controlDocument'
+import './ControlTest.css'
 
 const { Dragger } = Upload
 const { Text } = Typography
@@ -17,16 +22,8 @@ interface ControlTestProps {
 
 const IMAGE_ACCEPT = ['.png', '.jpg', '.jpeg', '.webp']
 const AUDIO_ACCEPT = ['.mp3', '.wav', '.ogg', '.m4a', '.aac']
-const DEFAULT_BG_URL = `${import.meta.env.BASE_URL}debg.png`
-const DEFAULT_ARCADE_BG_URL = `${import.meta.env.BASE_URL}hou384.png`
-const DEFAULT_ARCADE_FG_URL = `${import.meta.env.BASE_URL}qian384.png`
-const DEFAULT_CHAR_URL = `${import.meta.env.BASE_URL}decha.png`
 const DEFAULT_BGM_URL = `${import.meta.env.BASE_URL}defultbgm.ogg`
 const DEFAULT_ARCADE_BGM_URL = `${import.meta.env.BASE_URL}acbgm.ogg`
-const ZOMBIE_WALK_URL = `${import.meta.env.BASE_URL}zombie_walk.png`
-const ZOMBIE_WALK2_URL = `${import.meta.env.BASE_URL}zombie_walk2.png`
-const ZOMBIE_WALK3_URL = `${import.meta.env.BASE_URL}zombie_walk3.png`
-const ZOMBIE_WALK4_URL = `${import.meta.env.BASE_URL}zombie_walk4.png`
 const ZOMBIE_FRAME_W = 32
 const ZOMBIE_FRAME_H = 64
 const ZOMBIE_FRAMES = 6
@@ -162,7 +159,7 @@ function rectOverlap(
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y
 }
 
-function extractFrame(img: HTMLImageElement, key: string): HTMLCanvasElement | null {
+function extractFrame(img: ImageBitmap, key: string): HTMLCanvasElement | null {
   const r = REGIONS[key]
   if (!r) return null
   const c = document.createElement('canvas')
@@ -174,36 +171,57 @@ function extractFrame(img: HTMLImageElement, key: string): HTMLCanvasElement | n
 }
 
 export default function ControlTest({ onBack, variant = 'topdown' }: ControlTestProps) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const tx = (zh: string, en: string, ja: string) => lang === 'zh' ? zh : lang === 'ja' ? ja : en
+  const imageError = (error: string) => error.includes('CANCELED') ? tx('已取消素材加载，可重新加载。', 'Asset loading canceled. You can retry.', '素材の読み込みを取り消しました。再試行できます。')
+    : error.includes('RESOURCE_LIMIT') || error.includes('BUDGET') ? tx('素材超出内存预算，请减小图片尺寸或缩短音乐。', 'Assets exceed the memory budget. Use smaller images or shorter music.', 'メモリ予算を超えました。画像を小さくするか音楽を短くしてください。')
+    : error.includes('SPRITE_LAYOUT') ? tx('角色图至少需要 252×252 像素，并使用一图全动作布局。', 'Use an all-actions character sheet of at least 252×252 pixels.', '252×252 ピクセル以上の全アクションシートを使用してください。')
+    : error.includes('AUDIO_LIMIT') ? tx('音乐超出支持的大小、时长或声道范围，请更换素材。', 'Music exceeds the supported size, duration or channel limits.', '音楽のサイズ、長さ、チャンネル数が対応範囲を超えています。')
+    : tx('无法读取场景素材，请重试或更换受支持的文件。', 'Scene assets could not be loaded. Retry or choose a supported file.', 'シーン素材を読み込めません。再試行するか対応形式のファイルを選択してください。')
   const isArcade = variant === 'arcade'
-  const [spriteFile, setSpriteFile] = useState<File | null>(null)
-  const [bgFile, setBgFile] = useState<File | null>(null)
-  const [fgFile, setFgFile] = useState<File | null>(null)
-  const [musicFile, setMusicFile] = useState<File | null>(null)
-  const [frameCanvases, setFrameCanvases] = useState<Map<string, HTMLCanvasElement>>(new Map())
-  const [ready, setReady] = useState(false)
-  const [obstacleEditMode, setObstacleEditMode] = useState(false)
-  const [obstacles, setObstacles] = useState<{ x: number; y: number; w: number; h: number }[]>([])
-  const [dragRect, setDragRect] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null)
-
+  const model = useControlDocument(variant), draft = model.draft
+  const {sprite: spriteFile, background: bgFile, foreground: fgFile, music: musicFile, obstacles, obstacleEditMode} = draft
+  const {set, dispatch} = model
+  const selectFile = useCallback((slot: 'sprite' | 'background' | 'foreground' | 'music', file: File | null) => {
+    const extensions = slot === 'music' ? /\.(wav|mp3|ogg|m4a|aac)$/i : /\.(png|jpe?g|webp)$/i
+    if (file && (!extensions.test(file.name) || file.size < 1 || file.size > (slot === 'music' ? 64 : 20) * 1024 ** 2 || /[\\/]/.test(file.name))) {
+      message.error(lang === 'zh' ? '请选择有效的图片（最多 20 MiB）或音乐（最多 64 MiB）。' : lang === 'ja' ? '有効な画像（20 MiB 以下）または音楽（64 MiB 以下）を選択してください。' : 'Choose a valid image (up to 20 MiB) or music file (up to 64 MiB).'); return
+    }
+    set(slot, file)
+  }, [set, lang])
+  const setSpriteFile = useCallback((file: File | null) => selectFile('sprite', file), [selectFile])
+  const setBgFile = useCallback((file: File | null) => selectFile('background', file), [selectFile])
+  const setFgFile = useCallback((file: File | null) => selectFile('foreground', file), [selectFile])
+  const setMusicFile = useCallback((file: File | null) => selectFile('music', file), [selectFile])
+  const setObstacles = useCallback((value: SetStateAction<ControlRect[]>) => set('obstacles', value), [set])
+  const setObstacleEditMode = useCallback((value: boolean) => set('obstacleEditMode', value), [set])
+  const decoded = useControlImages(draft, model.retained)
+  const frameCanvases = useMemo(() => {
+    const frames = new Map<string, HTMLCanvasElement>()
+    if (decoded.images?.sprite) for (const key of Object.keys(REGIONS)) {
+      const frame = extractFrame(decoded.images.sprite, key); if (frame) frames.set(key, frame)
+    }
+    return frames
+  }, [decoded.images])
+  const ready = !!decoded.images?.sprite && !decoded.loading && !decoded.error
+  const [dragRect, setDragRect] = useState<{x1: number; y1: number; x2: number; y2: number} | null>(null)
+  const pointer = useRef(false)
+  const onInteraction = useCallback((active: boolean) => { pointer.current = active }, [])
+  const [live, setLive] = useState({x: draft.spawn.x, y: draft.spawn.y, action: 'idledown', monsters: 0})
+  const [audioError, setAudioError] = useState('')
+  const [audioState, setAudioState] = useState<'idle' | 'loading' | 'playing' | 'paused' | 'failed'>('idle')
+  const actionText = live.action.startsWith('run') ? tx('跑步', 'Running', '走る') : live.action.startsWith('walk') ? tx('行走', 'Walking', '歩く')
+    : live.action === 'item' ? tx('使用物品', 'Using item', 'アイテム') : live.action === 'attractL' ? tx('吸引', 'Attract', '誘う')
+    : live.action === 'defence' ? tx('防御', 'Defending', '防御') : tx('待机', 'Idle', '待機')
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const obstaclesRef = useRef<{ x: number; y: number; w: number; h: number }[]>([])
   const dragStartRef = useRef<{ x: number; y: number } | null>(null)
   const dragCurrentRef = useRef<{ x: number; y: number } | null>(null)
-  const imgRef = useRef<HTMLImageElement | null>(null)
-  const defaultSpriteImgRef = useRef<HTMLImageElement | null>(null)
-  const bgImgRef = useRef<HTMLImageElement | null>(null)
-  const defaultBgImgRef = useRef<HTMLImageElement | null>(null)
-  const fgImgRef = useRef<HTMLImageElement | null>(null)
-  const defaultFgImgRef = useRef<HTMLImageElement | null>(null)
+  const gameImages = useRef(decoded.images)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const zombieImgRef = useRef<HTMLImageElement | null>(null)
   const zombieCanvasRef = useRef<HTMLCanvasElement[]>([])
-  const zombie2ImgRef = useRef<HTMLImageElement | null>(null)
   const zombie2CanvasRef = useRef<HTMLCanvasElement[]>([])
-  const zombie3ImgRef = useRef<HTMLImageElement | null>(null)
   const zombie3CanvasRef = useRef<HTMLCanvasElement[]>([])
-  const zombie4ImgRef = useRef<HTMLImageElement | null>(null)
   const zombie4CanvasRef = useRef<HTMLCanvasElement[]>([])
   // 怪物列表: x(中心X), y(脚底Y), facing(1=右,-1=左), frameIdx, speed, type(0=类型1, 1=类型2)
   const monstersRef = useRef<{ x: number; y: number; facing: number; frameIdx: number; accum: number; speed: number; type: number }[]>([])
@@ -226,8 +244,13 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
   useEffect(() => {
     obstaclesRef.current = obstacles
   }, [obstacles])
-  obstacleEditModeRef.current = obstacleEditMode
-  dragRectRef.current = dragRect
+  useLayoutEffect(() => {
+    if (!ready) {
+      const canvas = canvasRef.current
+      if (canvas) canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }, [ready])
+  useLayoutEffect(() => { obstacleEditModeRef.current = obstacleEditMode; dragRectRef.current = dragRect }, [obstacleEditMode, dragRect])
 
   const canvasWrapperRef = useRef<HTMLDivElement>(null)
   const clientToLogic = useCallback(
@@ -264,19 +287,13 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
     const start = dragStartRef.current
     const current = dragCurrentRef.current
     if (!start || !current) return
-    const x1 = Math.min(start.x, current.x)
-    const y1 = Math.min(start.y, current.y)
-    const x2 = Math.max(start.x, current.x)
-    const y2 = Math.max(start.y, current.y)
-    const w = Math.max(4, x2 - x1)
-    const h = Math.max(4, y2 - y1)
-    if (w >= 4 && h >= 4) {
-      setObstacles((prev) => [...prev, { x: x1, y: y1, w, h }])
-    }
+    const rect = controlObstacle(start, current, variant)
+    if (obstaclesRef.current.length >= 2048) message.error(lang === 'zh' ? '碰撞区域已达到 2048 个上限。' : lang === 'ja' ? '障害物は 2048 個までです。' : 'The scene supports up to 2048 obstacles.')
+    else setObstacles(prev => [...prev, rect])
     dragStartRef.current = null
     dragCurrentRef.current = null
     setDragRect(null)
-  }, [])
+  }, [setObstacles, variant, lang])
   const handleCanvasMouseUp = useCallback(
     (e: React.MouseEvent) => {
       if (!obstacleEditMode || e.button !== 0) return
@@ -288,6 +305,7 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
   const handleCanvasMouseLeave = useCallback(() => {
     if (obstacleEditMode) {
       dragStartRef.current = null
+      dragCurrentRef.current = null
       setDragRect(null)
     }
   }, [obstacleEditMode])
@@ -296,261 +314,66 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
     const onWindowMouseUp = () => {
       if (dragStartRef.current) {
         if (!dragCurrentRef.current) dragCurrentRef.current = dragStartRef.current
-        const start = dragStartRef.current
-        const current = dragCurrentRef.current
-        const x1 = Math.min(start.x, current.x)
-        const y1 = Math.min(start.y, current.y)
-        const x2 = Math.max(start.x, current.x)
-        const y2 = Math.max(start.y, current.y)
-        const w = Math.max(4, x2 - x1)
-        const h = Math.max(4, y2 - y1)
-        if (w >= 4 && h >= 4) {
-          setObstacles((prev) => [...prev, { x: x1, y: y1, w, h }])
-        }
-        dragStartRef.current = null
-        dragCurrentRef.current = null
-        setDragRect(null)
+        finishDrag()
       }
     }
     window.addEventListener('mouseup', onWindowMouseUp)
     return () => window.removeEventListener('mouseup', onWindowMouseUp)
+  }, [finishDrag])
+
+  useLayoutEffect(() => {
+    gameImages.current = decoded.images
+    const cuts = [zombieCanvasRef, zombie2CanvasRef, zombie3CanvasRef, zombie4CanvasRef]
+    const names = ['zombie', 'zombie2', 'zombie3', 'zombie4'] as const
+    const counts = [ZOMBIE_FRAMES, ZOMBIE2_FRAMES, ZOMBIE3_FRAMES, ZOMBIE4_FRAMES]
+    for (let type = 0; type < names.length; type++) {
+      const image = decoded.images?.[names[type]]
+      cuts[type].current = image ? Array.from({length: counts[type]}, (_, i) => {
+        const canvas = document.createElement('canvas'); canvas.width = ZOMBIE_FRAME_W; canvas.height = ZOMBIE_FRAME_H
+        const context = canvas.getContext('2d')!
+        context.imageSmoothingEnabled = false
+        context.drawImage(image, i * ZOMBIE_FRAME_W, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, 0, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H)
+        return canvas
+      }) : []
+    }
+  }, [decoded.images])
+  useEffect(() => {
+    const timer = window.setInterval(() => setLive({x: posRef.current.x, y: posRef.current.y, action: animRef.current.name, monsters: monstersRef.current.length}), 100)
+    return () => window.clearInterval(timer)
   }, [])
+  useLayoutEffect(() => {
+    posRef.current = {x: draft.spawn.x, y: draft.spawn.y}; facingRef.current = draft.spawn.facing
+    animRef.current = {name: 'idledown', frameIdx: 0, accum: 0}; keysRef.current.clear()
+    monstersRef.current = []; monsterSpawnTimerRef.current = 0
+  }, [draft.spawn])
+  const beforeAction = useCallback(async () => {
+    if (dragStartRef.current) throw new Error('CONTROL_FINISH_OBSTACLE_GESTURE')
+    keysRef.current.clear(); dispatch({type: 'end'})
+  }, [dispatch])
+  const pending = useCallback(() => pointer.current || !!dragStartRef.current, [])
 
   useEffect(() => {
-    const buildFrames = (img: HTMLImageElement) => {
-      const map = new Map<string, HTMLCanvasElement>()
-      for (const key of Object.keys(REGIONS)) {
-        const c = extractFrame(img, key)
-        if (c) map.set(key, c)
-      }
-      setFrameCanvases(map)
-      setReady(true)
-    }
-    if (spriteFile) {
-      const url = URL.createObjectURL(spriteFile)
-      const img = new Image()
-      img.onload = () => {
-        imgRef.current = img
-        buildFrames(img)
-      }
-      img.src = url
-      return () => {
-        URL.revokeObjectURL(url)
-        imgRef.current = null
-        setFrameCanvases(new Map())
-        setReady(false)
-      }
-    }
-    imgRef.current = null
-    const def = defaultSpriteImgRef.current
-    if (def && def.complete && def.naturalWidth > 0) {
-      buildFrames(def)
-    } else {
-      setFrameCanvases(new Map())
-      setReady(false)
-    }
-  }, [spriteFile])
-
-  const spriteFileRef = useRef<File | null>(null)
-  spriteFileRef.current = spriteFile
-
-  useEffect(() => {
-    const img = new Image()
-    img.onload = () => {
-      defaultSpriteImgRef.current = img
-      if (!spriteFileRef.current && img.complete && img.naturalWidth > 0) {
-        const map = new Map<string, HTMLCanvasElement>()
-        for (const key of Object.keys(REGIONS)) {
-          const c = extractFrame(img, key)
-          if (c) map.set(key, c)
-        }
-        setFrameCanvases(map)
-        setReady(true)
-      }
-    }
-    img.src = DEFAULT_CHAR_URL
-    return () => { defaultSpriteImgRef.current = null }
-  }, [])
-
-  useEffect(() => {
-    if (bgFile) {
-      const url = URL.createObjectURL(bgFile)
-      const img = new Image()
-      img.onload = () => {
-        bgImgRef.current = img
-      }
-      img.src = url
-      return () => {
-        URL.revokeObjectURL(url)
-        bgImgRef.current = null
-      }
-    }
-    bgImgRef.current = null
-  }, [bgFile])
-
-  useEffect(() => {
-    const img = new Image()
-    img.onload = () => { defaultBgImgRef.current = img }
-    img.src = isArcade ? DEFAULT_ARCADE_BG_URL : DEFAULT_BG_URL
-    return () => { defaultBgImgRef.current = null }
-  }, [isArcade])
-
-  useEffect(() => {
-    if (fgFile) {
-      const url = URL.createObjectURL(fgFile)
-      const img = new Image()
-      img.onload = () => {
-        fgImgRef.current = img
-      }
-      img.src = url
-      return () => {
-        URL.revokeObjectURL(url)
-        fgImgRef.current = null
-      }
-    }
-    fgImgRef.current = null
-  }, [fgFile])
-
-  useEffect(() => {
-    if (!isArcade) return
-    const img = new Image()
-    img.onload = () => { defaultFgImgRef.current = img }
-    img.src = DEFAULT_ARCADE_FG_URL
-    return () => { defaultFgImgRef.current = null }
-  }, [isArcade])
-
-  // 加载僵尸行走图并切帧
-  useEffect(() => {
-    if (!isArcade) return
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.onload = () => {
-      zombieImgRef.current = img
-      // 切帧: 6帧,每帧32x64
-      zombieCanvasRef.current = []
-      for (let i = 0; i < ZOMBIE_FRAMES; i++) {
-        const c = document.createElement('canvas')
-        c.width = ZOMBIE_FRAME_W
-        c.height = ZOMBIE_FRAME_H
-        const ctx = c.getContext('2d')!
-        ctx.imageSmoothingEnabled = false
-        ctx.drawImage(img, i * ZOMBIE_FRAME_W, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, 0, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H)
-        zombieCanvasRef.current.push(c)
-      }
-    }
-    img.src = ZOMBIE_WALK_URL
+    if (!draft.musicOn || decoded.loading || decoded.error) return
+    const url = musicFile ? URL.createObjectURL(musicFile) : null
+    const audio = new Audio(url ?? (isArcade ? DEFAULT_ARCADE_BGM_URL : DEFAULT_BGM_URL))
+    let active = true
+    audio.loop = true; audioRef.current = audio
+    void Promise.resolve().then(() => { if (active) setAudioState('loading') })
+    audio.onerror = () => { if (active) { setAudioError('CONTROL_AUDIO_DECODE_FAILED'); setAudioState('failed') } }
+    audio.onplaying = () => { if (active) { setAudioError(''); setAudioState('playing') } }
+    audio.onpause = () => { if (active) setAudioState('paused') }
+    audio.onwaiting = () => { if (active) setAudioState('loading') }
+    void audio.play().catch(error => { if (active) { setAudioError(error?.name === 'NotAllowedError' ? 'CONTROL_AUDIO_PLAY_REQUIRED' : 'CONTROL_AUDIO_PLAY_FAILED'); setAudioState('failed') } })
     return () => {
-      zombieImgRef.current = null
-      zombieCanvasRef.current = []
+      active = false; audio.onerror = null; audio.onplaying = null; audio.onpause = null; audio.onwaiting = null
+      audio.pause(); audio.src = ''; if (url) URL.revokeObjectURL(url)
+      if (audioRef.current === audio) audioRef.current = null
     }
-  }, [isArcade])
-
-  // 加载第二种僵尸行走图并切帧 (7帧)
-  useEffect(() => {
-    if (!isArcade) return
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.onload = () => {
-      zombie2ImgRef.current = img
-      // 切帧: 7帧,每帧32x64
-      zombie2CanvasRef.current = []
-      for (let i = 0; i < ZOMBIE2_FRAMES; i++) {
-        const c = document.createElement('canvas')
-        c.width = ZOMBIE_FRAME_W
-        c.height = ZOMBIE_FRAME_H
-        const ctx = c.getContext('2d')!
-        ctx.imageSmoothingEnabled = false
-        ctx.drawImage(img, i * ZOMBIE_FRAME_W, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, 0, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H)
-        zombie2CanvasRef.current.push(c)
-      }
-    }
-    img.src = ZOMBIE_WALK2_URL
-    return () => {
-      zombie2ImgRef.current = null
-      zombie2CanvasRef.current = []
-    }
-  }, [isArcade])
-
-  // 加载第三种僵尸行走图并切帧 (10帧)
-  useEffect(() => {
-    if (!isArcade) return
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.onload = () => {
-      zombie3ImgRef.current = img
-      // 切帧: 10帧,每帧32x64
-      zombie3CanvasRef.current = []
-      for (let i = 0; i < ZOMBIE3_FRAMES; i++) {
-        const c = document.createElement('canvas')
-        c.width = ZOMBIE_FRAME_W
-        c.height = ZOMBIE_FRAME_H
-        const ctx = c.getContext('2d')!
-        ctx.imageSmoothingEnabled = false
-        ctx.drawImage(img, i * ZOMBIE_FRAME_W, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, 0, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H)
-        zombie3CanvasRef.current.push(c)
-      }
-    }
-    img.src = ZOMBIE_WALK3_URL
-    return () => {
-      zombie3ImgRef.current = null
-      zombie3CanvasRef.current = []
-    }
-  }, [isArcade])
-
-  // 加载第四种僵尸行走图并切帧 (7帧)
-  useEffect(() => {
-    if (!isArcade) return
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.onload = () => {
-      zombie4ImgRef.current = img
-      // 切帧: 7帧,每帧32x64
-      zombie4CanvasRef.current = []
-      for (let i = 0; i < ZOMBIE4_FRAMES; i++) {
-        const c = document.createElement('canvas')
-        c.width = ZOMBIE_FRAME_W
-        c.height = ZOMBIE_FRAME_H
-        const ctx = c.getContext('2d')!
-        ctx.imageSmoothingEnabled = false
-        ctx.drawImage(img, i * ZOMBIE_FRAME_W, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, 0, 0, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H)
-        zombie4CanvasRef.current.push(c)
-      }
-    }
-    img.src = ZOMBIE_WALK4_URL
-    return () => {
-      zombie4ImgRef.current = null
-      zombie4CanvasRef.current = []
-    }
-  }, [isArcade])
-
-  useEffect(() => {
-    if (musicFile) {
-      const url = URL.createObjectURL(musicFile)
-      const audio = new Audio(url)
-      audio.loop = true
-      audioRef.current = audio
-      audio.play().catch(() => {})
-      return () => {
-        audio.pause()
-        audio.src = ''
-        URL.revokeObjectURL(url)
-        audioRef.current = null
-      }
-    }
-    const defaultBgmUrl = isArcade ? DEFAULT_ARCADE_BGM_URL : DEFAULT_BGM_URL
-    const audio = new Audio(defaultBgmUrl)
-    audio.loop = true
-    audioRef.current = audio
-    audio.play().catch(() => {})
-    return () => {
-      audio.pause()
-      audio.src = ''
-      audioRef.current = null
-    }
-  }, [musicFile])
+  }, [musicFile, isArcade, draft.musicOn, decoded.loading, decoded.error])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.isComposing || e.metaKey || e.ctrlKey || e.altKey || document.activeElement !== canvasRef.current) return
       const k = e.code || e.key
       if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyI', 'KeyJ', 'KeyK', 'ShiftLeft', 'ShiftRight'].includes(k)) {
         e.preventDefault()
@@ -560,16 +383,19 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
     const handleKeyUp = (e: KeyboardEvent) => {
       keysRef.current.delete(e.code || e.key.toLowerCase())
     }
+    const clear = () => { keysRef.current.clear(); dragStartRef.current = null; dragCurrentRef.current = null; setDragRect(null) }
+    window.addEventListener('blur', clear); document.addEventListener('visibilitychange', clear)
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
     return () => {
+      window.removeEventListener('blur', clear); document.removeEventListener('visibilitychange', clear)
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
     }
   }, [])
 
   const gameLoop = useCallback(
-    (now?: number) => {
+    function gameLoop(now?: number) {
       const canvas = canvasRef.current
       const keys = keysRef.current
       rafRef.current = requestAnimationFrame(gameLoop)
@@ -665,17 +491,17 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
     const frameCanvas = frameCanvases.get(frameKey)
 
     ctx.setTransform(PIXEL_SCALE, 0, 0, PIXEL_SCALE, 0, 0)
-    const bgImg = bgImgRef.current ?? defaultBgImgRef.current
-    if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
-      const fitScale = Math.min(aw / bgImg.naturalWidth, ah / bgImg.naturalHeight)
+    const bgImg = gameImages.current?.background
+    if (bgImg && bgImg.width > 0) {
+      const fitScale = Math.min(aw / bgImg.width, ah / bgImg.height)
       const scale = isArcade ? fitScale * ARCADE_BG_SCALE : fitScale
-      const drawW = bgImg.naturalWidth * scale
-      const drawH = bgImg.naturalHeight * scale
+      const drawW = bgImg.width * scale
+      const drawH = bgImg.height * scale
       const dx = (aw - drawW) / 2
       const dy = (ah - drawH) / 2
       ctx.fillStyle = '#1a1a2e'
       ctx.fillRect(0, 0, aw, ah)
-      ctx.drawImage(bgImg, 0, 0, bgImg.naturalWidth, bgImg.naturalHeight, dx, dy, drawW, drawH)
+      ctx.drawImage(bgImg, 0, 0, bgImg.width, bgImg.height, dx, dy, drawW, drawH)
     } else {
       ctx.fillStyle = '#1a1a2e'
       ctx.fillRect(0, 0, aw, ah)
@@ -714,7 +540,8 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
       }
 
       // 更新怪物
-      for (const m of monstersRef.current) {
+      monstersRef.current = monstersRef.current.map(source => {
+        const m = {...source}
         m.x += m.facing * m.speed
         // 动画更新 (根据类型使用不同帧数)
         m.accum += 8 * dt // 8fps 动画速度
@@ -723,7 +550,8 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
           m.accum -= 1
           m.frameIdx = (m.frameIdx + 1) % frameCount
         }
-      }
+        return m
+      })
       // 移除超出边界的怪物 (m.x 是中心X)
       monstersRef.current = monstersRef.current.filter(
         (m) => m.x > -ZOMBIE_DISPLAY_W && m.x < arenaW + ZOMBIE_DISPLAY_W
@@ -810,15 +638,15 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
       entity.render()
     }
 
-    const fgImg = fgImgRef.current ?? defaultFgImgRef.current
-    if (fgImg && fgImg.complete && fgImg.naturalWidth > 0) {
-      const fitScale = Math.min(aw / fgImg.naturalWidth, ah / fgImg.naturalHeight)
+    const fgImg = gameImages.current?.foreground
+    if (fgImg && fgImg.width > 0) {
+      const fitScale = Math.min(aw / fgImg.width, ah / fgImg.height)
       const scale = isArcade ? fitScale * ARCADE_BG_SCALE : fitScale
-      const drawW = fgImg.naturalWidth * scale
-      const drawH = fgImg.naturalHeight * scale
+      const drawW = fgImg.width * scale
+      const drawH = fgImg.height * scale
       const dx = (aw - drawW) / 2
       const dy = (ah - drawH) / 2
-      ctx.drawImage(fgImg, 0, 0, fgImg.naturalWidth, fgImg.naturalHeight, dx, dy, drawW, drawH)
+      ctx.drawImage(fgImg, 0, 0, fgImg.width, fgImg.height, dx, dy, drawW, drawH)
     }
 
     if (obstacleEditModeRef.current) {
@@ -867,7 +695,10 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
   }, [gameLoop])
 
   return (
+    <ControlDocumentSurface model={model} beforeAction={beforeAction} pending={pending} onInteraction={onInteraction}>
+    <ConfigProvider theme={{inherit: false, algorithm: theme.darkAlgorithm, token: {colorPrimary: '#c45c3e'}}}>
     <div
+      className="control-test-scene"
       style={{
         position: 'fixed',
         inset: 0,
@@ -983,6 +814,7 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
         <div style={{ width: 200, display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Switch
+              aria-label={t('controlTestObstacleEdit')}
               checked={obstacleEditMode}
               onChange={setObstacleEditMode}
               size="small"
@@ -1039,15 +871,39 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
           >
             <canvas
               ref={canvasRef}
+              tabIndex={0}
+              aria-label={tx('游戏测试场景', 'Game test scene', 'ゲームテストシーン')}
+              onMouseDown={() => canvasRef.current?.focus()}
+              onBlur={() => keysRef.current.clear()}
               width={arenaW * PIXEL_SCALE}
               height={arenaH * PIXEL_SCALE}
               style={{
                 display: 'block',
                 imageRendering: 'pixelated',
+                maxWidth: 'calc(100vw - 48px)',
+                maxHeight: 'calc(100vh - 200px)',
               }}
             />
           </div>
         </div>
+      </div>
+      <div style={{position: 'absolute', bottom: 48, left: 64, color: '#fff', maxWidth: 'calc(100% - 80px)'}}>
+        <div role="status" aria-live="off" aria-label={tx('游戏状态', 'Game status', 'ゲーム状態')}>
+          {tx('位置', 'Position', '位置')} {live.x.toFixed(2)}, {live.y.toFixed(2)} · <span data-animation={live.action}>{actionText}</span> · {tx('碰撞区', 'Obstacles', '障害物')} {obstacles.length} · {tx('怪物', 'Monsters', 'モンスター')} {live.monsters}
+        </div>
+        <Button onClick={() => set('spawn', {x: posRef.current.x, y: posRef.current.y, facing: facingRef.current as -1 | 1})}>{tx('将当前位置设为起点', 'Use current position as spawn', '現在位置を開始地点にする')}</Button>
+        <Button onClick={() => {posRef.current = {x: draft.spawn.x, y: draft.spawn.y}; keysRef.current.clear(); monstersRef.current = []}}>{tx('重置角色', 'Reset player', 'キャラクターをリセット')}</Button>
+        <Switch aria-label={tx('播放背景音乐', 'Play background music', 'BGM を再生')} checked={draft.musicOn} onChange={v => set('musicOn', v)}/>
+        <span role="status" aria-live="off" aria-label={tx('背景音乐状态', 'Background music status', 'BGM 状態')}>
+          {' · '}{!draft.musicOn ? tx('音乐已关闭', 'Music off', 'BGM オフ') : decoded.loading ? tx('音乐加载中', 'Music loading', 'BGM 読み込み中') : audioState === 'playing' ? tx('音乐播放中', 'Music playing', 'BGM 再生中') : audioState === 'failed' ? tx('音乐未能播放', 'Music could not play', 'BGM を再生できません') : tx('音乐等待播放', 'Music waiting', 'BGM 待機中')}
+        </span>
+        {!!audioError && draft.musicOn && !decoded.loading && !decoded.error && <Alert type="warning" title={tx('音乐未能自动播放，请点击播放；仍失败时请更换受支持的文件。', 'Music could not start. Click Play music, or choose another supported file if it fails.', '音楽を開始できません。再生を押すか、対応する別のファイルを選択してください。')} action={<Button onClick={() => {
+          const audio = audioRef.current
+          if (audio) void audio.play().catch(() => { if (audioRef.current === audio) setAudioError('CONTROL_AUDIO_PLAY_FAILED') })
+        }}>{tx('播放音乐', 'Play music', '音楽を再生')}</Button>}/>}
+        {decoded.loading && <Alert type="info" title={tx('正在加载场景素材', 'Loading scene assets', 'シーン素材を読み込み中')} action={<Button onClick={decoded.cancel}>{tx('取消加载', 'Cancel loading', '読み込みを取消')}</Button>}/>}
+        {decoded.error && <Alert type="error" title={imageError(decoded.error)} action={<Button onClick={decoded.retry}>{tx('重试加载', 'Retry loading', '再読み込み')}</Button>}/>}
+        <div>{tx('点击场景后使用键盘；场景设置与起点可保存到项目。', 'Click the scene to use game keys. Scene settings and spawn can be saved to the project.', 'シーンをクリックしてキー操作。設定と開始地点をプロジェクトに保存できます。')}</div>
       </div>
       <Text
         type="secondary"
@@ -1063,5 +919,7 @@ export default function ControlTest({ onBack, variant = 'topdown' }: ControlTest
         {t('controlTestKeys')}
       </Text>
     </div>
+    </ConfigProvider>
+    </ControlDocumentSurface>
   )
 }

@@ -29,7 +29,7 @@ app=application(project,args.port)
 @app.middleware('http')
 async def delayed(request,call_next):
     path=request.url.path
-    host_worker=any(name in path for name in ['/normalImage.worker-','/matteTool.worker-','/expandShrink.worker-','/scatterSlice.worker-','/customSlice.worker-','/geminiWatermark.worker-','/spriteGifRows.worker-','/spriteSheetAssets.worker-','/sheetAdjust.worker-','/sheetAdjustPreview.worker-','/sheetPrepare.worker-','/videoAssets.worker-','/videoFrames.worker-','/videoCapture.worker-']) and path.endswith('.js')
+    host_worker=any(name in path for name in ['/normalImage.worker-','/matteTool.worker-','/expandShrink.worker-','/scatterSlice.worker-','/customSlice.worker-','/geminiWatermark.worker-','/spriteGifRows.worker-','/spriteSheetAssets.worker-','/sheetAdjust.worker-','/sheetAdjustPreview.worker-','/sheetPrepare.worker-','/videoAssets.worker-','/videoFrames.worker-','/videoCapture.worker-','/fineEditor.worker-']) and path.endswith('.js')
     flag='delay-upload' if path.endswith('/browser/result') else 'delay-content' if path.startswith('/api/versions/') and path.endswith('/content') else 'delay-worker' if host_worker else None
     if flag and (gates/flag).is_file():await asyncio.sleep(args.delay)
     response=await call_next(request)

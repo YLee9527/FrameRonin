@@ -1,5 +1,11 @@
 # 项目格式 1
 
+控制场景使用 `kind=control-topdown` 或 `control-arcade`，payload 格式 1 包含 variant、bundledResourceVersion=1、sprite/background/foreground/music 四个可空正式素材引用、obstacles、obstacleEditMode、musicOn 和 spawn={x,y,facing}。引用仅为 `{versionId,name,type}`，不接受 URL 或本机路径；空引用选择固定随包资源目录。不同场景文档空间独立，类型不可混写；俯视文档不接受前景。
+
+碰撞区最多 2048 个，矩形至少 4×4 且在逻辑场景内；起点范围匹配原场景的角色边界和街机行走带。恢复先检查严格字段、版本/别名、素材类型/尺寸/数量/音频元数据及资源预算，再读取正文并复用引用。图片限静态 PNG/JPEG/WebP、20 MiB；角色必须覆盖原 252×252 动作布局，音乐限 64 MiB/一小时，实际完整预算仍可能提前拒绝。预算包括编码历史、纹理/解码缓冲及音乐 PCM；恢复另计当前画面和音乐仍在占用的资源。
+
+素材、碰撞区/整段拖拽、编辑/音乐开关和显式起点共用 50 步/256 MiB 编码文件历史；重开及历史操作不创建加工任务。游戏运行时的当前帧、按键、随机怪物是暂态，打开或改变起点后重置，不按动画刷新率保存。默认随包资源版本 1 是当前发行内容契约，后续资源改版需显式升级并保留兼容资产。
+
 光流 `kind=optical-flow`、`formatVersion=1` 保存 inputMode、files/sheet、columns/rows、options、sheetColumns、view，以及 normalizations 和 split/flow/zip/sprite。文件为 `{versionId,name,type}`，结果为 `{outputs,report,inputs,taskId}`。normalizations 逐个绑定已选原件与宿主规范 PNG；后续切分/光流使用该规范版本，重复加工复用已验证归一结果。精确已知的早期格式 1 缺少 normalizations 时补空数组，未知/部分字段仍拒绝。
 
 恢复先核对字段、范围、资源别名、独立结果/任务 ID、选定原件、成功任务、实际输入输出顺序、规范图方向、帧数/尺寸和报告，再按预算批量读取正文。多文件保留实际任务的冻结输入顺序，避免不同语言环境的文件排序影响历史。当前配方可以与已有结果不同；导出只引用实际 flow 输出，不用当前参数重建结果。素材身份复用，重开、撤销和重做均不增加任务或版本。

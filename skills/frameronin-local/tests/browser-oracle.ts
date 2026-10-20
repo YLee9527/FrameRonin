@@ -275,6 +275,31 @@ async function runFineEditor(){
   }
   zip.file('checks.json',JSON.stringify(checks));await publish(zip,'browser-fine-editor.zip');status.textContent=`Fine editor complete: ${fixture.cases.length} original/Worker comparisons`
 }
+async function runControlBitmap(){
+  const fixture=await(await fetch('/fine-editor/manifest.json')).json(),zip=new JSZip(),checks=[]
+  const sources=[...new Set<string>(fixture.cases.map((c:{input?:string})=>'fine-editor/'+(c.input??'source.png'))),
+    'decha.png','debg.png','hou384.png','qian384.png','zombie_walk.png','zombie_walk2.png','zombie_walk3.png','zombie_walk4.png']
+  for(const [i,name] of sources.entries()){
+    const response=await fetch('/'+name);if(!response.ok)throw new Error('Missing fixed source '+name)
+    const file=await response.blob(),url=URL.createObjectURL(file)
+    const image=await new Promise<HTMLImageElement>((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Original image decode failed'));img.src=url})
+    URL.revokeObjectURL(url)
+    const original=document.createElement('canvas');original.width=image.naturalWidth;original.height=image.naturalHeight;original.getContext('2d')!.drawImage(image,0,0)
+    const decoded=await runFineEditorWorker({action:'decodeBitmap',file,budget:2*1024**3,retained:0},new AbortController().signal,i)
+    try{
+      if(!decoded.bitmap)throw new Error('Bitmap result missing')
+      const actual=document.createElement('canvas');actual.width=decoded.width;actual.height=decoded.height;actual.getContext('2d')!.drawImage(decoded.bitmap,0,0)
+      const a=original.getContext('2d')!.getImageData(0,0,original.width,original.height).data,b=actual.getContext('2d')!.getImageData(0,0,actual.width,actual.height).data
+      let differentChannels=0;for(let j=0;j<Math.max(a.length,b.length);j++)if(a[j]!==b[j])differentChannels++
+      const dimensionsEqual=original.width===actual.width&&original.height===actual.height
+      checks.push({name,width:original.width,height:original.height,dimensionsEqual,differentChannels,equal:dimensionsEqual&&differentChannels===0})
+      zip.file(`${i}/original.png`,await png(original));zip.file(`${i}/actual.png`,await png(actual));status.textContent='Game bitmap: '+name
+    }finally{decoded.bitmap?.close()}
+  }
+  zip.file('checks.json',JSON.stringify(checks));await publish(zip,'browser-control-bitmaps.zip')
+  status.textContent=`Game bitmap complete: ${checks.length} cases, ${checks.filter(c=>!c.equal).length} failed`
+}
+document.querySelector<HTMLButtonElement>('#control-bitmap')!.onclick=()=>{void runControlBitmap().catch(error=>{status.textContent=String(error)})}
 async function runNormalImage(){
   const fixture=await(await fetch('/normal-image/manifest.json')).json(),zip=new JSZip()
   for(const entry of fixture.cases){

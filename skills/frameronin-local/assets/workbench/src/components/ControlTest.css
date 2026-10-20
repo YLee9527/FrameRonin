@@ -1,0 +1,14 @@
+/* The game is dark even inside the workbench's light paper theme. */
+.app-content .control-test-scene .ant-upload-drag {
+  background: #242435 !important;
+  border-color: #8b8b9d !important;
+}
+
+.app-content .control-test-scene .ant-upload-drag:hover {
+  border-color: #e28c6b !important;
+}
+
+.control-test-scene canvas:focus-visible {
+  outline: 2px solid #e28c6b;
+  outline-offset: 3px;
+}

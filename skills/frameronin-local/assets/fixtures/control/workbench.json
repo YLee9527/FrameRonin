@@ -1,0 +1,53 @@
+{
+  "formatVersion": 1,
+  "sourceCodeSha256": "4eba110b49a9d399ce87ffdac405fec0d928715a40864415f257aceab79d224d",
+  "topdown": {
+    "initialSpawn": {
+      "x": 219,
+      "y": 118,
+      "facing": 1
+    },
+    "obstacle": {
+      "x": 280,
+      "y": 130,
+      "w": 30,
+      "h": 50
+    },
+    "steps": [
+      "Focus canvas; D for one second moves right",
+      "Draw fixed obstacle; continue D and assert character right <=280",
+      "Undo/redo obstacle; capture spawn and undo/redo/reset it",
+      "Import decha.png, debg.png, audio/tone.m4a; save, cold open, conflict/copy/late read"
+    ],
+    "criteria": "Movement is positive; obstacle blocks the original 21px-wide foot hitbox; saved spawn, obstacle and selected versions survive cold open"
+  },
+  "arcade": {
+    "initialSpawn": {
+      "x": 333,
+      "y": 251,
+      "facing": 1
+    },
+    "walkBand": {
+      "minY": 230,
+      "maxY": 272
+    },
+    "steps": [
+      "Focus canvas; W reaches original upper walk boundary; D moves right",
+      "Observe live monster spawning",
+      "Import decha.png, hou384.png, qian384.png and audio/tone.aac",
+      "Capture spawn, save, cold open and verify no new assets/tasks"
+    ],
+    "criteria": "Movement remains within the original walk band; foreground/background and character load; native music reaches playing; document versions stay identical"
+  },
+  "timingPolicy": "Original movement is per animation callback, while animation timing uses dt. Preserve that behavior; do not require the same one-second displacement across different display refresh rates.",
+  "audio": {
+    "tone.m4a": "e9ee4982f69c50913571dbc0395dce4c6bcb9b8c3a485910fb070b6e6f2ebb0a",
+    "tone.aac": "51a309000bd6918ac1a23ecedff52bbdd8ed2d01acbab26fd4cc99a5a360b522"
+  },
+  "languages": [
+    "zh",
+    "en",
+    "ja"
+  ],
+  "cancellation": "Use only tests/support/gated_workbench.py delay-worker; assert visible canceled state, no late apply, then retry. This is startup-stage acceptance, not whole-decoder stop-time proof."
+}

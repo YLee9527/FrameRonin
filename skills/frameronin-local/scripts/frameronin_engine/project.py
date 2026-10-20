@@ -17,7 +17,7 @@ from .errors import RoninError, Cancelled
 
 FORMAT_VERSION = 1
 IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp', '.tif', '.tiff'}
-MEDIA_EXTENSIONS = IMAGE_EXTENSIONS | {'.mp4', '.mov', '.mkv', '.webm', '.avi', '.wav', '.mp3', '.ogg', '.zip', '.psd', '.json', '.gd', '.tscn', '.tres'}
+MEDIA_EXTENSIONS = IMAGE_EXTENSIONS | {'.mp4', '.mov', '.mkv', '.webm', '.avi', '.wav', '.mp3', '.ogg', '.m4a', '.aac', '.zip', '.psd', '.json', '.gd', '.tscn', '.tres'}
 
 
 def now():
@@ -101,7 +101,7 @@ def inspect_media(path):
             raise RoninError('INVALID_IMAGE', 'The selected file cannot be fully decoded as an image.') from error
     else:
         result['kind'] = ('video' if path.suffix.lower() in {'.mp4', '.mov', '.mkv', '.webm', '.avi'} else
-                          'audio' if path.suffix.lower() in {'.wav', '.mp3', '.ogg'} else
+                          'audio' if path.suffix.lower() in {'.wav', '.mp3', '.ogg', '.m4a', '.aac'} else
                           'archive' if path.suffix.lower() == '.zip' else
                           'script_pending_review' if path.suffix.lower() == '.gd' else 'document')
         if result['kind'] in ['video', 'audio']:
@@ -422,7 +422,7 @@ class Project:
         checked_id(document_id)
         if type(expected_revision) is not int or expected_revision < 0:
             raise RoninError('DOCUMENT_REVISION_INVALID', 'Document revisions are non-negative integers.')
-        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request','ronin-scale','ronin-unify','ronin-duplicates','image-fine','image-normal','image-expand-shrink','scatter','custom-slice','image-visible-watermark','sprite-sheet','sheet-adjust','sheet-pro','image-matte','video','optical-flow']:
+        if kind not in ['rseprite', 'workflow', 'map', 'sequence', 'pixel', 'image', 'game', 'ai-request','ronin-scale','ronin-unify','ronin-duplicates','image-fine','image-normal','image-expand-shrink','scatter','custom-slice','image-visible-watermark','sprite-sheet','sheet-adjust','sheet-pro','image-matte','video','optical-flow','control-topdown','control-arcade']:
             raise RoninError('DOCUMENT_KIND_INVALID', 'Unknown editable document kind.')
         serialized = json.dumps(payload, ensure_ascii=False, allow_nan=False)
         if len(serialized.encode()) > 64 * 1024**2:

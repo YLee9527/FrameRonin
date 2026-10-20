@@ -89,9 +89,9 @@
 | map.psd | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 后台 PSD 对照与取消、正式结果的 Krita 两层/透明度及独立合成验收通过 |
 | map.godot-scene | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 新后台场景在固定可信无脚本 Godot 4.7.2 工程导入及三帧运行通过 |
 | map.godot-pack | 地图 | reference/frontend/src/components/MapStitch.tsx | tiles → PNG/PSD/Godot/ZIP | 工作台后台 ZIP/正式版本一致、解包及可信工程导入运行通过 |
-| game.topdown | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |
-| game.arcade | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |
-| game.controls | 控制测试 | reference/frontend/src/components/ControlTest.tsx | sprite sheet → playable preview | 待逐项验收 |
+| game.topdown | 控制测试 | reference/frontend/src/components/ControlTest.tsx | selected static character/background/foreground images, audio and obstacle/spawn settings; fixed bundled defaults → interactive original scene + formal project document with immutable selected versions | 俯视/街机原场景、移动/碰撞/动作、图片/音乐、正式文档/历史/冷重开/冲突/迟到、取消重试和三语通过；更广格式/可访问性与联合资源仍待验收 |
+| game.arcade | 控制测试 | reference/frontend/src/components/ControlTest.tsx | selected static character/background/foreground images, audio and obstacle/spawn settings; fixed bundled defaults → interactive original scene + formal project document with immutable selected versions | 俯视/街机原场景、移动/碰撞/动作、图片/音乐、正式文档/历史/冷重开/冲突/迟到、取消重试和三语通过；更广格式/可访问性与联合资源仍待验收 |
+| game.controls | 控制测试 | reference/frontend/src/components/ControlTest.tsx | selected static character/background/foreground images, audio and obstacle/spawn settings; fixed bundled defaults → interactive original scene + formal project document with immutable selected versions | 俯视/街机原场景、移动/碰撞/动作、图片/音乐、正式文档/历史/冷重开/冲突/迟到、取消重试和三语通过；更广格式/可访问性与联合资源仍待验收 |
 | game.map | 无限地图 | reference/frontend/src/components/InfiniteMapPlaceholder.tsx | map tiles/sprites → playable preview | 待逐项验收 |
 | game.monsters | 无限地图 | reference/frontend/src/components/InfiniteMapPlaceholder.tsx | map tiles/sprites → playable preview | 待逐项验收 |
 | game.movement | 无限地图 | reference/frontend/src/components/InfiniteMapPlaceholder.tsx | map tiles/sprites → playable preview | 待逐项验收 |

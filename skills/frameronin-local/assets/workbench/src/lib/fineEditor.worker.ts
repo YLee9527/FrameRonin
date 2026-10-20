@@ -1,15 +1,16 @@
 /// <reference lib="webworker" />
 import {checkFineEditorBudget,eraseConnected,fineEditorImageSize,movePixelSelection,type PixelRect} from './fineEditorPixels'
 
-export type FineEditorRequest={action:'decode';file:Blob;budget:number;retained:number}|{action:'encode'|'erase'|'move';width:number;height:number;pixels:Uint8ClampedArray;budget:number;retained:number;x?:number;y?:number;tolerance?:number;rect?:PixelRect;dx?:number;dy?:number}
-export type FineEditorResult={width:number;height:number;pixels?:Uint8ClampedArray;blob?:Blob;rect?:PixelRect}
+type DecodeRequest={file:Blob;budget:number;retained:number}
+export type FineEditorRequest=({action:'decode'}&DecodeRequest)|({action:'decodeBitmap'}&DecodeRequest)|{action:'encode'|'erase'|'move';width:number;height:number;pixels:Uint8ClampedArray;budget:number;retained:number;x?:number;y?:number;tolerance?:number;rect?:PixelRect;dx?:number;dy?:number}
+export type FineEditorResult={width:number;height:number;pixels?:Uint8ClampedArray;blob?:Blob;rect?:PixelRect;bitmap?:ImageBitmap}
 
 self.onmessage=async(event:MessageEvent<FineEditorRequest&{id:string;generation:number}>)=>{
   const request=event.data,{id,generation}=request
   let bitmap:ImageBitmap|undefined,decoder:ImageDecoder|undefined,frame:VideoFrame|undefined
   try{
     let pixels:Uint8ClampedArray,width:number,height:number
-    if(request.action==='decode'){
+    if(request.action==='decode'||request.action==='decodeBitmap'){
       const size=await fineEditorImageSize(request.file);width=size.width;height=size.height
       checkFineEditorBudget(width,height,request.file.size,request.budget,request.retained)
       const signature=new Uint8Array(await request.file.slice(0,2).arrayBuffer())
@@ -28,7 +29,12 @@ self.onmessage=async(event:MessageEvent<FineEditorRequest&{id:string;generation:
       width=decodedWidth;height=decodedHeight
       const canvas=new OffscreenCanvas(width,height),context=canvas.getContext('2d')
       if(!context)throw new Error('FINE_EDITOR_CANVAS_UNAVAILABLE')
-      context.drawImage(image,0,0);pixels=context.getImageData(0,0,width,height).data
+      context.drawImage(image,0,0)
+      if(request.action==='decodeBitmap'){
+        const result=canvas.transferToImageBitmap()
+        self.postMessage({id,generation,result:{width,height,bitmap:result}},[result]);return
+      }
+      pixels=context.getImageData(0,0,width,height).data
       self.postMessage({id,generation,result:{width,height,pixels}},[pixels.buffer]);return
     }
     width=request.width;height=request.height;pixels=request.pixels

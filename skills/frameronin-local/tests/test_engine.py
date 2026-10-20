@@ -175,6 +175,21 @@ class ProjectTests(unittest.TestCase):
             with self.assertRaises(RoninError):self.project.save_document(document_id,'image',payload,1)
         self.assertEqual(len(self.project.assets()),before)
 
+    def test_control_documents_and_original_m4a_aac_inputs_preserve_formal_versions(self):
+        for extension in ['.m4a','.aac']:
+            source=self.root/('music'+extension)
+            subprocess.run(['ffmpeg','-v','error','-f','lavfi','-i','sine=frequency=440:duration=0.1','-c:a','aac',str(source)],check=True,timeout=10)
+            version=self.project.import_file(source)
+            self.assertEqual(version['metadata']['kind'],'audio')
+            self.assertGreater(version['metadata']['durationSeconds'],0)
+            self.assertGreater(version['metadata']['sampleRate'],0)
+            for variant in ['topdown','arcade']:
+                document_id=identifier();payload={'formatVersion':1,'variant':variant,'music':{'versionId':version['id'],'name':source.name,'type':'audio/aac'}}
+                self.project.save_document(document_id,'control-'+variant,payload,0)
+                self.assertEqual(Project(self.project.root).document(document_id)['payload'],payload)
+                with self.assertRaises(RoninError):self.project.save_document(document_id,'control-'+variant,payload,0)
+        self.assertTrue(self.project.verify()['valid'])
+
     def test_watermark_keeps_original_decoded_video_audio_and_resource_boundary(self):
         fixtures = Path(__file__).resolve().parents[1] / 'assets/fixtures/watermark'
         source = self.project.import_file(fixtures / 'source.mp4')
