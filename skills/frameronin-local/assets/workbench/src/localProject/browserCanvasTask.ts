@@ -1,6 +1,7 @@
 import { jsonPost, localFetch, localJson } from './api'
 import {captureSelectedVideo} from '../lib/browserVideoCapture'
 import type {VideoCaptureLayout} from '../lib/videoCapture'
+import {runFineEditorWorker} from '../lib/fineEditorWorker'
 
 type Ready={ready:boolean;generation?:number;state?:string}
 /** Runs beyond its component's lifetime. The existing queue owns publication;
@@ -37,6 +38,15 @@ export async function browserCanvasTask(id:string,file:Blob,parameters:object,si
       if(!response.ok)throw new Error('VIDEO_SOURCE_VERSION_UNREADABLE')
       const selected=await response.blob();if(selected.size!==source.bytes)throw new Error('VIDEO_SOURCE_VERSION_CHANGED')
       blob=await captureSelectedVideo(selected,p.layout,{budget:options.budgetBytes,frontendBytes:p.frontendBytes,physical:{width:source.width!,height:source.height!}},captureController.signal,{id,generation:generation!},p=>options.onProgress?.(.2+.6*p))
+    }else if(options.operation==='image.flowNormalize'){
+      const p=parameters as {width:number;height:number;frontendBytes:number}
+      captureController=new AbortController();if(signal.aborted)captureController.abort();onStarted?.()
+      const decoded=await runFineEditorWorker({action:'decode',file,budget:options.budgetBytes,retained:p.frontendBytes},captureController.signal,generation!)
+      if(decoded.width!==p.width||decoded.height!==p.height||!decoded.pixels)throw new Error('FLOW_DECODE_DIMENSIONS')
+      // Move the buffer directly to the encoder Worker. The main thread does
+      // not inspect, copy or iterate the full-resolution raster.
+      const encoded=await runFineEditorWorker({action:'encode',width:decoded.width,height:decoded.height,pixels:decoded.pixels,budget:options.budgetBytes,retained:p.frontendBytes},captureController.signal,generation!)
+      if(!encoded.blob)throw new Error('FLOW_DECODE_OUTPUT');blob=encoded.blob
     }else{
     worker=options.operation==='video.frameTools'?new Worker(new URL('../lib/videoFrames.worker.ts',import.meta.url),{type:'module'}):
       options.operation==='image.matteTool'?new Worker(new URL('../lib/matteTool.worker.ts',import.meta.url),{type:'module'}):

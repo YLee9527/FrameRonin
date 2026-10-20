@@ -4,7 +4,10 @@ import { browserCanvasTask } from './browserCanvasTask'
 export type ManagedVersion = { id: string; name?: string; metadata: { kind: string; bytes: number; width?: number; height?: number; displayWidth?:number;displayHeight?:number;orientation?:number;containerFormat?:string;frames?: number; extension?: string; durationSeconds?: number; sampleRate?: number; channels?: number; thumbnailDataUrl?: string } }
 type Version = ManagedVersion
 type Task = { id: string; state: string; progress: number; results: string[]; error?: { code: string; message: string } }
-type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void; outputFilter?: (version: Version) => boolean }
+type Options = { signal?: AbortSignal; onProgress?: (progress: number) => void; onTask?: (taskId: string) => void; outputFilter?: (version: Version) => boolean;
+  /** Only for views that render bounded server thumbnails and retain originals
+   * as encoded Blobs. Never decode these result files in the main thread. */
+  imageResults?:'encoded-only' }
 const imported = new WeakMap<Blob, { project: string; version: string }>()
 const importing = new WeakMap<Blob, { project: string; promise: Promise<Version> }>()
 
@@ -98,7 +101,7 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     if (signal?.aborted) abort()
     while (['queued', 'running'].includes(record.state)) {
       signal?.throwIfAborted()
-      if(['video.capture','video.frameTools','image.matteTool','image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'].includes(operation)&&(parameters as {renderer?:string}).renderer==='browser-worker'&&record.state==='running'&&!browserRun){
+      if(['video.capture','video.frameTools','image.flowNormalize','image.matteTool','image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'].includes(operation)&&(parameters as {renderer?:string}).renderer==='browser-worker'&&record.state==='running'&&!browserRun){
         browserRun=browserCanvasTask(record.id,files[0],parameters,browserController.signal,()=>options.onProgress?.(.2),{operation,budgetBytes:memoryBudgetBytes,files:['image.matteTool','video.frameTools'].includes(operation)?files:undefined,onProgress:options.onProgress,source:inputVersions[0].metadata}).catch(error=>{browserError=error})
       }
       if(browserError)throw browserError
@@ -117,9 +120,9 @@ export async function runManagedTask(operation: string, files: Blob[], parameter
     for (const version of versions) {
       if(!Number.isSafeInteger(version.metadata.bytes)||version.metadata.bytes<0
         ||version.metadata.kind==='image'&&(!Number.isSafeInteger(version.metadata.width)||!Number.isSafeInteger(version.metadata.height)||(version.metadata.width??0)<1||(version.metadata.height??0)<1))throw new Error('TASK_RESULT_METADATA_INVALID')
-      const decodedBytes = version.metadata.kind === 'image'
+      const decodedBytes = version.metadata.kind === 'image'&&options.imageResults!=='encoded-only'
         ? (version.metadata.width ?? 0) * (version.metadata.height ?? 0) * 4 : 0
-      retainedBytes += version.metadata.bytes * 2 + decodedBytes * 4
+      retainedBytes += version.metadata.bytes * 2 + decodedBytes * 4+(version.metadata.thumbnailDataUrl?.length??0)*2
       // Leave room for decoding and frontend copies. Larger results remain in
       // the project and can be downloaded through its result links.
       if (!Number.isSafeInteger(retainedBytes)||retainedBytes<0||!Number.isFinite(memoryBudgetBytes) || retainedBytes > memoryBudgetBytes / 4) {

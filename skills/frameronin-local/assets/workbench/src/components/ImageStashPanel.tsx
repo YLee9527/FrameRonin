@@ -143,7 +143,7 @@ export default function ImageStashPanel() {
       const stashUrl = e.dataTransfer.getData(STASH_DRAG_TYPE)
       if (stashUrl) {
         const stashName = e.dataTransfer.getData('application/x-frameronin-stash-name') || undefined
-        void addImage(stashUrl, stashName)
+        void addImage(stashUrl, stashName).catch(()=>message.error(t('stashSendToLocalFailed')))
         return
       }
 
@@ -152,11 +152,11 @@ export default function ImageStashPanel() {
       for (let i = 0; i < files.length; i++) {
         const f = files[i]
         if (f.type.startsWith('image/')) {
-          void addImage(URL.createObjectURL(f), f.name)
+          void addImage(URL.createObjectURL(f), f.name,true).catch(()=>message.error(t('stashSendToLocalFailed')))
         }
       }
     },
-    [addImage]
+    [addImage,t]
   )
 
   return (

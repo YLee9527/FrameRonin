@@ -157,8 +157,13 @@ def application(project, port):
     def result_manifest(task_id:str):
         record=task(project,task_id)
         if record['state']!='succeeded':raise RoninError('TASK_NOT_COMPLETE','Only accepted task results can be previewed.')
-        versions=[project.version(version_id) for version_id in record['results']]
-        return [{key:version.get(key) for key in ['id','name','metadata']} for version in versions]
+        values=[];retained=0
+        for version_id in record['results']:
+            version=project.version(version_id);public={key:version.get(key) for key in ['id','name','metadata']}
+            retained+=len(json.dumps(public))*2
+            if retained>memory_budget()//16:raise RoninError('TASK_RESULTS_LIMIT','Result metadata exceeds the preview budget; use the project asset pages.')
+            values.append(public)
+        return values
 
     @app.get('/api/tasks')
     def list_tasks():

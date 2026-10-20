@@ -1,0 +1,1758 @@
+{
+  "date": "2026-10-20",
+  "scope": "AdvancedPixel actual workbench, controlled browser normalization/native processing, formal optical-flow documents/history and stash transfers; checkpoint only",
+  "projectId": "23438905-6cf7-4bc7-85b3-9d5c58ac885f",
+  "fixedOriginalComparison": {
+    "files": {
+      "fixtureSha256": "b1edcace85813e383958f890a1dd3e40d1dfd1c3c97978cfbcc5100368614618",
+      "actualSha256": "54bd99aa7c7f67d4486e4a9bb9a4e7dfb642a7b13be73c2eef64b838aa0e5c50",
+      "frames": 31,
+      "comparisons": [
+        {
+          "frame": "frame_001.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_002.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_003.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_004.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_005.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_006.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_007.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_008.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_009.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_010.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_011.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_012.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_013.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_014.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_015.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_016.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_017.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_018.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_019.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_020.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_021.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_022.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_023.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_024.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_025.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_026.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_027.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_028.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_029.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_030.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_031.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "sheetLayoutFromOriginalFrames": {
+        "equal": true,
+        "width": 3072,
+        "height": 3072,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      "failed": []
+    },
+    "sheetInput": {
+      "fixtureSha256": "b1edcace85813e383958f890a1dd3e40d1dfd1c3c97978cfbcc5100368614618",
+      "actualSha256": "0115c9a3cc7ee1a8889f3e8e77c42681b24c952f3a1a8ec69a26a69086829df2",
+      "frames": 31,
+      "comparisons": [
+        {
+          "frame": "frame_001.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_002.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_003.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_004.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_005.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_006.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_007.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_008.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_009.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_010.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_011.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_012.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_013.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_014.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_015.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_016.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_017.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_018.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_019.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_020.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_021.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_022.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_023.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_024.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_025.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_026.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_027.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_028.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_029.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_030.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        },
+        {
+          "frame": "frame_031.png",
+          "equal": true,
+          "width": 512,
+          "height": 512,
+          "maxChannelError": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "differentPixels": 0,
+          "firstDifference": null,
+          "encodedBytesEqual": false
+        }
+      ],
+      "sheetLayoutFromOriginalFrames": null,
+      "failed": []
+    },
+    "sheetOracle": "Exact tiling of the frozen original 31 frames; original grid/export kernel separately verified by nine browser cases in skill-flow-tools-engine.json"
+  },
+  "sourceFormats": {
+    "cases": [
+      {
+        "sample": "jpg",
+        "comparisons": [
+          {
+            "frame": "frame_001.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_002.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_003.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "oriented-jpg",
+        "comparisons": [
+          {
+            "frame": "frame_001.png",
+            "equal": true,
+            "width": 12,
+            "height": 16,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_002.png",
+            "equal": true,
+            "width": 12,
+            "height": 16,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_003.png",
+            "equal": true,
+            "width": 12,
+            "height": 16,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "oriented-png",
+        "comparisons": [
+          {
+            "frame": "frame_001.png",
+            "equal": true,
+            "width": 12,
+            "height": 16,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_002.png",
+            "equal": true,
+            "width": 12,
+            "height": 16,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_003.png",
+            "equal": true,
+            "width": 12,
+            "height": 16,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "lossless-webp",
+        "comparisons": [
+          {
+            "frame": "frame_001.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_002.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_003.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "lossy-webp",
+        "comparisons": [
+          {
+            "frame": "frame_001.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_002.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_003.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          }
+        ],
+        "equal": true
+      },
+      {
+        "sample": "oriented-webp",
+        "comparisons": [
+          {
+            "frame": "frame_001.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_002.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          },
+          {
+            "frame": "frame_003.png",
+            "equal": true,
+            "width": 16,
+            "height": 12,
+            "maxChannelError": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "differentPixels": 0,
+            "firstDifference": null,
+            "encodedBytesEqual": false
+          }
+        ],
+        "equal": true
+      }
+    ],
+    "failed": []
+  },
+  "stash": {
+    "frames": 5,
+    "comparisons": [
+      {
+        "frame": "frame_001.png",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      {
+        "frame": "frame_002.png",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      {
+        "frame": "frame_003.png",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      {
+        "frame": "frame_004.png",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      {
+        "frame": "frame_005.png",
+        "equal": true,
+        "width": 16,
+        "height": 12,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      }
+    ],
+    "failed": [],
+    "beforeTasks": 31,
+    "afterTasks": 33,
+    "normalizedInputsReused": true,
+    "counts": {
+      "tasks": 33,
+      "versions": 297
+    },
+    "repeatedButtonTransfers": 2,
+    "pickerImportUndoRedo": true,
+    "nativeDrag": "Attempted with DOM drag and held ordinary mouse; no successful native drag observed; remains open"
+  },
+  "cancellation": {
+    "taskId": "d0fd16ec-1427-4e20-b365-da6b8f971efe",
+    "state": "canceled",
+    "generation": 1,
+    "results": [],
+    "uiFeedbackMs": 288,
+    "receipt": {
+      "generation": 1,
+      "cancelElapsedSeconds": 0.04787512507755309,
+      "processStopConfirmed": true,
+      "scope": "local_owned_processes",
+      "aiState": null,
+      "ownedProcessCount": 2
+    },
+    "observedComputingBefore": {
+      "taskId": "d0fd16ec-1427-4e20-b365-da6b8f971efe",
+      "state": "running",
+      "progress": 0.12755905511811025,
+      "inputFrames": 128
+    },
+    "ownedChildrenStopped": true,
+    "finalRecheck": true
+  },
+  "guards": {
+    "documentId": "dab35d8c-04e8-471b-b85f-23aae7b6f143",
+    "revision": 4,
+    "currentAlpha": 0.7,
+    "retainedFlowTask": "b7c1104f-e897-43a5-bed6-26c3afefb3bd",
+    "lateTask": "7540cd3f-3fd6-4ce9-9b65-355e5af0a82c",
+    "lateState": "succeeded",
+    "lateAlpha": 0.65,
+    "lateResults": [
+      "1eedf046-e7b2-4b53-b0f4-bfe80452b36f",
+      "60162c36-7d88-49f2-bc2d-d4898b9f9284",
+      "a2847da1-15fa-4f62-ac30-1089077a0092",
+      "d7bf6454-515f-46de-9994-6243453dc207",
+      "b337a3bf-43cd-4995-9db9-56654b6f292c",
+      "80ebb7c1-7ca7-439f-8af7-71a83ad2d2e4"
+    ],
+    "conflictBlockedNavigation": true,
+    "saveAsPreservedEdits": true,
+    "lateReadPreservedAlpha": 0.65,
+    "lateResultPreservedCurrentDocument": true
+  },
+  "coldPagination": {
+    "coldReload": true,
+    "document": "baddb969-b6a0-49f4-8de5-8977f9ac2275",
+    "visibleFileRows": 8,
+    "sourceText": "已选 128 帧 · 512×512",
+    "noResultDownload": true
+  },
+  "resultPagination": {
+    "totalFrames": 31,
+    "page": 2,
+    "firstVisibleFrame": 25,
+    "lastVisibleFrame": 31,
+    "visibleFrames": 7,
+    "savedRevision": 5,
+    "languages": [
+      "zh",
+      "en",
+      "ja"
+    ]
+  },
+  "backgroundChain": {
+    "tasks": [
+      {
+        "id": "129050f5-7392-45a5-bc45-3343df5740e0",
+        "state": "succeeded",
+        "generation": 0,
+        "operation": "sequence.opticalFlow",
+        "inputs": [
+          "80a4f556-92c0-464b-b851-9f0a399bbc87",
+          "afc03375-eef1-450c-a4b6-d5a6e44fdc70"
+        ],
+        "results": [
+          "dae6ce98-1568-4d0c-b54a-ca75c38a2ec0",
+          "c85e6831-683c-49b6-b9ba-37b6d06fc9e8",
+          "75c9a308-edb4-43e2-97d1-132cbe24bf4d",
+          "20d5a76c-6f36-450d-832b-dd3b297b34f6"
+        ]
+      },
+      {
+        "id": "99064dde-cb10-4dce-b3de-49b17fcc85a6",
+        "state": "succeeded",
+        "generation": 0,
+        "operation": "image.flowNormalize",
+        "inputs": [
+          "8c63a60f-c0db-4fb2-bb2a-4f604e514d86"
+        ],
+        "results": [
+          "afc03375-eef1-450c-a4b6-d5a6e44fdc70",
+          "831fb7ee-bc42-492b-ac19-f6a287cc25e7"
+        ]
+      },
+      {
+        "id": "6b70531b-a36c-475a-a8c4-9e776ddd481c",
+        "state": "succeeded",
+        "generation": 0,
+        "operation": "image.flowNormalize",
+        "inputs": [
+          "2f8a0b85-47fe-4f9f-bea6-78430e90d16a"
+        ],
+        "results": [
+          "80a4f556-92c0-464b-b851-9f0a399bbc87",
+          "999980a9-0242-49e6-ae94-1b91a8023763"
+        ]
+      }
+    ],
+    "nativeFlowStartedAfterLeaveMs": 231,
+    "finalInvisibleContentDownloads": 0,
+    "comparisons": [
+      {
+        "equal": true,
+        "width": 12,
+        "height": 16,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      {
+        "equal": true,
+        "width": 12,
+        "height": 16,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      },
+      {
+        "equal": true,
+        "width": 12,
+        "height": 16,
+        "maxChannelError": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "differentPixels": 0,
+        "firstDifference": null,
+        "encodedBytesEqual": false
+      }
+    ],
+    "savedSourceOnlyDocumentVerified": true
+  },
+  "formalProject": {
+    "projectId": "23438905-6cf7-4bc7-85b3-9d5c58ac885f",
+    "tasks": 37,
+    "versions": 313,
+    "documents": 12,
+    "valid": true,
+    "database": "ok",
+    "activeTasks": 0,
+    "canceledTaskUnchanged": true
+  },
+  "readOnlyRestore": {
+    "projectId": "23438905-6cf7-4bc7-85b3-9d5c58ac885f",
+    "documents": [
+      {
+        "id": "ec1b42ec-93c8-4468-8e95-8c9e174d085d",
+        "revision": 5,
+        "inputMode": "files",
+        "sourceFiles": 16,
+        "splitFrames": 0,
+        "resultFrames": 31,
+        "normalizationTasks": 0,
+        "taskIds": [
+          "f371c91f-cc75-465d-b310-559c3ce0bddd",
+          "fa73b858-8675-4006-ae8d-c01794978106",
+          "c4c5bb9c-3f30-4620-b716-3e75d0c96eb4"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "3c4e5d5a-c37b-4c9c-ac91-934e1126ac78",
+        "revision": 1,
+        "inputMode": "files",
+        "sourceFiles": 2,
+        "splitFrames": 0,
+        "resultFrames": 0,
+        "normalizationTasks": 0,
+        "taskIds": [],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "dab35d8c-04e8-471b-b85f-23aae7b6f143",
+        "revision": 4,
+        "inputMode": "files",
+        "sourceFiles": 3,
+        "splitFrames": 0,
+        "resultFrames": 5,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "ec85373b-82e8-4b83-87d9-68a766eed2af",
+          "d8b2af37-d1f0-4c52-8780-ad48ae85ec7c",
+          "b7c1104f-e897-43a5-bed6-26c3afefb3bd",
+          "90e1bc31-6709-471e-a7ce-7c850a9a7dba"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "16389551-a126-4709-b6da-86f18a54fd44",
+        "revision": 2,
+        "inputMode": "files",
+        "sourceFiles": 3,
+        "splitFrames": 0,
+        "resultFrames": 5,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "ec85373b-82e8-4b83-87d9-68a766eed2af",
+          "d8b2af37-d1f0-4c52-8780-ad48ae85ec7c",
+          "b7c1104f-e897-43a5-bed6-26c3afefb3bd",
+          "90e1bc31-6709-471e-a7ce-7c850a9a7dba"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "285ccef0-efaf-44da-adac-d87a26fa0712",
+        "revision": 6,
+        "inputMode": "files",
+        "sourceFiles": 3,
+        "splitFrames": 0,
+        "resultFrames": 5,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "ec85373b-82e8-4b83-87d9-68a766eed2af",
+          "d8b2af37-d1f0-4c52-8780-ad48ae85ec7c",
+          "b7c1104f-e897-43a5-bed6-26c3afefb3bd",
+          "90e1bc31-6709-471e-a7ce-7c850a9a7dba"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "71d35069-c862-421b-b9ad-b8608fdbd644",
+        "revision": 2,
+        "inputMode": "files",
+        "sourceFiles": 2,
+        "splitFrames": 0,
+        "resultFrames": 3,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "4ae9ef4f-dba5-4068-bf0e-c6fda31a871c",
+          "5f635759-b685-4b24-bd39-755b3c49a879",
+          "65ac6dc7-c1ef-4930-a36e-ece2985134fd",
+          "52075589-5cd5-4ace-a475-d791fa3e43bb"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "8dfb99b4-c6c7-496d-a912-4b112f6e8346",
+        "revision": 2,
+        "inputMode": "files",
+        "sourceFiles": 2,
+        "splitFrames": 0,
+        "resultFrames": 3,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "005b93aa-84bc-42fd-870c-41c33d56e162",
+          "8041af7a-e016-43cd-91e9-ea1e31083d6b",
+          "a3ca22b7-512c-4a8c-99e0-9457a8e8a86a",
+          "fbb8451b-fa5e-449b-9981-be366ef2d7f2"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "85d17a16-0ce0-44d2-97d2-7617d9bca139",
+        "revision": 2,
+        "inputMode": "files",
+        "sourceFiles": 2,
+        "splitFrames": 0,
+        "resultFrames": 3,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "d0197101-5aea-46d3-a71c-afce6434a84e",
+          "e4426fcc-e83a-4cc6-b5ac-401163ab33a5",
+          "5a90fc7d-f961-44ab-a7bf-c6f052bbc87e",
+          "c86b9d9f-0e3c-45dd-9a30-3202760b7e3e"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "5835b024-2f5a-40c5-9581-de6b12481f9c",
+        "revision": 2,
+        "inputMode": "files",
+        "sourceFiles": 2,
+        "splitFrames": 0,
+        "resultFrames": 3,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "78f50a68-a934-4c47-8fe9-9b4d1ea1ef49",
+          "e0b93cff-0b35-403e-b38f-e6bf5e85074d",
+          "0999c45e-2438-4f05-a8d7-35f61b53c00c",
+          "ed57a389-66c8-4f5f-bf7d-9d3628b60c91"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "5a59c952-5f14-4155-9311-e31568db4b6f",
+        "revision": 3,
+        "inputMode": "files",
+        "sourceFiles": 2,
+        "splitFrames": 0,
+        "resultFrames": 3,
+        "normalizationTasks": 2,
+        "taskIds": [
+          "d2869812-655c-4653-9275-834d7694848d",
+          "8be288be-da1f-4eaf-81aa-03902f953e29",
+          "154bc4bb-606d-49c7-bd54-3869ac29a31f",
+          "746c2e9f-a5ea-4e04-86da-c6ecce381484"
+        ],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "baddb969-b6a0-49f4-8de5-8977f9ac2275",
+        "revision": 5,
+        "inputMode": "files",
+        "sourceFiles": 128,
+        "splitFrames": 0,
+        "resultFrames": 0,
+        "normalizationTasks": 0,
+        "taskIds": [],
+        "referenceIdentityPreserved": true
+      },
+      {
+        "id": "d0fa4054-54f6-43ff-958d-5ae39cb16b6c",
+        "revision": 6,
+        "inputMode": "sheet",
+        "sourceFiles": 16,
+        "splitFrames": 16,
+        "resultFrames": 31,
+        "normalizationTasks": 0,
+        "taskIds": [
+          "3cab7585-114d-4ef7-a91d-ee86a7ddfa34",
+          "2e29ec4b-9fa1-4817-ba5b-c82cf7b87ab7",
+          "3a66f5b2-3549-4440-bfd7-56c1903ece37"
+        ],
+        "referenceIdentityPreserved": true
+      }
+    ],
+    "tasks": 37,
+    "assets": 313,
+    "reads": 687,
+    "metadataPosts": 6,
+    "writes": 0,
+    "unchanged": true
+  },
+  "screenshots": {
+    "skill-flow-workbench.png": "e9ba61d9b8c0af7852ff13d92cae15aefee38e1a5e6599be748d5fe66c0f4b56",
+    "skill-flow-workbench-sheet.png": "815bfaf0c7014aefde5a5f9ed63fc5538ddb7b3d2d0d9ef6bec89960c430a239",
+    "skill-flow-workbench-en.png": "f284febeb887e6bd1b28db3176187b43ff9d88c5626eb4c069737462ab109d7b",
+    "skill-flow-workbench-ja.png": "3629e54e11c93b1236e883f7e9a128c125a03a6b3751c341a8d5e23e76fa9a2c"
+  },
+  "checks": {
+    "pythonTests": 59,
+    "pythonExecution": "45 engine tests plus 14 workflow/video suites; all terminal exit 0",
+    "javascriptTests": 107,
+    "javascriptFocusedRecheck": 18,
+    "productionBuild": true,
+    "targetedEslint": true,
+    "skillValidation": true,
+    "intermediateSizeBoundary": "Preview regression with controlled metadata covers 21 MiB import rejection, 21 MiB formal-result acceptance and 129 MiB rejection; not a large-image UI/RSS acceptance"
+  },
+  "fixes": [
+    "Preserve browser JPEG color rounding and PNG/JPEG/WebP orientation via a formal host decode/encode Worker stage instead of native codec fallback",
+    "Separate <=20 MiB imported sources from <=128 MiB controlled intermediate PNGs, still bounded by the full resource estimate",
+    "Borrowed stash preview URLs stay owned by their source; explicitly transferred URLs are revoked after copying",
+    "No invisible final result downloads after leaving; required intermediate reads continue the task chain",
+    "Bound task result metadata manifests to memoryBudgetBytes/16"
+  ],
+  "remaining": [
+    "Native drag into/from stash not accepted in this host; accessible button/picker transfers verified",
+    "Full host normalization/other-stage cancellation timing and joint browser/engine RSS, cross-tab reservations",
+    "More real assets, full quality, macOS 14, input method/focus/Retina/VoiceOver",
+    "Remaining editors/game, full AI templates/quality, portable distribution and full-scope regression; S2/S3/S4 remain incomplete"
+  ]
+}

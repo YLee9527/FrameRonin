@@ -1,8 +1,12 @@
 # CLI 与本地 API
 
-`image.flowSplit` 接收一份静态 PNG/JPEG/WebP，columns/rows 各 1–64、frontendBytes；每份 ≤20 MiB、边长 ≤30000。后台复用原 splitSpriteSheetGrid 的比例边界和最少 1px 行为，按行输出全部 PNG 和报告。允许输出不等尺寸，光流阶段仍严格拒绝不同尺寸帧。
+`image.flowNormalize` 接收一份选定的静态 PNG/JPEG/WebP ≤20 MiB，参数为 width、height、renderer=browser-worker、frontendBytes。尺寸必须等于原浏览器显示尺寸；JPEG/PNG 展开 EXIF，WebP 保留原浏览器的原尺寸语义。宿主先用专用 Worker 解码，再转移缓冲给编码 Worker，输出无方向标记的正式 PNG 和报告。估算 256 MiB + frontendBytes + 输入字节×8 + 像素×64；不静默改用不同色彩/方向语义的原生解码器，CLI/通用提案不能单独执行此宿主操作。
 
-`sequence.flowExport` 接收 1–1000 份静态图，format 为 zip/sheet，columns 为 1–1000、frontendBytes。ZIP 仅接受已处理 PNG，逐帧按原画布语义规范化并编码，名称 frame_001.png 起；不会把 JPEG 字节伪装成 PNG。sheet 要求等尺寸，实际列数 min(输入数,columns)，行优先，最终边长 ≤30000，输出 PNG/报告。两者估算 256 MiB + frontendBytes + 输入字节×8 + 输入像素总和×32 + 输出像素×32，超预算在启动前拒绝，执行在受控 Node 进程族中。原 sequence.opticalFlow 新增 frontendBytes 默认 0，并计入编码输入副本；算法未改写。这些周边内核已对照，AdvancedPixel 工作台接入尚待完成。
+`image.flowSplit` 接收一份静态规范 PNG，columns/rows 各 1–64、frontendBytes，边长 ≤30000。后台复用原 splitSpriteSheetGrid 的比例边界和最少 1px 行为，按行输出全部 PNG 和报告。允许输出不等尺寸，光流阶段仍严格拒绝不同尺寸帧。
+
+`sequence.flowExport` 接收 1–1000 份静态规范 PNG，format 为 zip/sheet，columns 为 1–1000、frontendBytes。ZIP 逐帧按原画布语义规范化并编码，名称 frame_001.png 起；sheet 要求等尺寸，实际列数 min(输入数,columns)，行优先，最终边长 ≤30000，输出 PNG/报告。Split/Export 的导入源限 20 MiB；origin 为 flowNormalize、flowSplit 或 opticalFlow 的正式 PNG 结果沿用 128 MiB 结果上限，避免浏览器解码及编码膨胀打断合法链。完整预算仍为 256 MiB + frontendBytes + 输入字节×8 + 输入像素总和×32 + 输出像素×32。
+
+三项原生 flowSplit/opticalFlow/flowExport 遇 JPEG、WebP 或有方向的 PNG 返回 FLOW_BROWSER_DECODE_REQUIRED；工作台自动建立、缓存并核对上述正式归一版本，再运行原算法。sequence.opticalFlow 接收 2–500 张等尺寸规范 PNG，输出 2N−1 帧，报告包含完整实际参数。AdvancedPixel 已接入正式 optical-flow 文档及统一历史，预览用有界缩略图，加工/暂存保持原件；改参数不隐式重跑，迟到结果只保留在项目。
 
 `video.capture` 接收一份正式视频版本，参数为 `renderer=browser-worker`、`frontendBytes` 和精确 `layout={sourceWidth,sourceHeight,start,end,fps,maxFrames,crop:{left,top,right,bottom}}`。显示尺寸为 1–30000 整数，起止秒为 0–86400 且 end>start，FPS 为 1–60 有限数，最多 2000 帧。裁边允许有限小数和原版重叠裁边，PNG 画布向下取整并至少 1px；时间戳按原版反复累加间隔。输入 ≤200 MiB，不支持的原生编解码器明确失败，不静默改用 FFmpeg。CLI/通用提案不能直接执行该宿主操作。
 

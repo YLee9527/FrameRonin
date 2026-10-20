@@ -54,4 +54,4 @@ RoninPro 三项独立操作：`image.customScale` 保留目标尺寸、比例、
 
 精灵表按行 GIF 使用工作台的 `image.spriteGifs`，严格布局为 columns、rows、唯一 order、framesPerRow、duration，输出有序 GIF ZIP 与报告。保留原每行最大尺寸左上补透明、独立调色板和 GIF 10ms 时长舍入。原网格切分使用 `image.customSlice`，行列最大 64、总帧数最大 4096；每行 GIF 最多 128 帧、时长 20–500ms、ZIP 最大 128 MiB。静态 PNG/JPEG/WebP 最大 20 MiB，仍受完整工作集预算约束；必须保留宿主浏览器执行端，不使用近似的后端编码替代。
 
-AdvancedPixel 的 image.flowSplit 与 sequence.flowExport 后台内核已加入操作注册表，保留原比例网格余边/极小格和图集列数/帧顺序/ZIP 画布编码；源图每份最多 20 MiB、边长 30000，图集必须等尺寸并符合预算。完整 AdvancedPixel 页面尚未切换，正式文档/历史及实际交互继续实施，不将内核对照视为工作台已验收。
+AdvancedPixel 已接入受控光流、比例网格拆分和图集/ZIP 导出，支持正式文档、统一历史、取消与离开后继续。JPEG/WebP 和有方向 PNG 先由 image.flowNormalize 宿主 Worker 转成正式规范 PNG，避免原生解码的颜色/方向差异；普通无方向 PNG 可直接加工。源图 ≤20 MiB、边长 ≤30000，受控中间 PNG 沿用 128 MiB 输出上限，完整工作集仍须符合预算。直接对非规范图调用 flowSplit/opticalFlow/flowExport 会明确拒绝，使用工作台先归一，不静默换解码器。

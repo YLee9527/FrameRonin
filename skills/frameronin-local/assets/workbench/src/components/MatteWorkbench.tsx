@@ -153,7 +153,7 @@ export default function MatteWorkbench(){
   <Space wrap><Button type="primary" disabled={!hasInputs(d)||!!busy||preparing||sampling} onClick={()=>{clearAuto();void perform('raw')}}>{d.mode==='doubleBg'?t('chromaDoubleBgRedoBtn'):text('重新抠图','Run matte','背景を再計算')}</Button>
    {d.mode==='doubleBg'&&<Button disabled={!d.raw||rawOutdated||!!busy||preparing} onClick={()=>{clearAuto();void perform('repair')}}>{t('chromaDoubleBgPostProcessBtn')}</Button>}
    {resultFile&&rawUrl(resultFile)&&<Button icon={<DownloadOutlined/>} href={rawUrl(resultFile)} download={downloadName}>{t('imgDownload')}</Button>}
-   {d.mode==='doubleBg'&&resultFile&&<Button icon={<InboxOutlined/>} onClick={async()=>{const transfer=URL.createObjectURL(resultFile);await addImage(transfer,downloadName);message.success(t('imgFineEditorSendToStashSuccess'))}}>{t('imgFineEditorSendToStash')}</Button>}
+   {d.mode==='doubleBg'&&resultFile&&<Button icon={<InboxOutlined/>} onClick={async()=>{try{const transfer=URL.createObjectURL(resultFile);await addImage(transfer,downloadName,true);message.success(t('imgFineEditorSendToStashSuccess'))}catch(error){message.error(String(error))}}}>{t('imgFineEditorSendToStash')}</Button>}
   </Space>
   {busy&&<Space><Text>{status}</Text><Progress percent={Math.round(progress*100)} style={{width:160}}/><Button loading={canceling} onClick={()=>{setCanceling(true);clearAuto();active.current?.abort()}}>{text('取消加工','Cancel processing','処理を取消')}</Button></Space>}
   {!busy&&status&&<Text role="status">{status}</Text>}

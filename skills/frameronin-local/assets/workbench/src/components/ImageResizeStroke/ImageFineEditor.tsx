@@ -710,7 +710,7 @@ export default function ImageFineEditor({ imageUrl, onExport,binding,disabled=fa
     }catch(error){setEditError(String(error))}
   },[exportBlob,onExport])
   const handleSendToStash=useCallback(async()=>{
-    try{const blob=await exportBlob();addImage(URL.createObjectURL(blob),'fine-edited.png');message.success(t('imgFineEditorSendToStashSuccess'))}
+    try{const blob=await exportBlob();await addImage(URL.createObjectURL(blob),'fine-edited.png',true);message.success(t('imgFineEditorSendToStashSuccess'))}
     catch(error){setEditError(String(error))}
   },[exportBlob,addImage,t])
 

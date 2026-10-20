@@ -70,6 +70,9 @@ REGISTRY = {
         'frontendBytes': integer(0,0,2*1024**3)}, 'png_sequence_report', 'full_frame_pair', overhead=384),
     'image.flowSplit': operation(['image'], {'columns': integer(4,1,64), 'rows': integer(1,1,64),
         'frontendBytes': integer(0,0,2*1024**3)}, 'png_sequence_report', 'original_proportional_grid', overhead=256),
+    'image.flowNormalize': operation(['image'],{'width':integer(256,1,30000),'height':integer(256,1,30000),
+        'renderer':choice('browser-worker',['browser-worker']),'frontendBytes':integer(0,0,2*1024**3)},
+        'png_report','original_browser_decode',overhead=256),
     'sequence.flowExport': operation(['image+'], {'format': choice('zip',['zip','sheet']),
         'columns': integer(1,1,1000), 'frontendBytes': integer(0,0,2*1024**3)},
         'png_or_zip_report', 'original_optical_flow_export', overhead=256),
@@ -363,11 +366,23 @@ def preview(project, payload):
             raise RoninError('OPTICAL_FLOW_FRAMES', 'Select 2–500 frames with identical dimensions; output is limited to 999 frames.')
         estimate += sum(pixels) * 4 + pixels[0] * (2 * len(versions) - 1) * 4 + max(pixels) * 64
         estimate += values['frontendBytes'] + sum(v['metadata']['bytes'] for v in versions)*4
+    if name in ['sequence.opticalFlow','image.flowSplit','sequence.flowExport']:
+        if any(v['metadata'].get('containerFormat')!='PNG' or (v['metadata'].get('orientation') or 1)!=1 for v in versions):
+            raise RoninError('FLOW_BROWSER_DECODE_REQUIRED','Use the workbench to decode JPEG, WebP and oriented images into canonical PNG versions before optical-flow processing or export.')
+    if name=='image.flowNormalize':
+        m=versions[0]['metadata'];width=m['width'] if m.get('containerFormat')=='WEBP' else m.get('displayWidth',m['width']);height=m['height'] if m.get('containerFormat')=='WEBP' else m.get('displayHeight',m['height'])
+        if m.get('containerFormat') not in ['PNG','JPEG','WEBP'] or m.get('frames',1)!=1 or m['bytes']>20*1024**2 or values['width']!=width or values['height']!=height:
+            raise RoninError('FLOW_DECODE_INPUT','Normalize a static selected image at its original displayed dimensions, up to 20 MiB.')
+        estimate=256*1024**2+values['frontendBytes']+m['bytes']*8+width*height*64
     if name in ['image.flowSplit','sequence.flowExport']:
-        if any(v['metadata'].get('frames',1)!=1 or v['metadata'].get('containerFormat') not in ['PNG','JPEG','WEBP'] or v['metadata']['bytes']>20*1024**2 or max(v['metadata']['width'],v['metadata']['height'])>30000 for v in versions):
-            raise RoninError('FLOW_SOURCE_FORMAT','Select static PNG, JPEG or WebP frames up to 20 MiB and 30000 pixels per side.')
-        if name=='sequence.flowExport' and values['format']=='zip' and any(v['metadata'].get('containerFormat')!='PNG' for v in versions):
-            raise RoninError('FLOW_EXPORT_FORMAT','Frame ZIP export requires the processed PNG versions; source JPEG/WebP files must not be renamed as PNG.')
+        # Browser decoding and interpolation can expand a valid <=20 MiB source
+        # into a larger PNG. Keep the upload limit separate from the existing
+        # controlled-result limit; both still pass the full working-set budget.
+        for version in versions:
+            m=version['metadata']
+            limit=128*1024**2 if version.get('origin') in ['image.flowNormalize','image.flowSplit','sequence.opticalFlow'] else 20*1024**2
+            if m.get('frames',1)!=1 or m['bytes']>limit or max(m['width'],m['height'])>30000:
+                raise RoninError('FLOW_SOURCE_FORMAT','Use static canonical PNGs up to 30000 pixels per side: imports up to 20 MiB, controlled flow results up to 128 MiB.')
         output_pixels=0
         if name=='image.flowSplit':
             m=versions[0]['metadata'];cols,rows=values['columns'],values['rows']
@@ -426,7 +441,7 @@ def preview(project, payload):
                          {'estimatedBytes': estimate, 'budgetBytes': budget})
     processing_mode = ('legacy_browser_composite' if name == 'gif.split' else 'per_frame_browser_palette') \
         if name in ['gif.split', 'sequence.gif'] and values['renderer'] == 'browser' else spec['processingMode']
-    requires_workbench=name in ['video.capture','video.frameTools','image.matteTool','image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
+    requires_workbench=name in ['video.capture','video.frameTools','image.flowNormalize','image.matteTool','image.sheetCompose','image.sheetGif','image.sheetFix','image.sheetFrames','image.sheetPreprocess','image.sheetPrepare','image.spriteGifs','image.visibleWatermark','image.customScale','image.normal','image.expandShrink','image.scatterDetect','image.scatterExport','image.customSlicePlan','image.customSlice','image.customCompose'] and values['renderer']=='browser-worker'
     if requires_workbench:processing_mode='original_host_canvas_worker'
     return {'operation': name, 'inputs': inputs, 'parameters': values, 'versions': versions,
             'estimatedBytes': estimate, 'budgetBytes': budget, 'processingMode': processing_mode,

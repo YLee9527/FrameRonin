@@ -57,6 +57,42 @@ test('missing runtime budget rejects before imports or job creation', async () =
     assert.equal(requests.length, 1)
   } finally { globalThis.fetch = nativeFetch }
 })
+test('encoded-only image results keep registered bytes without reserving main-thread raster copies',async()=>{
+ const requests=fixture({'/api/tasks/task/results':()=>response([{id:'output',metadata:{kind:'image',bytes:3,width:8192,height:8192}}])})
+ try{
+  const result=await runManagedTask('sequence.opticalFlow',[new Blob(['source'])],{},{imageResults:'encoded-only'})
+  assert.equal(result.outputs[0].blob.size,3);assert(requests.some(r=>r.url.endsWith('/content')))
+ }finally{globalThis.fetch=nativeFetch}
+ const rejected=fixture({'/api/tasks/task/results':()=>response([{id:'output',metadata:{kind:'image',bytes:300*1024**2,width:256,height:256}}])})
+ try{
+  await assert.rejects(runManagedTask('sequence.opticalFlow',[new Blob(['source'])],{},{imageResults:'encoded-only'}),/preview budget/)
+  assert(!rejected.some(r=>r.url.endsWith('/content')))
+ }finally{globalThis.fetch=nativeFetch}
+})
+test('flow browser decode transfers its raster straight into an encoder Worker and publishes only encoded content',async()=>{
+ const nativeWorker=globalThis.Worker,calls=[],workers=[];let uploaded=false
+ class Worker{
+  constructor(){assert(workers.every(w=>w.stopped));workers.push(this)}
+  terminate(){this.stopped=true}
+  postMessage(p,transfer){
+   calls.push({action:p.action,transferred:!!transfer?.length&&transfer[0]===p.pixels?.buffer})
+   const result=p.action==='decode'?{width:16,height:12,pixels:new Uint8ClampedArray(16*12*4)}:{width:16,height:12,blob:new Blob(['png'],{type:'image/png'})}
+   queueMicrotask(()=>this.onmessage({data:{id:p.id,generation:p.generation,result}}))
+  }
+ }
+ globalThis.Worker=Worker
+ const requests=fixture({
+  '/api/tasks':()=>response({id:'task',state:'running'}),
+  '/api/tasks/task':()=>response({id:'task',state:uploaded?'succeeded':'running',progress:uploaded?1:.1,results:uploaded?['output']:[]}),
+  '/api/tasks/task/browser':()=>response({ready:true,generation:0,state:'running'}),
+  '/api/tasks/task/browser/heartbeat':()=>response({accepted:true}),
+  '/api/tasks/task/browser/result':init=>{assert.equal(init.body.get('file').type,'image/png');uploaded=true;return response({accepted:true})},
+ })
+ try{
+  await runManagedTask('image.flowNormalize',[new File(['selected'],'source.jpg',{type:'image/jpeg'})],{width:16,height:12,frontendBytes:0,renderer:'browser-worker'})
+  assert.deepEqual(calls,[{action:'decode',transferred:false},{action:'encode',transferred:true}]);assert(workers.every(w=>w.stopped));assert(requests.some(r=>r.url.endsWith('/browser/result')))
+ }finally{globalThis.Worker=nativeWorker;globalThis.fetch=nativeFetch}
+})
 test('concurrent document save and processing share one selected input import', async () => {
   let imports = 0
   fixture({ '/api/assets': async () => { imports++;await new Promise(resolve=>setTimeout(resolve,20));return response({id:'shared-input'}) } })

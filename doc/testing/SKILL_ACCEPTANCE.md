@@ -389,3 +389,23 @@ video.capture 使用与原 ParamsStep 相同的宿主原生视频解码，不借
 56 Python / 99 JS、三项光流周边专项、原版测试页构建及 Node 语法检查通过。负向覆盖类型/范围、伪 PNG ZIP、不同尺寸图集、超过 30000 边长、未知路径与前端预算超限，拒绝前未创建任务。复现：原版测试页 Run original optical flow grid and exports 下载 browser-flow-tools.zip，然后 tests/accept_flow_tools_oracle.py <zip> --project <新验收项目> --output <json>；默认同时核对已冻结原输出，--freeze 只用于第一次生成基线，不覆盖已有目录。
 
 此检查点尚未改写 AdvancedPixel 界面。其正式文档/统一历史、跨工具输入与结果、预览/取消/离开后继续和实际交互仍待接入，不以后台内核证明完整入口完成。详见 [内核证据](evidence/skill-flow-tools-engine.json)，S2/S3/S4 不升级。
+
+## 2026-10-20 AdvancedPixel 工作台与光流文档检查点
+
+多文件按名排序与精灵表比例网格输入、全部原品质/双向/平滑/位移/时间权重/最近邻设置、PNG ZIP 和图集导出接入受控任务。界面只解码有界缩略图，原件和结果保留真实编码文件；文件/结果按 24/64/128 分页。正式 optical-flow 文档保存当前配方、归一/切分/光流/导出实际任务来源与文件引用，先核对元数据/任务/报告及完整预算后恢复。共享保存/自动保存、另存、冲突阻止导航、统一手势及结果历史、迟到读取/结果保护同时接入。
+
+16×512×512 固定原浏览器语料完成实际多文件和 8×2 精灵表两条链：每条 31 帧 ZIP 的命名、顺序、全部 RGBA 严格相同；实际 6 列图集与冻结原帧的准确布局相同。图集合成的独立原函数对照仍由此前九项内核证据提供，不把按原帧拼图称作新浏览器 oracle。31 帧末页实际显示 25–31，128 源帧文档冷重开保持第六页八项且无取消结果；重开和序列化未新增任务、版本或文档。中、英、日实际界面与截图完成检查。
+
+初验发现原生 Skia 的 JPEG 舍入和 PNG/WebP 方向处理不同于原浏览器，因此新增 image.flowNormalize：专用解码 Worker 的缓冲转移给编码 Worker，生成正式无方向 PNG；本地内核遇非规范源明确拒绝，不用提示或额外容差掩盖差异。普通/旋转 JPEG、旋转 PNG、无损/有损/旋转 WebP 六条实际链共 18 帧与原 Canvas 输出严格 RGBA 相同。改输入、历史或重复加工复用对应正式归一版本。原件仍限 20 MiB，受控中间 PNG 沿用 128 MiB 输出上限；21/129 MiB 边界由预检回归覆盖，未据此声称大图 UI/RSS 验收。
+
+同一结果两次按钮转入暂存成功，原预览 URL 保留；选择器从暂存导入、撤销/重做，再生成五帧 ZIP 通过原像素对照，仅新增光流和导出两任务，没有重复归一。共享暂存现在区分借用 URL 与显式转移的 URL，异步失败不再登记损坏地址。原生拖放用 DOM drag 和普通鼠标按住移动均未确认成功，按钮/选择器通过不替代该缺口。
+
+128×512×512 高品质任务在实际计算时取消，界面反馈 288ms，所属两进程停止约 0.048s；取消代次 1、无结果，所有其他任务完成后再次核对无迟到登记。原生归一→第二次归一→光流链在返回菜单后继续，光流请求在离开 231ms 后发起；最终三帧严格对照通过，最后阶段不可见正文下载为零，源文档仍无后台结果引用。必要中间读取保留以完成下一段，关闭宿主标签仍不能保证 Worker 存活。
+
+冲突拒绝返回，另存保持当前编辑；两秒受控正文延迟下编辑 .65 不被打开文档覆盖，计算中继续改为 .7 也保留既有结果引用，.65 的迟到结果只登记项目。最终 37 任务/313 版本/12 文档、无活动任务，数据库/内容校验通过；生产序列化器只读恢复全部 12 文档，所有输入/结果对象身份和任务状态保持相同。
+
+59 Python（45 引擎加 14 工作流/视频）/107 JS、生产构建、相关 ESLint 和 Skill 结构检查通过；最后变更另复验 18 项文档/任务/暂存 JS 检查。详见 [结构化证据](evidence/skill-flow-workbench.json)、[中文](evidence/skill-flow-workbench.png)、[精灵表](evidence/skill-flow-workbench-sheet.png)、[英文](evidence/skill-flow-workbench-en.png)和[日文](evidence/skill-flow-workbench-ja.png)。
+
+复现：工作台使用 fixtures/flow-tools/workbench/inputs 或 input-sheet.png（8×2），默认平衡参数生成31帧；下载后运行 tests/compare_flow_workbench.py <ZIP> --sheet <PNG，可选> --output <JSON>，会先核对冻结输入、原输出和原代码散列。六种格式语料复用 fine-editor 的原 Canvas 冻结样本。tests/verify_flow_document_api.mjs --base <本机服务> --output <JSON> 只读恢复既有文档，禁止加工/导入/保存。测试延迟仍只在 tests/support/gated_workbench.py。
+
+原生拖放、宿主各阶段完整停止计时、联合 RSS/跨标签预算、更多真实质量/格式、macOS 14/输入法/Retina/VoiceOver，以及其余编辑器、游戏、AI 与分发保持开放，不升级 S2/S3/S4。

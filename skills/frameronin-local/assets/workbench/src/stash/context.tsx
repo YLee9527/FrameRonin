@@ -5,6 +5,7 @@ import {
   useId,
   useState,
 } from 'react'
+import {materializeStashUrl} from './transfer'
 
 export interface StashItem {
   id: string
@@ -13,19 +14,6 @@ export interface StashItem {
 }
 
 const STORAGE_KEY = 'frameronin_stash'
-
-async function urlToDataUrl(url: string): Promise<string> {
-  if (url.startsWith('data:')) return url
-  if (!url.startsWith('blob:')) return url
-  const res = await fetch(url)
-  const blob = await res.blob()
-  return new Promise((resolve, reject) => {
-    const r = new FileReader()
-    r.onload = () => resolve(r.result as string)
-    r.onerror = reject
-    r.readAsDataURL(blob)
-  })
-}
 
 function loadFromSession(): StashItem[] {
   try {
@@ -48,7 +36,7 @@ function saveToSession(items: StashItem[]) {
 
 interface ImageStashContextValue {
   items: StashItem[]
-  addImage: (url: string, name?: string) => void
+  addImage: (url: string, name?: string, releaseSource?:boolean) => Promise<void>
   removeImage: (id: string) => void
   clearAll: () => void
 }
@@ -60,15 +48,9 @@ export function ImageStashProvider({ children }: { children: React.ReactNode }) 
   const idSeed = useId()
 
   const addImage = useCallback(
-    async (url: string, name?: string) => {
+    async (url: string, name?: string, releaseSource=false) => {
       const id = `${idSeed}-${Date.now()}-${Math.random().toString(36).slice(2)}`
-      let persistUrl: string
-      if (url.startsWith('blob:')) {
-        persistUrl = await urlToDataUrl(url).catch(() => url)
-        if (persistUrl !== url) URL.revokeObjectURL(url)
-      } else {
-        persistUrl = url
-      }
+      const persistUrl=await materializeStashUrl(url,releaseSource)
       setItems((prev) => {
         const next = [...prev, { id, url: persistUrl, name }]
         saveToSession(next)
@@ -105,6 +87,8 @@ export function ImageStashProvider({ children }: { children: React.ReactNode }) 
   )
 }
 
+// The provider and consumer hook intentionally share this context instance.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useImageStash() {
   const ctx = useContext(ImageStashContext)
   if (!ctx) throw new Error('useImageStash must be used within ImageStashProvider')

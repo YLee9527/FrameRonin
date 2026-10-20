@@ -20,7 +20,7 @@
 | sequence.duration | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 1000 帧全局 100ms GIF 下载及全部时长通过；100→101→100ms 键盘撤销重做、迟到结果保护和保存通过 |
 | sequence.merge | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 规则/透明拆分、裁切扩边合成及三种拼接的 14 个原浏览器输出通过固定标准；工作台合成/超级拆分及下载通过，完整参数组合待验收 |
 | sequence.dedupe | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 待逐项验收 |
-| sequence.optical-flow | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | 后台与 RoninPro 工作台固定样本通过；GIF 入口交互待验收 |
+| sequence.optical-flow | RoninPro → 高级像素处理算法 | reference/frontend/src/components/RoninProAdvancedPixel.tsx; reference/frontend/src/lib/opticalFlowInterpolate.ts; reference/frontend/src/lib/spriteGridDuplicate.ts | static PNG/JPEG/WebP files or one sprite sheet + optical-flow parameters → 2N−1 PNG sequence, ordered PNG ZIP or sprite sheet + reports | 多文件/精灵表原版像素、六种格式/方向、受控加工与导出、正式文档/历史、分页/冷重开、冲突/迟到/取消/导航和三语通过；原生拖放、全阶段取消/联合资源继续验收 |
 | sequence.png-zip | GIF与帧 | reference/frontend/src/components/GifFrameConverter.tsx | GIF/PNG frames → GIF/PNG ZIP/sheet | GIF 拆帧 ZIP 实际下载及四帧像素/顺序通过；其他序列 ZIP 入口待验收 |
 | image.crop | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收 |
 | image.resize | 图片常规 | reference/frontend/src/components/ImageResizeStroke.tsx | image → PNG | 受控 Worker、29 组原算法对照、正式文档/历史/取消/冲突通过；完整格式与联合内存继续验收 |

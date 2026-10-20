@@ -1,0 +1,48 @@
+{
+  "formatVersion": 1,
+  "sample": "flow-workbench-16x512",
+  "sources": {
+    "input-sheet.png": "6f0389244a6768448a24e6d2eae34b29ceb3e5241d92a394b7992e4cc7d27dab",
+    "inputs/00.png": "fb80b453f3177fcca517d110794c95d7798600ead2d63a4fc70ee80fa8726d45",
+    "inputs/01.png": "77a0c4945a110ce5feacdac03a791df34d078e3f4a8d0803cfb17b34210de133",
+    "inputs/02.png": "a1b287908424f6f6398a80924b13e94cecb27554b92169f95f869d9305066439",
+    "inputs/03.png": "78ede37053db2bf65bdaa753d8bc776e8692ddb01f850ae9f2be9a9c096d036d",
+    "inputs/04.png": "e456bab4a01823b832e3440ae65544df1def03a9ec54e3babbc79cecca1657b5",
+    "inputs/05.png": "d9a4a24887ddf562921fbb36897d09ea4497b1518e40712c458451963b92846c",
+    "inputs/06.png": "1576dcce25f6af8f5d60bc913becb8844431e996e04926062005b1c15ddfb9eb",
+    "inputs/07.png": "8e8becc2ab9537d1c2e33e09eb2dc82a24bd4e8e0c9e8d996b08f05b27a0ec76",
+    "inputs/08.png": "d6e0c57722dc849390565074414a939219a96a91fcb2cde8aafd45e5cc2f3248",
+    "inputs/09.png": "e1b2cfbf4ba4ca9380dc6550d2f7a3c5bb289d3f8f4eb77ccd92d424b7f564c2",
+    "inputs/10.png": "899f697df0bd58ed4a7faa2ba56a90b99e4e21ba449661e2af2c33478c8a612b",
+    "inputs/11.png": "bfa65812ccfce58cdc45d6f37c82a38f53e9f6b33457746a859584c8d2a19fd8",
+    "inputs/12.png": "619265e4686ddf8b9a02f88094e9c1f83f9c0128d06df74e24207ce8761d45db",
+    "inputs/13.png": "ee7a414dcf6a3b3e09d47e19f131bbad086820f65f7eb0bb055afa48bfad90c4",
+    "inputs/14.png": "f3ac7919db38f61fce2c5123db7325bcfad15417fd41493d88c4e8ee2571b693",
+    "inputs/15.png": "e14e374db503431aa1e8c91aa7fe5c73a224302bbea4e7a831388551b675d6fd",
+    "original-frames.zip": "b534b1d02351a8c0568422575f4a864f7e46d6aeda061b405f144e37a3deacd5"
+  },
+  "parameters": {
+    "alpha": 0.5,
+    "nearestNeighbor": false,
+    "bidirectional": true,
+    "smoothFlow": true,
+    "quality": "balanced",
+    "maxMotionRelative": 0.35
+  },
+  "sheetInput": {
+    "file": "input-sheet.png",
+    "columns": 8,
+    "rows": 2
+  },
+  "sourceCount": 16,
+  "expectedFrames": 31,
+  "width": 512,
+  "height": 512,
+  "exportColumns": 6,
+  "originals": {
+    "reference/frontend/src/components/RoninProAdvancedPixel.tsx": "96313e220cb778780b42f4f6df2cb26a6418d6381b40b4d2280d0848b34d6b6f",
+    "reference/frontend/src/lib/opticalFlowInterpolate.ts": "d372c4f5fea93ba572d11b873e17c99e13abcf7cf796bc75daf6513de5e232f3",
+    "reference/frontend/src/lib/spriteGridDuplicate.ts": "8257d92932d0c2ca77345a01310c3fe6e5cf7a1dbe014d08c1602c6a98395f8d"
+  },
+  "purpose": "Owned artificial inputs and original browser output for actual files/sheet workbench export comparisons; no generated scripts are executed."
+}

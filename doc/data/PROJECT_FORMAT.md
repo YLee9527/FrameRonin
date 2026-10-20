@@ -1,5 +1,11 @@
 # 项目格式 1
 
+光流 `kind=optical-flow`、`formatVersion=1` 保存 inputMode、files/sheet、columns/rows、options、sheetColumns、view，以及 normalizations 和 split/flow/zip/sprite。文件为 `{versionId,name,type}`，结果为 `{outputs,report,inputs,taskId}`。normalizations 逐个绑定已选原件与宿主规范 PNG；后续切分/光流使用该规范版本，重复加工复用已验证归一结果。精确已知的早期格式 1 缺少 normalizations 时补空数组，未知/部分字段仍拒绝。
+
+恢复先核对字段、范围、资源别名、独立结果/任务 ID、选定原件、成功任务、实际输入输出顺序、规范图方向、帧数/尺寸和报告，再按预算批量读取正文。多文件保留实际任务的冻结输入顺序，避免不同语言环境的文件排序影响历史。当前配方可以与已有结果不同；导出只引用实际 flow 输出，不用当前参数重建结果。素材身份复用，重开、撤销和重做均不增加任务或版本。
+
+输入、整段参数手势、分页、切分/归一/加工与导出结果共用 50 步/256 MiB 文件历史。保存/另存/冲突和迟到读取使用共享控件；加工完成再次核对文档对象、执行代次及未结束手势，过期产物留在正式项目。离开页面后链式任务保留必需的中间读取，最后阶段不下载不可见结果；关闭整个宿主标签页仍会中断宿主 Worker。
+
 视频 `kind=video`、`formatVersion=1` 已接入正式工作台。文档保存正式 source、原生显示 info、当前 settings/view、frameCount/frameSize、升序 selected 和当前 mask，以及 capture/analysis/processed/rawSheet/styledSheet/rawDownload/processedDownload 七类可空结果。每个结果为 `{data,report,inputs,taskId}`，所有文件为 `{versionId,name,type}`，不存对象 URL 或用户路径。view 保存分页、游标、动画 FPS/速度/循环及预览背景；仅已知的早期五字段 view 补默认速度 1 和循环 true，未知或部分新字段仍拒绝。
 
 恢复先检查严格字段、范围、分页/游标、唯一身份及一致文件别名，再核对源视频元数据、成功任务、输入输出顺序、实际取帧尺寸/时间戳、处理选帧、遮罩尺寸、图集时间和描边基准、原帧下载的完整顺序。遮罩结果允许保留其实际使用的历史遮罩，与当前 mask 分开；当前设置和选择同样允许尚未应用。所有来源可核对后才按预算读取正文，检查报告参数及输出数量。未知操作、取消任务、其他素材、错误格式或伪装结果拒绝。

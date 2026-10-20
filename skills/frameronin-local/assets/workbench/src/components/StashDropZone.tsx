@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import {stashTransferName} from '../stash/transfer'
 
 const STASH_DRAG_TYPE = 'application/x-frameronin-stash-url'
 
@@ -7,6 +8,9 @@ interface StashDropZoneProps {
   onStashDrop: (file: File) => void
   maxSizeMB?: number
   onSizeError?: () => void
+  maxFiles?:number
+  onCountError?:()=>void
+  disabled?:boolean
 }
 
 /** 包装上传区域，使暂存中的图片拖入时能转换为 File 并触发 onStashDrop */
@@ -15,6 +19,9 @@ export default function StashDropZone({
   onStashDrop,
   maxSizeMB = 20,
   onSizeError,
+  maxFiles=Infinity,
+  onCountError,
+  disabled=false,
 }: StashDropZoneProps) {
   /**
    * 必须在捕获阶段处理：若用冒泡 onDrop，内层 antd Dragger 会先 beforeUpload 加一份文件，
@@ -22,10 +29,13 @@ export default function StashDropZone({
    */
   const handleDropCapture = useCallback(
     async (e: React.DragEvent) => {
+      if(disabled){e.preventDefault();e.stopPropagation();return}
       const url = e.dataTransfer.getData(STASH_DRAG_TYPE)
       if (url) {
+        const name=e.dataTransfer.getData('application/x-frameronin-stash-name')
         e.preventDefault()
         e.stopPropagation()
+        if(maxFiles<1){onCountError?.();return}
         try {
           const res = await fetch(url)
           const blob = await res.blob()
@@ -33,8 +43,7 @@ export default function StashDropZone({
             onSizeError?.()
             return
           }
-          const ext = blob.type === 'image/jpeg' ? 'jpg' : blob.type === 'image/webp' ? 'webp' : blob.type === 'image/gif' ? 'gif' : 'png'
-          const file = new File([blob], `stash_${Date.now()}.${ext}`, { type: blob.type })
+          const file = new File([blob], stashTransferName(name,blob.type), { type: blob.type })
           onStashDrop(file)
         } catch {
           /* ignore */
@@ -45,6 +54,7 @@ export default function StashDropZone({
       if (files?.length) {
         e.preventDefault()
         e.stopPropagation()
+        if(Array.from(files).filter(f=>f.type.startsWith('image/')).length>maxFiles){onCountError?.();return}
         for (let i = 0; i < files.length; i++) {
           const f = files[i]
           if (!f || !f.type.startsWith('image/')) continue
@@ -56,10 +66,11 @@ export default function StashDropZone({
         }
       }
     },
-    [onStashDrop, maxSizeMB, onSizeError]
+    [onStashDrop, maxSizeMB, onSizeError,maxFiles,onCountError,disabled]
   )
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
+    if(disabled){e.preventDefault();e.stopPropagation();e.dataTransfer.dropEffect='none';return}
     const hasStash = e.dataTransfer.types.includes(STASH_DRAG_TYPE)
     const hasFiles = e.dataTransfer.types.includes('Files')
     if (hasStash || hasFiles) {
@@ -67,7 +78,7 @@ export default function StashDropZone({
       e.stopPropagation()
       e.dataTransfer.dropEffect = 'copy'
     }
-  }, [])
+  }, [disabled])
 
   return (
     <div

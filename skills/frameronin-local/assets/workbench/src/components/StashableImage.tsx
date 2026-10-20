@@ -17,6 +17,7 @@ const StashableImage = forwardRef<HTMLImageElement, StashableImageProps>(functio
 ) {
   const handleDragStart = (e: React.DragEvent<HTMLImageElement>) => {
     e.dataTransfer.setData(STASH_DRAG_TYPE, stashSrc ?? src)
+    if(stashName)e.dataTransfer.setData('application/x-frameronin-stash-name',stashName)
     e.dataTransfer.effectAllowed = 'copy'
     onDragStart?.(e)
   }

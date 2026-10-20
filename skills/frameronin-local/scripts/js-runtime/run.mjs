@@ -160,7 +160,7 @@ if (request.operation === 'workflow') {
   const expanded = await algorithms.expandFramesWithOpticalMidpoints(frames, request.parameters,
     (done, total) => process.stdout.write(JSON.stringify({ progress: done / total * 0.9 }) + '\n'))
   for (const canvas of expanded) outputs.push(new Blob([await canvas.encode('png')]))
-  report = { inputFrames: frames.length, outputFrames: expanded.length, method: 'original-opencv-farneback',
+  report = { operation:'sequence.opticalFlow',parameters:request.parameters,inputFrames: frames.length, outputFrames: expanded.length, method: 'original-opencv-farneback',
     processingDimensions: { width: frames[0].width, height: frames[0].height } }
 } else if (['sequence.combine','sequence.stitch','image.sliceBrowser','image.superSlice','image.blank'].includes(request.operation)) {
   const images=[]

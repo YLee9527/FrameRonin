@@ -52,6 +52,19 @@ class ProjectTests(unittest.TestCase):
             time.sleep(.02)
         self.directory.cleanup()
 
+    def test_result_manifest_is_bounded_and_never_leaks_private_paths(self):
+        from frameronin_engine.server import application
+        app=application(self.project,8765)
+        endpoint=next(r.endpoint for r in app.routes if r.path=='/api/tasks/{task_id}/results')
+        with patch('frameronin_engine.server.task',return_value={'state':'succeeded','results':[self.version['id']]}):
+            values=endpoint(identifier());self.assertEqual([v['id'] for v in values],[self.version['id']])
+            self.assertEqual(set(values[0]),{'id','name','metadata'})
+            with patch('frameronin_engine.server.memory_budget',return_value=16):
+                with self.assertRaises(RoninError) as error:endpoint(identifier())
+                self.assertEqual(error.exception.code,'TASK_RESULTS_LIMIT')
+        with patch('frameronin_engine.server.task',return_value={'state':'running','results':[]}):
+            with self.assertRaises(RoninError):endpoint(identifier())
+
     def test_version_manifest_preserves_order_and_rejects_unscoped_ids(self):
         from frameronin_engine.server import application
         app = application(self.project, 8765)
@@ -911,6 +924,33 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(cancel(self.project, first['id'])['state'], 'canceled')
         self.assertEqual(wait(self.project, second['id'], 10)['state'], 'succeeded')
 
+    def test_flow_browser_decode_preserves_display_size_and_requires_host_publication(self):
+        from frameronin_engine.browser_tasks import ready,accept
+        source=self.root/'oriented.jpg';exif=Image.Exif();exif[274]=6
+        Image.new('RGB',(16,12),'blue').save(source,exif=exif)
+        selected=self.project.import_file(source)
+        payload={'operation':'image.flowNormalize','inputs':[selected['id']],
+            'parameters':{'width':12,'height':16,'renderer':'browser-worker'}}
+        self.assertTrue(preview(self.project,payload)['requiresWorkbench'])
+        with self.assertRaises(RoninError):submit(self.project,payload)
+        for op in ['sequence.opticalFlow','image.flowSplit','sequence.flowExport']:
+            with self.assertRaises(RoninError) as error:preview(self.project,{'operation':op,'inputs':[selected['id']]*(2 if op=='sequence.opticalFlow' else 1),'parameters':{}})
+            self.assertEqual(error.exception.code,'FLOW_BROWSER_DECODE_REQUIRED')
+        invalid={**payload,'parameters':{'width':16,'height':12}}
+        with self.assertRaises(RoninError):preview(self.project,invalid)
+        with self.project.connection() as db:self.assertEqual(db.execute('SELECT count(*) FROM tasks').fetchone()[0],0)
+        created=submit(self.project,payload,browser_client=True);deadline=time.monotonic()+15
+        while not ready(self.project,created['id'])['ready']:
+            if time.monotonic()>deadline:self.fail('Browser decode task never requested its controlled result')
+            time.sleep(.02)
+        wrong=self.root/'wrong.png';Image.new('RGBA',(16,12),'blue').save(wrong)
+        with self.assertRaises(RoninError):accept(self.project,created['id'],0,wrong)
+        correct=self.root/'correct.png';Image.new('RGBA',(12,16),'blue').save(correct);accept(self.project,created['id'],0,correct)
+        done=wait(self.project,created['id'],15);self.assertEqual(done['state'],'succeeded',done)
+        self.assertEqual(len(done['results']),2)
+        decoded=self.project.version(done['results'][0]);self.assertEqual((decoded['metadata']['width'],decoded['metadata']['height']),(12,16))
+        self.assertFalse(preview(self.project,{'operation':'sequence.opticalFlow','inputs':[decoded['id']]*2,'parameters':{}})['requiresWorkbench'])
+
     def test_flow_proportional_grid_keeps_remainder_pixels_and_tiny_cells(self):
         for columns,rows in [(3,2),(32,16)]:
             record=submit(self.project,{'operation':'image.flowSplit','inputs':[self.version['id']],
@@ -962,6 +1002,22 @@ class ProjectTests(unittest.TestCase):
                 with self.assertRaises(RoninError):preview(self.project,{'operation':operation,
                     'inputs':[self.version['id']]*(2 if operation=='sequence.opticalFlow' else 1),
                     'parameters':{'frontendBytes':512*1024**2}})
+        with self.project.connection() as db:self.assertEqual(db.execute('SELECT count(*) FROM tasks').fetchone()[0],0)
+
+    def test_flow_intermediate_png_expansion_keeps_source_and_result_limits_separate(self):
+        version={**self.version,'metadata':{**self.version['metadata'],'bytes':21*1024**2}}
+        for operation in ['image.flowSplit','sequence.flowExport']:
+            payload={'operation':operation,'inputs':[version['id']],'parameters':{}}
+            with patch.object(self.project,'version',return_value=version),patch('frameronin_engine.operations.memory_budget',return_value=2*1024**3):
+                with self.assertRaises(RoninError) as error:preview(self.project,payload)
+                self.assertEqual(error.exception.code,'FLOW_SOURCE_FORMAT')
+                for origin in ['image.flowNormalize','image.flowSplit','sequence.opticalFlow']:
+                    version['origin']=origin
+                    self.assertLess(preview(self.project,payload)['estimatedBytes'],2*1024**3)
+                version['metadata']['bytes']=129*1024**2
+                with self.assertRaises(RoninError) as error:preview(self.project,payload)
+                self.assertEqual(error.exception.code,'FLOW_SOURCE_FORMAT')
+                version['origin']='import';version['metadata']['bytes']=21*1024**2
         with self.project.connection() as db:self.assertEqual(db.execute('SELECT count(*) FROM tasks').fetchone()[0],0)
 
     def test_cancel_stops_nested_media_processes_and_records_confirmation(self):
